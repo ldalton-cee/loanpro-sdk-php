@@ -83,11 +83,11 @@ class LoanPro {
 
         if ($method == "POST" || $method == "PUT") {
             if ($file) {
-                $delimiter = '-------------' . uniqid();
-                $data = $this->encodeMultipartRequest($delimiter, "file", $file, $data);
-                $headers[] = 'Content-Type: multipart/form-data; boundary=' . $delimiter;
-                $headers[] = 'Content-Length: ' . strlen($data);
-                curl_setopt($request, CURLOPT_POSTFIELDS, $data);
+                $finfo = new \finfo();
+                $detectedMimeType = $finfo->file($file, FILEINFO_MIME);
+                $postFields = array_merge($data, ['upload' => "@$file;type={$detectedMimeType}"]);
+                curl_setopt($request, CURLOPT_POST, true);
+                curl_setopt($request, CURLOPT_POSTFIELDS, $postFields);
             } else {
                 $payload = json_encode($data);
                 $headers[] = "Content-Type: application/json";
