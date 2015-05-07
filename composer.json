@@ -1,0 +1,23 @@
+{
+    "name": "simnang/loanpro-sdk",
+    "description": "LoanPro SDK for PHP",
+    "license": "MIT",
+    "keywords": ["loanpro","sdk","simnang"],
+    "authors": [
+        {
+            "name": "Cesar Olea",
+            "email": "cesarolea@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*",
+        "monolog/monolog": "^1.13"
+    },
+    "require-dev": {},
+    "autoload": {
+        "psr-4": {
+            "Simnang\\LoanPro\\": "src"
+        }
+    }
+}
