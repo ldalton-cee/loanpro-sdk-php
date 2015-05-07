@@ -75,7 +75,7 @@ class LoanPro {
         return $request;
     }
 
-    public function tx($method, $uri, $data = [], $file) {
+    public function tx($method, $uri, $data = [], $file = false) {
         $url = $this->getEndpointBase().$uri;
         $method = strtoupper($method);
         $headers = $this->getHeaders();
