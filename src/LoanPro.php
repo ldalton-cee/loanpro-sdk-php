@@ -18,10 +18,8 @@ class LoanPro {
     private $log = null;
 
     public function __construct($path = '', $level = 100) {
-        if (!empty($path)) {
-            $this->log = new Logger('loanpro-sdk');
-            $this->log->pushHandler(new StreamHandler($path, $level));
-        }
+        $this->log = new Logger('loanpro-sdk');
+        $this->log->pushHandler(new StreamHandler($path ?: 'loanpro-sdk.log', $level));
     }
 
     public function getEndpointBase() {
@@ -109,10 +107,8 @@ class LoanPro {
         $response = trim(curl_exec($request));
         rewind($verbose);
 
-        if ($this->log) {
-            $verboseLog = stream_get_contents($verbose);
-            $this->log->debug($verboseLog);
-        }
+        $verboseLog = stream_get_contents($verbose);
+        $this->log->debug($verboseLog);
 
         curl_close($request);
         return $response;
@@ -122,7 +118,24 @@ class LoanPro {
         return new ODataResourcePath($this->getEndpointBase().$property);
     }
 
-    public function getUri(ODataResourcePath $path) {
-        return str_replace($this->getEndpointBase(), '', (string)$path);
+    public function getUri($path) {
+        $path = $path instanceof ODataResourcePath ? (string)$path : $path;
+        return str_replace($this->getEndpointBase(), '', $path);
+    }
+
+    public function odataRead($path) {
+        $path = $path instanceof ODataResourcePath ? (string)$path : $path;
+        $this->log->debug($path);
+        $result = $this->tx('GET', $this->getUri($path));
+        $this->log->debug($result);
+        return json_decode($result);
+    }
+
+    public function odataRequest($method, $path, $data = []) {
+        $path = $path instanceof ODataResourcePath ? (string)$path : $path;
+        $this->log->debug($path);
+        $result = $this->tx($method, $this->getUri($path), $data);
+        $this->log->debug($result);
+        return json_decode($result);
     }
 }
