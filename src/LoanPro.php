@@ -118,6 +118,8 @@ class LoanPro {
      * @return string The result of the request
      */
     public function tx($method, $uri, $data = [], $file = false) {
+        if($uri[0] == '/')
+            $uri = substr($uri, 1);
         $url = $this->getEndpointBase().str_replace(' ', '%20', $uri);
         $method = strtoupper($method);
         $headers = $this->getHeaders();
@@ -173,9 +175,9 @@ class LoanPro {
     }
 
     /**
-     * This returns a json object holding the response of a GET request to the provided URL
+     * This returns a json object (represented as an stdClass) holding the response of a GET request to the provided URL
      * @param $path The full URL to send a request to
-     * @return Json
+     * @return stdClass
      */
     public function odataRead($path) {
         $path = $path instanceof ODataResourcePath ? (string)$path : $path;
@@ -189,11 +191,11 @@ class LoanPro {
     }
 
     /**
-     * This returns a Json object holding the response from running an HTTP request to the uri provided
+     * This returns a Json object (represented as an stdClass) holding the response from running an HTTP request to the uri provided
      * @param $method The HTTP method to use
      * @param $path The uri of the endpoint
      * @param array $data The data to send in an associative array that will be mapped to a json object
-     * @return Json The result as a Json Objct
+     * @return stdClass The result as an stdClass Objct
      */
     public function odataRequest($method, $path, $data = []) {
         $path = $path instanceof ODataResourcePath ? (string)$path : $path;
