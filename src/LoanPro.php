@@ -23,8 +23,8 @@ class LoanPro {
 
     private $log = null;
 
-    public function __construct() {
-        $this->setLoggingOptions();
+    public function __construct($path = '', $level = 100, $loggingEnabled = true) {
+        $this->setLoggingOptions($path = '', $level = 100, $loggingEnabled = true);
     }
 
     public function getEndpointBase() {
