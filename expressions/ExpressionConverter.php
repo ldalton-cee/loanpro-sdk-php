@@ -25,13 +25,13 @@ class ExpressionConverter
         $operands = [];
         $operations = [];
 
-        $operandSeg = preg_split("/( +)?(===|==|!==|!=|<=|>=|<|>|=|\|\||\&\&|\&|\*|\-|\+|\%|\/)( +)?/", $expression);
+        $operandSeg = preg_split("/( +)?(===|==|!==|!=|<=|>=|<|>|=|\|\||\&\&|\&|\||\*|\-|\+|\%|\/)( +)?/", $expression);
         foreach($operandSeg as $op)
         {
             if(strlen($op) > 0)
                 $operands[] = $op;
         }
-        preg_match_all("/(===|==|!==|!=|<=|>=|<|>|=|\|\||\&\&|\&|\*|\-|\+|\%|\/)/", $expression, $operations);
+        preg_match_all("/(===|==|!==|!=|<=|>=|<|>|=|\|\||\&\&|\&|\||\*|\-|\+|\%|\/)/", $expression, $operations);
 
         $operations = $operations[0];
 
@@ -112,6 +112,7 @@ class ExpressionConverter
             }
         }
         $expression = implode('',$segmentsForNegating);
+        var_dump($expression);
 
         $path = $this->m_path->setFilter(null);
         $path = (string)$path;
