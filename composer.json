@@ -7,6 +7,10 @@
         {
             "name": "Cesar Olea",
             "email": "cesarolea@gmail.com"
+        },
+        {
+            "name": "Matthew Tolman",
+            "email": "matthewstolman@gmail.com"
         }
     ],
     "require": {
