@@ -19,7 +19,8 @@
     "require-dev": {},
     "autoload": {
         "psr-4": {
-            "Simnang\\LoanPro\\": "src"
+            "Simnang\\LoanPro\\": "src",
+            "Simnang\\ExpressionConverter\\": "expressions"
         }
     }
 }
