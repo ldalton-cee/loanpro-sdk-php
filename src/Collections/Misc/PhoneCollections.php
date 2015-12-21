@@ -6,7 +6,7 @@
  * Time: 9:55 AM
  */
 
-namespace Simnang\LoanPro\Collections\Loan;
+namespace Simnang\LoanPro\Collections\Misc;
 
 use Simnang\LoanPro\Collections\CollectionBase;
 
