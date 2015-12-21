@@ -8,7 +8,6 @@
 
 namespace Simnang\LoanPro\Entities;
 
-
 class LoanSetup
 {
     private $loanAmount;
@@ -139,6 +138,11 @@ class LoanSetup
         {
             $d = DateTime::createFromFormat('Y-m-d', $val);
             return $d && $d->format('Y-m-d') == $val;
+        }
+        if(isset(LoanSetup::$validationArray["collections"][$key]))
+        {
+            $collItem = LoanSetup::$validationArray["collections"][$key]."/".$val;
+            return \Simnang\LoanPro\Collections\CollectionRetriever::IsValidItem($collItem);
         }
         return true;
     }
