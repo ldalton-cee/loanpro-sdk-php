@@ -51,33 +51,37 @@ class BaseEntity implements \JsonSerializable
 
     private function Validate($key, $val)
     {
-        if(in_array($key, $this->validationArray["numbers"]))
+        if(isset($this->validationArray["numbers"]) && in_array($key, $this->validationArray["numbers"]))
         {
             return is_numeric($val);
         }
-        if(in_array($key, $this->validationArray["int"]))
+        if(isset($this->validationArray["int"]) && in_array($key, $this->validationArray["int"]))
         {
             return is_integer($val);
         }
-        if(in_array($key, $this->validationArray["string"]))
+        if(isset($this->validationArray["string"]) && in_array($key, $this->validationArray["string"]))
         {
             return true;
         }
-        if(isset($this->validationArray["ranges"]["key"]))
+        if(isset($this->validationArray["ranges"]) && isset($this->validationArray["ranges"][$key]))
         {
             $int = intval($val);
             return ($this->validationArray["ranges"]["key"][0] <= $int) &&
             ($this->validationArray["ranges"]["key"][1] >= $int);
         }
-        if(in_array($key, $this->validationArray["dates"]))
+        if(isset($this->validationArray["dates"]) && in_array($key, $this->validationArray["dates"]))
         {
             $d = \DateTime::createFromFormat('Y-m-d', $val);
             return $d && $d->format('Y-m-d') == $val;
         }
-        if(isset($this->validationArray["collections"][$key]))
+        if(isset($this->validationArray["collections"]) && isset($this->validationArray["collections"][$key]))
         {
             $collItem = $this->validationArray["collections"][$key]."/".$val;
             return \Simnang\LoanPro\Collections\CollectionRetriever::IsValidItem($collItem);
+        }
+        if(isset($this->validationArray["class"]) && isset($this->validationArray["class"][$key]))
+        {
+            return $val instanceof $this->validationArray["class"][$key];
         }
         return false;
     }
