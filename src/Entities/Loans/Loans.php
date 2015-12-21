@@ -33,7 +33,7 @@ class Loans extends \Simnang\LoanPro\Entities\BaseEntity
             "loanAlert"
         ],
         "class"=>[
-            "LoanSetup"=>"Simnang\LoanPro\Entities\LoanSetup"
+            "LoanSetup"=>"Simnang\LoanPro\Entities\Loans\Loans"
         ]
     ];
 }
