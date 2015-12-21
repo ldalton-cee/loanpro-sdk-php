@@ -15,7 +15,7 @@ class PaymentMethods extends \Simnang\LoanPro\Entities\BaseEntity
         "int"=>[
             "id",
         ],
-        "range"=>[
+        "ranges"=>[
             "active"=>[0,1],
             "isPrimary"=>[0,1],
         ],

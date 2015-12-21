@@ -19,7 +19,7 @@ class Address extends \Simnang\LoanPro\Entities\BaseEntity
         "int"=>[
             "id",
         ],
-        "range"=>[
+        "ranges"=>[
             "isVerified"=>[0,1],
             "active"=>[0,1],
         ],

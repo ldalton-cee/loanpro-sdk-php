@@ -16,7 +16,7 @@ class Phone extends \Simnang\LoanPro\Entities\BaseEntity
             "id",
             "entityId",
         ],
-        "range"=>[
+        "ranges"=>[
             "isPrimary"=>[0,1],
             "isSecondary"=>[0,1],
             "carrierVerified"=>[0,1],

@@ -18,10 +18,6 @@ class PaymentDetails extends \Simnang\LoanPro\Entities\BaseEntity
         "int"=>[
             "id",
         ],
-        "range"=>[
-            "active"=>[0,1],
-            "isPrimary"=>[0,1],
-        ],
         "bool"=>[
             "verify",
         ],

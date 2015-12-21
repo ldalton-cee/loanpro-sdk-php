@@ -22,7 +22,7 @@ class Customer extends \Simnang\LoanPro\Entities\BaseEntity
         "date"=>[
             "birthDate"
         ],
-        "range"=>[
+        "ranges"=>[
             "ofacMatch"=>[0,1],
             "ofacTested"=>[0,1],
         ],
