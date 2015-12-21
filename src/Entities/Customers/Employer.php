@@ -24,7 +24,7 @@ class Employer extends \Simnang\LoanPro\Entities\BaseEntity
         ],
         "string"=>[
             "companyName",
-            "shiftManager"
+            "title"
         ],
         "phone"=>[
             "phone"
@@ -34,7 +34,7 @@ class Employer extends \Simnang\LoanPro\Entities\BaseEntity
             "payDateFrequency"=>"customerEmployer/payDateFrequency",
         ],
         "class"=>[
-            "Address"=>"Simnang\LoanPro\Entities\Customers\Address",
+            "Address"=>"Simnang\\LoanPro\\Entities\\Customers\\Address",
         ]
     ];
 }
