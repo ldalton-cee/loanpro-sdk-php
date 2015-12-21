@@ -39,7 +39,7 @@ class BaseEntity implements \JsonSerializable
     public function __set($key, $val)
     {
         if($this->Validate($key, $val)) {
-            if(isset($this->properties[$key]) && $this->properties[$key] instanceof ClassArray)
+            if(isset($this->properties[$key]) && $this->properties[$key] instanceof ClassArray || isset($this->properties[$key]) && $this->properties[$key] instanceof MetadataLink)
             {
                 $this->properties[$key]->items[] = $this->TranslateProperty($key, $val);
             }
@@ -57,6 +57,14 @@ class BaseEntity implements \JsonSerializable
         {
             if(isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key])) {
                 $this->properties[$key] = new ClassArray($this->validationArray["classArray"][$key]);
+                $arrays = $this->ReverseTranslateProperty($key, $val);
+                foreach($arrays as $arr)
+                {
+                    $this->properties[$key]->items[] = $arr;
+                }
+            }
+            elseif(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key])) {
+                $this->properties[$key] = new MetadataLink($this->validationArray["metadataLink"][$key]);
                 $arrays = $this->ReverseTranslateProperty($key, $val);
                 foreach($arrays as $arr)
                 {
@@ -91,6 +99,22 @@ class BaseEntity implements \JsonSerializable
                 $obj->PopulateFromJSON(json_encode($object));
                 $arr[] = $obj;
             }
+            $val = $arr;
+        }
+        if(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]))
+        {
+            $arr = [];
+            foreach($val->results as $object)
+            {
+                $meta = $object->__metadata;
+                $id = str_replace(")","", explode("=",$meta->uri)[1]);
+                $metaName = explode(".",$meta->type)[1];
+                $metadata = new MetaData();
+                $metadata->metaDataName = $metaName;
+                $metadata->id = $id;
+                $arr[] = $metadata;
+            }
+
             $val = $arr;
         }
 
@@ -204,6 +228,10 @@ class BaseEntity implements \JsonSerializable
         }
         if(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]))
         {
+            if(!isset($this->properties[$key]))
+            {
+                $this->properties[$key] = new MetadataLink($this->validationArray["metadataLink"][$key]);
+            }
             if(is_int($val) || ($val instanceof $this->validationArray["metadataLink"][$key]) && !is_null($val->id))
             {
                 return true;
