@@ -42,6 +42,88 @@ class LoanCollections extends CollectionBase
         ],
         "firstdayinterest"=>[
             "Yes"=>"yes", "No"=>"no"
+        ],
+        "cardfee"=>[
+            "Waive Fee"=>"0",
+            "Flat Fee"=>"1",
+            "Percentage Fee"=>"2",
+            "Greater of Fee or Percentage"=>"3",
+            "Lesser of Fee or Percentage"=>"4"
+        ],
+        "ebilling"=>[
+            "Yes"=>"yes",
+            "No"=>"no"
+        ],
+        "ecoa"=>[
+            "Not Specified"=>"0",
+            "Individual or Primary"=>"1",
+            "Joint Contract"=>"2",
+            "Maker"=>"7",
+            "System Managed"=>"A",
+            "Associate Terminated" => "T",
+            "Consumer Deceased"=>"X",
+            "Delete Borrower"=>"Z"
+        ],
+        "creditstatus"=>[
+            "AUTO" => 0,
+            "Current"=>11,
+            "Paid or Closed Zero Balance"=>13,
+            "Transferred Offices"=>5,
+            "Account Paid, Voluntary Surrender"=>61,
+            "Account Paid, Collection Account"=>62,
+            "Account Paid, Reposession"=>63,
+            "Account Paid, Charge-off"=>64,
+            "30-59 DPD"=>71,
+            "60-89 DPD"=>78,
+            "90-119 DPD"=>80,
+            "120-149 DPD"=>82,
+            "150-179 DPD"=>83,
+            "Assigned to Collections"=>93,
+            "Voluntary Surrender"=>95,
+            "Repossessed, possible balance due"=>96,
+            "Do Not Send"=>99,
+            "Delete Entire Account (not fraud)"=>"DA",
+            "Delete Entire Account (fraud)"=>"DF"
+        ],
+        "creditbureau"=>[
+            "Auto"=>"00",
+            "Unsecured"=>"01",
+            "Secured"=>"02",
+            "Partially Secured"=>"03",
+            "Home Improvements"=>"04",
+            "Installment Sales - Contract"=>"06",
+            "Real Estate - specific type unknown"=>"08",
+            "Timeshare"=>"0A",
+            "Flexible Spending Credit Card"=>"0G",
+            "Recreational Merchandise"=>"11",
+            "Education"=>"12",
+            "Non-Auto Lease"=>"13",
+            "Personal Line of Credit"=>"15",
+            "Manufactured Housing"=>"17",
+            "Credit Card"=>"18",
+            "Household Goods"=>"1C",
+            "Note Loan"=>"20",
+            "Secured by Household Goods"=>"22",
+            "Secured by Household Goods & Other Collateral"=>"23",
+            "Conventional Real Estate Mortgage"=>"26",
+            "Auto Lease"=>"3A",
+            "Credit Line Secured"=>"47",
+            "Real Estate - Junior Liens & Non-Purchase Money First"=>"5A",
+            "Second Mortgage"=>"5B",
+            "Commercial Installment Loan"=>"6A",
+            "Commercial Mortgage Loan"=>"6B",
+            "Home Equity Installment Payments"=>"6D",
+            "Commercial Line of Credit"=>"7A",
+            "Home Equity Line of Credit"=>"89",
+            "Medical Debt"=>"90",
+            "Debt Consolidation"=>"91"
+        ],
+        "reportingtype"=>[
+            "Line of Credit"=>"C",
+            "Installment"=>"I",
+            "Mortgage"=>"M",
+            "Open"=>"O",
+            "Revolving"=>"R"
         ]
     ];
 
@@ -54,7 +136,13 @@ class LoanCollections extends CollectionBase
         "Days In Year"=>"daysInYear",
         "Beg End"=>"begend",
         "First Period Days"=>"firstPeriodDays",
-        "First Day Interest"=>"firstdayinterest"
+        "First Day Interest"=>"firstdayinterest",
+        "Card Payment Fee"=>"cardfee",
+        "E-Billing"=>"ebilling",
+        "ECOA"=>"ecoa",
+        "Credit Status"=>"creditstatus",
+        "Credit Bureau"=>"creditbureau",
+        "Reporting Type"=>"reportingtype"
     ];
 
     public static function GetLists()

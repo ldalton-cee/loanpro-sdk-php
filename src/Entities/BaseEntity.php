@@ -45,6 +45,12 @@ class BaseEntity implements \JsonSerializable
             $val =  \Simnang\LoanPro\Collections\CollectionRetriever::TranslatePath($collItem);
             $val = str_replace("/", ".", $val);
         }
+        if(isset($this->validationArray["timestamp"]) && in_array($key, $this->validationArray["timestamp"]))
+        {
+            $val = str_replace("/Date(", "", $val);
+            $val = str_replace(")/(", "", $val);
+            $val = "/Date(".$val.")/";
+        }
 
         return $val;
     }
@@ -81,6 +87,12 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["class"]) && isset($this->validationArray["class"][$key]))
         {
             return $val instanceof $this->validationArray["class"][$key];
+        }
+        if(isset($this->validationArray["timestamp"]) && in_array($key, $this->validationArray["timestamp"]))
+        {
+            $val = str_replace("/Date(", "", $val);
+            $val = str_replace(")/(", "", $val);
+            return is_numeric($val);
         }
         return false;
     }

@@ -12,7 +12,7 @@ class CollectionRetriever
 {
     private function __construct(){}
 
-    private static $collNameMap = ["loan"=>"Simnang\LoanPro\Collections\Loan\LoanCollections"];
+    private static $collNameMap = ["loan"=>"Simnang\LoanPro\Collections\Loan\LoanCollections","loan setup"=>"Simnang\LoanPro\Collections\Loan\LoanCollections","loan settings"=>"Simnang\LoanPro\Collections\Loan\LoanCollections"];
 
     public static function IsValidCollection($seriesPath)
     {
