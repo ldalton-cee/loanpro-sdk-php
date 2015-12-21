@@ -8,6 +8,7 @@
 
 namespace Simnang\LoanPro\Collections\Loan;
 
+use Simnang\LoanPro\Collections\CollectionBase;
 
 class CollateralCollections extends CollectionBase
 {
