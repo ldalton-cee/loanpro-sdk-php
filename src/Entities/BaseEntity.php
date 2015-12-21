@@ -19,7 +19,7 @@ class BaseEntity
 
     private $properties = [];
 
-    protected static $validationArray = [];
+    protected $validationArray = [];
 
     public function __get($key)
     {
@@ -39,9 +39,9 @@ class BaseEntity
 
     private function TranslateProperty($key, $val)
     {
-        if(isset(LoanSetup::$validationArray["collections"][$key]))
+        if(isset($this->validationArray["collections"][$key]))
         {
-            $collItem = LoanSetup::$validationArray["collections"][$key]."/".$val;
+            $collItem = $this->validationArray["collections"][$key]."/".$val;
             $val =  \Simnang\LoanPro\Collections\CollectionRetriever::TranslatePath($collItem);
             $val = str_replace("/", ".", $val);
         }
@@ -51,32 +51,32 @@ class BaseEntity
 
     private function Validate($key, $val)
     {
-        if(in_array($key, LoanSetup::$validationArray["numbers"]))
+        if(in_array($key, $this->validationArray["numbers"]))
         {
             return is_numeric($val);
         }
-        if(in_array($key, LoanSetup::$validationArray["int"]))
+        if(in_array($key, $this->validationArray["int"]))
         {
             return is_integer($val);
         }
-        if(in_array($key, LoanSetup::$validationArray["string"]))
+        if(in_array($key, $this->validationArray["string"]))
         {
             return true;
         }
-        if(isset(LoanSetup::$validationArray["ranges"]["key"]))
+        if(isset($this->validationArray["ranges"]["key"]))
         {
             $int = intval($val);
-            return (LoanSetup::$validationArray["ranges"]["key"][0] <= $int) &&
-            (LoanSetup::$validationArray["ranges"]["key"][1] >= $int);
+            return ($this->validationArray["ranges"]["key"][0] <= $int) &&
+            ($this->validationArray["ranges"]["key"][1] >= $int);
         }
-        if(in_array($key, LoanSetup::$validationArray["dates"]))
+        if(in_array($key, $this->validationArray["dates"]))
         {
             $d = \DateTime::createFromFormat('Y-m-d', $val);
             return $d && $d->format('Y-m-d') == $val;
         }
-        if(isset(LoanSetup::$validationArray["collections"][$key]))
+        if(isset($this->validationArray["collections"][$key]))
         {
-            $collItem = LoanSetup::$validationArray["collections"][$key]."/".$val;
+            $collItem = $this->validationArray["collections"][$key]."/".$val;
             return \Simnang\LoanPro\Collections\CollectionRetriever::IsValidItem($collItem);
         }
         return false;
