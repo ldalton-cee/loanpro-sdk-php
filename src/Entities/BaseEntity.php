@@ -159,6 +159,10 @@ class BaseEntity implements \JsonSerializable
             }
             return $val instanceof $this->validationArray["classArray"][$key];
         }
+        if(isset($this->validationArray["cardExpiration"]) && in_array($key, $this->validationArray["cardExpiration"]))
+        {
+            return preg_match("/^([0-9]){1,2}\/([0-9]){1,2}$/", $val);
+        }
         return false;
     }
 }

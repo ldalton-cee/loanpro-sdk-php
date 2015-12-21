@@ -24,6 +24,9 @@ class PaymentMethods extends \Simnang\LoanPro\Entities\BaseEntity
         ],
         "collections"=>[
             "type"=>"payment/methods",
+        ],
+        "class"=>[
+            "PaymentDetails"=>"Simnang\\LoanPro\\Entities\\Customer\\PaymentDetails"
         ]
     ];
 }

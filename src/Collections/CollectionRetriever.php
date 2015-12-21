@@ -20,8 +20,9 @@ class CollectionRetriever
         "company"=>"Simnang\\LoanPro\\Collections\\Company\\CompanyCollections",
         "customerEmployer"=>"Simnang\\LoanPro\\Collections\\Customers\\EmployerCollections",
         "customerReference"=>"Simnang\\LoanPro\\Collections\\Customers\\CustomerReferenceCollections",
-        "payment"=>"Simnang\\LoanPro\\Collections\\Customers\\PaymentCollections",
-        "credit card"=>"Simnang\\LoanPro\\Collections\\Customers\\PaymentCollections",
+        "payment"=>"Simnang\\LoanPro\\Collections\\Misc\\PaymentCollections",
+        "credit card"=>"Simnang\\LoanPro\\Collections\\Misc\\CreditCardCollections",
+        "phone"=>"Simnang\\LoanPro\\Collections\\Misc\\PhoneCollections",
     ];
 
     public static function IsValidCollection($seriesPath)
