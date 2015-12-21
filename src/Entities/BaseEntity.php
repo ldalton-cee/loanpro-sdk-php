@@ -9,7 +9,7 @@
 namespace Simnang\LoanPro\Entities;
 
 
-class BaseEntity
+class BaseEntity implements \JsonSerializable
 {
 
     public function jsonSerialize()
