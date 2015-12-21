@@ -9,7 +9,7 @@
 namespace Simnang\LoanPro\Entities\Loans;
 
 
-class Loans extends \Simnang\LoanPro\Entities\BaseEntity
+class Loan extends \Simnang\LoanPro\Entities\BaseEntity
 {
     public function __construct()
     {
