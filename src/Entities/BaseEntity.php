@@ -37,7 +37,12 @@ class BaseEntity implements \JsonSerializable
     public function __set($key, $val)
     {
         if($this->Validate($key, $val)) {
-            $this->properties[$key] = $this->TranslateProperty($key, $val);
+            if($this->properties[$key] instanceof ClassArray)
+            {
+                $this->properties[$key]->items[] = $this->TranslateProperty($key, $val);
+            }
+            else
+                $this->properties[$key] = $this->TranslateProperty($key, $val);
         }
     }
 
@@ -58,7 +63,7 @@ class BaseEntity implements \JsonSerializable
         {
             $val =  explode("/",\Simnang\LoanPro\Collections\CollectionRetriever::ReverseTranslate($val))[2];
         }
-        if(isset($this->validationArray["class"]) && isset($this->validationArray["class"][$key]))
+        if((isset($this->validationArray["class"]) && isset($this->validationArray["class"][$key])) || isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key]))
         {
             $obj = new $this->validationArray["class"][$key]();
             $obj->PopulateFromJSON(json_encode($val));
@@ -145,6 +150,14 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["entityType"]) && in_array($key, $this->validationArray["entityType"]))
         {
             return (isset(static::$entityType[$key]) || in_array($key, static::$entityType));
+        }
+        if(isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key]))
+        {
+            if(!isset($this->properties[$key]))
+            {
+                $this->properties[$key] = new ClassArray($this->validationArray["classArray"][$key]);
+            }
+            return $val instanceof $this->validationArray["classArray"][$key];
         }
         return false;
     }
