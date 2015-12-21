@@ -28,6 +28,37 @@ class MetadataLink implements \JsonSerializable
         $this->update = true;
     }
 
+    public function __unset($key)
+    {
+        $id = str_replace("_","",$key);
+        foreach($this->items as $item)
+        {
+            if($item->id == $id)
+                $item->destroy = true;
+        }
+    }
+
+    public function __isset($key)
+    {
+
+        $id = str_replace("_","",$key);
+        foreach($this->items as $item)
+        {
+            if($item->id == $id)
+                return true;
+        }
+        return false;
+    }
+
+    public function DestroyLink($id)
+    {
+        foreach($this->items as $item)
+        {
+            if($item->id == $id)
+                $item->destroy = true;
+        }
+    }
+
     public function jsonSerialize()
     {
         $results = [];
@@ -35,7 +66,7 @@ class MetadataLink implements \JsonSerializable
         foreach($this->items as $i)
         {
             if($i instanceof MetaData) {
-                if($this->update)
+                if($this->update && !$i->destroy)
                 {
                     $obj = [
                         "__metadata" => [
@@ -43,7 +74,6 @@ class MetadataLink implements \JsonSerializable
                             "type" => "Entity." . $i->metaDataName
                         ],
                         "__update"=>"true",
-                        "__destroy"=>$i->destroy
                     ];
                 }
                 else {
@@ -52,8 +82,9 @@ class MetadataLink implements \JsonSerializable
                             "uri" => MetadataLink::$baseURI . $i->metaDataName . "(id=" . $i->id . ")",
                             "type" => "Entity." . $i->metaDataName
                         ],
-                        "__destroy"=>$i->destroy
                     ];
+                    if($i->destroy)
+                        $obj["__destroy"]=$i->destroy;
                 }
                 $results[] = $obj;
             }
