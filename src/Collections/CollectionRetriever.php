@@ -60,7 +60,6 @@ class CollectionRetriever
         else
             return false;
 
-
         if(isset($collName::GetListNames()[$subCollection]))
         {
             $subCollection = LoanCollections::GetListNames()[$subCollection];
@@ -176,9 +175,10 @@ class CollectionRetriever
             if (isset($collName::GetLists()[$subCollName]) && isset($collName::GetListNames()[$subCollection])) {
                 $path .= "/$subCollection";
                 if(!is_null($item)) {
-                    if(in_array($item, $collName::GetListNames()[$subCollName]))
+
+                    if(in_array($item, $collName::GetLists()[$subCollName]))
                     {
-                        $item = array_search($item, $collName::GetListNames()[$subCollName]);
+                        $item = array_search($item, $collName::GetLists()[$subCollName]);
                     }else if (!isset($collName::GetLists()[$subCollection][$item])) {
                         $item = null;
                     }

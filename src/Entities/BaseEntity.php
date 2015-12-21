@@ -37,9 +37,36 @@ class BaseEntity implements \JsonSerializable
         }
     }
 
+    public function PopulateFromJSON($jsonStr)
+    {
+        $obj = json_decode($jsonStr);
+        $objVars = get_object_vars($obj);
+
+        foreach($objVars as $key => $val)
+        {
+            $this->$key = $this->ReverseTranslateProperty($key, $val);
+        }
+    }
+
+    private function ReverseTranslateProperty($key, $val)
+    {
+        if(isset($this->validationArray["collections"]) && isset($this->validationArray["collections"][$key]))
+        {
+            $val =  explode("/",\Simnang\LoanPro\Collections\CollectionRetriever::ReverseTranslate($val))[2];
+        }
+        if(isset($this->validationArray["class"]) && isset($this->validationArray["class"][$key]))
+        {
+            $obj = new $this->validationArray["class"][$key]();
+            $obj->PopulateFromJSON(json_encode($val));
+            $val = $obj;
+        }
+
+        return $val;
+    }
+
     private function TranslateProperty($key, $val)
     {
-        if(isset($this->validationArray["collections"][$key]))
+        if(isset($this->validationArray["collections"]) && isset($this->validationArray["collections"][$key]))
         {
             $collItem = $this->validationArray["collections"][$key]."/".$val;
             $val =  \Simnang\LoanPro\Collections\CollectionRetriever::TranslatePath($collItem);
@@ -48,7 +75,7 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["timestamp"]) && in_array($key, $this->validationArray["timestamp"]))
         {
             $val = str_replace("/Date(", "", $val);
-            $val = str_replace(")/(", "", $val);
+            $val = str_replace(")/", "", $val);
             $val = "/Date(".$val.")/";
         }
 
@@ -91,7 +118,7 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["timestamp"]) && in_array($key, $this->validationArray["timestamp"]))
         {
             $val = str_replace("/Date(", "", $val);
-            $val = str_replace(")/(", "", $val);
+            $val = str_replace(")/", "", $val);
             return is_numeric($val);
         }
         if(isset($this->validationArray["phone"]) && in_array($key, $this->validationArray["phone"]))
