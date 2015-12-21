@@ -21,6 +21,8 @@ class BaseEntity implements \JsonSerializable
         return $this->properties;
     }
 
+    public $metaDataName = "";
+
     private $properties = [];
 
     protected $validationArray = [];
@@ -114,6 +116,21 @@ class BaseEntity implements \JsonSerializable
             if(isset(static::$entityType[$key]))
                 $val = static::$entityType[$key];
         }
+        if(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]))
+        {
+            if(is_int($val)) {
+                $meta = new MetaData();
+                $meta->id = $val;
+                $meta->metaDataName = (new $this->validationArray["metadataLink"][$key]())->metaDataName;
+                return $meta;
+            }
+            elseif( ($val instanceof $this->validationArray["metadataLink"][$key]) && !is_null($val->id)){
+                $meta = new MetaData();
+                $meta->id = $val->id;
+                $meta->metaDataName = $val->metaDataName;
+                return $meta;
+            }
+        }
 
         return $val;
     }
@@ -184,6 +201,13 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["cardExpiration"]) && in_array($key, $this->validationArray["cardExpiration"]))
         {
             return preg_match("/^([0-9]){1,2}\/([0-9]){1,2}$/", $val);
+        }
+        if(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]))
+        {
+            if(is_int($val) || ($val instanceof $this->validationArray["metadataLink"][$key]) && !is_null($val->id))
+            {
+                return true;
+            }
         }
         return false;
     }

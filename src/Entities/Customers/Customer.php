@@ -11,6 +11,8 @@ namespace Simnang\LoanPro\Entities\Customers;
 
 class Customer extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "Customers";
+
     protected $validationArray = [
         "number"=>[
             "creditLimit"
@@ -53,6 +55,7 @@ class Customer extends \Simnang\LoanPro\Entities\BaseEntity
         "classArray"=>[
             "Phones"=>"Simnang\\LoanPro\\Entities\\Customers\\Phone",
             "PaymentMethods"=>"Simnang\\LoanPro\\Entities\\Customers\\PaymentMethods",
+            "References"=>"Simnang\\Loanpro\\Entities\\Customers\\CustomerReferences"
         ]
     ];
 }

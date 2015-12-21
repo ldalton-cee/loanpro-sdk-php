@@ -11,6 +11,8 @@ namespace Simnang\LoanPro\Entities\Customers;
 
 class PaymentDetails extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "PaymentDetails";
+
     protected $validationArray = [
         "cardExpiration"=>[
             "cardExpiration"

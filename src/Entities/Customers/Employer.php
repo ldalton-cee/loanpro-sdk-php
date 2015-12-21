@@ -11,6 +11,8 @@ namespace Simnang\LoanPro\Entities\Customers;
 
 class Employer extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "Employers";
+
     protected $validationArray = [
         "number"=>[
             "income"

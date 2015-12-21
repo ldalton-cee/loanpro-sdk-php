@@ -11,6 +11,8 @@ namespace Simnang\LoanPro\Entities\Customers;
 
 class CustomerReferences extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "References";
+
     protected $validationArray = [
         "int"=>[
             "id",

@@ -11,6 +11,8 @@ namespace Simnang\LoanPro\Entities\Loans;
 
 class Insurance extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "Insurance";
+
     protected $validationArray = [
         "number"=>[
             "deductible"

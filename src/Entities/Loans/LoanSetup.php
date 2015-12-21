@@ -11,6 +11,8 @@ use Simnang\LoanPro\Entities;
 
 class LoanSetup extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "LoanSetup";
+
     protected $validationArray = [
         "numbers"=>[
             "loanAmount",

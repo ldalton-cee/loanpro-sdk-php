@@ -11,6 +11,8 @@ namespace Simnang\LoanPro\Entities\Customers;
 
 class PaymentMethods extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "PaymentMethods";
+
     protected $validationArray = [
         "int"=>[
             "id",

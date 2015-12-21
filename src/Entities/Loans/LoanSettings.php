@@ -47,4 +47,7 @@ class LoanSettings extends \Simnang\LoanPro\Entities\BaseEntity
     public function __construct()
     {
     }
+
+    public $metaDataName = "LoanSettings";
+
 }

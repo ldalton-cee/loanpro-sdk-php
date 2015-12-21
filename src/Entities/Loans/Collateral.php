@@ -11,6 +11,8 @@ namespace Simnang\LoanPro\Entities\Loans;
 
 class Collateral extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "Collateral";
+
     protected $validationArray = [
         "number"=>[
             "gap",

@@ -11,6 +11,8 @@ namespace Simnang\LoanPro\Entities\Customers;
 
 class Address extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "Address";
+
     protected $validationArray = [
         "number"=>[
             "geoLat",

@@ -11,6 +11,8 @@ namespace Simnang\LoanPro\Entities\Customers;
 
 class Phone extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "Phones";
+
     protected $validationArray = [
         "int"=>[
             "id",

@@ -11,6 +11,8 @@ namespace Simnang\LoanPro\Entities\Misc;
 
 class Notes extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "Notes";
+
     protected $validationArray = [
         "int"=>[
             "categoryId",

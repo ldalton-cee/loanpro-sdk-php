@@ -11,6 +11,7 @@ namespace Simnang\LoanPro\Entities\Loans;
 
 class Loan extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public $metaDataName = "Loans";
     public function __construct()
     {
         $this->modId = 0;
@@ -33,10 +34,13 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
             "loanAlert"
         ],
         "class"=>[
-            "LoanSetup"=>"Simnang\LoanPro\Entities\Loans\LoanSetup",
-            "LoanSettings"=>"Simnang\LoanPro\Entities\Loans\LoanSettings",
-            "Insurance"=>"Simnang\LoanPro\Entities\Loans\Insurance",
+            "LoanSetup"=>"Simnang\\LoanPro\\Entities\\Loans\\LoanSetup",
+            "LoanSettings"=>"Simnang\\LoanPro\\Entities\\Loans\\LoanSettings",
+            "Insurance"=>"Simnang\\LoanPro\\Entities\\Loans\\Insurance",
 
+        ],
+        "metadataLink"=>[
+            "Customers"=>"Simnang\\LoanPro\\Entities\\Customers\\Customer"
         ]
     ];
 }
