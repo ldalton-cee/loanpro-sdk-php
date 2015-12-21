@@ -53,7 +53,18 @@ class BaseEntity implements \JsonSerializable
 
         foreach($objVars as $key => $val)
         {
-            $this->$key = $this->ReverseTranslateProperty($key, $val);
+            if(isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key])) {
+                $this->properties[$key] = new ClassArray($this->validationArray["classArray"][$key]);
+                $arrays = $this->ReverseTranslateProperty($key, $val);
+                foreach($arrays as $arr)
+                {
+                    $this->properties[$key]->items[] = $arr;
+                }
+            }
+            else
+            {
+                $this->$key = $this->ReverseTranslateProperty($key, $val);
+            }
         }
     }
 
@@ -63,11 +74,22 @@ class BaseEntity implements \JsonSerializable
         {
             $val =  explode("/",\Simnang\LoanPro\Collections\CollectionRetriever::ReverseTranslate($val))[2];
         }
-        if((isset($this->validationArray["class"]) && isset($this->validationArray["class"][$key])) || isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key]))
+        if((isset($this->validationArray["class"]) && isset($this->validationArray["class"][$key])))
         {
             $obj = new $this->validationArray["class"][$key]();
             $obj->PopulateFromJSON(json_encode($val));
             $val = $obj;
+        }
+        if(isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key]))
+        {
+            $arr = [];
+            foreach($val->results as $object)
+            {
+                $obj = new $this->validationArray["classArray"][$key]();
+                $obj->PopulateFromJSON(json_encode($object));
+                $arr[] = $obj;
+            }
+            $val = $arr;
         }
 
         return $val;
