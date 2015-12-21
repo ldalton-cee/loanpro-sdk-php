@@ -6,14 +6,19 @@
  * Time: 11:02 AM
  */
 
-namespace Simnang\LoanPro\Entities;
+namespace Simnang\LoanPro\Entities\Loans;
 
 
-class Loans extends BaseEntity
+class Loans extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    public function __construct()
+    {
+        $this->modId = 0;
+        $this->modTotal = 0;
+        $this->active = 1;
+    }
+
     protected $validationArray = [
-        "numbers"=>[
-        ],
         "int"=>[
             "id",
             "modTotal",
@@ -21,10 +26,6 @@ class Loans extends BaseEntity
         ],
         "ranges"=>[
             "active"=>[0,1]
-        ],
-        "dates"=>[
-        ],
-        "collections"=>[
         ],
         "string"=>[
             "displayId",

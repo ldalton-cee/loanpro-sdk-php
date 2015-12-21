@@ -66,8 +66,7 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["ranges"]) && isset($this->validationArray["ranges"][$key]))
         {
             $int = intval($val);
-            return ($this->validationArray["ranges"]["key"][0] <= $int) &&
-            ($this->validationArray["ranges"]["key"][1] >= $int);
+            return ($this->validationArray["ranges"][$key][0] <= $int) && ($this->validationArray["ranges"][$key][1] >= $int);
         }
         if(isset($this->validationArray["dates"]) && in_array($key, $this->validationArray["dates"]))
         {

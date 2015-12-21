@@ -6,9 +6,10 @@
  * Time: 11:14 AM
  */
 
-namespace Simnang\LoanPro\Entities;
+namespace Simnang\LoanPro\Entities\Loans;
+use Simnang\LoanPro\Entities;
 
-class LoanSetup extends BaseEntity
+class LoanSetup extends \Simnang\LoanPro\Entities\BaseEntity
 {
     protected $validationArray = [
         "numbers"=>[
