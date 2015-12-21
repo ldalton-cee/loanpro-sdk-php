@@ -13,9 +13,15 @@ class CollectionRetriever
     private function __construct(){}
 
     private static $collNameMap = [
-        "loan"=>"Simnang\LoanPro\Collections\Loan\LoanCollections",
-        "collateral"=>"Simnang\LoanPro\Collections\Loan\CollateralCollections",
-        "customer"=>"Simnang\LoanPro\Collections\Customers\CustomerCollections"
+        "loan"=>"Simnang\\LoanPro\\Collections\\Loan\\LoanCollections",
+        "collateral"=>"Simnang\\LoanPro\\Collections\\Loan\\CollateralCollections",
+        "customer"=>"Simnang\\LoanPro\\Collections\\Customers\\CustomerCollections",
+        "geo"=>"Simnang\\LoanPro\\Collections\\Customers\\GeographicCollections",
+        "company"=>"Simnang\\LoanPro\\Collections\\Company\\CompanyCollections",
+        "customerEmployer"=>"Simnang\\LoanPro\\Collections\\Customers\\EmployerCollections",
+        "customerReference"=>"Simnang\\LoanPro\\Collections\\Customers\\CustomerReferenceCollections",
+        "payment"=>"Simnang\\LoanPro\\Collections\\Customers\\PaymentCollections",
+        "credit card"=>"Simnang\\LoanPro\\Collections\\Customers\\PaymentCollections",
     ];
 
     public static function IsValidCollection($seriesPath)
@@ -32,7 +38,7 @@ class CollectionRetriever
         $largeCollection = strtolower($largeCollection);
 
         if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
-            $collName = CollectionRetriever::$collNameMap[$largeCollection];
+            $collName = str_replace(" ","",ucwords(CollectionRetriever::$collNameMap[$largeCollection]));
         else
             return false;
 
@@ -60,7 +66,7 @@ class CollectionRetriever
         $largeCollection = strtolower($largeCollection);
 
         if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
-            $collName = CollectionRetriever::$collNameMap[$largeCollection];
+            $collName = str_replace(" ","",ucwords(CollectionRetriever::$collNameMap[$largeCollection]));
         else
             return false;
 
@@ -101,7 +107,7 @@ class CollectionRetriever
         $largeCollection = strtolower($largeCollection);
 
         if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
-            $collName = CollectionRetriever::$collNameMap[$largeCollection];
+            $collName = str_replace(" ","",ucwords(CollectionRetriever::$collNameMap[$largeCollection]));
         else
             return false;
 
@@ -159,7 +165,7 @@ class CollectionRetriever
         $largeCollection = strtolower($largeCollection);
 
         if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
-            $collName = CollectionRetriever::$collNameMap[$largeCollection];
+            $collName = str_replace(" ","",ucwords(CollectionRetriever::$collNameMap[$largeCollection]));
         else
             return false;
 

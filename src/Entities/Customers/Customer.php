@@ -44,6 +44,14 @@ class Customer extends \Simnang\LoanPro\Entities\BaseEntity
             "gender"=>"customer/gender",
             "generationCode"=>"customer/generationCode",
             "customerIdType"=>"customer/idType"
+        ],
+        "class"=>[
+            "PrimaryAddress"=>"Simnang\\LoanPro\\Entities\\Customers\\Address",
+            "MailAddress"=>"Simnang\\LoanPro\\Entities\\Customers\\Address",
+            "Employer"=>"Simnang\\LoanPro\\Entities\\Customers\\Employer",
+        ],
+        "classArray"=>[
+            "Phones"=>"Simnang\\LoanPro\\Entities\\Customers\\Phone",
         ]
     ];
 }

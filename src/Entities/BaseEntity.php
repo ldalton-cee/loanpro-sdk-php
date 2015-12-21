@@ -11,6 +11,10 @@ namespace Simnang\LoanPro\Entities;
 
 class BaseEntity implements \JsonSerializable
 {
+    protected static $entityType = [
+        "Loan"=>"Entity.Loan",
+        "Customer"=>"Entity.Customer"
+    ];
 
     public function jsonSerialize()
     {
@@ -78,6 +82,11 @@ class BaseEntity implements \JsonSerializable
             $val = str_replace(")/", "", $val);
             $val = "/Date(".$val.")/";
         }
+        if(isset($this->validationArray["entityType"]) && in_array($key, $this->validationArray["entityType"]))
+        {
+            if(isset(static::$entityType[$key]))
+                $val = static::$entityType[$key];
+        }
 
         return $val;
     }
@@ -128,6 +137,14 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["email"]) && in_array($key, $this->validationArray["email"]))
         {
             return filter_var($val, FILTER_VALIDATE_EMAIL);
+        }
+        if(isset($this->validationArray["bool"]) && in_array($key, $this->validationArray["bool"]))
+        {
+            return is_bool($val);
+        }
+        if(isset($this->validationArray["entityType"]) && in_array($key, $this->validationArray["entityType"]))
+        {
+            return (isset(static::$entityType[$key]) || in_array($key, static::$entityType));
         }
         return false;
     }
