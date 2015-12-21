@@ -125,6 +125,10 @@ class BaseEntity implements \JsonSerializable
         {
             return preg_match("/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/", $val);
         }
+        if(isset($this->validationArray["email"]) && in_array($key, $this->validationArray["email"]))
+        {
+            return filter_var($val, FILTER_VALIDATE_EMAIL);
+        }
         return false;
     }
 }
