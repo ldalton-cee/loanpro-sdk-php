@@ -15,7 +15,7 @@ class LoanCollections extends CollectionBase
 {
     private function __construct(){}
 
-    private static $lists = [
+    protected static $lists = [
         "rateType"=>[
             "Annual"=>"annually", "Bi-Weekly"=>"biweekly", "Monthly"=>"monthly", "Semi-Annually"=>"semiannually", "Semi-Monthly"=>"semimonthly", "Weekly"=>"weekly"
         ],
@@ -65,23 +65,23 @@ class LoanCollections extends CollectionBase
             "Delete Borrower"=>"Z"
         ],
         "creditstatus"=>[
-            "AUTO" => 0,
-            "Current"=>11,
-            "Paid or Closed Zero Balance"=>13,
-            "Transferred Offices"=>5,
-            "Account Paid, Voluntary Surrender"=>61,
-            "Account Paid, Collection Account"=>62,
-            "Account Paid, Reposession"=>63,
-            "Account Paid, Charge-off"=>64,
-            "30-59 DPD"=>71,
-            "60-89 DPD"=>78,
-            "90-119 DPD"=>80,
-            "120-149 DPD"=>82,
-            "150-179 DPD"=>83,
-            "Assigned to Collections"=>93,
-            "Voluntary Surrender"=>95,
-            "Repossessed, possible balance due"=>96,
-            "Do Not Send"=>99,
+            "AUTO" => "0",
+            "Current"=>"11",
+            "Paid or Closed Zero Balance"=>"13",
+            "Transferred Offices"=>"5",
+            "Account Paid, Voluntary Surrender"=>"61",
+            "Account Paid, Collection Account"=>"62",
+            "Account Paid, Reposession"=>"63",
+            "Account Paid, Charge-off"=>"64",
+            "30-59 DPD"=>"71",
+            "60-89 DPD"=>"78",
+            "90-119 DPD"=>'80',
+            "120-149 DPD"=>'82',
+            "150-179 DPD"=>'83',
+            "Assigned to Collections"=>'93',
+            "Voluntary Surrender"=>'95',
+            "Repossessed, possible balance due"=>'96',
+            "Do Not Send"=>'99',
             "Delete Entire Account (not fraud)"=>"DA",
             "Delete Entire Account (fraud)"=>"DF"
         ],
@@ -127,7 +127,7 @@ class LoanCollections extends CollectionBase
         ]
     ];
 
-    private static $listNames = [
+    protected static $listNames = [
         "Interest Rate"=>"rateType",
         "Loan Class"=>"class",
         "Loan Type"=>"type",
@@ -144,14 +144,4 @@ class LoanCollections extends CollectionBase
         "Credit Bureau"=>"creditbureau",
         "Reporting Type"=>"reportingtype"
     ];
-
-    public static function GetLists()
-    {
-        return LoanCollections::$lists;
-    }
-
-    public static function GetListNames()
-    {
-        return LoanCollections::$listNames;
-    }
 }

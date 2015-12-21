@@ -11,11 +11,20 @@ namespace Simnang\LoanPro\Collections;
 
 class CollectionBase
 {
-    public static function GetCollectionLists(){
-        return static::GetLists();
+    protected static $lists = [
+    ];
+
+    protected static $listNames = [
+    ];
+
+    public static function GetLists()
+    {
+        return static::$lists;
     }
 
-    public static function GetCollectionListNames(){
-        return static::GetListNames();
+    public static function GetListNames()
+    {
+        return static::$listNames;
     }
+
 }

@@ -94,6 +94,10 @@ class BaseEntity implements \JsonSerializable
             $val = str_replace(")/(", "", $val);
             return is_numeric($val);
         }
+        if(isset($this->validationArray["phone"]) && in_array($key, $this->validationArray["phone"]))
+        {
+            return preg_match("/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/", $val);
+        }
         return false;
     }
 }
