@@ -21,6 +21,51 @@ class BaseEntity implements \JsonSerializable
         return $this->properties;
     }
 
+    public function GetUpdate()
+    {
+        if(is_null($this->id))
+        {
+            return null;
+        }
+        $props = [];
+        foreach($this->properties as $key => $prop)
+        {
+            if(is_subclass_of($prop, "Simnang\\LoanPro\\Entities\\BaseEntity"))
+            {
+                $props[$key] = json_decode($prop->GetUpdate());
+                if($props[$key] == null)
+                    $props[$key] = $prop;
+            }
+            elseif($prop instanceof ClassArray)
+            {
+                $p = new ClassArray();
+                foreach($prop->items as $item)
+                {
+                    $updItm = $item->GetUpdate();
+                    if(is_null($updItm))
+                        $updItm = $item;
+                    $p->items[] = $updItm;
+                }
+                $props[$key] = $p;
+            }
+            elseif($prop instanceof MetadataLink)
+            {
+                $p = new MetadataLink();
+                foreach($prop->items as $item)
+                {
+                    $p->items[] = $item;
+                }
+                $p->Update();
+                $props[$key] = $p;
+            }
+            else
+                $props[$key] = $prop;
+        }
+        $props["__id"] = $this->id;
+        $props["__update"] = "true";
+        return json_encode($props);
+    }
+
     public $metaDataName = "";
 
     private $properties = [];

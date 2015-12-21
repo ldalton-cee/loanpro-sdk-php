@@ -13,5 +13,5 @@ class MetaData
 {
     public $metaDataName;
     public $id;
-
+    public $destroy = false;
 }

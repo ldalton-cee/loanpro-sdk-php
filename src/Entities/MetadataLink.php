@@ -14,11 +14,18 @@ class MetadataLink implements \JsonSerializable
     private $classType;
     public $items;
     private static $baseURI = "/api/1/odata.svc/";
+    private $update;
 
     public function __construct($type = "")
     {
         $this->classType = $type;
         $this->items = [];
+        $this->update = false;
+    }
+
+    public function Update()
+    {
+        $this->update = true;
     }
 
     public function jsonSerialize()
@@ -27,13 +34,27 @@ class MetadataLink implements \JsonSerializable
 
         foreach($this->items as $i)
         {
-            if($i instanceof $this->classType || $i instanceof MetaData) {
-                $obj = [
-                    "__metadata" => [
-                        "uri" => MetadataLink::$baseURI . $i->metaDataName . "(id=" . $i->id . ")",
-                        "type" => "Entity." . $i->metaDataName
-                    ]
-                ];
+            if($i instanceof MetaData) {
+                if($this->update)
+                {
+                    $obj = [
+                        "__metadata" => [
+                            "uri" => MetadataLink::$baseURI . $i->metaDataName . "(id=" . $i->id . ")",
+                            "type" => "Entity." . $i->metaDataName
+                        ],
+                        "__update"=>"true",
+                        "__destroy"=>$i->destroy
+                    ];
+                }
+                else {
+                    $obj = [
+                        "__metadata" => [
+                            "uri" => MetadataLink::$baseURI . $i->metaDataName . "(id=" . $i->id . ")",
+                            "type" => "Entity." . $i->metaDataName
+                        ],
+                        "__destroy"=>$i->destroy
+                    ];
+                }
                 $results[] = $obj;
             }
         }
