@@ -37,7 +37,7 @@ class BaseEntity implements \JsonSerializable
     public function __set($key, $val)
     {
         if($this->Validate($key, $val)) {
-            if($this->properties[$key] instanceof ClassArray)
+            if(isset($this->properties[$key]) && $this->properties[$key] instanceof ClassArray)
             {
                 $this->properties[$key]->items[] = $this->TranslateProperty($key, $val);
             }
