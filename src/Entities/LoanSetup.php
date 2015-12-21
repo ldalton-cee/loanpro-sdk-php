@@ -8,50 +8,14 @@
 
 namespace Simnang\LoanPro\Entities;
 
-class LoanSetup
+class LoanSetup implements \JsonSerializable
 {
-    private $loanAmount;
-    private $discount;
-    private $underwriting;
-    private $loanRate;
-    private $loanRateType;
-    private $loanTerm;
-    private $contractDate;
-    private $firstPaymentDate;
-    private $amountDown;
-    private $reserve;
-    private $salesPrice;
-    private $gap;
-    private $warranty;
-    private $dealerProfit;
-    private $taxes;
-    private $creditLimit;
-    private $loanClass;
-    private $loanType;
-    private $discountSplit;
-    private $paymentFrequency;
-    private $calcType;
-    private $daysInYear;
-    private $interestApplication;
-    private $begEnd;
-    private $firstPeriodDays;
-    private $firstDayInterest;
-    private $discountCalc;
-    private $diyAlt;
-    private $daysInPeriod;
-    private $roundDecimals;
-    private $lastAsFinal;
-    private $curtailPercentBase;
-    private $nddCalc;
-    private $endInterest;
-    private $feesPaidBy;
-    private $graceDays;
-    private $lateFeeType;
-    private $lateFeeAmount;
-    private $lateFeePercent;
-    private $lateFeeCalc;
-    private $lateFeePercentBase;
-    private $paymentDateApp;
+    public function jsonSerialize()
+    {
+        return $this->properties;
+    }
+
+    private $properties = [];
 
     private static $validationArray = [
         "numbers"=>[
@@ -107,19 +71,29 @@ class LoanSetup
 
     public function __get($key)
     {
-        if(isset($this->$key))
+        if(isset($this->properties[$key]))
         {
-            return $this->$key;
+            return $this->properties[$key];
         }
     }
 
     public function __set($key, $val)
     {
-        if(isset($this->$key))
-        {
-            if($this->Validate($key, $val))
-                $this->$key = $val;
+        if($this->Validate($key, $val)) {
+            $this->properties[$key] = $this->TranslateProperty($key, $val);
         }
+    }
+
+    private function TranslateProperty($key, $val)
+    {
+        if(isset(LoanSetup::$validationArray["collections"][$key]))
+        {
+            $collItem = LoanSetup::$validationArray["collections"][$key]."/".$val;
+            $val =  \Simnang\LoanPro\Collections\CollectionRetriever::TranslatePath($collItem);
+            $val = str_replace("/", ".", $val);
+        }
+
+        return $val;
     }
 
     private function Validate($key, $val)
@@ -144,6 +118,6 @@ class LoanSetup
             $collItem = LoanSetup::$validationArray["collections"][$key]."/".$val;
             return \Simnang\LoanPro\Collections\CollectionRetriever::IsValidItem($collItem);
         }
-        return true;
+        return false;
     }
 }
