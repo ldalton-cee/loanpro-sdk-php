@@ -8,16 +8,9 @@
 
 namespace Simnang\LoanPro\Entities;
 
-class LoanSetup implements \JsonSerializable
+class LoanSetup extends BaseEntity
 {
-    public function jsonSerialize()
-    {
-        return $this->properties;
-    }
-
-    private $properties = [];
-
-    private static $validationArray = [
+    protected static $validationArray = [
         "numbers"=>[
             "loanAmount",
             "discount",
@@ -34,6 +27,9 @@ class LoanSetup implements \JsonSerializable
             "creditLimit",
             "lateFeeAmount",
             "lateFeePercent"
+        ],
+        "int"=>[
+            "id"
         ],
         "ranges"=>[
             "graceDays"=>[0, 30],
@@ -66,58 +62,9 @@ class LoanSetup implements \JsonSerializable
             "lateFeeCalc"=>"loan/lateFeeCalc",
             "lateFeePercentBase"=>"loan/lateFeePercentBase",
             "paymentDateApp"=>"loan/pmtdateapp"
+        ],
+        "string"=>[
+
         ]
     ];
-
-    public function __get($key)
-    {
-        if(isset($this->properties[$key]))
-        {
-            return $this->properties[$key];
-        }
-    }
-
-    public function __set($key, $val)
-    {
-        if($this->Validate($key, $val)) {
-            $this->properties[$key] = $this->TranslateProperty($key, $val);
-        }
-    }
-
-    private function TranslateProperty($key, $val)
-    {
-        if(isset(LoanSetup::$validationArray["collections"][$key]))
-        {
-            $collItem = LoanSetup::$validationArray["collections"][$key]."/".$val;
-            $val =  \Simnang\LoanPro\Collections\CollectionRetriever::TranslatePath($collItem);
-            $val = str_replace("/", ".", $val);
-        }
-
-        return $val;
-    }
-
-    private function Validate($key, $val)
-    {
-        if(in_array($key, LoanSetup::$validationArray["numbers"]))
-        {
-            return is_numeric($val);
-        }
-        if(isset(LoanSetup::$validationArray["ranges"]["key"]))
-        {
-            $int = intval($val);
-            return (LoanSetup::$validationArray["ranges"]["key"][0] <= $int) &&
-                   (LoanSetup::$validationArray["ranges"]["key"][1] >= $int);
-        }
-        if(in_array($key, LoanSetup::$validationArray["dates"]))
-        {
-            $d = DateTime::createFromFormat('Y-m-d', $val);
-            return $d && $d->format('Y-m-d') == $val;
-        }
-        if(isset(LoanSetup::$validationArray["collections"][$key]))
-        {
-            $collItem = LoanSetup::$validationArray["collections"][$key]."/".$val;
-            return \Simnang\LoanPro\Collections\CollectionRetriever::IsValidItem($collItem);
-        }
-        return false;
-    }
 }
