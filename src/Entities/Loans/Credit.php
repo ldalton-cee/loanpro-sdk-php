@@ -14,7 +14,7 @@ namespace Simnang\LoanPro\Entities\Loans;
  *
  * This represents Collateral entities used in LoanPro
  */
-class Advancement extends \Simnang\LoanPro\Entities\BaseEntity
+class Credit extends \Simnang\LoanPro\Entities\BaseEntity
 {
     /**
      * The metadata string for it
