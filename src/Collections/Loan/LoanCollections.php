@@ -47,13 +47,13 @@ class LoanCollections extends CollectionBase
         "daysInYear"=>[
             "Actual"=>"actual", "Frequency"=>"frequency"
         ],
-        "begend"=>[
+        "begEnd"=>[
             "Beginning"=>"beg", "End"=>"end"
         ],
         "firstPeriodDays"=>[
             "Actual"=>"actual", "Force Regular"=>"forceRegular", "Frequency"=>"frequency"
         ],
-        "firstdayinterest"=>[
+        "firstDayInterest"=>[
             "Yes"=>"yes", "No"=>"no"
         ],
         "cardfee"=>[
@@ -148,7 +148,99 @@ class LoanCollections extends CollectionBase
         "latefeeapp"=>[
             "Payoff"=>"payoff",
             "Standard"=>"standard",
-        ]
+        ],
+        "interestApplication"=>[
+            "Between Periods"=>"betweenPeriods",
+            "Between Transactions"=>"betweenTransactions",
+        ],
+        "discountCalc"=>[
+            "Full"=>"full",
+            "Percentage"=>"percentage",
+            "Percentage Fixed"=>"percentFixed",
+            "Rebalancing"=>"rebalancing",
+            "Straight Line"=>"striaghtLine"
+        ],
+        "diyAlt"=>[
+            "Yes"=>"yes",
+            "No"=>"no",
+        ],
+        "daysInPeriod"=>[
+            "1"=>1,
+            "Every Business Day"=>"1B",
+            '2'=>2,
+            '3'=>3,
+            '4'=>4,
+            '5'=>5,
+            '6'=>6,
+            '8'=>8,
+            '9'=>9,
+            '10'=>10,
+            '12'=>12,
+            '13'=>18,
+            '15'=>15,
+            '18'=>13,
+            '20'=>20,
+            '24'=>24,
+            '26'=>26,
+            '28'=>28,
+            '30'=>30,
+            '36'=>36,
+            '40'=>40,
+            '45'=>45,
+            '52'=>52,
+            '60'=>60,
+            '72'=>72,
+            '73'=>73,
+            '90'=>90,
+            '91'=>91,
+            '120'=>120,
+            '180'=>180,
+            '182'=>182,
+            '360'=>360,
+            '364'=>364,
+            '365'=>365,
+        ],
+        "lastAsFinal"=>[
+            "Yes"=>"yes",
+            "No"=>"no",
+        ],
+        "curtailPercentBase"=>[
+            "Loan Amount"=>"loanAmount",
+        ],
+        "nddCalc"=>[
+            "Interest Only"=>"interestOnly",
+            "Standard"=>"standard",
+        ],
+        "endInterest"=>[
+            "Original Loan Expiration Date"=>"loanExp",
+            "None"=>"no",
+        ],
+        "feesPaidBy"=>[
+            "Date"=>"date",
+            "Period"=>"period"
+        ],
+        "lateFee"=>[
+            "Fixed Amount"=>1,
+            "Flat Dollar Amount"=>2,
+            "Percentage"=>3,
+            "Greater of Flat or Percentage"=>4,
+            "Lesser of Flat or Percentage"=>5,
+        ],
+        "lateFeeCalc"=>[
+            "Current"=>"current",
+            "Standard"=>"standard",
+            "Standard Fee"=>"standardFee",
+        ],
+        "latefeepercentbase"=>[
+            "Regular Payment + Escrow"=>"escrow",
+            "Regular Payment + Escrow + Hold"=>"escrowHold",
+            "Regular Payment + Hold"=>"hold",
+            "Regular Payment"=>"regular",
+        ],
+        "pmtdateapp"=>[
+            "Actual-Next"=>"actual",
+            "Last-Next"=>"last"
+        ],
     ];
 
     /**
@@ -162,9 +254,10 @@ class LoanCollections extends CollectionBase
         "Payment Frequency"=>"frequency",
         "Calculation Type"=>"calcType",
         "Days In Year"=>"daysInYear",
-        "Beg End"=>"begend",
+        "Days in Year Alternate"=>"diyAlt",
+        "Beg End"=>"begEnd",
         "First Period Days"=>"firstPeriodDays",
-        "First Day Interest"=>"firstdayinterest",
+        "First Day Interest"=>"firstDayInterest",
         "Card Payment Fee"=>"cardfee",
         "E-Billing"=>"ebilling",
         "ECOA"=>"ecoa",
@@ -172,6 +265,18 @@ class LoanCollections extends CollectionBase
         "Credit Bureau"=>"creditbureau",
         "Reporting Type"=>"reportingtype",
         "Card Fee"=>"cardfee.types",
-        "Charge Application Type"=>"latefeeapp"
+        "Charge Application Type"=>"latefeeapp",
+        "Interest Application"=>"interestApplication",
+        "Discount Calculation"=>"discountCalc",
+        "Days in Period"=>"daysInPeriod",
+        "Last As Final"=>"lastAsFinal",
+        "Curtailment Percent Base"=>"curtailPercentBase",
+        "NDD Calc"=>"nddCalc",
+        "End Interest"=>"endInterest",
+        "Fees Paid By"=>"feesPaidBy",
+        "Late Fee Type"=>"lateFee",
+        "Late Fee Calculation"=>"lateFeeCalc",
+        "Late Fee Percentage Base"=>"latefeepercentbase",
+        "Payment Date Application"=>"pmtdateapp",
     ];
 }

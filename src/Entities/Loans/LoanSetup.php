@@ -66,9 +66,9 @@ class LoanSetup extends \Simnang\LoanPro\Entities\BaseEntity
             "begEnd"=>"loan/begEnd",
             "firstPeriodDays"=>"loan/firstPeriodDays",
             "firstDayInterest"=>"loan/firstDayInterest",
-            "discoutCalc"=>"loan/discountCalc",
+            "discountCalc"=>"loan/discountCalc",
             "diyAlt"=>"loan/diyAlt",
-            "daysIPeriod"=>"loan/daysInPeriod",
+            "daysInPeriod"=>"loan/daysInPeriod",
             "lastAsFinal"=>"loan/lastAsFinal",
             "curtailPercentBase"=>"loan/curtailPercentBase",
             "nddCalc"=>"loan/nddCalc",
@@ -76,7 +76,7 @@ class LoanSetup extends \Simnang\LoanPro\Entities\BaseEntity
             "feesPaidBy"=>"loan/feesPaidBy",
             "lateFeeType"=>"loan/lateFee",
             "lateFeeCalc"=>"loan/lateFeeCalc",
-            "lateFeePercentBase"=>"loan/lateFeePercentBase",
+            "lateFeePercentBase"=>"loan/latefeepercentbase",
             "paymentDateApp"=>"loan/pmtdateapp"
         ],
     ];
