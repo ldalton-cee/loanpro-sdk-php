@@ -25,7 +25,7 @@ class LoanPro {
      *
      * @var string
      */
-    private $endpointBase = "https://loanpro.simnang.com/api/public/api/1/";
+    private $endpointBase = "https://beta-loanpro.simnang.com/api/public/api/1/";
 
     /**
      * Limits changing critical variables; set to false only if you know what you're doing
@@ -228,11 +228,6 @@ class LoanPro {
                 $headers[] = "Content-Type: application/json";
                 $headers[] = "Content-Length: ".strlen($payload);
                 curl_setopt($request, CURLOPT_POSTFIELDS, $payload);
-
-
-                var_dump($method);
-                var_dump($headers);
-                echo($payload);
             }
         }
 

@@ -226,7 +226,12 @@ class BaseEntity implements \JsonSerializable
     public function PopulateFromJSON($jsonStr)
     {
         $this->properties = [];
-        $obj = json_decode($jsonStr);
+        if(is_string($jsonStr))
+            $obj = json_decode($jsonStr);
+        else
+            $obj = $jsonStr;
+        if(property_exists($obj, "d"))
+            $obj = $obj->d;
         $objVars = get_object_vars($obj);
 
         foreach($objVars as $key => $val)
@@ -235,18 +240,20 @@ class BaseEntity implements \JsonSerializable
             if(isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key])) {
                 $this->properties[$key] = new ClassArray($this->validationArray["classArray"][$key]);
                 $arrays = $this->ReverseTranslateProperty($key, $val);
-                foreach($arrays as $arr)
-                {
-                    $this->properties[$key]->items[] = $arr;
+                if(!is_null($arrays)) {
+                    foreach ($arrays as $arr) {
+                        $this->properties[$key]->items[] = $arr;
+                    }
                 }
             }
             //Handle metadata links
             elseif(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key])) {
                 $this->properties[$key] = new MetadataLink($this->validationArray["metadataLink"][$key]);
                 $arrays = $this->ReverseTranslateProperty($key, $val);
-                foreach($arrays as $arr)
-                {
-                    $this->properties[$key]->items[] = $arr;
+                if(!is_null($arrays)) {
+                    foreach ($arrays as $arr) {
+                        $this->properties[$key]->items[] = $arr;
+                    }
                 }
             }
             //Just get the reverse translated property and use that
@@ -273,6 +280,8 @@ class BaseEntity implements \JsonSerializable
             $parts =  explode("/",\Simnang\LoanPro\Collections\CollectionRetriever::ReverseTranslate($val));
             $numPartsGiven = count(explode("/",$this->validationArray["collections"][$key]));
             $val = [];
+            if(count($parts) < 3)
+                return '';
             for($i = $numPartsGiven; $i < 3; ++$i)
                 $val[] = $parts[$i];
             $val = implode("/",$val);
@@ -288,6 +297,8 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key]))
         {
             $arr = [];
+            if(!property_exists($val, "results"))
+                return null;
             foreach($val->results as $object)
             {
                 $obj = new $this->validationArray["classArray"][$key]();
@@ -300,6 +311,8 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]))
         {
             $arr = [];
+            if(!property_exists($val, "results"))
+                return null;
             foreach($val->results as $object)
             {
                 $meta = $object->__metadata;
