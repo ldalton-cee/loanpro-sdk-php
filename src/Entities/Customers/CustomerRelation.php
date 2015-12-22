@@ -36,6 +36,7 @@ class CustomerRelation extends MetaData
      */
     public function jsonSerialize()
     {
+        $rel = CollectionRetriever::TranslatePath("loan/customerRole/".$this->loanRelationship);
         if($this->update && !$this->destroy)
         {
             $obj = [
@@ -44,7 +45,7 @@ class CustomerRelation extends MetaData
                     "type" => "Entity." . ((!is_null($this->entityName))? $this->entityName : $this->metaDataName)
                 ],
                 "__update"=>"true",
-                "__setLoanRole"=>$this->loanRelationship,
+                "__setLoanRole"=>$rel,
             ];
         }
         else {
@@ -53,7 +54,7 @@ class CustomerRelation extends MetaData
                     "uri" => MetaData::$baseURI . $this->metaDataName . "(id=" . $this->id . ")",
                     "type" => "Entity." . ((!is_null($this->entityName))? $this->entityName : $this->metaDataName)
                 ],
-                "__setLoanRole"=>$this->loanRelationship,
+                "__setLoanRole"=>$rel,
             ];
             if($this->destroy)
                 $obj["__destroy"]=$this->destroy;
