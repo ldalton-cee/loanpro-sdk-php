@@ -106,8 +106,6 @@ class CollectionRetriever
         if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
             $collName = CollectionRetriever::$collNameMap[$largeCollection];
         else {
-
-            var_dump($pathParts);
             return false;
         }
 
@@ -122,8 +120,6 @@ class CollectionRetriever
                 return true;
             }
         }
-
-        var_dump($pathParts);
         return false;
     }
 

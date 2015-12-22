@@ -112,7 +112,6 @@ class ExpressionConverter
             }
         }
         $expression = implode('',$segmentsForNegating);
-        var_dump($expression);
 
         $path = $this->m_path->setFilter(null);
         $path = (string)$path;

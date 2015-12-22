@@ -210,10 +210,10 @@ class BaseEntity implements \JsonSerializable
             else
                 $this->properties[$key] = $this->TranslateProperty($key, $val);
         }
-        else
-        {
-            var_dump($key,$val);
-        }
+//        else
+//        {
+//            var_dump($key,$val);
+//        }
     }
 
     /**
@@ -271,8 +271,6 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["collections"]) && isset($this->validationArray["collections"][$key]))
         {
             $parts =  explode("/",\Simnang\LoanPro\Collections\CollectionRetriever::ReverseTranslate($val));
-            if($key == "extra")
-                var_dump($parts);
             $numPartsGiven = count(explode("/",$this->validationArray["collections"][$key]));
             $val = [];
             for($i = $numPartsGiven; $i < 3; ++$i)
@@ -395,6 +393,10 @@ class BaseEntity implements \JsonSerializable
                 return $meta;
             }
         }
+        if(isset($this->validationArray["bool"]) && in_array($key, $this->validationArray["bool"]))
+        {
+            return BaseEntity::ParseBool($val);
+        }
 
         return $val;
     }
@@ -475,7 +477,7 @@ class BaseEntity implements \JsonSerializable
         //validate bool
         if(isset($this->validationArray["bool"]) && in_array($key, $this->validationArray["bool"]))
         {
-            return is_bool($val);
+            return is_bool($val) || ($val == "true" || $val == "false");
         }
         //validate entity types
         if(isset($this->validationArray["entityType"]) && in_array($key, $this->validationArray["entityType"]))
@@ -519,5 +521,16 @@ class BaseEntity implements \JsonSerializable
             }
         }
         return false;
+    }
+
+    public static function ParseBool($bool)
+    {
+        if($bool == "true")
+            return true;
+        if($bool == "false")
+            return false;
+        if(is_bool($bool))
+            return $bool;
+        throw new \InvalidArgumentException("Boolean String must be provided!");
     }
 }
