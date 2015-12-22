@@ -77,7 +77,8 @@ class LoanSetup extends \Simnang\LoanPro\Entities\BaseEntity
             "lateFeeType"=>"loan/lateFee",
             "lateFeeCalc"=>"loan/lateFeeCalc",
             "lateFeePercentBase"=>"loan/latefeepercentbase",
-            "paymentDateApp"=>"loan/pmtdateapp"
+            "paymentDateApp"=>"loan/pmtdateapp",
+            "loanType"=>"loan/type",
         ],
     ];
 }
