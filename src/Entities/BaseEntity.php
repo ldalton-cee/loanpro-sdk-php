@@ -33,6 +33,24 @@ class BaseEntity implements \JsonSerializable
      */
     public function jsonSerialize()
     {
+        foreach($this->properties as $key => $val)
+        {
+            if($val instanceof ClassArray)
+            {
+                if(count($val->items) == 0)
+                    unset($this->properties[$key]);
+            }
+            elseif($val instanceof MetadataLink)
+            {
+                if(count($val->items) == 0)
+                    unset($this->properties[$key]);
+            }
+            elseif(is_object($val) && property_exists($val, 'properties'))
+            {
+                if(count($val->properties) == 0)
+                    unset($this->properties[$key]);
+            }
+        }
         return $this->properties;
     }
 
