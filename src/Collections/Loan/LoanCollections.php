@@ -47,7 +47,7 @@ class LoanCollections extends CollectionBase
         "daysInYear"=>[
             "Actual"=>"actual", "Frequency"=>"frequency"
         ],
-        "begEnd"=>[
+        "begend"=>[
             "Beginning"=>"beg", "End"=>"end"
         ],
         "firstPeriodDays"=>[
@@ -255,7 +255,7 @@ class LoanCollections extends CollectionBase
         "Calculation Type"=>"calcType",
         "Days In Year"=>"daysInYear",
         "Days in Year Alternate"=>"diyAlt",
-        "Beg End"=>"begEnd",
+        "Beg End"=>"begend",
         "First Period Days"=>"firstPeriodDays",
         "First Day Interest"=>"firstDayInterest",
         "Card Payment Fee"=>"cardfee",

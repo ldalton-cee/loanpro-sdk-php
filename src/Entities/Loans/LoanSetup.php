@@ -63,7 +63,7 @@ class LoanSetup extends \Simnang\LoanPro\Entities\BaseEntity
             "calcType"=>"loan/calcType",
             "daysInYear"=>"loan/daysInYear",
             "interestApplication"=>"loan/interestApplication",
-            "begEnd"=>"loan/begEnd",
+            "begEnd"=>"loan/begend",
             "firstPeriodDays"=>"loan/firstPeriodDays",
             "firstDayInterest"=>"loan/firstDayInterest",
             "discountCalc"=>"loan/discountCalc",
