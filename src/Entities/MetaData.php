@@ -17,6 +17,7 @@ namespace Simnang\LoanPro\Entities;
 class MetaData implements \JsonSerializable
 {
     public $metaDataName;
+    public $entityName = null;
     public $id;
     public $destroy = false;
     public $update = false;
@@ -33,7 +34,7 @@ class MetaData implements \JsonSerializable
             $obj = [
                 "__metadata" => [
                     "uri" => MetaData::$baseURI . $this->metaDataName . "(id=" . $this->id . ")",
-                    "type" => "Entity." . $this->metaDataName
+                    "type" => "Entity." . ((!is_null($this->entityName))? $this->entityName : $this->metaDataName)
                 ],
                 "__update"=>"true",
             ];
@@ -42,7 +43,7 @@ class MetaData implements \JsonSerializable
             $obj = [
                 "__metadata" => [
                     "uri" => MetaData::$baseURI . $this->metaDataName . "(id=" . $this->id . ")",
-                    "type" => "Entity." . $this->metaDataName
+                    "type" => "Entity." . ((!is_null($this->entityName))? $this->entityName : $this->metaDataName)
                 ],
             ];
             if($this->destroy)

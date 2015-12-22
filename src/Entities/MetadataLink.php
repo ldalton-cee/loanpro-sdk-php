@@ -112,27 +112,8 @@ class MetadataLink implements \JsonSerializable
         foreach($this->items as $i)
         {
             if($i instanceof MetaData) {
-                if(($this->update || $i->update) && !$i->destroy)
-                {
-                    $obj = [
-                        "__metadata" => [
-                            "uri" => MetadataLink::$baseURI . $i->metaDataName . "(id=" . $i->id . ")",
-                            "type" => "Entity." . $i->metaDataName
-                        ],
-                        "__update"=>"true",
-                    ];
-                }
-                else {
-                    $obj = [
-                        "__metadata" => [
-                            "uri" => MetadataLink::$baseURI . $i->metaDataName . "(id=" . $i->id . ")",
-                            "type" => "Entity." . $i->metaDataName
-                        ],
-                    ];
-                    if($i->destroy)
-                        $obj["__destroy"]=$i->destroy;
-                }
-                $results[] = $obj;
+                if($this->update) $i->update = true;
+                $results[] = $i;
             }
         }
 
