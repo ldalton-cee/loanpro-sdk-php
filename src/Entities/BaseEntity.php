@@ -37,6 +37,29 @@ class BaseEntity implements \JsonSerializable
     }
 
     /**
+     * Allows destruction of single links
+     * @param $key
+     */
+    public function __unset($key)
+    {
+        if(isset($this->validationArray["metadata"]) && isset($this->validationArray["metadata"][$key]) && isset($this->properties[$key]))
+        {
+            $this->properties[$key]->destroy = true;
+        }
+        elseif(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]) && isset($this->properties[$key]))
+        {
+            $this->properties[$key]->DestroyAll();
+        }
+        else
+            unset($this->properties[$key]);
+    }
+
+    public function __isset($key)
+    {
+        return isset($this->properties[$key]);
+    }
+
+    /**
      * This returns the json string for updating an entity, and it returns null if it fails
      *
      * It fails is there is no "id" property set
@@ -79,6 +102,15 @@ class BaseEntity implements \JsonSerializable
                     $p->items[] = $item;
                 }
                 $p->Update();
+                $props[$key] = $p;
+            }
+            elseif($prop instanceof MetaData)
+            {
+                $p = new MetaData();
+                $p->destroy = $prop->destroy;
+                $p->metaDataName = $prop->metaDataName;
+                $p->id = $prop->id;
+                $p->update = true;
                 $props[$key] = $p;
             }
             else
@@ -314,10 +346,34 @@ class BaseEntity implements \JsonSerializable
             if(is_int($val)) {
                 $meta = new MetaData();
                 $meta->id = $val;
-                $meta->metaDataName = (new $this->validationArray["metadataLink"][$key]())->metaDataName;
+                if(class_exists($this->validationArray["metadata"][$key]))
+                    $meta->metaDataName = (new $this->validationArray["metadataLink"][$key]())->metaDataName;
+                else
+                    $meta->metaDataName = $this->validationArray["metadata"][$key];
                 return $meta;
             }
             elseif( ($val instanceof $this->validationArray["metadataLink"][$key]) && !is_null($val->id)){
+                $meta = new MetaData();
+                $meta->id = $val->id;
+                $meta->metaDataName = $val->metaDataName;
+                return $meta;
+            }
+        }
+        //validate single metadata link
+        if(isset($this->validationArray["metadata"]) && isset($this->validationArray["metadata"][$key]))
+        {
+            if(is_int($val))
+            {
+                $meta = new MetaData();
+                $meta->id = $val;
+                if(class_exists($this->validationArray["metadata"][$key]))
+                    $meta->metaDataName = (new $this->validationArray["metadataLink"][$key]())->metaDataName;
+                else
+                    $meta->metaDataName = $this->validationArray["metadata"][$key];
+                return $meta;
+            }
+            elseif((class_exists($this->validationArray["metadata"][$key]) && $val instanceof $this->validationArray["metadata"][$key]) && !is_null($val->id))
+            {
                 $meta = new MetaData();
                 $meta->id = $val->id;
                 $meta->metaDataName = $val->metaDataName;
@@ -360,10 +416,17 @@ class BaseEntity implements \JsonSerializable
             return ($this->validationArray["ranges"][$key][0] <= $int) && ($this->validationArray["ranges"][$key][1] >= $int);
         }
         //validate dates
-        if(isset($this->validationArray["dates"]) && in_array($key, $this->validationArray["dates"]))
+        if(isset($this->validationArray["dates"]))
         {
-            $d = \DateTime::createFromFormat('Y-m-d', $val);
-            return $d && $d->format('Y-m-d') == $val;
+            if(in_array($key, $this->validationArray["dates"])) {
+                $d = \DateTime::createFromFormat('Y-m-d', $val);
+                return $d && $d->format('Y-m-d') == $val;
+            }
+            else if(isset($this->validationArray["dates"][$key]))
+            {
+                $d = \DateTime::createFromFormat($this->validationArray["dates"][$key], $val);
+                return $d && $d->format($this->validationArray["dates"][$key]) == $val;
+            }
         }
         //validate collections
         if(isset($this->validationArray["collections"]) && isset($this->validationArray["collections"][$key]))
@@ -428,6 +491,14 @@ class BaseEntity implements \JsonSerializable
                 $this->properties[$key] = new MetadataLink($this->validationArray["metadataLink"][$key]);
             }
             if(is_int($val) || ($val instanceof $this->validationArray["metadataLink"][$key]) && !is_null($val->id))
+            {
+                return true;
+            }
+        }
+        //validate single metadata link
+        if(isset($this->validationArray["metadata"]) && isset($this->validationArray["metadata"][$key]))
+        {
+            if(is_int($val) || (class_exists($this->validationArray["metadata"][$key]) && $val instanceof $this->validationArray["metadata"][$key]) && !is_null($val->id))
             {
                 return true;
             }

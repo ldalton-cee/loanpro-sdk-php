@@ -14,9 +14,41 @@ namespace Simnang\LoanPro\Entities;
  *
  * Represents a piece of metadata
  */
-class MetaData
+class MetaData implements \JsonSerializable
 {
     public $metaDataName;
     public $id;
     public $destroy = false;
+    public $update = false;
+    private static $baseURI = "/api/1/odata.svc/";
+
+    /**
+     * Returns the aray of metadata to become json
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        if($this->update && !$this->destroy)
+        {
+            $obj = [
+                "__metadata" => [
+                    "uri" => MetaData::$baseURI . $this->metaDataName . "(id=" . $this->id . ")",
+                    "type" => "Entity." . $this->metaDataName
+                ],
+                "__update"=>"true",
+            ];
+        }
+        else {
+            $obj = [
+                "__metadata" => [
+                    "uri" => MetaData::$baseURI . $this->metaDataName . "(id=" . $this->id . ")",
+                    "type" => "Entity." . $this->metaDataName
+                ],
+            ];
+            if($this->destroy)
+                $obj["__destroy"]=$this->destroy;
+        }
+
+        return $obj;
+    }
 }

@@ -47,6 +47,8 @@ class CollectionRetriever
         "payment"=>"Simnang\\LoanPro\\Collections\\Misc\\PaymentCollections",
         "credit card"=>"Simnang\\LoanPro\\Collections\\Misc\\CreditCardCollections",
         "phone"=>"Simnang\\LoanPro\\Collections\\Misc\\PhoneCollections",
+        "payment"=>"Simnang\\LoanPro\\Collections\\Loan\\PaymentCollections",
+        "autopay"=>"Simnang\\LoanPro\\Collections\\Loan\\AutopayCollections",
     ];
 
     /**
@@ -200,8 +202,20 @@ class CollectionRetriever
 
         $pathParts = explode("/", $seriesPath);
 
-        if(count($pathParts) < 1 || count($pathParts) > 3)
+        if(count($pathParts) < 1)
             return false;
+        elseif(count($pathParts) > 3)
+        {
+            if(count($pathParts) == 4) {
+                $p = [];
+                $p[0] = $pathParts[0];
+                $p[1] = $pathParts[1] . "." . $pathParts[2];
+                $p[2] = $pathParts[3];
+                $pathParts = $p;
+            }
+            else
+                return false;
+        }
 
         $largeCollection = $pathParts[0];
         if(isset($pathParts[1]))

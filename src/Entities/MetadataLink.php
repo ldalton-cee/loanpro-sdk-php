@@ -86,8 +86,18 @@ class MetadataLink implements \JsonSerializable
     {
         foreach($this->items as $item)
         {
-            if($item->id == $id)
+            if($item->id == $id) {
                 $item->destroy = true;
+                break;
+            }
+        }
+    }
+
+    public function DestroyAll()
+    {
+        foreach($this->items as $item)
+        {
+            $item->destroy = true;
         }
     }
 
@@ -102,7 +112,7 @@ class MetadataLink implements \JsonSerializable
         foreach($this->items as $i)
         {
             if($i instanceof MetaData) {
-                if($this->update && !$i->destroy)
+                if(($this->update || $i->update) && !$i->destroy)
                 {
                     $obj = [
                         "__metadata" => [

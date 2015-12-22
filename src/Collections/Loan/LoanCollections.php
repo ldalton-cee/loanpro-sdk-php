@@ -137,6 +137,17 @@ class LoanCollections extends CollectionBase
             "Mortgage"=>"M",
             "Open"=>"O",
             "Revolving"=>"R"
+        ],
+        "cardfee.types"=>[
+            "Waive Fee"=>0,
+            "Flat Fee"=>1,
+            "Percentage"=>2,
+            "Greater of Fee or Percentage"=>3,
+            "Lesser of Fee or Percentage"=>4,
+        ],
+        "latefeeapp"=>[
+            "Payoff"=>"payoff",
+            "Standard"=>"standard",
         ]
     ];
 
@@ -159,6 +170,8 @@ class LoanCollections extends CollectionBase
         "ECOA"=>"ecoa",
         "Credit Status"=>"creditstatus",
         "Credit Bureau"=>"creditbureau",
-        "Reporting Type"=>"reportingtype"
+        "Reporting Type"=>"reportingtype",
+        "Card Fee"=>"cardfee.types",
+        "Charge Application Type"=>"latefeeapp"
     ];
 }
