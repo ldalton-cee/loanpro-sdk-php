@@ -8,10 +8,23 @@
 
 namespace Simnang\LoanPro\Entities\Loans;
 
-
+/**
+ * Class Loan
+ * @package Simnang\LoanPro\Entities\Loans
+ *
+ * Represents Loan entities inside of LoanPro
+ */
 class Loan extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    /**
+     * Represents the metadata name for the Loan
+     * @var string
+     */
     public $metaDataName = "Loans";
+
+    /**
+     * Sets up some default values
+     */
     public function __construct()
     {
         $this->modId = 0;
@@ -19,6 +32,10 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
         $this->active = 1;
     }
 
+    /**
+     * The validation array for all of the fields represented in LoanPro
+     * @var array
+     */
     protected $validationArray = [
         "int"=>[
             "id",

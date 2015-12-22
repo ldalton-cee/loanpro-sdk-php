@@ -17,51 +17,139 @@ use ODataQuery\ODataResourcePath;
  * This class is the basis for all communications with the LoanPro API
  */
 class LoanPro {
+    /**
+     * The base endpoint item for communicating with the LoanPro API
+     * This uses version 1.* of the LoanPro API
+     *
+     * Do not change!
+     *
+     * @var string
+     */
     private $endpointBase = "https://loanpro.simnang.com/api/public/api/1/";
+
+    /**
+     * Limits changing critical variables; set to false only if you know what you're doing
+     * @var bool
+     */
+    private $safeMode = true;
+    /**
+     * This holds your API key
+     * @var
+     */
     private $apiKey;
+
+    /**
+     * This holds your Tenant ID
+     * @var
+     */
     private $tenantId;
 
+    /**
+     * This holds the logger (optional; useful for debugging; may affect performance)
+     * @var null
+     */
     private $log = null;
 
+    /**
+     * Constructor; all parameters affect logging options (great for debugging)
+     * Please note that logging may affect performance
+     *
+     * @param string $path - log path
+     * @param int $level - log level
+     * @param bool|true $loggingEnabled - whether or not logging is enabled
+     */
     public function __construct($path = '', $level = 100, $loggingEnabled = true) {
         $this->setLoggingOptions($path = '', $level = 100, $loggingEnabled = true);
     }
 
+    /**
+     * Disables Safe mode, allowing you to change critical values
+     * @param bool|false $areYouSure
+     */
+    public function DisableSafeMode($areYouSure = false)
+    {
+        if($areYouSure)
+            $this->safeMode = false;
+    }
+
+    /**
+     * returns the endpoint base
+     * @return string
+     */
     public function getEndpointBase() {
         return $this->endpointBase;
     }
 
+    /**
+     * sets the endpoint base
+     * Do not call UNLESS you know what you're doing!
+     * @return string
+     */
     public function setEndpointBase($endpointBase) {
-        $this->endpointBase = $endpointBase;
+        if(!$this->safeMode)
+            $this->endpointBase = $endpointBase;
     }
 
+    /**
+     * Returns the set API key
+     * @return mixed
+     */
     public function getApiKey() {
         return $this->apiKey;
     }
 
+    /**
+     * Sets API key
+     * @param $apiKey
+     */
     public function setApiKey($apiKey) {
         $this->apiKey = $apiKey;
     }
 
+    /**
+     * Returns the tenant ID
+     * @return mixed
+     */
     public function getTenantId() {
         return $this->tenantId;
     }
 
+    /**
+     * Sets Tenant ID
+     * @param $tenantId
+     */
     public function setTenantId($tenantId) {
         $this->tenantId = $tenantId;
     }
 
+    /**
+     * Sets the API Key and Tenant ID
+     * @param $apiKey
+     * @param $tenantId
+     */
     public function setCredentials($apiKey, $tenantId) {
         $this->setApiKey($apiKey);
         $this->setTenantId($tenantId);
     }
 
+    /**
+     * Sets different options for the system
+     * (recommended to use setCredentials instead)
+     * @param $options
+     */
     public function setOptions($options) {
         $this->setApiKey($options['apiKey'] ? $options['apiKey'] : $this->getApiKey());
         $this->setTenantId($options['tenantId'] ? $options['tenantId'] : $this->getTenantId());
-        $this->setEndpointBase($options['endpointBase'] ? $options['endpointBase'] : $this->getEndpointBase());
+        if(!$this->safeMode)
+            $this->setEndpointBase($options['endpointBase'] ? $options['endpointBase'] : $this->getEndpointBase());
     }
 
+    /**
+     * Sets logging options
+     * @param string $path
+     * @param int $level
+     * @param bool|true $loggingEnabled - set to false to disable logging
+     */
     public function setLoggingOptions($path = '', $level = 100, $loggingEnabled = true)
     {
         if($loggingEnabled) {
@@ -73,6 +161,9 @@ class LoanPro {
         }
     }
 
+    /**
+     * Disable logging
+     */
     public function disableLogging()
     {
         $this->log = null;
@@ -160,6 +251,11 @@ class LoanPro {
         return $response;
     }
 
+    /**
+     * Returns the ODataResourcePath
+     * @param $property
+     * @return ODataResourcePath
+     */
     public function getResourcePath($property) {
         return new ODataResourcePath($this->getEndpointBase().$property);
     }
@@ -207,6 +303,10 @@ class LoanPro {
         return json_decode($result);
     }
 
+    /**
+     * Perform Debug logging
+     * @param $info
+     */
     private function logDebug($info)
     {
         if(!is_null($this->log))

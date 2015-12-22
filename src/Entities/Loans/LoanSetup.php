@@ -7,12 +7,25 @@
  */
 
 namespace Simnang\LoanPro\Entities\Loans;
-use Simnang\LoanPro\Entities;
 
+/**
+ * Class LoanSetup
+ * @package Simnang\LoanPro\Entities\Loans
+ *
+ * Represents the LoanSetup entities inside LoanPro
+ */
 class LoanSetup extends \Simnang\LoanPro\Entities\BaseEntity
 {
+    /**
+     * Represents the metadata name for the Loan Setup
+     * @var string
+     */
     public $metaDataName = "LoanSetup";
 
+    /**
+     * The validation array for all of the fields represented in LoanPro
+     * @var array
+     */
     protected $validationArray = [
         "numbers"=>[
             "loanAmount",
@@ -67,8 +80,4 @@ class LoanSetup extends \Simnang\LoanPro\Entities\BaseEntity
             "paymentDateApp"=>"loan/pmtdateapp"
         ],
     ];
-
-    public function __construct()
-    {
-    }
 }

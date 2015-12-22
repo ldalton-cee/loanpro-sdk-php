@@ -31,7 +31,7 @@ class PaymentDetails extends \Simnang\LoanPro\Entities\BaseEntity
             "cardNumber",
         ],
         "collections"=>[
-            "cardType"=>"creditCard/type",
+            "cardType"=>"credit card/type",
         ]
     ];
 }

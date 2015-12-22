@@ -11,10 +11,23 @@ namespace Simnang\LoanPro\Collections\Loan;
 
 use Simnang\LoanPro\Collections\CollectionBase;
 
+/**
+ * Class LoanCollections
+ * @package Simnang\LoanPro\Collections\Loan\
+ *
+ * Represents the loan collections in LoanPro
+ */
 class LoanCollections extends CollectionBase
 {
+    /**
+     * Collections cannot be instantiated
+     */
     private function __construct(){}
 
+    /**
+     * A list of all collection items dividend into collection groups
+     * @var array
+     */
     protected static $lists = [
         "rateType"=>[
             "Annual"=>"annually", "Bi-Weekly"=>"biweekly", "Monthly"=>"monthly", "Semi-Annually"=>"semiannually", "Semi-Monthly"=>"semimonthly", "Weekly"=>"weekly"
@@ -127,6 +140,10 @@ class LoanCollections extends CollectionBase
         ]
     ];
 
+    /**
+     * A list of all collection groups and their alternate names
+     * @var array
+     */
     protected static $listNames = [
         "Interest Rate"=>"rateType",
         "Loan Class"=>"class",

@@ -8,10 +8,34 @@
 
 namespace Simnang\LoanPro\Collections;
 
+/**
+ * Class CollectionRetriever
+ * @package Simnang\LoanPro\Collections
+ *
+ * This is the heart of all collections.
+ *
+ * Changes here will affect all collections.
+ *
+ * Series paths have each segment seperated by a "/"
+ * Thus it would look like
+ *      collection/group/item
+ * ex.
+ *      loan/rateType/monthly
+ */
 class CollectionRetriever
 {
+    /**
+     * This cannot be instantiated
+     */
     private function __construct(){}
 
+    /**
+     * This holds a list of all collections and the corresponding collection entity
+     * Please note that all keys are lowercase
+     *     * If you need to do camel case, than have a space before each capital letter; the system will convert automatically
+     * The values is the string representation of the corresponding collections class
+     * @var array
+     */
     private static $collNameMap = [
         "loan"=>"Simnang\\LoanPro\\Collections\\Loan\\LoanCollections",
         "collateral"=>"Simnang\\LoanPro\\Collections\\Loan\\CollateralCollections",
@@ -25,6 +49,11 @@ class CollectionRetriever
         "phone"=>"Simnang\\LoanPro\\Collections\\Misc\\PhoneCollections",
     ];
 
+    /**
+     * Checks whether or not a collection group is valid
+     * @param $seriesPath
+     * @return bool
+     */
     public static function IsValidCollection($seriesPath)
     {
         $pathParts = explode("/", $seriesPath);
@@ -39,7 +68,7 @@ class CollectionRetriever
         $largeCollection = strtolower($largeCollection);
 
         if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
-            $collName = str_replace(" ","",ucwords(CollectionRetriever::$collNameMap[$largeCollection]));
+            $collName = CollectionRetriever::$collNameMap[$largeCollection];
         else
             return false;
 
@@ -52,6 +81,11 @@ class CollectionRetriever
         return false;
     }
 
+    /**
+     * Checks to see if a collection item is valid
+     * @param $seriesPath
+     * @return bool
+     */
     public static function IsValidItem($seriesPath)
     {
         $pathParts = explode("/", $seriesPath);
@@ -67,7 +101,7 @@ class CollectionRetriever
         $largeCollection = strtolower($largeCollection);
 
         if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
-            $collName = str_replace(" ","",ucwords(CollectionRetriever::$collNameMap[$largeCollection]));
+            $collName = CollectionRetriever::$collNameMap[$largeCollection];
         else
             return false;
 
@@ -86,6 +120,12 @@ class CollectionRetriever
         return false;
     }
 
+    /**
+     * Translates a given SDK path into the corresponding LoanPro path
+     * returns false on failure
+     * @param $seriesPath
+     * @return bool|string
+     */
     public static function TranslatePath($seriesPath)
     {
         $largeCollection = null;
@@ -108,11 +148,12 @@ class CollectionRetriever
         $largeCollection = strtolower($largeCollection);
 
         if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
-            $collName = str_replace(" ","",ucwords(CollectionRetriever::$collNameMap[$largeCollection]));
+            $collName = CollectionRetriever::$collNameMap[$largeCollection];
         else
             return false;
 
-        $path = $largeCollection;
+        //convert spaced out words into camel case
+        $path = lcfirst(str_replace(" ","",ucwords($largeCollection)));
 
         if(!is_null($subCollection)) {
             if (isset($collName::GetListNames()[$subCollection])) {
@@ -142,6 +183,12 @@ class CollectionRetriever
         return $path;
     }
 
+    /**
+     * translates from a LoanPro path to an SDK path; uses alternate names in the translation process
+     *      * this is because the alternate names are sometimes more clear
+     * @param $seriesPath
+     * @return bool|string
+     */
     public static function ReverseTranslate($seriesPath)
     {
         $seriesPath = str_replace(".", "/", $seriesPath);
@@ -163,7 +210,8 @@ class CollectionRetriever
             $item = $pathParts[2];
 
 
-        $largeCollection = strtolower($largeCollection);
+        $largeColParts = preg_split("/(?=[A-Z])/", $largeCollection);
+        $largeCollection = strtolower(implode(" "), $largeColParts);
 
         if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
             $collName = str_replace(" ","",ucwords(CollectionRetriever::$collNameMap[$largeCollection]));

@@ -8,7 +8,12 @@
 
 namespace Simnang\LoanPro\Entities;
 
-
+/**
+ * Class MetaData
+ * @package Simnang\LoanPro\Entities
+ *
+ * Represents a piece of metadata
+ */
 class MetaData
 {
     public $metaDataName;

@@ -8,7 +8,12 @@
 
 namespace Simnang\LoanPro\Entities;
 
-
+/**
+ * Class MetadataLink
+ * @package Simnang\LoanPro\Entities
+ *
+ * Represents a series of metadata links
+ */
 class MetadataLink implements \JsonSerializable
 {
     private $classType;
@@ -16,6 +21,10 @@ class MetadataLink implements \JsonSerializable
     private static $baseURI = "/api/1/odata.svc/";
     private $update;
 
+    /**
+     * @param string $type
+     * Initialize
+     */
     public function __construct($type = "")
     {
         $this->classType = $type;
@@ -23,11 +32,23 @@ class MetadataLink implements \JsonSerializable
         $this->update = false;
     }
 
-    public function Update()
+    /**
+     * Tell it to update
+     * @param bool $update Whether or not to update
+     */
+    public function Update($update = true)
     {
-        $this->update = true;
+        $this->update = $update;
     }
 
+    /**
+     * Used to destroy a link
+     * Make sure that an underscore proceeds the metadata id
+     *
+     * ex.
+     * unset($metadataLink->_1) //will unlink the metadata with id 1
+     * @param $key
+     */
     public function __unset($key)
     {
         $id = str_replace("_","",$key);
@@ -38,6 +59,11 @@ class MetadataLink implements \JsonSerializable
         }
     }
 
+    /**
+     * Returns whether or not a metadata item with the specified id exists
+     * @param $key
+     * @return bool
+     */
     public function __isset($key)
     {
 
@@ -50,6 +76,12 @@ class MetadataLink implements \JsonSerializable
         return false;
     }
 
+    /**
+     * Alternat for the __unset function; do not need to have a proceeding underscore
+     * ex.
+     *  $metdataLink->DestroyLink(1) //will destroy the link to the metadata with id 1
+     * @param $id
+     */
     public function DestroyLink($id)
     {
         foreach($this->items as $item)
@@ -59,6 +91,10 @@ class MetadataLink implements \JsonSerializable
         }
     }
 
+    /**
+     * Returns the aray of metadata to become json
+     * @return array
+     */
     public function jsonSerialize()
     {
         $results = [];

@@ -8,7 +8,11 @@
 
 namespace Simnang\LoanPro\Entities;
 
-
+/**
+ * Class ClassArray
+ * @package Simnang\LoanPro\Entities
+ * Represents a class array
+ */
 class ClassArray implements \JsonSerializable
 {
     private $classType;
@@ -20,6 +24,10 @@ class ClassArray implements \JsonSerializable
         $this->items = [];
     }
 
+    /**
+     * Returns the Json serializable array
+     * @return array
+     */
     public function jsonSerialize()
     {
         return ["results"=>$this->items];
