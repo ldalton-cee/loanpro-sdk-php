@@ -38,11 +38,6 @@ class LoanSettings extends \Simnang\LoanPro\Entities\BaseEntity
             "isStoplightManuallySet"=>[0,1],
             "eBilling"=>[0,1],
         ],
-        "dates"=>[
-            "repoDate",
-            "closedDate",
-            "liquidationDate",
-        ],
         "timestamp"=>[
             "repoDate",
             "closedDate",

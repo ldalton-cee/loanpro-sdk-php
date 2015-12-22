@@ -234,6 +234,12 @@ class LoanCollections extends CollectionBase
             "Actual-Next"=>"actual",
             "Last-Next"=>"last"
         ],
+        "customerRole"=>[
+            "Additional"=>"additional",
+            "Primary"=>"primary",
+            "Secondary"=>"secondary",
+            "Unassigned"=>"unassigned",
+        ],
     ];
 
     /**
@@ -270,5 +276,6 @@ class LoanCollections extends CollectionBase
         "Late Fee Calculation"=>"lateFeeCalc",
         "Late Fee Percentage Base"=>"latefeepercentbase",
         "Payment Date Application"=>"pmtdateapp",
+        "Customer Role"=>"customerRole",
     ];
 }

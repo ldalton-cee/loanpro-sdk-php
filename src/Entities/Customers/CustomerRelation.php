@@ -2,27 +2,34 @@
 /**
  * Created by IntelliJ IDEA.
  * User: tofurama
- * Date: 12/21/15
- * Time: 2:54 PM
+ * Date: 12/22/15
+ * Time: 4:14 PM
  */
 
-namespace Simnang\LoanPro\Entities;
+namespace Simnang\LoanPro\Entities\Customers;
 
-/**
- * Class MetaData
- * @package Simnang\LoanPro\Entities
- *
- * Represents a piece of metadata
- */
-class MetaData implements \JsonSerializable
+
+use Simnang\LoanPro\Collections\CollectionRetriever;
+use Simnang\LoanPro\Entities\MetaData;
+
+class CustomerRelation extends MetaData
 {
-    public $metaDataName;
-    public $entityName = null;
-    public $id;
-    public $destroy = false;
-    public $update = false;
-    protected static $baseURI = "/api/1/odata.svc/";
+    protected $loanRelationship;
 
+    public function __construct(){
+        $this->loanRelationship = "additional";
+    }
+
+    public function SetRelation($relation = "")
+    {
+        if(CollectionRetriever::IsValidItem("loan/customerRole/".$this->loanRelationship))
+            $this->loanRelationship = $relation;
+    }
+
+    public function GetRelation()
+    {
+        return $this->loanRelationship;
+    }
     /**
      * Returns the aray of metadata to become json
      * @return array
@@ -37,6 +44,7 @@ class MetaData implements \JsonSerializable
                     "type" => "Entity." . ((!is_null($this->entityName))? $this->entityName : $this->metaDataName)
                 ],
                 "__update"=>"true",
+                "__setLoanRole"=>$this->loanRelationship,
             ];
         }
         else {
@@ -45,6 +53,7 @@ class MetaData implements \JsonSerializable
                     "uri" => MetaData::$baseURI . $this->metaDataName . "(id=" . $this->id . ")",
                     "type" => "Entity." . ((!is_null($this->entityName))? $this->entityName : $this->metaDataName)
                 ],
+                "__setLoanRole"=>$this->loanRelationship,
             ];
             if($this->destroy)
                 $obj["__destroy"]=$this->destroy;

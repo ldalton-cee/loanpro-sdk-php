@@ -7,6 +7,7 @@
  */
 
 namespace Simnang\LoanPro\Entities;
+use Simnang\LoanPro\Entities\Customers\CustomerRelation;
 
 /**
  * Class BaseEntity
@@ -336,7 +337,13 @@ class BaseEntity implements \JsonSerializable
                 $meta = $object->__metadata;
                 $id = str_replace(")","", explode("=",$meta->uri)[1]);
                 $metaName = explode(".",$meta->type)[1];
-                $metadata = new MetaData();
+                if($this->validationArray["metadataLink"][$key] == "Simnang\\LoanPro\\Entities\\Customers\\Customer")
+                {
+                    $metadata = new CustomerRelation();
+                    $metadata->SetRelation($object->GetRelation());
+                }
+                else
+                    $metadata = new MetaData();
                 $metadata->metaDataName = $metaName;
                 $metadata->id = $id;
                 $arr[] = $metadata;
@@ -382,23 +389,33 @@ class BaseEntity implements \JsonSerializable
         //handle metadata links
         if(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]))
         {
-            //we can do the id of the metadata link, or the object for the metadata link
-            if(is_int($val)) {
-                $meta = new MetaData();
-                $meta->id = $val;
-                if(class_exists($this->validationArray["metadataLink"][$key]))
-                    $meta->metaDataName = (new $this->validationArray["metadataLink"][$key]())->metaDataName;
-                else
-                    $meta->metaDataName = $this->validationArray["metadata"][$key];
-                return $meta;
+
+            if($this->validationArray["metadataLink"][$key] == "Simnang\\LoanPro\\Entities\\Customers\\Customer")
+            {
+                $metadata = new CustomerRelation();
+                $metadata->id($val[0]);
+                $metadata->SetRelation($val[1]);
+                $metadata->metaDataName = (new $this->validationArray["metadataLink"][$key]())->metaDataName;
+                return $metadata;
             }
-            elseif( ($val instanceof $this->validationArray["metadataLink"][$key]) && !is_null($val->id)){
-                $meta = new MetaData();
-                $meta->id = $val->id;
-                $meta->metaDataName = $val->metaDataName;
-                if(property_exists($val, "entityName"))
-                    $meta->entityName = $val->entityName;
-                return $meta;
+            else {
+                //we can do the id of the metadata link, or the object for the metadata link
+                if (is_int($val)) {
+                    $meta = new MetaData();
+                    $meta->id = $val;
+                    if (class_exists($this->validationArray["metadataLink"][$key]))
+                        $meta->metaDataName = (new $this->validationArray["metadataLink"][$key]())->metaDataName;
+                    else
+                        $meta->metaDataName = $this->validationArray["metadata"][$key];
+                    return $meta;
+                } elseif (($val instanceof $this->validationArray["metadataLink"][$key]) && !is_null($val->id)) {
+                    $meta = new MetaData();
+                    $meta->id = $val->id;
+                    $meta->metaDataName = $val->metaDataName;
+                    if (property_exists($val, "entityName"))
+                        $meta->entityName = $val->entityName;
+                    return $meta;
+                }
             }
         }
         //validate single metadata link
@@ -538,7 +555,12 @@ class BaseEntity implements \JsonSerializable
             {
                 $this->properties[$key] = new MetadataLink($this->validationArray["metadataLink"][$key]);
             }
-            if(is_int($val) || ($val instanceof $this->validationArray["metadataLink"][$key]) && !is_null($val->id))
+            if($this->validationArray["metadataLink"][$key] == "Simnang\\LoanPro\\Entities\\Customers\\Customer")
+            {
+                if(is_array($val) && count($val) == 2)
+                    return true;
+            }
+            elseif(is_int($val) || ($val instanceof $this->validationArray["metadataLink"][$key]) && !is_null($val->id))
             {
                 return true;
             }
