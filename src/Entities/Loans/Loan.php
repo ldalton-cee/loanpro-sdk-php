@@ -54,7 +54,7 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
             "LoanSetup"=>"Simnang\\LoanPro\\Entities\\Loans\\LoanSetup",
             "LoanSettings"=>"Simnang\\LoanPro\\Entities\\Loans\\LoanSettings",
             "Insurance"=>"Simnang\\LoanPro\\Entities\\Loans\\Insurance",
-
+            "Collateral"=>"Simnang\\LoanPro\\Entities\\Loans\\Collateral",
         ],
         "classArray"=>[
             "Autopays"=>"Simnang\\LoanPro\\Entities\\Loans\\Autopay",
