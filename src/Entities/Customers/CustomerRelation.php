@@ -42,8 +42,8 @@ class CustomerRelation extends MetaData
         {
             $obj = [
                 "__metadata" => [
-                    "uri" => MetaData::$baseURI . $this->metaDataName . "(id=" . $this->id . ")",
-                    "type" => "Entity." . ((!is_null($this->entityName))? $this->entityName : $this->metaDataName)
+                    "uri" => MetaData::$baseURI . "Customers(id=" . $this->id . ")",
+                    "type" => "Entity.Customer"
                 ],
                 "__update"=>"true",
                 "__setLoanRole"=>$rel,
@@ -52,8 +52,8 @@ class CustomerRelation extends MetaData
         else {
             $obj = [
                 "__metadata" => [
-                    "uri" => MetaData::$baseURI . $this->metaDataName . "(id=" . $this->id . ")",
-                    "type" => "Entity." . ((!is_null($this->entityName))? $this->entityName : $this->metaDataName)
+                    "uri" => MetaData::$baseURI . "Customers(id=" . $this->id . ")",
+                    "type" => "Entity.Customer"
                 ],
                 "__setLoanRole"=>$rel,
             ];
