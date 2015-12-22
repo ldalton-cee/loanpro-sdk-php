@@ -74,7 +74,7 @@ class Payment extends \Simnang\LoanPro\Entities\BaseEntity
         "collections"=>[
             "extra"=>"payment",
             "cardFeeType"=>"loan/cardfee.types",
-            "echeckAuthType"=>"payment.echeckauth",
+            "echeckAuthType"=>"payment/echeckauth",
         ],
     ];
 }

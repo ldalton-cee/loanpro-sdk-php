@@ -42,8 +42,8 @@ class CollectionRetriever
         "customer"=>"Simnang\\LoanPro\\Collections\\Customers\\CustomerCollections",
         "geo"=>"Simnang\\LoanPro\\Collections\\Customers\\GeographicCollections",
         "company"=>"Simnang\\LoanPro\\Collections\\Company\\CompanyCollections",
-        "customerEmployer"=>"Simnang\\LoanPro\\Collections\\Customers\\EmployerCollections",
-        "customerReference"=>"Simnang\\LoanPro\\Collections\\Customers\\CustomerReferenceCollections",
+        "customer employer"=>"Simnang\\LoanPro\\Collections\\Customers\\EmployerCollections",
+        "customer reference"=>"Simnang\\LoanPro\\Collections\\Customers\\CustomerReferenceCollections",
         "payment"=>"Simnang\\LoanPro\\Collections\\Misc\\PaymentCollections",
         "credit card"=>"Simnang\\LoanPro\\Collections\\Misc\\CreditCardCollections",
         "phone"=>"Simnang\\LoanPro\\Collections\\Misc\\PhoneCollections",
@@ -92,8 +92,9 @@ class CollectionRetriever
     {
         $pathParts = explode("/", $seriesPath);
 
-        if(count($pathParts) != 3)
+        if(count($pathParts) != 3) {
             return false;
+        }
 
         $largeCollection = $pathParts[0];
         $subCollection = $pathParts[1];
@@ -104,12 +105,15 @@ class CollectionRetriever
 
         if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
             $collName = CollectionRetriever::$collNameMap[$largeCollection];
-        else
+        else {
+
+            var_dump($pathParts);
             return false;
+        }
 
         if(isset($collName::GetListNames()[$subCollection]))
         {
-            $subCollection = LoanCollections::GetListNames()[$subCollection];
+            $subCollection = $collName::GetListNames()[$subCollection];
         }
         if(isset($collName::GetLists()[$subCollection]))
         {
@@ -119,6 +123,7 @@ class CollectionRetriever
             }
         }
 
+        var_dump($pathParts);
         return false;
     }
 

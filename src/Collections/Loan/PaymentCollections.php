@@ -35,13 +35,19 @@ class PaymentCollections extends CollectionBase
             "Individual Signature"=>"PPD",
             "Telephone"=>"TEL",
             "Web"=>"WEB"
-        ]
+        ],
+        "methods"=>
+        [
+            "Debit"=>"debit",
+            "E-Check"=>"echeck"
+        ],
     ];
 
     protected static $listNames = [
         "Transactions"=>"extra.tx",
         "Periods"=>"extra.periods",
         "Card Payment Fee Types"=>"cardfee.types",
-        "E-Check Authentication"=>"echeckauth"
+        "E-Check Authentication"=>"echeckauth",
+        "Methods"=>"methods",
     ];
 }

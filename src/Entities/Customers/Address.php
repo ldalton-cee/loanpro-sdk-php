@@ -32,7 +32,7 @@ class Address extends \Simnang\LoanPro\Entities\BaseEntity
             "zipcode",
         ],
         "collections"=>[
-            "state"=>"geo/",
+            "state"=>"geo",
             "country"=>"company/country",
         ]
     ];

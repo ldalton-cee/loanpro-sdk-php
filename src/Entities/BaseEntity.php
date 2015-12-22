@@ -270,7 +270,14 @@ class BaseEntity implements \JsonSerializable
         //Reverse collections (collection paths in the sdk use a '/', loanpro ones don't)
         if(isset($this->validationArray["collections"]) && isset($this->validationArray["collections"][$key]))
         {
-            $val =  explode("/",\Simnang\LoanPro\Collections\CollectionRetriever::ReverseTranslate($val))[2];
+            $parts =  explode("/",\Simnang\LoanPro\Collections\CollectionRetriever::ReverseTranslate($val));
+            if($key == "extra")
+                var_dump($parts);
+            $numPartsGiven = count(explode("/",$this->validationArray["collections"][$key]));
+            $val = [];
+            for($i = $numPartsGiven; $i < 3; ++$i)
+                $val[] = $parts[$i];
+            $val = implode("/",$val);
         }
         //Get the class instance from a class
         if((isset($this->validationArray["class"]) && isset($this->validationArray["class"][$key])))
@@ -340,8 +347,8 @@ class BaseEntity implements \JsonSerializable
         //Get the appropriate entity type if the full type isn't provided
         if(isset($this->validationArray["entityType"]) && in_array($key, $this->validationArray["entityType"]))
         {
-            if(isset(static::$entityType[$key]))
-                $val = static::$entityType[$key];
+            if(isset(BaseEntity::$entityType[$val]))
+                $val = BaseEntity::$entityType[$val];
         }
         //handle metadata links
         if(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]))
@@ -473,7 +480,7 @@ class BaseEntity implements \JsonSerializable
         //validate entity types
         if(isset($this->validationArray["entityType"]) && in_array($key, $this->validationArray["entityType"]))
         {
-            return (isset(static::$entityType[$key]) || in_array($key, static::$entityType));
+            return (isset(BaseEntity::$entityType[$val]) || in_array($val, BaseEntity::$entityType));
         }
         //validate class arrays
         if(isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key]))
