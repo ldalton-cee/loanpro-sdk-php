@@ -21,7 +21,7 @@ class Advancement extends \Simnang\LoanPro\Entities\BaseEntity
      * @var string
      */
     public $metaDataName = "LoanAdvancements";
-    public $entityType = "Advancement";
+    public $entityName = "Advancement";
 
     /**
      * Validation array for all of the collateral fields

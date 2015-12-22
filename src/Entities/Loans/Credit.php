@@ -21,7 +21,7 @@ class Credit extends \Simnang\LoanPro\Entities\BaseEntity
      * @var string
      */
     public $metaDataName = "LoanCredits";
-    public $entityType = "Credit";
+    public $entityName = "Credit";
 
     /**
      * Validation array for all of the collateral fields
