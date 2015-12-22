@@ -47,7 +47,7 @@ class Payment extends \Simnang\LoanPro\Entities\BaseEntity
             "order",
             "paymentProcessorId",
         ],
-        "date"=>[
+        "dates"=>[
             "date",
             "beforeNextDueDate",
         ],

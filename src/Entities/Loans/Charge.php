@@ -42,7 +42,7 @@ class Charge extends \Simnang\LoanPro\Entities\BaseEntity
             "priorcutoff",
             "_notEditable",
         ],
-        "date"=>[
+        "dates"=>[
             "date",
         ],
         "ranges"=>[

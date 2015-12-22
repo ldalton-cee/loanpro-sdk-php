@@ -21,7 +21,7 @@ class Customer extends \Simnang\LoanPro\Entities\BaseEntity
             "id",
             "ssn",
         ],
-        "date"=>[
+        "dates"=>[
             "birthDate"
         ],
         "ranges"=>[

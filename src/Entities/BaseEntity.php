@@ -210,6 +210,10 @@ class BaseEntity implements \JsonSerializable
             else
                 $this->properties[$key] = $this->TranslateProperty($key, $val);
         }
+        else
+        {
+            var_dump($key,$val);
+        }
     }
 
     /**
@@ -406,7 +410,7 @@ class BaseEntity implements \JsonSerializable
         //validate ints
         if(isset($this->validationArray["int"]) && in_array($key, $this->validationArray["int"]))
         {
-            return is_integer($val);
+            return is_numeric($val);
         }
         //strings are valid
         if(isset($this->validationArray["string"]) && in_array($key, $this->validationArray["string"]))

@@ -20,7 +20,7 @@ class Employer extends \Simnang\LoanPro\Entities\BaseEntity
         "int"=>[
             "id",
         ],
-        "date"=>[
+        "dates"=>[
             "payDate",
             "hireDate"
         ],

@@ -42,6 +42,15 @@ class CustomerCollections extends CollectionBase
             "EIN"=>"employerNumber",
             "SIN"=>"sin",
             "SSN"=>"ssn"
+        ],
+        "phoneType"=>
+        [
+            "Cell"=>"cell",
+            "CellSmartPhone"=>"cellSmartPhone",
+            "Home"=>"home",
+            "Fax"=>"fax",
+            "Office"=>"office",
+            "Other"=>"other",
         ]
     ];
 
@@ -49,6 +58,7 @@ class CustomerCollections extends CollectionBase
         "Customer Type"=>"type",
         "Gender"=>"gender",
         "Generation Code"=>"generationCode",
-        "ID Number Type"=>"idType"
+        "ID Number Type"=>"idType",
+        "Phone Type"=>"phoneType"
     ];
 }

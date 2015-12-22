@@ -36,7 +36,7 @@ class Autopay extends \Simnang\LoanPro\Entities\BaseEntity
             "daysInPeriod",
             "recurringPeriods",
         ],
-        "date"=>[
+        "dates"=>[
             "applyDate",
             "processDate"=>"m/d/Y",
             "processDateTime"=>"Y-m-d H:i:s",
