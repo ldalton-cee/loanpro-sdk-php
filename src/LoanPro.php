@@ -228,6 +228,11 @@ class LoanPro {
                 $headers[] = "Content-Type: application/json";
                 $headers[] = "Content-Length: ".strlen($payload);
                 curl_setopt($request, CURLOPT_POSTFIELDS, $payload);
+
+
+                var_dump($method);
+                var_dump($headers);
+                echo($payload);
             }
         }
 

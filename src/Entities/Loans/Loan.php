@@ -23,16 +23,6 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
     public $metaDataName = "Loans";
 
     /**
-     * Sets up some default values
-     */
-    public function __construct()
-    {
-        $this->modId = 0;
-        $this->modTotal = 0;
-        $this->active = 1;
-    }
-
-    /**
      * The validation array for all of the fields represented in LoanPro
      * @var array
      */
@@ -43,7 +33,9 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
             "modId"
         ],
         "ranges"=>[
-            "active"=>[0,1]
+            "active"=>[0,1],
+            "archived"=>[0,1],
+            "deleted"=>[0,1],
         ],
         "string"=>[
             "displayId",
