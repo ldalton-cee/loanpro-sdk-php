@@ -204,7 +204,7 @@ class LoanCollections extends CollectionBase
             "Yes"=>"yes",
             "No"=>"no",
         ],
-        "curtailPercentBase"=>[
+        "curtailpercentbase"=>[
             "Loan Amount"=>"loanAmount",
         ],
         "nddCalc"=>[
@@ -270,7 +270,7 @@ class LoanCollections extends CollectionBase
         "Discount Calculation"=>"discountCalc",
         "Days in Period"=>"daysinperiod",
         "Last As Final"=>"lastAsFinal",
-        "Curtailment Percent Base"=>"curtailPercentBase",
+        "Curtailment Percent Base"=>"curtailpercentbase",
         "NDD Calc"=>"nddCalc",
         "End Interest"=>"endInterest",
         "Fees Paid By"=>"feesPaidBy",

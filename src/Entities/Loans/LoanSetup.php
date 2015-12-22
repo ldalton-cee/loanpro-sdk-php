@@ -70,7 +70,7 @@ class LoanSetup extends \Simnang\LoanPro\Entities\BaseEntity
             "diyAlt"=>"loan/diyAlt",
             "daysInPeriod"=>"loan/daysinperiod",
             "lastAsFinal"=>"loan/lastAsFinal",
-            "curtailPercentBase"=>"loan/curtailPercentBase",
+            "curtailPercentBase"=>"loan/curtailpercentbase",
             "nddCalc"=>"loan/nddCalc",
             "endInterest"=>"loan/endInterest",
             "feesPaidBy"=>"loan/feesPaidBy",
