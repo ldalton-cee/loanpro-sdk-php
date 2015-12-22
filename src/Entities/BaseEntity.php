@@ -356,7 +356,7 @@ class BaseEntity implements \JsonSerializable
                 $meta = new MetaData();
                 $meta->id = $val->id;
                 $meta->metaDataName = $val->metaDataName;
-                if(properties($val, "entityName"))
+                if(property_exists($val, "entityName"))
                     $meta->entityName = $val->entityName;
                 return $meta;
             }
