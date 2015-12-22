@@ -36,7 +36,7 @@ class Insurance extends \Simnang\LoanPro\Entities\BaseEntity
             "modTotal",
             "modId"
         ],
-        "timestamp"=>[
+        "dates"=>[
             "startDate",
             "endDate"
         ],

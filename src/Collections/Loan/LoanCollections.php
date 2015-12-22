@@ -56,18 +56,11 @@ class LoanCollections extends CollectionBase
         "firstDayInterest"=>[
             "Yes"=>"yes", "No"=>"no"
         ],
-        "cardfee"=>[
-            "Waive Fee"=>"0",
-            "Flat Fee"=>"1",
-            "Percentage Fee"=>"2",
-            "Greater of Fee or Percentage"=>"3",
-            "Lesser of Fee or Percentage"=>"4"
-        ],
         "ebilling"=>[
             "Yes"=>"yes",
             "No"=>"no"
         ],
-        "ecoa"=>[
+        "ecoacodes"=>[
             "Not Specified"=>"0",
             "Individual or Primary"=>"1",
             "Joint Contract"=>"2",
@@ -258,9 +251,8 @@ class LoanCollections extends CollectionBase
         "Beg End"=>"begend",
         "First Period Days"=>"firstPeriodDays",
         "First Day Interest"=>"firstDayInterest",
-        "Card Payment Fee"=>"cardfee",
         "E-Billing"=>"ebilling",
-        "ECOA"=>"ecoa",
+        "ECOA"=>"ecoacodes",
         "Credit Status"=>"creditstatus",
         "Credit Bureau"=>"creditbureau",
         "Reporting Type"=>"reportingtype",

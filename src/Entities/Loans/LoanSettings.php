@@ -43,10 +43,10 @@ class LoanSettings extends \Simnang\LoanPro\Entities\BaseEntity
             "liquidationDate"
         ],
         "collections"=>[
-            "cardFeeType"=>"loan/cardfee",
+            "cardFeeType"=>"loan/cardfee.types",
             "eBilling"=>"loan/ebilling",
             "ECOACode"=>"loan/ecoa",
-            "coBuyerECOACode"=>"loan/ecoa",
+            "coBuyerECOACode"=>"loan/ecoacodes",
             "creditStatus"=>"loan/creditstatus",
             "creditBureau"=>"loan/creditbureau",
             "reportingType"=>"loan/reportingtype",
