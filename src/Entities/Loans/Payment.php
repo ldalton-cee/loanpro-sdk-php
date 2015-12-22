@@ -20,7 +20,7 @@ class Payment extends \Simnang\LoanPro\Entities\BaseEntity
      * The metadata string for it
      * @var string
      */
-    public $metaDataName = "Collateral";
+    public $metaDataName = "Payments";
 
     /**
      * Validation array for all of the collateral fields

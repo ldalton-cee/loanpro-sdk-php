@@ -59,6 +59,7 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
         "classArray"=>[
             "Autopays"=>"Simnang\\LoanPro\\Entities\\Loans\\Autopay",
             "Payments"=>"Simnang\\LoanPro\\Entities\\Loans\\Payment",
+            "Charges"=>"Simnang\\LoanPro\\Entities\\Loans\\Charge",
         ],
         "metadataLink"=>[
             "Customers"=>"Simnang\\LoanPro\\Entities\\Customers\\Customer"

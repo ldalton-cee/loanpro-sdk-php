@@ -20,7 +20,7 @@ class Autopay extends \Simnang\LoanPro\Entities\BaseEntity
      * The metadata string for it
      * @var string
      */
-    public $metaDataName = "Collateral";
+    public $metaDataName = "Autopays";
 
     /**
      * Validation array for all of the collateral fields

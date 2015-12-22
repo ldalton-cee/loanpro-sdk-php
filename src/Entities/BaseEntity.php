@@ -346,7 +346,7 @@ class BaseEntity implements \JsonSerializable
             if(is_int($val)) {
                 $meta = new MetaData();
                 $meta->id = $val;
-                if(class_exists($this->validationArray["metadata"][$key]))
+                if(class_exists($this->validationArray["metadataLink"][$key]))
                     $meta->metaDataName = (new $this->validationArray["metadataLink"][$key]())->metaDataName;
                 else
                     $meta->metaDataName = $this->validationArray["metadata"][$key];
@@ -367,7 +367,7 @@ class BaseEntity implements \JsonSerializable
                 $meta = new MetaData();
                 $meta->id = $val;
                 if(class_exists($this->validationArray["metadata"][$key]))
-                    $meta->metaDataName = (new $this->validationArray["metadataLink"][$key]())->metaDataName;
+                    $meta->metaDataName = (new $this->validationArray["metadata"][$key]())->metaDataName;
                 else
                     $meta->metaDataName = $this->validationArray["metadata"][$key];
                 return $meta;

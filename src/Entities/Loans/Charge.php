@@ -20,14 +20,14 @@ class Charge extends \Simnang\LoanPro\Entities\BaseEntity
      * The metadata string for it
      * @var string
      */
-    public $metaDataName = "Collateral";
+    public $metaDataName = "Charges";
 
     /**
      * Validation array for all of the collateral fields
      * @var array
      */
     protected $validationArray = [
-        "number"=>[
+        "numbers"=>[
             "amount",
             "paidAmount",
             "paidPercent"
@@ -36,7 +36,6 @@ class Charge extends \Simnang\LoanPro\Entities\BaseEntity
             "id",
             "chargeTypeId",
             "displayId",
-            "chargeTypeId",
             "order",
         ],
         "bool"=>[
