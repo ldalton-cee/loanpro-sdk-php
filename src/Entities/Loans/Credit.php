@@ -39,7 +39,7 @@ class Credit extends \Simnang\LoanPro\Entities\BaseEntity
             "dpdAdjustmentId",
             "apdAdjustmentId",
         ],
-        "timestamp"=>[
+        "dates"=>[
             "date",
         ],
         "string"=>[
