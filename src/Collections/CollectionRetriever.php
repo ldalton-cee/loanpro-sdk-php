@@ -211,7 +211,7 @@ class CollectionRetriever
 
 
         $largeColParts = preg_split("/(?=[A-Z])/", $largeCollection);
-        $largeCollection = strtolower(implode(" "), $largeColParts);
+        $largeCollection = strtolower(implode(" ", $largeColParts));
 
         if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
             $collName = str_replace(" ","",ucwords(CollectionRetriever::$collNameMap[$largeCollection]));
