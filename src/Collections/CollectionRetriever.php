@@ -123,8 +123,16 @@ class CollectionRetriever
         return false;
     }
 
+    public static function GetLoanProPath($seriesPath)
+    {
+        $p = CollectionRetriever::TranslatePath($seriesPath);
+        if(!$p)
+            return false;
+        return str_replace("/",".",$p);
+    }
+
     /**
-     * Translates a given SDK path into the corresponding LoanPro path
+     * Translates a given SDK path into the corresponding LoanPro path; keeps slashes
      * returns false on failure
      * @param $seriesPath
      * @return bool|string

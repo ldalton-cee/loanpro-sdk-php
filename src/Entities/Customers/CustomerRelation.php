@@ -36,7 +36,8 @@ class CustomerRelation extends MetaData
      */
     public function jsonSerialize()
     {
-        $rel = CollectionRetriever::TranslatePath("loan/customerRole/".$this->loanRelationship);
+        $rel = CollectionRetriever::GetLoanProPath("loan/customerRole/".$this->loanRelationship);
+        var_dump($rel);
         if($this->update && !$this->destroy)
         {
             $obj = [
