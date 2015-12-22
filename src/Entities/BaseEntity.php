@@ -28,6 +28,11 @@ class BaseEntity implements \JsonSerializable
         "Customer"=>"Entity.Customer"
     ];
 
+    public function IgnoreWarnings()
+    {
+        $this->properties["__ignoreWarnings"] = true;
+    }
+
     /**
      * This returns the associative array that is turned into a Json string
      * @return array
@@ -393,7 +398,7 @@ class BaseEntity implements \JsonSerializable
             if($this->validationArray["metadataLink"][$key] == "Simnang\\LoanPro\\Entities\\Customers\\Customer")
             {
                 $metadata = new CustomerRelation();
-                $metadata->id($val[0]);
+                $metadata->id = $val[0];
                 $metadata->SetRelation($val[1]);
                 $metadata->metaDataName = (new $this->validationArray["metadataLink"][$key]())->metaDataName;
                 return $metadata;
