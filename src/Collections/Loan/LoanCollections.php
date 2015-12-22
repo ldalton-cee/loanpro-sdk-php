@@ -164,7 +164,7 @@ class LoanCollections extends CollectionBase
             "Yes"=>"yes",
             "No"=>"no",
         ],
-        "daysInPeriod"=>[
+        "daysinperiod"=>[
             "1"=>1,
             "Every Business Day"=>"1B",
             '2'=>2,
@@ -268,7 +268,7 @@ class LoanCollections extends CollectionBase
         "Charge Application Type"=>"latefeeapp",
         "Interest Application"=>"interestApplication",
         "Discount Calculation"=>"discountCalc",
-        "Days in Period"=>"daysInPeriod",
+        "Days in Period"=>"daysinperiod",
         "Last As Final"=>"lastAsFinal",
         "Curtailment Percent Base"=>"curtailPercentBase",
         "NDD Calc"=>"nddCalc",
