@@ -27,7 +27,7 @@ class Collateral extends \Simnang\LoanPro\Entities\BaseEntity
      * @var array
      */
     protected $validationArray = [
-        "number"=>[
+        "numbers"=>[
             "gap",
             "warranty",
             "distance",

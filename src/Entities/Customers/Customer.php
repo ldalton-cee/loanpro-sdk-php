@@ -14,7 +14,7 @@ class Customer extends \Simnang\LoanPro\Entities\BaseEntity
     public $metaDataName = "Customers";
 
     protected $validationArray = [
-        "number"=>[
+        "numbers"=>[
             "creditLimit"
         ],
         "int"=>[

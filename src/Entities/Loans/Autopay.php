@@ -27,7 +27,7 @@ class Autopay extends \Simnang\LoanPro\Entities\BaseEntity
      * @var array
      */
     protected $validationArray = [
-        "number"=>[
+        "numbers"=>[
             "amount",
         ],
         "int"=>[

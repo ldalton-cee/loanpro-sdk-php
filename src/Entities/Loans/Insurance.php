@@ -28,7 +28,7 @@ class Insurance extends \Simnang\LoanPro\Entities\BaseEntity
      * @var array
      */
     protected $validationArray = [
-        "number"=>[
+        "numbers"=>[
             "deductible"
         ],
         "int"=>[
