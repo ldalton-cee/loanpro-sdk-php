@@ -157,7 +157,7 @@ class BaseEntity implements \JsonSerializable
      * This holds all of the fields and properties for an entity
      * @var array
      */
-    private $properties = [];
+    protected $properties = [];
 
     /**
      * This describes the properties in an array, and how they are to be validated

@@ -23,6 +23,11 @@ class Credit extends \Simnang\LoanPro\Entities\BaseEntity
     public $metaDataName = "LoanCredits";
     public $entityName = "Credit";
 
+    public function __construct()
+    {
+        $this->properties["modalType"]="credit";
+    }
+
     /**
      * Validation array for all of the collateral fields
      * @var array
@@ -38,6 +43,10 @@ class Credit extends \Simnang\LoanPro\Entities\BaseEntity
             "category",
             "dpdAdjustmentId",
             "apdAdjustmentId",
+            "paymentType",
+        ],
+        "ranges"=>[
+            "resetPastDue"=>[0,1]
         ],
         "dates"=>[
             "date",
