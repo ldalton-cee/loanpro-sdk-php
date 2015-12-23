@@ -56,7 +56,7 @@ class Customer extends \Simnang\LoanPro\Entities\BaseEntity
         "classArray"=>[
             "Phones"=>"Simnang\\LoanPro\\Entities\\Customers\\Phone",
             "PaymentMethods"=>"Simnang\\LoanPro\\Entities\\Customers\\PaymentMethods",
-            "References"=>"Simnang\\Loanpro\\Entities\\Customers\\CustomerReferences"
+            "References"=>"Simnang\\LoanPro\\Entities\\Customers\\CustomerReferences"
         ]
     ];
 }

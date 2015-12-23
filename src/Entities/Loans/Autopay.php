@@ -61,7 +61,7 @@ class Autopay extends \Simnang\LoanPro\Entities\BaseEntity
 
         ],
         "metadata"=>[
-            "PrimaryPaymentMethod"=>"\\Simnang\\Loanpro\\Entities\\Customers\\PaymentMethods",
+            "PrimaryPaymentMethod"=>"\\Simnang\\LoanPro\\Entities\\Customers\\PaymentMethods",
             "PaymentType"=>"CustomPaymentType"
         ],
     ];

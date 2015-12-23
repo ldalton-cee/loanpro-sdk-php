@@ -100,7 +100,7 @@ class BaseEntity implements \JsonSerializable
         {
             if(is_subclass_of($prop, "Simnang\\LoanPro\\Entities\\BaseEntity"))
             {
-                $props[$key] = json_decode($prop->GetUpdate());
+                $props[$key] = $prop->GetUpdate();
                 if($props[$key] == null)
                     $props[$key] = $prop;
             }
@@ -143,7 +143,7 @@ class BaseEntity implements \JsonSerializable
         //set special update fields
         $props["__id"] = $this->id;
         $props["__update"] = "true";
-        return json_encode($props);
+        return $props;
     }
 
     /**
