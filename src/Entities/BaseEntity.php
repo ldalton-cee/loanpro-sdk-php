@@ -465,6 +465,15 @@ class BaseEntity implements \JsonSerializable
         {
             return BaseEntity::ParseBool($val);
         }
+        if(isset($this->validationArray["arrays"]) && isset($this->validationArray["arrays"][$key]))
+        {
+            foreach($this->properties[$key] as $array)
+            {
+                $array[] = $val;
+            }
+
+            return $this->properties[$key];
+        }
 
         return $val;
     }
@@ -592,6 +601,15 @@ class BaseEntity implements \JsonSerializable
             {
                 return true;
             }
+        }
+        //validate array
+        if(isset($this->validationArray["arrays"]) && isset($this->validationArray["arrays"][$key]))
+        {//make sure we have a metadata link set at the appropriate spot
+            if(!isset($this->properties[$key]))
+            {
+                $this->properties[$key] = [$this->validationArray["arrays"][$key]=>[]];
+            }
+            return true;
         }
         return false;
     }

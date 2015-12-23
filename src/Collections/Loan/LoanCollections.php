@@ -253,6 +253,13 @@ class LoanCollections extends CollectionBase
             "Fixed"=>"fixed",
             "Zero"=>"zero"
         ],
+        "rollPayment"=>[
+            "Underwriting Fee"=>"fee",
+            "Refinance Fee"=>"fee",
+            "Whole Term"=>"term",
+            "Term"=>"termExact",
+            "Loan Rate"=>"loanRate",
+        ],
     ];
 
     /**
@@ -293,5 +300,8 @@ class LoanCollections extends CollectionBase
         "Funding Authorization Type"=>"funding.auth",
         "Funding Method"=>"funding.method",
         "Amount Past Due Adjustment Types"=>"apd.adjust.type",
+        "Schedule Roll Solve With"=>"rollScheduleSolve",
+        "Schedule Roll Solve For"=>"rollScheduleSolveFor",
+        "Roll Payment"=>"rollPayment"
     ];
 }
