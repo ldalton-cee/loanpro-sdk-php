@@ -23,6 +23,11 @@ class Advancement extends \Simnang\LoanPro\Entities\BaseEntity
     public $metaDataName = "LoanAdvancements";
     public $entityName = "Advancement";
 
+    public function __construct()
+    {
+        $this->properties["modalType"]="advancement";
+    }
+
     /**
      * Validation array for all of the collateral fields
      * @var array
