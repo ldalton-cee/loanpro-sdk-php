@@ -28,6 +28,8 @@ class BaseEntity implements \JsonSerializable
         "Customer"=>"Entity.Customer"
     ];
 
+    protected $skipNestedUpdate = false;
+
     public function IgnoreWarnings()
     {
         $this->properties["__ignoreWarnings"] = true;
@@ -89,8 +91,14 @@ class BaseEntity implements \JsonSerializable
      * It fails is there is no "id" property set
      * @return null|string
      */
-    public function GetUpdate()
+    public function GetUpdate($nested = false)
     {
+        if($nested && $this->skipNestedUpdate) {
+            $jsonArr = $this->jsonSerialize();
+            if(isset($jsonArr['id']))
+                unset($jsonArr['id']);
+            return $jsonArr;
+        }
         if(is_null($this->id))
         {
             return null;
@@ -100,7 +108,7 @@ class BaseEntity implements \JsonSerializable
         {
             if(is_subclass_of($prop, "Simnang\\LoanPro\\Entities\\BaseEntity"))
             {
-                $props[$key] = $prop->GetUpdate();
+                $props[$key] = $prop->GetUpdate(true);
                 if($props[$key] == null)
                     $props[$key] = $prop;
             }
@@ -110,7 +118,7 @@ class BaseEntity implements \JsonSerializable
                 $p = new ClassArray();
                 foreach($prop->items as $item)
                 {
-                    $updItm = $item->GetUpdate();
+                    $updItm = $item->GetUpdate(true);
                     if(is_null($updItm))
                         $updItm = $item;
                     $p->items[] = $updItm;

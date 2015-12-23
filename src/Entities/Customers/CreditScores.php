@@ -12,6 +12,7 @@ namespace Simnang\LoanPro\Entities\Customers;
 class CreditScores extends \Simnang\LoanPro\Entities\BaseEntity
 {
     public $metaDataName = "CreditScores";
+    protected $skipNestedUpdate = true;
 
     protected $validationArray = [
         "int"=>[
