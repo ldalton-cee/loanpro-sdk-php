@@ -249,6 +249,10 @@ class LoanCollections extends CollectionBase
         "funding.method"=>[
             "Cash Drawer"
         ],
+        "apd.adjust.type"=>[
+            "Fixed"=>"fixed",
+            "Zero"=>"zero"
+        ],
     ];
 
     /**
@@ -288,5 +292,6 @@ class LoanCollections extends CollectionBase
         "Customer Role"=>"customerRole",
         "Funding Authorization Type"=>"funding.auth",
         "Funding Method"=>"funding.method",
+        "Amount Past Due Adjustment Types"=>"apd.adjust.type",
     ];
 }

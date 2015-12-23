@@ -80,6 +80,13 @@ class BaseEntity implements \JsonSerializable
             unset($this->properties[$key]);
     }
 
+    public function Destroy($destroy = true)
+    {
+        $this->properties["__destroy"] = $destroy;
+        if(isset($this->properties["id"]))
+            $this->properties["__id"] = $this->properties["id"];
+    }
+
     public function __isset($key)
     {
         return isset($this->properties[$key]);

@@ -24,6 +24,21 @@ class ClassArray implements \JsonSerializable
         $this->items = [];
     }
 
+    public function __unset($key)
+    {
+        if(isset($this->items[$key]))
+            $this->items[$key]->Destroy();
+        else {
+            foreach ($this->items as $i)
+            {
+                if($i == $key) {
+                    $i->Destroy();
+                    return;
+                }
+            }
+        }
+    }
+
     /**
      * Returns the Json serializable array
      * @return array
