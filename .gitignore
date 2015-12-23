@@ -2,3 +2,6 @@
 composer.lock
 .idea/
 composer.phar
+TestEnvironment/.idea*
+TestEnvironment/.vagrant*
+TestEnvironment/html/composer/v*
