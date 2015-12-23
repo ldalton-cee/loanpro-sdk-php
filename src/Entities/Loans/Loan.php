@@ -54,6 +54,8 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
             "Charges"=>"Simnang\\LoanPro\\Entities\\Loans\\Charge",
             "Advancements"=>"Simnang\\LoanPro\\Entities\\Loans\\Advancement",
             "Credits"=>"Simnang\\LoanPro\\Entities\\Loans\\Credit",
+            "LinkedLoanValues"=>"Simnang\\LoanPro\\Entities\\Loans\\LinkedLoan",
+            "ChecklistItemValues"=>"Simnang\\LoanPro\\Entities\\Loans\\ChecklistItemValue",
         ],
         "metadataLink"=>[
             "Customers"=>"Simnang\\LoanPro\\Entities\\Customers\\Customer"

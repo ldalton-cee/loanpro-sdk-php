@@ -49,6 +49,7 @@ class CollectionRetriever
         "phone"=>"Simnang\\LoanPro\\Collections\\Misc\\PhoneCollections",
         "payment"=>"Simnang\\LoanPro\\Collections\\Loan\\PaymentCollections",
         "autopay"=>"Simnang\\LoanPro\\Collections\\Loan\\AutopayCollections",
+        "loanpromise"=>"Simnang\\LoanPro\\Collections\\Loan\\PromisesCollections",
     ];
 
     /**

@@ -31,7 +31,7 @@
 
         echo "<h1>End Object</h1><br /><br /><br />";
 
-        $response = $loanProSDK->odataRequest('PUT', 'odata.svc/Customers(1)', $loan->GetUpdate());
+        $response = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans(179)', $loan->GetUpdate());
         var_dump($response);
         ?>
     </body>
