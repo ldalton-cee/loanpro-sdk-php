@@ -22,6 +22,19 @@ class Payment extends \Simnang\LoanPro\Entities\BaseEntity
      */
     public $metaDataName = "Payments";
 
+    public function Void($reason, $loanId, $loanProSDK)
+    {
+        $this->Reverse($reason, $loanId, $loanProSDK);
+    }
+
+    public function Reverse($reason, $loanId, $loanProSDK)
+    {
+        if(is_null($this->id))
+            return false;
+        $this->comments = $reason;
+        return $loanProSDK->odataRequest("PUT", "Loans(".$loanId.")/VoidPayment(".$this->id.")");
+    }
+
     /**
      * Validation array for all of the collateral fields
      * @var array
