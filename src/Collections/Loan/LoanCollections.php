@@ -240,6 +240,15 @@ class LoanCollections extends CollectionBase
             "Secondary"=>"secondary",
             "Unassigned"=>"unassigned",
         ],
+        "funding.auth"=>[
+            "Company Signature"=>"ccd",
+            "Individual Signature"=>"ppd",
+            "Telephone"=>"tel",
+            "Web"=>"web"
+        ],
+        "funding.method"=>[
+            "Cash Drawer"
+        ],
     ];
 
     /**
@@ -277,5 +286,7 @@ class LoanCollections extends CollectionBase
         "Late Fee Percentage Base"=>"latefeepercentbase",
         "Payment Date Application"=>"pmtdateapp",
         "Customer Role"=>"customerRole",
+        "Funding Authorization Type"=>"funding.auth",
+        "Funding Method"=>"funding.method",
     ];
 }

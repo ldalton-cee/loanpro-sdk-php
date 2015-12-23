@@ -37,6 +37,9 @@ class Employer extends \Simnang\LoanPro\Entities\BaseEntity
         ],
         "class"=>[
             "Address"=>"Simnang\\LoanPro\\Entities\\Customers\\Address",
-        ]
+        ],
+        "classArray"=>[
+            "CustomFieldValues"=>"Simnang\\LoanPro\\Entities\\Misc\\CustomFieldValue",
+        ],
     ];
 }

@@ -60,6 +60,9 @@ class LoanSettings extends \Simnang\LoanPro\Entities\BaseEntity
             "creditBureau"=>"loan/creditbureau",
             "reportingType"=>"loan/reportingtype",
         ],
+        "classArray"=>[
+            "CustomFieldValues"=>"Simnang\\LoanPro\\Entities\\Misc\\CustomFieldValue",
+        ],
     ];
 
     /**

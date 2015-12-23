@@ -56,9 +56,14 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
             "Credits"=>"Simnang\\LoanPro\\Entities\\Loans\\Credit",
             "LinkedLoanValues"=>"Simnang\\LoanPro\\Entities\\Loans\\LinkedLoan",
             "ChecklistItemValues"=>"Simnang\\LoanPro\\Entities\\Loans\\ChecklistItemValue",
+            "PayNearMeOrders"=>"Simnang\\LoanPro\\Entities\\Loans\\PayNearMeOrder",
+            "RecurrentCharges"=>"Simnang\\LoanPro\\Entities\\Loans\\RecurringCharge",
+            "CustomFieldValues"=>"Simnang\\LoanPro\\Entities\\Misc\\CustomFieldValue",
         ],
         "metadataLink"=>[
-            "Customers"=>"Simnang\\LoanPro\\Entities\\Customers\\Customer"
-        ]
+            "Customers"=>"Simnang\\LoanPro\\Entities\\Customers\\Customer",
+            "Portfolios"=>"Portfolios",
+            "SubPortfolios"=>"Portfolios",
+        ],
     ];
 }

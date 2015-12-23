@@ -543,7 +543,7 @@ class BaseEntity implements \JsonSerializable
         //validate entity types
         if(isset($this->validationArray["entityType"]) && in_array($key, $this->validationArray["entityType"]))
         {
-            return (isset(BaseEntity::$entityType[$val]) || in_array($val, BaseEntity::$entityType));
+            return (isset(BaseEntity::$entityType[$val]) || in_array($val, BaseEntity::$entityType) || strrpos($val,"Entity."));
         }
         //validate class arrays
         if(isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key]))

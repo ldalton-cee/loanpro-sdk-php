@@ -80,5 +80,8 @@ class LoanSetup extends \Simnang\LoanPro\Entities\BaseEntity
             "paymentDateApp"=>"loan/pmtdateapp",
             "loanType"=>"loan/type",
         ],
+        "classArray"=>[
+            "CustomFieldValues"=>"Simnang\\LoanPro\\Entities\\Misc\\CustomFieldValue",
+        ],
     ];
 }

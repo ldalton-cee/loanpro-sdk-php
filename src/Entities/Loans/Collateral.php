@@ -54,6 +54,9 @@ class Collateral extends \Simnang\LoanPro\Entities\BaseEntity
         "collections"=>[
             "collateralType"=>"collateral/type",
             "gpsStatus"=>"collateral/gpsstatus"
-        ]
+        ],
+        "classArray"=>[
+            "CustomFieldValues"=>"Simnang\\LoanPro\\Entities\\Misc\\CustomFieldValue",
+        ],
     ];
 }
