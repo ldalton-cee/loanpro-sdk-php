@@ -15,9 +15,14 @@ class CreditScores extends \Simnang\LoanPro\Entities\BaseEntity
 
     protected $validationArray = [
         "int"=>[
+            "id",
             "equifaxScore",
             "transunionScore",
             "experianScore"
+        ],
+        "timestamp"=>[
+            "created",
+            "modified",
         ],
     ];
 }

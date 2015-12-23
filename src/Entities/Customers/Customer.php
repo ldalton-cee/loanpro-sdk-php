@@ -21,6 +21,7 @@ class Customer extends \Simnang\LoanPro\Entities\BaseEntity
         "int"=>[
             "id",
             "ssn",
+            "creditScoreId",
         ],
         "dates"=>[
             "birthDate"
@@ -52,6 +53,7 @@ class Customer extends \Simnang\LoanPro\Entities\BaseEntity
             "PrimaryAddress"=>"Simnang\\LoanPro\\Entities\\Customers\\Address",
             "MailAddress"=>"Simnang\\LoanPro\\Entities\\Customers\\Address",
             "Employer"=>"Simnang\\LoanPro\\Entities\\Customers\\Employer",
+            "CreditScore"=>"Simnang\\LoanPro\\Entities\\Customers\\CreditScores",
         ],
         "classArray"=>[
             "Phones"=>"Simnang\\LoanPro\\Entities\\Customers\\Phone",
