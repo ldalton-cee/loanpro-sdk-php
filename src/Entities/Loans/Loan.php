@@ -69,8 +69,8 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
         ],
         "metadataLink"=>[
             "Customers"=>"Simnang\\LoanPro\\Entities\\Customers\\Customer",
-            "Portfolios"=>"Portfolios",
-            "SubPortfolios"=>"Portfolios",
+            "Portfolios"=>"Portfolio",
+            "SubPortfolios"=>"SubPortfolio",
         ],
     ];
 }

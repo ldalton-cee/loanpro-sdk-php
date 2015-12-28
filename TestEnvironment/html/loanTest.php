@@ -31,7 +31,8 @@
 
         echo "<h1>End Object</h1><br /><br /><br />";
 
-        $loan->Portfolios = 12;
+        $loan->Portfolios = 2;
+        $loan->SubPortfolios = 3;
 
         /*Not working yet
         $recurringCharge = new \Simnang\LoanPro\Entities\Loans\RecurringCharge();
