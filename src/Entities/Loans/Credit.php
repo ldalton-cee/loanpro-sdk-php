@@ -58,5 +58,8 @@ class Credit extends \Simnang\LoanPro\Entities\BaseEntity
         "entityType"=>[
             "entityType"
         ],
+        "classArray"=>[
+            "ChargeOff"=>"Simnang\\LoanPro\\Entities\\Loans\\ChargeOff",
+        ],
     ];
 }
