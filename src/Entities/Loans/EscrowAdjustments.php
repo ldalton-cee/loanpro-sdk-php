@@ -35,7 +35,7 @@ class EscrowAdjustments extends \Simnang\LoanPro\Entities\BaseEntity
             "period",
             "subset",
         ],
-        "date"=>[
+        "dates"=>[
             "date",
         ],
     ];
