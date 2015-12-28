@@ -34,7 +34,13 @@
         $customFieldsVal = new \Simnang\LoanPro\Entities\Misc\CustomFieldValue();
         $customFieldsVal->customFieldId = 39;
         $customFieldsVal->customFieldValue = "30";
-        $customFieldsVal->
+        $customFieldsVal->entityType='Entity.LoanSettings';
+        $customFieldsVal->id = 17360;
+
+        $loanSettings = new \Simnang\LoanPro\Entities\Loans\LoanSettings();
+        $loanSettings->id = 176;
+        $loanSettings->CustomFieldValues = $customFieldsVal;
+        $loan->LoanSettings = $loanSettings;
 
         /*Not working yet
         $recurringCharge = new \Simnang\LoanPro\Entities\Loans\RecurringCharge();

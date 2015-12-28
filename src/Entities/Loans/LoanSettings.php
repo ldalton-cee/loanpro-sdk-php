@@ -26,6 +26,7 @@ class LoanSettings extends \Simnang\LoanPro\Entities\BaseEntity
             "cardFeePercent"
         ],
         "int"=>[
+            "id",
             "loanId",
             "agent",
             "loanStatusId",
