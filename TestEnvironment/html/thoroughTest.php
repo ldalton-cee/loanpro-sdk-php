@@ -243,6 +243,23 @@
 
     $loan2->Promises = $promise;
 
+    $escrowTransaction = new \Simnang\LoanPro\Entities\Loans\EscrowTransactions();
+    $escrowTransaction->category = 1;
+    $escrowTransaction->subset = 1;
+    $escrowTransaction->date = '2015-12-12';
+    $escrowTransaction->type = 'Deposit';
+    $escrowTransaction->description = 'API Test';
+    $escrowTransaction->amount = 100;
+
+    $loan2->EscrowTransactions = $escrowTransaction;
+
+    $escrowAdj = new \Simnang\LoanPro\Entities\Loans\EscrowAdjustments();
+    $escrowAdj->amount = 400;
+    $escrowAdj->period = 2;
+    $escrowAdj->subset = 1;
+    $escrowAdj->date = '2016-12-12';
+
+    $loan2->EscrowAdjustments = $escrowAdj;
 
     $funding = new \Simnang\LoanPro\Entities\Loans\Funding();
     $funding->amount = 1;

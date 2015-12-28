@@ -55,6 +55,7 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
             "Advancements"=>"Simnang\\LoanPro\\Entities\\Loans\\Advancement",
             "Credits"=>"Simnang\\LoanPro\\Entities\\Loans\\Credit",
             "Promises"=>"Simnang\\LoanPro\\Entities\\Loans\\Promises",
+            "RecurrentCharges"=>"Simnang\\LoanPro\\Entities\\Loans\\RecurringCharge",
             "LoanFunding"=>"Simnang\\LoanPro\\Entities\\Loans\\Funding",
             "LinkedLoanValues"=>"Simnang\\LoanPro\\Entities\\Loans\\LinkedLoan",
             "ChecklistItemValues"=>"Simnang\\LoanPro\\Entities\\Loans\\ChecklistItemValue",

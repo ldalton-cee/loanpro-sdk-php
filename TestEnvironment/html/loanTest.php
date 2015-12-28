@@ -31,15 +31,17 @@
 
         echo "<h1>End Object</h1><br /><br /><br />";
 
-        $escrowTransaction = new \Simnang\LoanPro\Entities\Loans\EscrowTransactions();
-        $escrowTransaction->category = 1;
-        $escrowTransaction->subset = 1;
-        $escrowTransaction->date = '2015-12-12';
-        $escrowTransaction->type = 'Deposit';
-        $escrowTransaction->description = 'API Test';
-        $escrowTransaction->amount = 100;
+        $loan->Portfolios = 12;
 
-        $loan->EscrowTransactions = $escrowTransaction;
+        /*Not working yet
+        $recurringCharge = new \Simnang\LoanPro\Entities\Loans\RecurringCharge();
+        $recurringCharge->fixedAmount = 900;
+        $recurringCharge->percentage = 0;
+        $recurringCharge->status = 0;
+        $recurringCharge->id = 13;
+
+        $loan->RecurrentCharges = $recurringCharge;
+        */
 
         var_dump(json_encode($loan->GetUpdate()));
         $response = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans(179)', $loan->GetUpdate());
