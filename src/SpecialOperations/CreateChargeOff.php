@@ -42,6 +42,7 @@ class CreateChargeOff
 
 
         var_dump($loan);
-        $loanPro->odataRequest('PUT', 'odata.svc/Loans('.$loan->id.')', $loan->GetUpdate());
+        $request = $loanPro->odataRequest('PUT', 'odata.svc/Loans('.$loan->id.')', $loan->GetUpdate());
+        var_dump($request);
     }
 }
