@@ -42,6 +42,7 @@
         $funding->method = 'Cash Drawer';
         $funding->country = "usa";
         $funding->whoEntityType = 'Customer';
+        $funding->description = "API Test";
         $loan->LoanFunding = $funding;
 
         var_dump(json_encode($loan->GetUpdate()));

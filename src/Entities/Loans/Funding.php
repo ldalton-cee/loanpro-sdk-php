@@ -55,5 +55,8 @@ class Funding extends \Simnang\LoanPro\Entities\BaseEntity
         "entityType"=>[
             "whoEntityType"
         ],
+        "string"=>[
+            "description"
+        ],
     ];
 }
