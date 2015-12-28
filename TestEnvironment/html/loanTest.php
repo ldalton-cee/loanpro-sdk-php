@@ -31,18 +31,6 @@
 
         echo "<h1>End Object</h1><br /><br /><br />";
 
-        $funding = new \Simnang\LoanPro\Entities\Loans\Funding();
-        $funding->amount = 1;
-        $funding->cashDrawerId = 1;
-        $funding->whoEntityId_customer=91;
-        $funding->whoEntityId = 91;
-        $funding->date = '2015-12-31';
-        $funding->authorizationType = 'web';
-        $funding->method = 'Cash Drawer';
-        $funding->country = "usa";
-        $funding->whoEntityType = 'Customer';
-        $loan->LoanFunding = $funding;
-
         var_dump(json_encode($loan->GetUpdate()));
         $response = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans(179)', $loan->GetUpdate());
         var_dump($response);
