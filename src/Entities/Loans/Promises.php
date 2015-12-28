@@ -35,7 +35,7 @@ class Promises extends \Simnang\LoanPro\Entities\BaseEntity
             "id",
         ],
         "ranges"=>[
-            "fullfilled"=>[0,1],
+            "fulfilled"=>[0,1],
         ],
         "dates"=>[
             "fulfillmentDate",

@@ -33,7 +33,7 @@
 
         $promise = new \Simnang\LoanPro\Entities\Loans\Promises();
         $promise->amount = 900;
-        $promise->fullfilled = 0;
+        $promise->fulfilled = 0;
         $promise->dueDate = '2016-11-11';
         $promise->subject = 'test';
         $promise->note = "<p>API Test</p>";
