@@ -50,6 +50,7 @@ class CollectionRetriever
         "payment"=>"Simnang\\LoanPro\\Collections\\Loan\\PaymentCollections",
         "autopay"=>"Simnang\\LoanPro\\Collections\\Loan\\AutopayCollections",
         "loanpromise"=>"Simnang\\LoanPro\\Collections\\Loan\\PromisesCollections",
+        "transaction"=>"Simnang\\LoanPro\\Collections\\Loan\\TransactionCollection",
     ];
 
     /**
