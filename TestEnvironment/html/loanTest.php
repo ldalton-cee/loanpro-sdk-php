@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>PHP SDK Customer Testing</title>
+        <title>PHP SDK Loan Testing</title>
     </head>
     <body>
         <?php
@@ -31,8 +31,19 @@
 
         echo "<h1>End Object</h1><br /><br /><br />";
 
+        $promise = new \Simnang\LoanPro\Entities\Loans\Promises();
+        $promise->amount = 900;
+        $promise->fullfilled = 0;
+        $promise->dueDate = '2016-11-11';
+        $promise->subject = 'test';
+        $promise->note = "<p>API Test</p>";
+
+        $loan->Promises = $promise;
+        var_dump(json_decode(json_encode($promise)));
+
         $response = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans(179)', $loan->GetUpdate());
         var_dump($response);
+
         ?>
     </body>
 </html>

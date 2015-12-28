@@ -21,28 +21,36 @@ class CreateChargeOff
     public static function CreateChargeOff(Credit $credit, Loan $loan, LoanPro $loanPro)
     {
         $chargeOff = new ChargeOff();
-        $chargeOff->entityId = $loan->id;
         if(is_null($loan->id))
         {
             $return = $loanPro->odataRequest('POST', 'odata.svc/Loans', $loan);
             $loan->PopulateFromJSON($return);
         }
-        var_dump($loan);
-
-        if(!is_null($credit->id))
+        $chargeOff->entityId = $loan->id;
+        if(is_null($credit->id))
         {
-            $chargeOff->creditId = $credit->id;
+            $loanOrig = new Loan();
+            $return = $loanPro->odataRequest('GET', 'odata.svc/Loans('.$loan->id.')?$expand=Credits', $loan);
+            $loanOrig->PopulateFromJSON($return);
+
+            $loan->Credits = $credit;
+            $loanPro->odataRequest('PUT', 'odata.svc/Loans('.$loan->id.')', $loan->GetUpdate());
+            $return = $loanPro->odataRequest('GET', 'odata.svc/Loans('.$loan->id.')?$expand=Credits', $loan);
+            $loan->PopulateFromJSON($return);
+
+            foreach($loan->Credits->items as $cred) {
+                if(!in_array($cred, $loanOrig->Credits->items)) {
+                    $credit = $cred;
+                    break;
+                }
+            }
+            if(is_null($credit->id)) return;
         }
-        var_dump($credit);
+
+        $chargeOff->creditId = $credit->id;
         $chargeOff->entityType = "Loan";
-        $credit->ChargeOff = $chargeOff;
 
-        var_dump($chargeOff);
-        $loan->Credits = $credit;
-
-
-        var_dump($loan);
-        $request = $loanPro->odataRequest('PUT', 'odata.svc/Loans('.$loan->id.')', $loan->GetUpdate());
-        var_dump($request);
+        $loan->ChargeOff = $chargeOff;
+        $loanPro->odataRequest('POST', 'odata.svc/ChargeOff', $loan->GetUpdate());
     }
 }

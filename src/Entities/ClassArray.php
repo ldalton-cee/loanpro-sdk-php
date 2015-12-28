@@ -39,6 +39,14 @@ class ClassArray implements \JsonSerializable
         }
     }
 
+    public function DestroyAll()
+    {
+        foreach ($this->items as $i)
+        {
+            $i->Destroy();
+        }
+    }
+
     /**
      * Returns the Json serializable array
      * @return array

@@ -144,6 +144,13 @@
     //            $loan->Payments = $payment;
     //var_dump(json_decode(json_encode($payment)));
 
+    $link1 = new \Simnang\LoanPro\Entities\Loans\LinkedLoan();
+    $link1->optionId = $link1->GetOptionId('Charges');
+    $link1->linkedLoanId = 180;
+    $link1->value=1;
+
+    $loan->LinkedLoanValues = $link1;
+    var_dump($loan);
 
     $autopay = new \Simnang\LoanPro\Entities\Loans\Autopay();
     $autopay->amount = 120.23;
@@ -220,6 +227,14 @@
     $loan2->Charges = $charge;
     $loan2->Advancements = $advancement;
     $loan2->Credits = $credit;
+
+    $checklistItemVal = new \Simnang\LoanPro\Entities\Loans\ChecklistItemValue();
+    $checklistItemVal->checklistId = 1;
+    $checklistItemVal->checklistItemId = 7;
+    $checklistItemVal->checklistItemValue = 1;
+    $loan2->ChecklistItemValues = $checklistItemVal;
+
+
 
     var_dump($loan2->GetUpdate());
     $return = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans('.$loan->id.")", $loan2->GetUpdate());

@@ -76,6 +76,10 @@ class BaseEntity implements \JsonSerializable
         {
             $this->properties[$key]->DestroyAll();
         }
+        elseif(isset($this->validationArray['classArray']) && isset($this->validationArray['classArray'][$key]) && isset($this->properties[$key]))
+        {
+            $this->properties[$key]->DestroyAll();
+        }
         else
             unset($this->properties[$key]);
     }
