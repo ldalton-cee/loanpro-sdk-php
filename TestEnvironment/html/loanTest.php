@@ -42,7 +42,9 @@
         $funding->method = 'Cash Drawer';
         $funding->country = "usa";
         $funding->whoEntityType = 'Customer';
+        $loan->LoanFunding = $funding;
 
+        var_dump(json_encode($loan->GetUpdate()));
         $response = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans(179)', $loan->GetUpdate());
         var_dump($response);
 
