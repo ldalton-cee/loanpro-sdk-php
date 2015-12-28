@@ -234,7 +234,14 @@
     $checklistItemVal->checklistItemValue = 1;
     $loan2->ChecklistItemValues = $checklistItemVal;
 
+    $promise = new \Simnang\LoanPro\Entities\Loans\Promises();
+    $promise->amount = 900;
+    $promise->fulfilled = 0;
+    $promise->dueDate = '2016-11-11';
+    $promise->subject = 'test';
+    $promise->note = "<p>API Test</p>";
 
+    $loan2->Promises = $promise;
 
     var_dump($loan2->GetUpdate());
     $return = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans('.$loan->id.")", $loan2->GetUpdate());

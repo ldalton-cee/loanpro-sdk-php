@@ -31,16 +31,17 @@
 
         echo "<h1>End Object</h1><br /><br /><br />";
 
-        $promise = new \Simnang\LoanPro\Entities\Loans\Promises();
-        $promise->amount = 900;
-        $promise->fulfilled = 0;
-        $promise->dueDate = '2016-11-11';
-        $promise->subject = 'test';
-        $promise->note = "<p>API Test</p>";
-
-        $loan->Promises = $promise;
-        var_dump(json_decode(json_encode($promise)));
-        var_dump(json_encode($loan->GetUpdate()));
+        $funding = new \Simnang\LoanPro\Entities\Loans\Funding();
+        $funding->amount = 1;
+        $funding->cashDrawerId = 1;
+        $funding->whoEntityId_customer=91;
+        $funding->whoEntityId = 91;
+        $funding->resetPastDue = 0;
+        $funding->date = '2015-12-31';
+        $funding->authorizationType = 'ccd';
+        $funding->method = 'Cash Drawer';
+        $funding->country = "usa";
+        $funding->whoEntityType = 'Customer';
 
         $response = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans(179)', $loan->GetUpdate());
         var_dump($response);

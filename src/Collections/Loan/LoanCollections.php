@@ -247,7 +247,10 @@ class LoanCollections extends CollectionBase
             "Web"=>"web"
         ],
         "funding.method"=>[
-            "Cash Drawer"
+            "Cash Drawer"=>"cashdrawer",
+            "Bank Account"=>"deposit",
+            "ACH Deposit"=>"deposit",
+            "EFT Bank Transfer"=>"transfer",
         ],
         "apd.adjust.type"=>[
             "Fixed"=>"fixed",
