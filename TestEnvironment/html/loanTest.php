@@ -36,13 +36,11 @@
         $funding->cashDrawerId = 1;
         $funding->whoEntityId_customer=91;
         $funding->whoEntityId = 91;
-        $funding->resetPastDue = 0;
         $funding->date = '2015-12-31';
-        $funding->authorizationType = 'ccd';
+        $funding->authorizationType = 'web';
         $funding->method = 'Cash Drawer';
         $funding->country = "usa";
         $funding->whoEntityType = 'Customer';
-        $funding->description = "API Test";
         $loan->LoanFunding = $funding;
 
         var_dump(json_encode($loan->GetUpdate()));

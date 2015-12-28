@@ -39,7 +39,7 @@ class Funding extends \Simnang\LoanPro\Entities\BaseEntity
             "id",
             "cashDrawerId",
             "whoEntityId_customer",
-            "whoEtityId",
+            "whoEntityId",
         ],
         "ranges"=>[
             "resetPastDue"=>[0,1]
@@ -54,9 +54,6 @@ class Funding extends \Simnang\LoanPro\Entities\BaseEntity
         ],
         "entityType"=>[
             "whoEntityType"
-        ],
-        "string"=>[
-            "description"
         ],
     ];
 }
