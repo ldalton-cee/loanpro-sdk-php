@@ -31,6 +31,16 @@
 
         echo "<h1>End Object</h1><br /><br /><br />";
 
+        $escrowTransaction = new \Simnang\LoanPro\Entities\Loans\EscrowTransactions();
+        $escrowTransaction->category = 1;
+        $escrowTransaction->subset = 1;
+        $escrowTransaction->date = '2015-12-12';
+        $escrowTransaction->type = 'Deposit';
+        $escrowTransaction->description = 'API Test';
+        $escrowTransaction->amount = 100;
+
+        $loan->EscrowTransactions = $escrowTransaction;
+
         var_dump(json_encode($loan->GetUpdate()));
         $response = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans(179)', $loan->GetUpdate());
         var_dump($response);

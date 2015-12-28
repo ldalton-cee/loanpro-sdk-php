@@ -63,8 +63,8 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
             "CustomFieldValues"=>"Simnang\\LoanPro\\Entities\\Misc\\CustomFieldValue",
             "RuleAppliedLoanSettings"=>"Simnang\\LoanPro\\Entities\\Misc\\RulesApplied",
             "DPDAdjustments"=>"Simnang\\LoanPro\\Entities\\Misc\\DPDAdjustment",
-            "EscrowTransactions"=>"Simnang\\LoanPro\\Entities\\Misc\\EscrowTransactions",
-            "EscrowAdjustments"=>"Simnang\\LoanPro\\Entities\\Misc\\EscrowAdjustments",
+            "EscrowTransactions"=>"Simnang\\LoanPro\\Entities\\Loans\\EscrowTransactions",
+            "EscrowAdjustments"=>"Simnang\\LoanPro\\Entities\\Loans\\EscrowAdjustments",
         ],
         "metadataLink"=>[
             "Customers"=>"Simnang\\LoanPro\\Entities\\Customers\\Customer",
