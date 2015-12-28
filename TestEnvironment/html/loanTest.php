@@ -40,13 +40,11 @@
         $loanSettings = new \Simnang\LoanPro\Entities\Loans\LoanSettings();
         $loanSettings->id = 176;
         $loanSettings->CustomFieldValues = $customFieldsVal;
-        $loan->LoanSettings = $loanSettings;
+        //$loan->LoanSettings = $loanSettings;
 
-        $rulesApplied = new \Simnang\LoanPro\Entities\Loans\RulesApplied();
-        $rulesApplied->__id = 1;
-        $rulesApplied->enabled = true;
-
-        $loan->RuleAppliedLoanSettings = $rulesApplied;
+        $dpdAdjust = new \Simnang\LoanPro\Entities\Loans\DPDAdjustment();
+        $dpdAdjust->date = '2015-12-31';
+        $loan->DPDAdjustments = $dpdAdjust;
 
         /*Not working yet
         $recurringCharge = new \Simnang\LoanPro\Entities\Loans\RecurringCharge();
