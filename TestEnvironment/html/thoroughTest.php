@@ -273,6 +273,9 @@
     $funding->whoEntityType = 'Customer';
     $loan2->LoanFunding = $funding;
 
+    $loan2->Portfolios = 2;
+    $loan2->SubPortfolios = 3;
+
     var_dump($loan2->GetUpdate());
     $return = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans('.$loan->id.")", $loan2->GetUpdate());
     var_dump($return);

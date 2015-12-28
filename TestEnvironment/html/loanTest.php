@@ -31,8 +31,10 @@
 
         echo "<h1>End Object</h1><br /><br /><br />";
 
-        $loan->Portfolios = 2;
-        $loan->SubPortfolios = 3;
+        $customFieldsVal = new \Simnang\LoanPro\Entities\Misc\CustomFieldValue();
+        $customFieldsVal->customFieldId = 39;
+        $customFieldsVal->customFieldValue = "30";
+        $customFieldsVal->
 
         /*Not working yet
         $recurringCharge = new \Simnang\LoanPro\Entities\Loans\RecurringCharge();

@@ -34,5 +34,8 @@ class CustomFieldValue extends \Simnang\LoanPro\Entities\BaseEntity
         "string"=>[
             "customFieldValue",
         ],
+        "entityType"=>[
+            "entityType"
+        ],
     ];
 }
