@@ -282,6 +282,16 @@
 
     $loan2->RuleAppliedLoanSettings = $rulesApplied;
 
+    $dpdAdjust = new \Simnang\LoanPro\Entities\Loans\DPDAdjustment();
+    $dpdAdjust->date = '2015-12-31';
+    $loan2->DPDAdjustments = $dpdAdjust;
+
+    $apdAdj = new \Simnang\LoanPro\Entities\Loans\APDAdjustment();
+    $apdAdj->date = '2015-12-31';
+    $apdAdj->dollarAmount = 1250;
+    $apdAdj->type = "Fixed";
+    $loan2->APDAdjustments = $apdAdj;
+
     var_dump($loan2->GetUpdate());
     $return = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans('.$loan->id.")", $loan2->GetUpdate());
     var_dump($return);

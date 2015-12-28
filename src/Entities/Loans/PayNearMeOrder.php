@@ -28,6 +28,7 @@ class PayNearMeOrder extends \Simnang\LoanPro\Entities\BaseEntity
      */
     protected $validationArray = [
         "int"=>[
+            "id",
             "customerId",
         ],
         "ranges"=>[

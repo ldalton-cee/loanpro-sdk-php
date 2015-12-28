@@ -41,10 +41,26 @@
         $loanSettings->id = 176;
         $loanSettings->CustomFieldValues = $customFieldsVal;
         //$loan->LoanSettings = $loanSettings;
+        $file = fopen('loanTest.php', 'r');
+        \Simnang\LoanPro\SpecialOperations\DocumentUploader::UploadDocument($file, $loanProSDK, 'LoanDocuments', 179, 9);
 
-        $dpdAdjust = new \Simnang\LoanPro\Entities\Loans\DPDAdjustment();
-        $dpdAdjust->date = '2015-12-31';
-        $loan->DPDAdjustments = $dpdAdjust;
+
+        /* Times out
+        $payNearMe = new \Simnang\LoanPro\Entities\Loans\PayNearMeOrder();
+        $payNearMe->customerId = 91;
+        $payNearMe->sendSMS = 0;
+        $payNearMe->customerName = 'Testing API';
+        $payNearMe->address1 = '123 Oak Lane';
+        $payNearMe->city = 'New York';
+        $payNearMe->status = 'Delivered';
+        $payNearMe->zipcode = '84010';
+        $payNearMe->cardNumber = '123543154652135';
+        $payNearMe->email = 't@t.com';
+        $payNearMe->phone = '8005555555';
+        $payNearMe->state = 'state/Utah';
+
+        $loan->PayNearMeOrders = $payNearMe;
+        */
 
         /*Not working yet
         $recurringCharge = new \Simnang\LoanPro\Entities\Loans\RecurringCharge();
