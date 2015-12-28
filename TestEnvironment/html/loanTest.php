@@ -40,6 +40,7 @@
 
         $loan->Promises = $promise;
         var_dump(json_decode(json_encode($promise)));
+        var_dump(json_encode($loan->GetUpdate()));
 
         $response = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans(179)', $loan->GetUpdate());
         var_dump($response);
