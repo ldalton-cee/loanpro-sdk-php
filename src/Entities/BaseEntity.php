@@ -479,7 +479,16 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["arrayOfClass"]) && isset($this->validationArray["arrayOfClass"][$key]))
         {
             $arr = $this->properties[$key];
-            $arr[] = $val;
+
+            $v = [];
+            foreach($val as $vl)
+            {
+                $tmp = new $this->validationArray["arrayOfClass"][$key]();
+                $tmp->PopulateFromJson($vl);
+                $v[] = $tmp;
+            }
+
+            $arr = array_merge($arr, $v);
             return $arr;
         }
 
@@ -626,7 +635,8 @@ class BaseEntity implements \JsonSerializable
             {
                 $this->properties[$key] = [];
             }
-            return $val instanceof $this->validationArray["arrayOfClass"][$key];
+            $valid = is_array($val);
+            return $valid;
         }
 
         return false;

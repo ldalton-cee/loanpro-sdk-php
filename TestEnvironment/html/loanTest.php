@@ -44,7 +44,7 @@
 
         //\Simnang\LoanPro\SpecialOperations\DocumentUploader::UploadDocument('/vagrant/html/composer/composer.json', $loanProSDK, 'LoanDocuments', 179, 9);
 
-        var_dump(\Simnang\LoanPro\SpecialOperations\AdminStatsOps::GetAdminStats($loan->id, $loanProSDK));
+        var_dump(json_decode(json_encode(\Simnang\LoanPro\SpecialOperations\AdminStatsOps::GetAdminStats($loan->id, $loanProSDK))));
 
 
         /* Blocked

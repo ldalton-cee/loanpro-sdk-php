@@ -19,30 +19,16 @@ class StatListItem extends BaseEntity
      */
     protected $validationArray = [
         "numbers"=>[
-            "interestCollected",
-            "feesCollected",
-            "discountCollected",
-            "pendingCollection",
-            "principalBalance",
-            "activeROI",
-            "paidOffROI",
-            "percentPaidOff",
-            "remainingInterest",
-            "currentPayoff",
-            "currentPerdiem",
-            "creditLimit",
-            "availableCredit",
-            "irr",
-            "totalDueToDate",
+            "amount",
+            "balance",
+            "total",
         ],
         "int"=>[
             "id",
+            'year',
         ],
-        "collections"=>[
-            "method"=>"loan/rollPayment",
-        ],
-        "arrays"=>[
-            "amountIncludes"=>"escrow"
-        ],
+        "string"=>[
+            "operator"
+        ]
     ];
 }
