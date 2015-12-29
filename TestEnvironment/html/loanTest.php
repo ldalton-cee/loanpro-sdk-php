@@ -44,12 +44,17 @@
 
         //\Simnang\LoanPro\SpecialOperations\DocumentUploader::UploadDocument('/vagrant/html/composer/composer.json', $loanProSDK, 'LoanDocuments', 179, 9);
 
+        var_dump(\Simnang\LoanPro\SpecialOperations\AdminStatsOps::GetAdminStats($loan->id, $loanProSDK));
+
+
+        /* Blocked
         $rollPmt = new \Simnang\LoanPro\Entities\Loans\RollPayment();
         $rollPmt->amount = 100;
         $rollPmt->method = 'loanRate';
         $rollPmt->amountIncludes = ['escrow'=>[2]];
 
         var_dump(\Simnang\LoanPro\SpecialOperations\RollPaymentOps::SetRollPayment($rollPmt, $loan->id, $loanProSDK));
+        */
 
         /* Times out
         $payNearMe = new \Simnang\LoanPro\Entities\Loans\PayNearMeOrder();
