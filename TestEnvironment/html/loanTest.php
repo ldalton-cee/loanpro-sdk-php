@@ -41,9 +41,21 @@
         $loanSettings->id = 176;
         $loanSettings->CustomFieldValues = $customFieldsVal;
         //$loan->LoanSettings = $loanSettings;
-        $file = fopen('loanTest.php', 'r');
-        \Simnang\LoanPro\SpecialOperations\DocumentUploader::UploadDocument($file, $loanProSDK, 'LoanDocuments', 179, 9);
 
+        //\Simnang\LoanPro\SpecialOperations\DocumentUploader::UploadDocument('/vagrant/html/composer/composer.json', $loanProSDK, 'LoanDocuments', 179, 9);
+
+        $schedRoll = new \Simnang\LoanPro\Entities\Loans\ScheduleRoll();
+        $schedRoll->term = 12;
+        $schedRoll->rate = 12;
+        $schedRoll->solveUsing = "dollar";
+        $schedRoll->amount = 0;
+        $schedRoll->percent = 0;
+        $schedRoll->advancedTerms = 0;
+        $schedRoll->solvFor = "balance";
+        $schedRoll->balance = 12;
+        $schedRoll->forceBalloon = 0;
+
+        $loan->ScheduleRolls = $schedRoll;
 
         /* Times out
         $payNearMe = new \Simnang\LoanPro\Entities\Loans\PayNearMeOrder();

@@ -62,6 +62,7 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
             "PayNearMeOrders"=>"Simnang\\LoanPro\\Entities\\Loans\\PayNearMeOrder",
             "RecurrentCharges"=>"Simnang\\LoanPro\\Entities\\Loans\\RecurringCharge",
             "CustomFieldValues"=>"Simnang\\LoanPro\\Entities\\Misc\\CustomFieldValue",
+            "ScheduleRolls"=>"Simnang\\LoanPro\\Entities\\Misc\\ScheduleRoll",
             "RuleAppliedLoanSettings"=>"Simnang\\LoanPro\\Entities\\Loans\\RulesApplied",
             "DPDAdjustments"=>"Simnang\\LoanPro\\Entities\\Loans\\DPDAdjustment",
             "APDAdjustments"=>"Simnang\\LoanPro\\Entities\\Loans\\APDAdjustment",

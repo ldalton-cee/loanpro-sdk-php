@@ -28,7 +28,7 @@ class DocumentUploader
         return DocumentUploader::$docTypes;
     }
 
-    public static function UploadDocument(File $file, LoanPro $loanPro, $docType, int $entityId, int $sectionId, DocumentInfo $info = null)
+    public static function UploadDocument(\File $file, LoanPro $loanPro, $docType, int $entityId, int $sectionId, DocumentInfo $info = null)
     {
         if(!in_array($docType, DocumentUploader::$docTypes))
             throw new InvalidArgumentException('Invalid DocType provided.');

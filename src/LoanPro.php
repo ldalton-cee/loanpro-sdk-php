@@ -218,6 +218,7 @@ class LoanPro {
 
         if ($method == "POST" || $method == "PUT") {
             if ($file) {
+                var_dump($file);
                 $finfo = new \finfo();
                 $detectedMimeType = $finfo->file($file, FILEINFO_MIME);
                 $postFields = array_merge($data, ['upload' => "@$file;type={$detectedMimeType}"]);
