@@ -48,7 +48,8 @@
         $rollPmt->amount = 100;
         $rollPmt->method = 'loanRate';
         $rollPmt->amountIncludes = ['escrow'=>[2]];
-        var_dump(json_decode(json_encode($rollPmt)));
+
+        var_dump(\Simnang\LoanPro\SpecialOperations\RollPaymentOps::SetRollPayment($rollPmt, $loan->id, $loanProSDK));
 
         /* Times out
         $payNearMe = new \Simnang\LoanPro\Entities\Loans\PayNearMeOrder();
