@@ -11,7 +11,7 @@ namespace Simnang\LoanPro\Entities\Reports;
 
 use Simnang\LoanPro\Entities\BaseEntity;
 
-class Stat extends BaseEntity
+class StatListItem extends BaseEntity
 {
     /**
      * Validation array for all of the collateral fields
