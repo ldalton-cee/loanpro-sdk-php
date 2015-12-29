@@ -11,6 +11,7 @@ namespace Simnang\LoanPro\SpecialOperations;
 
 use Psr\Log\InvalidArgumentException;
 use Simnang\LoanPro\Entities\Reports\AdminStats;
+use Simnang\LoanPro\LoanPro;
 
 class AdminStatsOps
 {
