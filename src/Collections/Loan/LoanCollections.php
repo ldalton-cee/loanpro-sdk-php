@@ -39,7 +39,7 @@ class LoanCollections extends CollectionBase
             "Credit Limit"=>"creditLimit","Flooring"=>"flooring","Installment"=>"installment", "Lease"=>"lease"
         ],
         "frequency"=>[
-            "Annual"=>"annually", "Bi-Weekly"=>"biweekly", "Custom"=>"custom", "Monthly"=>"monthly", "Quarterly"=>"quarerly", "Semi-Annually"=>"semiannually", "Semi-Monthly"=>"semimonthly", "Single"=>"single", "Weekly"=>"weekly"
+            "Annual"=>"annually", "Bi-Weekly"=>"biweekly", "Custom"=>"custom", "Monthly"=>"monthly", "Quarterly"=>"quarterly", "Semi-Annually"=>"semiannually", "Semi-Monthly"=>"semimonthly", "Single"=>"single", "Weekly"=>"weekly"
         ],
         "calcType"=>[
             "Interest Only"=>"interestOnly", "Rule 78"=>"rule78", "Simple Interest"=>"simpleInterest", "Simple Interest Locked"=>"simpleIntLocked"
