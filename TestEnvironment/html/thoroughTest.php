@@ -292,6 +292,20 @@
     $apdAdj->type = "Fixed";
     $loan2->APDAdjustments = $apdAdj;
 
+
+    $schedRoll = new \Simnang\LoanPro\Entities\Loans\ScheduleRoll();
+    $schedRoll->term = 12;
+    $schedRoll->rate = 12;
+    $schedRoll->solveUsing = "dollar";
+    $schedRoll->amount = 0;
+    $schedRoll->percent = 0;
+    $schedRoll->advancedTerms = 0;
+    $schedRoll->solvFor = "balance";
+    $schedRoll->balance = 1;
+    $schedRoll->forceBalloon = 0;
+
+    $loan2->ScheduleRolls = $schedRoll;
+
     var_dump($loan2->GetUpdate());
     $return = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans('.$loan->id.")", $loan2->GetUpdate());
     var_dump($return);

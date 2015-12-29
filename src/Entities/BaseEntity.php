@@ -471,11 +471,8 @@ class BaseEntity implements \JsonSerializable
         }
         if(isset($this->validationArray["arrays"]) && isset($this->validationArray["arrays"][$key]))
         {
-            $array = [];
-            foreach($this->properties[$key] as $array)
-            {
-                $array[] = $val;
-            }
+            $array = $this->properties[$key];
+            $array = array_merge($array, $key);
 
             return $array;
         }
@@ -614,11 +611,11 @@ class BaseEntity implements \JsonSerializable
             }
         }
         //validate array
-        if(isset($this->validationArray["arrays"]) && isset($this->validationArray["arrays"][$key]))
+        if(isset($this->validationArray["arrays"]) && isset($this->validationArray["arrays"][$key]) && is_array($val))
         {//make sure we have a metadata link set at the appropriate spot
             if(!isset($this->properties[$key]))
             {
-                $this->properties[$key] = [$this->validationArray["arrays"][$key]=>[]];
+                $this->properties[$key] = [];
             }
             return true;
         }

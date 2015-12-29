@@ -37,7 +37,7 @@ class RollPayment extends \Simnang\LoanPro\Entities\BaseEntity
             "method"=>"loan/rollPayment",
         ],
         "arrays"=>[
-            "amountIncludes"=>"escrow"
+            "amountIncludes"
         ],
     ];
 }
