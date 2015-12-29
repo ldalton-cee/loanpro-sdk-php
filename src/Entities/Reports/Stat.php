@@ -40,7 +40,6 @@ class Stat extends BaseEntity
         ],
         "class"=>[
             "profitSummary"=>"Simnang\\LoanPro\\Entities\\Reports\\StatList",
-            "fiveYearInterest"=>"Simnang\\LoanPro\\Entities\\Reports\\StatList",
             "netPosition"=>"Simnang\\LoanPro\\Entities\\Reports\\StatList",
         ],
         "arrayOfClass"=>[

@@ -626,7 +626,7 @@ class BaseEntity implements \JsonSerializable
             {
                 $this->properties[$key] = [];
             }
-            return $val instanceof $this->validationArray["metadata"][$key];
+            return $val instanceof $this->validationArray["arrayOfClass"][$key];
         }
 
         return false;
