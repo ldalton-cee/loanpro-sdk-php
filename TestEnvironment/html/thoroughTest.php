@@ -309,7 +309,8 @@
     var_dump($loan2->GetUpdate());
     $return = $loanProSDK->odataRequest('PUT', 'odata.svc/Loans('.$loan->id.")", $loan2->GetUpdate());
     var_dump($return);
-    exit;
+
+    var_dump(json_decode(json_encode(\Simnang\LoanPro\SpecialOperations\AdminStatsOps::GetAdminStats($loan2->id, $loanProSDK))));
 
     //var_dump(json_decode(json_encode($loan2)));
 

@@ -42,10 +42,20 @@
         $loanSettings->CustomFieldValues = $customFieldsVal;
         //$loan->LoanSettings = $loanSettings;
 
-        //\Simnang\LoanPro\SpecialOperations\DocumentUploader::UploadDocument('/vagrant/html/composer/composer.json', $loanProSDK, 'LoanDocuments', 179, 9);
+        $paymentPredict = new \Simnang\LoanPro\Entities\Loans\PaymentPrediction();
+        $paymentPredict->Amount = 225.6;
+        $paymentPredict->Date = '2015-11-30';
+        $paymentPredict->PaymentTypeId = 1;
+        $paymentPredict->Extra = 'tx/principal';
+        $paymentPredict->chargeFeeType = '1';
+        $paymentPredict->chargeFeeAmount = 5;
+        $paymentPredict->chargeFeePercentage = 5;
 
-        var_dump(json_decode(json_encode(\Simnang\LoanPro\SpecialOperations\AdminStatsOps::GetAdminStats($loan->id, $loanProSDK))));
+        var_dump(json_decode(json_encode($paymentPredict)));
 
+        /* Blocked
+         \Simnang\LoanPro\SpecialOperations\DocumentUploader::UploadDocument('/vagrant/html/composer/composer.json', $loanProSDK, 'LoanDocuments', 179, 9);
+        */
 
         /* Blocked
         $rollPmt = new \Simnang\LoanPro\Entities\Loans\RollPayment();
