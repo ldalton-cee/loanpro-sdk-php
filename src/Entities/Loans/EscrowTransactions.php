@@ -14,19 +14,13 @@ namespace Simnang\LoanPro\Entities\Loans;
  *
  * This represents Collateral entities used in LoanPro
  */
-class Credit extends \Simnang\LoanPro\Entities\BaseEntity
+class EscrowTransactions extends \Simnang\LoanPro\Entities\BaseEntity
 {
     /**
      * The metadata string for it
      * @var string
      */
-    public $metaDataName = "LoanCredits";
-    public $entityName = "Credit";
-
-    public function __construct()
-    {
-        $this->properties["modalType"]="credit";
-    }
+    public $metaDataName = "EscrowTransactions";
 
     /**
      * Validation array for all of the collateral fields
@@ -38,28 +32,17 @@ class Credit extends \Simnang\LoanPro\Entities\BaseEntity
         ],
         "int"=>[
             "id",
-            "entityId",
-            "modId",
             "category",
-            "dpdAdjustmentId",
-            "apdAdjustmentId",
-            "paymentType",
-        ],
-        "ranges"=>[
-            "resetPastDue"=>[0,1]
+            "subset"
         ],
         "dates"=>[
             "date",
         ],
+        "collections"=>[
+            "type"=>"transaction/type",
+        ],
         "string"=>[
-            "title",
-            "customApplication"
-        ],
-        "entityType"=>[
-            "entityType"
-        ],
-        "classArray"=>[
-            "ChargeOff"=>"Simnang\\LoanPro\\Entities\\Loans\\ChargeOff",
+            "description"
         ],
     ];
 }

@@ -2,3 +2,7 @@
 composer.lock
 .idea/
 composer.phar
+TestEnvironment/.idea*
+TestEnvironment/.vagrant*
+TestEnvironment/profiler*
+TestEnvironment/html/composer/v*

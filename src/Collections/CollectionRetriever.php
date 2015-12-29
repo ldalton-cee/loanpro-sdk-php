@@ -49,6 +49,8 @@ class CollectionRetriever
         "phone"=>"Simnang\\LoanPro\\Collections\\Misc\\PhoneCollections",
         "payment"=>"Simnang\\LoanPro\\Collections\\Loan\\PaymentCollections",
         "autopay"=>"Simnang\\LoanPro\\Collections\\Loan\\AutopayCollections",
+        "loanpromise"=>"Simnang\\LoanPro\\Collections\\Loan\\PromisesCollections",
+        "transaction"=>"Simnang\\LoanPro\\Collections\\Loan\\TransactionCollections",
     ];
 
     /**
@@ -218,8 +220,12 @@ class CollectionRetriever
             if(count($pathParts) == 4) {
                 $p = [];
                 $p[0] = $pathParts[0];
-                $p[1] = $pathParts[1] . "." . $pathParts[2];
-                $p[2] = $pathParts[3];
+                $ps = [];
+                for($i = 1; $i < count($pathParts)-1; ++$i)
+                    $ps[] = $pathParts[$i];
+
+                $p[1] = implode('.',$ps);
+                $p[2] = $pathParts[count($pathParts)-1];
                 $pathParts = $p;
             }
             else

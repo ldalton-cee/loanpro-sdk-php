@@ -76,8 +76,19 @@ class BaseEntity implements \JsonSerializable
         {
             $this->properties[$key]->DestroyAll();
         }
+        elseif(isset($this->validationArray['classArray']) && isset($this->validationArray['classArray'][$key]) && isset($this->properties[$key]))
+        {
+            $this->properties[$key]->DestroyAll();
+        }
         else
             unset($this->properties[$key]);
+    }
+
+    public function Destroy($destroy = true)
+    {
+        $this->properties["__destroy"] = $destroy;
+        if(isset($this->properties["id"]))
+            $this->properties["__id"] = $this->properties["id"];
     }
 
     public function __isset($key)
@@ -419,7 +430,7 @@ class BaseEntity implements \JsonSerializable
                     if (class_exists($this->validationArray["metadataLink"][$key]))
                         $meta->metaDataName = (new $this->validationArray["metadataLink"][$key]())->metaDataName;
                     else
-                        $meta->metaDataName = $this->validationArray["metadata"][$key];
+                        $meta->metaDataName = $this->validationArray["metadataLink"][$key];
                     return $meta;
                 } elseif (($val instanceof $this->validationArray["metadataLink"][$key]) && !is_null($val->id)) {
                     $meta = new MetaData();
@@ -457,6 +468,28 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["bool"]) && in_array($key, $this->validationArray["bool"]))
         {
             return BaseEntity::ParseBool($val);
+        }
+        if(isset($this->validationArray["arrays"]) && in_array($key, $this->validationArray["arrays"]))
+        {
+            $array = $this->properties[$key];
+            $array = array_merge($array, $val);
+
+            return $array;
+        }
+        if(isset($this->validationArray["arrayOfClass"]) && isset($this->validationArray["arrayOfClass"][$key]))
+        {
+            $arr = $this->properties[$key];
+
+            $v = [];
+            foreach($val as $vl)
+            {
+                $tmp = new $this->validationArray["arrayOfClass"][$key]();
+                $tmp->PopulateFromJson($vl);
+                $v[] = $tmp;
+            }
+
+            $arr = array_merge($arr, $v);
+            return $arr;
         }
 
         return $val;
@@ -543,7 +576,7 @@ class BaseEntity implements \JsonSerializable
         //validate entity types
         if(isset($this->validationArray["entityType"]) && in_array($key, $this->validationArray["entityType"]))
         {
-            return (isset(BaseEntity::$entityType[$val]) || in_array($val, BaseEntity::$entityType));
+            return (isset(BaseEntity::$entityType[$val]) || in_array($val, BaseEntity::$entityType) || strrpos($val,"Entity.") == 0);
         }
         //validate class arrays
         if(isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key]))
@@ -586,6 +619,26 @@ class BaseEntity implements \JsonSerializable
                 return true;
             }
         }
+        //validate array
+        if(isset($this->validationArray["arrays"]) && in_array($key,$this->validationArray["arrays"]) && is_array($val))
+        {//make sure we have a metadata link set at the appropriate spot
+            if(!isset($this->properties[$key]))
+            {
+                $this->properties[$key] = [];
+            }
+            return true;
+        }
+        //validate array
+        if(isset($this->validationArray["arrayOfClass"]) && isset($this->validationArray["arrayOfClass"][$key]))
+        {//make sure we have a metadata link set at the appropriate spot
+            if(!isset($this->properties[$key]))
+            {
+                $this->properties[$key] = [];
+            }
+            $valid = is_array($val);
+            return $valid;
+        }
+
         return false;
     }
 

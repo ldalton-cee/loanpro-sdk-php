@@ -240,6 +240,29 @@ class LoanCollections extends CollectionBase
             "Secondary"=>"secondary",
             "Unassigned"=>"unassigned",
         ],
+        "funding.auth"=>[
+            "Company Signature"=>"ccd",
+            "Individual Signature"=>"ppd",
+            "Telephone"=>"tel",
+            "Web"=>"web"
+        ],
+        "funding.method"=>[
+            "Cash Drawer"=>"cashdrawer",
+            "Bank Account"=>"deposit",
+            "ACH Deposit"=>"deposit",
+            "EFT Bank Transfer"=>"transfer",
+        ],
+        "apd.adjust.type"=>[
+            "Fixed"=>"fixed",
+            "Zero"=>"zero"
+        ],
+        "rollPayment"=>[
+            "Underwriting Fee"=>"fee",
+            "Refinance Fee"=>"fee",
+            "Whole Term"=>"term",
+            "Term"=>"termExact",
+            "Loan Rate"=>"loanRate",
+        ],
     ];
 
     /**
@@ -277,5 +300,11 @@ class LoanCollections extends CollectionBase
         "Late Fee Percentage Base"=>"latefeepercentbase",
         "Payment Date Application"=>"pmtdateapp",
         "Customer Role"=>"customerRole",
+        "Funding Authorization Type"=>"funding.auth",
+        "Funding Method"=>"funding.method",
+        "Amount Past Due Adjustment Types"=>"apd.adjust.type",
+        "Schedule Roll Solve With"=>"rollScheduleSolve",
+        "Schedule Roll Solve For"=>"rollScheduleSolveFor",
+        "Roll Payment"=>"rollPayment"
     ];
 }

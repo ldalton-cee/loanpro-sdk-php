@@ -48,6 +48,9 @@ class Insurance extends \Simnang\LoanPro\Entities\BaseEntity
         ],
         "phone"=>[
             "phone"
-        ]
+        ],
+        "classArray"=>[
+            "CustomFieldValues"=>"Simnang\\LoanPro\\Entities\\Misc\\CustomFieldValue",
+        ],
     ];
 }

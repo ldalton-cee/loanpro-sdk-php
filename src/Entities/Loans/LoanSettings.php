@@ -26,6 +26,7 @@ class LoanSettings extends \Simnang\LoanPro\Entities\BaseEntity
             "cardFeePercent"
         ],
         "int"=>[
+            "id",
             "loanId",
             "agent",
             "loanStatusId",
@@ -59,6 +60,9 @@ class LoanSettings extends \Simnang\LoanPro\Entities\BaseEntity
             "creditStatus"=>"loan/creditstatus",
             "creditBureau"=>"loan/creditbureau",
             "reportingType"=>"loan/reportingtype",
+        ],
+        "classArray"=>[
+            "CustomFieldValues"=>"Simnang\\LoanPro\\Entities\\Misc\\CustomFieldValue",
         ],
     ];
 

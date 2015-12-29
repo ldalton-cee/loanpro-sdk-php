@@ -218,6 +218,7 @@ class LoanPro {
 
         if ($method == "POST" || $method == "PUT") {
             if ($file) {
+                var_dump($file);
                 $finfo = new \finfo();
                 $detectedMimeType = $finfo->file($file, FILEINFO_MIME);
                 $postFields = array_merge($data, ['upload' => "@$file;type={$detectedMimeType}"]);
@@ -298,6 +299,23 @@ class LoanPro {
 
         $this->logDebug($path);
         $result = $this->tx($method, $this->getUri($path), $data);
+
+        $this->logDebug($result);
+        return json_decode($result);
+    }
+
+    /**
+     * This returns a Json object (represented as an stdClass) holding the response from running an HTTP request to the uri provided
+     * @param $method The HTTP method to use
+     * @param $path The uri of the endpoint
+     * @param array $data The data to send in an associative array that will be mapped to a json object
+     * @return stdClass The result as an stdClass Objct
+     */
+    public function fileRequest($method, $path, $data = [], $file) {
+        $path = $path instanceof ODataResourcePath ? (string)$path : $path;
+
+        $this->logDebug($path);
+        $result = $this->tx($method, $this->getUri($path), $data, $file);
 
         $this->logDebug($result);
         return json_decode($result);
