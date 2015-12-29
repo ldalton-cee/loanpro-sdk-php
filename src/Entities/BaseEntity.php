@@ -472,7 +472,7 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["arrays"]) && in_array($key, $this->validationArray["arrays"]))
         {
             $array = $this->properties[$key];
-            $array = array_merge($array, $key);
+            $array = array_merge($array, $val);
 
             return $array;
         }
