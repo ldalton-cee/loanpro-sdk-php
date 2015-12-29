@@ -611,7 +611,7 @@ class BaseEntity implements \JsonSerializable
             }
         }
         //validate array
-        if(isset($this->validationArray["arrays"]) && ina_array($key,$this->validationArray["arrays"]) && is_array($val))
+        if(isset($this->validationArray["arrays"]) && in_array($key,$this->validationArray["arrays"]) && is_array($val))
         {//make sure we have a metadata link set at the appropriate spot
             if(!isset($this->properties[$key]))
             {
