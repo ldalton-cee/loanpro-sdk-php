@@ -68,6 +68,7 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
             "APDAdjustments"=>"Simnang\\LoanPro\\Entities\\Loans\\APDAdjustment",
             "EscrowTransactions"=>"Simnang\\LoanPro\\Entities\\Loans\\EscrowTransactions",
             "EscrowAdjustments"=>"Simnang\\LoanPro\\Entities\\Loans\\EscrowAdjustments",
+            "Notes"=>"Simnang\\LoanPro\\Entities\\Misc\\Notes",
         ],
         "metadataLink"=>[
             "Customers"=>"Simnang\\LoanPro\\Entities\\Customers\\Customer",
