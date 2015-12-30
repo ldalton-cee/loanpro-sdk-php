@@ -25,7 +25,7 @@ class LoanPro {
      *
      * @var string
      */
-    private $endpointBase = "https://beta-loanpro.simnang.com/api/public/api/1/";
+    private $endpointBase = "https://loanpro.simnang.com/api/public/api/1/";
 
     /**
      * Limits changing critical variables; set to false only if you know what you're doing
