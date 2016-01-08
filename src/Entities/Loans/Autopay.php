@@ -53,11 +53,11 @@ class Autopay extends \Simnang\LoanPro\Entities\BaseEntity
             "name",
         ],
         "collections"=>[
-            "type"=>"autopay/type",
-            "paymentExtraTowards"=>"payment",
-            "amountType"=>"autopay/amountType",
-            "methodType"=>"autopay/methodType",
-            "recurringFrequency"=>"autopay/recurringFrequency",
+            "type"=>"autopay.type",
+            "paymentExtraTowards"=>"payment.extra",
+            "amountType"=>"autopay.amountType",
+            "methodType"=>"autopay.methodType",
+            "recurringFrequency"=>"autopay.recurringFrequency",
 
         ],
         "metadata"=>[

@@ -33,7 +33,7 @@ class Address extends \Simnang\LoanPro\Entities\BaseEntity
         ],
         "collections"=>[
             "state"=>"geo",
-            "country"=>"company/country",
+            "country"=>"company.country",
         ]
     ];
 }

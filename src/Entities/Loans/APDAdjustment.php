@@ -37,7 +37,7 @@ class APDAdjustment extends \Simnang\LoanPro\Entities\BaseEntity
             "dollarAmount"
         ],
         "collections"=>[
-            "type"=>"loan/apd.adjust.type"
+            "type"=>"loan.apd.adjust.type"
         ],
     ];
 }

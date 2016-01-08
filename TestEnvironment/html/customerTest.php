@@ -15,11 +15,11 @@
 
         $loanProSDK->setCredentials($apiToken, $tenantID);
 
-        $response = json_encode($loanProSDK->odataRequest('GET', 'odata.svc/Customers(1)?$expand=PrimaryAddress,MailAddress,Employer,References,PaymentMethods,PaymentAccounts,Phones,CustomFieldValues,Documents,CreditScore,Loans'));
+        $response = json_encode($loanProSDK->odataRequest('GET', 'odata.svc/Customers(1)?$expand=PrimaryAddress,MailAddress,Employer,References,PaymentMethods,PaymentAccounts,Phones,CustomFieldValues,Documents,CreditScore'));
         var_dump(json_decode($response));
         $customer = new Simnang\LoanPro\Entities\Customers\Customer();
         $customer->PopulateFromJSON($response);
-        echo "<br /><br /><br /><h1>Object</h1>";
+        echo "<br /><br /><br /><h1>Customer Object</h1>";
         var_dump(json_decode(json_encode($customer)));
 
         $ssn = substr("".time(),-9);

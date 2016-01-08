@@ -39,7 +39,7 @@ class EscrowTransactions extends \Simnang\LoanPro\Entities\BaseEntity
             "date",
         ],
         "collections"=>[
-            "type"=>"transaction/type",
+            "type"=>"transaction.type",
         ],
         "string"=>[
             "description"

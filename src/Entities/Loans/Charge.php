@@ -54,7 +54,7 @@ class Charge extends \Simnang\LoanPro\Entities\BaseEntity
             "editComment",
         ],
         "collections"=>[
-            "chargeApplicationType"=>"loan/latefeeapp",
+            "chargeApplicationType"=>"loan.latefeeapp",
         ],
         "class"=>[
             "ParentCharge"=>"Simnang\\LoanPro\\Entities\\Loans\\Charge",

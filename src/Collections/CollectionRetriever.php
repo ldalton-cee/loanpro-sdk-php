@@ -29,29 +29,7 @@ class CollectionRetriever
      */
     private function __construct(){}
 
-    /**
-     * This holds a list of all collections and the corresponding collection entity
-     * Please note that all keys are lowercase
-     *     * If you need to do camel case, than have a space before each capital letter; the system will convert automatically
-     * The values is the string representation of the corresponding collections class
-     * @var array
-     */
-    private static $collNameMap = [
-        "loan"=>"Simnang\\LoanPro\\Collections\\Loan\\LoanCollections",
-        "collateral"=>"Simnang\\LoanPro\\Collections\\Loan\\CollateralCollections",
-        "customer"=>"Simnang\\LoanPro\\Collections\\Customers\\CustomerCollections",
-        "geo"=>"Simnang\\LoanPro\\Collections\\Customers\\GeographicCollections",
-        "company"=>"Simnang\\LoanPro\\Collections\\Company\\CompanyCollections",
-        "customer employer"=>"Simnang\\LoanPro\\Collections\\Customers\\EmployerCollections",
-        "customer reference"=>"Simnang\\LoanPro\\Collections\\Customers\\CustomerReferenceCollections",
-        "payment"=>"Simnang\\LoanPro\\Collections\\Misc\\PaymentCollections",
-        "credit card"=>"Simnang\\LoanPro\\Collections\\Misc\\CreditCardCollections",
-        "phone"=>"Simnang\\LoanPro\\Collections\\Misc\\PhoneCollections",
-        "payment"=>"Simnang\\LoanPro\\Collections\\Loan\\PaymentCollections",
-        "autopay"=>"Simnang\\LoanPro\\Collections\\Loan\\AutopayCollections",
-        "loanpromise"=>"Simnang\\LoanPro\\Collections\\Loan\\PromisesCollections",
-        "transaction"=>"Simnang\\LoanPro\\Collections\\Loan\\TransactionCollections",
-    ];
+    private static $collectionJSON = false;
 
     /**
      * Checks whether or not a collection group is valid
@@ -60,29 +38,7 @@ class CollectionRetriever
      */
     public static function IsValidCollection($seriesPath)
     {
-        $pathParts = explode("/", $seriesPath);
-
-        if(count($pathParts) != 2)
-            return false;
-
-        $largeCollection = $pathParts[0];
-        $subCollection = $pathParts[1];
-        $collName = null;
-
-        $largeCollection = strtolower($largeCollection);
-
-        if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
-            $collName = CollectionRetriever::$collNameMap[$largeCollection];
-        else
-            return false;
-
-        if(isset($collName::GetListNames()[$subCollection]))
-        {
-            $subCollection = $collName::GetListNames()[$subCollection];
-        }
-        if(isset($collName::GetLists()[$subCollection]))
-            return true;
-        return false;
+        return self::IsValidItem($seriesPath);
     }
 
     /**
@@ -92,37 +48,10 @@ class CollectionRetriever
      */
     public static function IsValidItem($seriesPath)
     {
-        $pathParts = explode("/", $seriesPath);
+        $pathParts = explode(".", $seriesPath);
 
-        if(count($pathParts) != 3) {
-            return false;
-        }
-
-        $largeCollection = $pathParts[0];
-        $subCollection = $pathParts[1];
-        $item = $pathParts[2];
-        $collName = null;
-
-        $largeCollection = strtolower($largeCollection);
-
-        if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
-            $collName = CollectionRetriever::$collNameMap[$largeCollection];
-        else {
-            return false;
-        }
-
-        if(isset($collName::GetListNames()[$subCollection]))
-        {
-            $subCollection = $collName::GetListNames()[$subCollection];
-        }
-        if(isset($collName::GetLists()[$subCollection]))
-        {
-            if(isset($collName::GetLists()[$subCollection][$item]) || in_array($item, $collName::GetLists()[$subCollection]))
-            {
-                return true;
-            }
-        }
-        return false;
+        $finalPath = '';
+        return self::RecursiveTranslate(0, $pathParts, $finalPath, self::$collectionJSON);
     }
 
     public static function GetLoanProPath($seriesPath)
@@ -130,7 +59,7 @@ class CollectionRetriever
         $p = CollectionRetriever::TranslatePath($seriesPath);
         if(!$p)
             return false;
-        return str_replace("/",".",$p);
+        return $p;
     }
 
     /**
@@ -141,59 +70,39 @@ class CollectionRetriever
      */
     public static function TranslatePath($seriesPath)
     {
-        $largeCollection = null;
-        $subCollection = null;
-        $item = null;
-        $collName = null;
+        $pathParts = explode(".", $seriesPath);
 
-        $pathParts = explode("/", $seriesPath);
-
-        if(count($pathParts) < 1 || count($pathParts) > 3)
+        $finalPath = '';
+        if(!self::RecursiveTranslate(0, $pathParts, $finalPath, self::$collectionJSON))
             return false;
+        $finalPath = rtrim($finalPath, ".");
+        return $finalPath;
+    }
 
-        $largeCollection = $pathParts[0];
-        if(isset($pathParts[1]))
-            $subCollection = $pathParts[1];
-        if(isset($pathParts[2]))
-            $item = $pathParts[2];
-
-
-        $largeCollection = strtolower($largeCollection);
-
-        if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
-            $collName = CollectionRetriever::$collNameMap[$largeCollection];
-        else
-            return false;
-
-        //convert spaced out words into camel case
-        $path = lcfirst(str_replace(" ","",ucwords($largeCollection)));
-
-        if(!is_null($subCollection)) {
-            if (isset($collName::GetListNames()[$subCollection])) {
-                $subCollection = $collName::GetListNames()[$subCollection];
-            }
-            if (isset($collName::GetLists()[$subCollection])) {
-                $path .= "/$subCollection";
-                if(!is_null($item)) {
-                    if (isset($collName::GetLists()[$subCollection][$item])) {
-                        $item = $collName::GetLists()[$subCollection][$item];
-                    }
-                    if(!in_array($item, $collName::GetLists()[$subCollection])){
-                        $item = null;
-                    }
-                    else{
-                        $path .= "/$item";
-                    }
-                }
-            }
+    private static function RecursiveTranslate($curPart, $parts, &$resultPath, $curCollection)
+    {
+        if($curPart >= count($parts))
+            return true;
+        $part = $parts[$curPart];
+        if(isset($curCollection[$part]))
+        {
+            $resultPath .= $part . ".";
+            if(isset($curCollection[$part]['children']))
+                return self::RecursiveTranslate($curPart + 1, $parts, $resultPath, $curCollection[$part]['children']);
             else
+                return true;
+        }
+        foreach($curCollection as $name => $collection)
+        {
+            if(isset($collection["alt"]) && $collection["alt"] == $part)
             {
-                $subCollection = null;
-                $item = null;
+                $resultPath .= $name . ".";
+                if(isset($collection['children']))
+                    return self::RecursiveTranslate($curPart + 1, $parts, $resultPath, $collection['children']);
+                return true;
             }
         }
-
-        return $path;
+        return false;
     }
 
     /**
@@ -204,85 +113,54 @@ class CollectionRetriever
      */
     public static function ReverseTranslate($seriesPath)
     {
-        $seriesPath = str_replace(".", "/", $seriesPath);
+        $pathParts = explode(".", $seriesPath);
 
-        $largeCollection = null;
-        $subCollection = null;
-        $item = null;
-        $collName = null;
-
-        $pathParts = explode("/", $seriesPath);
-
-        if(count($pathParts) < 1)
+        $finalPath = '';
+        if(!self::RecursiveReverseTranslate(0, $pathParts, $finalPath, self::$collectionJSON))
             return false;
-        elseif(count($pathParts) > 3)
+        $finalPath = rtrim($finalPath, ".");
+        return $finalPath;
+    }
+
+    private static function RecursiveReverseTranslate($curPart, $parts, &$resultPath, $curCollection)
+    {
+        if($curPart >= count($parts))
+            return true;
+        $part = $parts[$curPart];
+        if(isset($curCollection[$part]))
         {
-            if(count($pathParts) == 4) {
-                $p = [];
-                $p[0] = $pathParts[0];
-                $ps = [];
-                for($i = 1; $i < count($pathParts)-1; ++$i)
-                    $ps[] = $pathParts[$i];
-
-                $p[1] = implode('.',$ps);
-                $p[2] = $pathParts[count($pathParts)-1];
-                $pathParts = $p;
-            }
+            if(isset($curCollection[$part]['alt']))
+            $resultPath .= $curCollection[$part]['alt'] . ".";
+            if(isset($curCollection[$part]['children']))
+                return self::RecursiveTranslate($curPart + 1, $parts, $resultPath, $curCollection[$part]['children']);
             else
-                return false;
+                return true;
         }
-
-        $largeCollection = $pathParts[0];
-        if(isset($pathParts[1]))
-            $subCollection = $pathParts[1];
-        if(isset($pathParts[2]))
-            $item = $pathParts[2];
-
-
-        $largeColParts = preg_split("/(?=[A-Z])/", $largeCollection);
-        $largeCollection = strtolower(implode(" ", $largeColParts));
-
-        if(isset(CollectionRetriever::$collNameMap[$largeCollection]))
-            $collName = str_replace(" ","",ucwords(CollectionRetriever::$collNameMap[$largeCollection]));
-        else
-            return false;
-
-        $path = $largeCollection;
-
-        if(!is_null($subCollection)) {
-            $subCollName = $subCollection;
-            if (isset($collName::GetListNames()[$subCollection])) {
-                $subCollName = $collName::GetListNames()[$subCollection];
-            }
-
-            if(in_array($subCollection, $collName::GetListNames()))
+        foreach($curCollection as $name => $collection)
+        {
+            if(isset($collection["alt"]) && $collection["alt"] == $part)
             {
-                $subCollection = array_search($subCollection, $collName::GetListNames());
-            }
-
-            if (isset($collName::GetLists()[$subCollName]) && isset($collName::GetListNames()[$subCollection])) {
-                $path .= "/$subCollection";
-                if(!is_null($item)) {
-
-                    if(in_array($item, $collName::GetLists()[$subCollName]))
-                    {
-                        $item = array_search($item, $collName::GetLists()[$subCollName]);
-                    }else if (!isset($collName::GetLists()[$subCollection][$item])) {
-                        $item = null;
-                    }
-                    if(!is_null($item))
-                    {
-                        $path .= "/$item";
-                    }
-                }
-            }
-            else
-            {
-                $subCollection = null;
-                $item = null;
+                $resultPath .= $part . ".";
+                if(isset($collection['children']))
+                    return self::RecursiveTranslate($curPart + 1, $parts, $resultPath, $collection['children']);
+                return true;
             }
         }
+        return false;
+    }
 
-        return $path;
+    public static function Instantiate()
+    {
+        if(!self::$collectionJSON)
+        {
+            self::LoadJSON();
+        }
+    }
+
+    private static function LoadJSON()
+    {
+        $jsonData = file_get_contents(__DIR__."/collection.json");
+        self::$collectionJSON = json_decode($jsonData, true);
     }
 }
+CollectionRetriever::Instantiate();

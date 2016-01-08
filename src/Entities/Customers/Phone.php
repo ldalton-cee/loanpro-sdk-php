@@ -48,7 +48,7 @@ class Phone extends \Simnang\LoanPro\Entities\BaseEntity
             "carrierName"
         ],
         "collections"=>[
-            "type"=>"customer/phoneType",
+            "type"=>"customer.phoneType",
         ],
         "entityType"=>[
             "entityType"
