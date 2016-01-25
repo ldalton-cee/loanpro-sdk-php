@@ -1083,5 +1083,26 @@
         }
       }
     }
+  },
+  "bankacct":
+  {
+      "alt":"Bank Account",
+      "children":{
+         "type":
+         {
+            "alt":"Account Type",
+            "children":{
+                "checking":{"alt":"Checking"},
+                "savings":{"alt":"Savings"}
+            }
+         },
+         "checktype":{
+            "alt":"Checking Type",
+            "children":{
+                "business":{"alt":"Business"},
+                "personal":{"alt":"Personal"}
+            }
+        }
+      }
   }
 }
