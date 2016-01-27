@@ -340,6 +340,9 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key]))
         {
             $arr = [];
+
+            if(is_array($val))
+                return null;
             if(!property_exists($val, "results"))
                 return null;
             foreach($val->results as $object)
