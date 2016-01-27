@@ -273,7 +273,7 @@ class BaseEntity implements \JsonSerializable
             $obj = json_decode($jsonStr);
         else
             $obj = $jsonStr;
-        if(property_exists($obj, "d"))
+        if(property_exists($obj, "d") && count(get_object_vars($obj)) == 1)
             $obj = $obj->d;
         $objVars = get_object_vars($obj);
 
