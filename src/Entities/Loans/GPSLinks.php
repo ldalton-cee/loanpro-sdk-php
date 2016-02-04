@@ -14,14 +14,13 @@ namespace Simnang\LoanPro\Entities\Loans;
  *
  * This represents Collateral entities used in LoanPro
  */
-class SubPortfolio extends \Simnang\LoanPro\Entities\BaseEntity
+class GPSLinks extends \Simnang\LoanPro\Entities\BaseEntity
 {
     /**
      * The metadata string for it
      * @var string
      */
-    public $metaDataName = "SubPortfolios";
-    public $entityName = 'SubPortfolio';
+    public $metaDataName = "GPSLink";
 
     /**
      * Validation array for all of the collateral fields
@@ -30,13 +29,10 @@ class SubPortfolio extends \Simnang\LoanPro\Entities\BaseEntity
     protected $validationArray = [
         "int"=>[
             "id",
-            "parent"
-        ],
-        "ranges"=>[
-            "active"=>[0,1],
         ],
         "string"=>[
-            "title"
+            "value",
+            "info",
         ],
     ];
 }

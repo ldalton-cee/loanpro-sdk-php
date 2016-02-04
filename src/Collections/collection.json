@@ -72,10 +72,21 @@
         }
       },
       "customerRole": {
-        "additional": { "alt": "Additional" },
-        "secondary": { "alt": "Secondary" },
-        "primary": { "alt": "Primary" },
-        "unassigned": { "alt": "Unassigned" }
+        "alt":"CustomerRole",
+        "children": {
+          "additional": {
+            "alt": "Additional"
+          },
+          "secondary": {
+            "alt": "Secondary"
+          },
+          "primary": {
+            "alt": "Primary"
+          },
+          "unassigned": {
+            "alt": "Unassigned"
+          }
+        }
       },
       "escrowAvailability": {
         "alt": "Escrow Availability",
@@ -1086,23 +1097,23 @@
   },
   "bankacct":
   {
-      "alt":"Bank Account",
-      "children":{
-         "type":
-         {
-            "alt":"Account Type",
-            "children":{
-                "checking":{"alt":"Checking"},
-                "savings":{"alt":"Savings"}
-            }
-         },
-         "checktype":{
-            "alt":"Checking Type",
-            "children":{
-                "business":{"alt":"Business"},
-                "personal":{"alt":"Personal"}
-            }
+    "alt":"Bank Account",
+    "children":{
+      "type":
+      {
+        "alt":"Account Type",
+        "children":{
+          "checking":{"alt":"Checking"},
+          "savings":{"alt":"Savings"}
+        }
+      },
+      "checktype":{
+        "alt":"Checking Type",
+        "children":{
+          "business":{"alt":"Business"},
+          "personal":{"alt":"Personal"}
         }
       }
+    }
   }
 }

@@ -367,7 +367,11 @@ class BaseEntity implements \JsonSerializable
                 if($this->validationArray["metadataLink"][$key] == "Simnang\\LoanPro\\Entities\\Customers\\Customer")
                 {
                     $metadata = new CustomerRelation();
-                    $metadata->SetRelation($object->GetRelation());
+                    if(method_exists($object, "GetRelation")){
+                        $metadata->SetRelation($object->GetRelation());
+                    }else{
+                        $metadata->PopulateFromJson(json_encode($object));
+                    }
                 }
                 else
                     $metadata = new MetaData();
