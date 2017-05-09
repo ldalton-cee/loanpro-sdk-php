@@ -14,13 +14,13 @@ namespace Simnang\LoanPro\Entities\Loans;
  *
  * This represents Collateral entities used in LoanPro
  */
-class ScheduleRoll extends \Simnang\LoanPro\Entities\BaseEntity
+class EscrowSubsetOptions extends \Simnang\LoanPro\Entities\BaseEntity
 {
     /**
      * The metadata string for it
      * @var string
      */
-    public $metaDataName = "ScheduleRoll";
+    public $metaDataName = "EscrowSubsetOptions";
 
     /**
      * Validation array for all of the collateral fields
@@ -28,22 +28,25 @@ class ScheduleRoll extends \Simnang\LoanPro\Entities\BaseEntity
      */
     protected $validationArray = [
         "numbers"=>[
-            "amount",
-            "percentage",
-            "advancedTerms",
-            "balance",
+            "leaseSalesTax",
         ],
         "int"=>[
             "id",
-            "term",
-            "rate"
-        ],
-        "collections"=>[
-            "solveUsing"=>"loan.rollScheduleSolve",
-            "solveFor"=>"loan.rollScheduleFor",
+            "subset"
         ],
         "ranges"=>[
-            "forceBalloon"=>[0,1]
+            "aprInclude"=>[0,1],
+            "scheduleInclude"=>[0,1],
+            "disclosureLnAmtAdd"=>[0,1],
+            "interestBearing"=>[0,1],
+        ],
+        "collections"=>[
+            "payoffOption"=>"loan.escrowpayoff",
+            "paymentApplication"=>"loan.escrowpmtapp",
+            "availability"=>"loan.escrowAvailability",
+        ],
+        "entityType"=>[
+            'entityType'
         ],
     ];
 }

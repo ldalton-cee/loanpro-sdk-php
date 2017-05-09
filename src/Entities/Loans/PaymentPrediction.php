@@ -33,8 +33,8 @@ class PaymentPrediction extends \Simnang\LoanPro\Entities\BaseEntity
             "Date",
         ],
         "collections"=>[
-            "Extra"=>"payment/extra.",
-            "chargeFeeType"=>"loan/cardfee.types",
+            "Extra"=>"payment.extra.",
+            "chargeFeeType"=>"loan.cardfee.types",
         ],
     ];
 }

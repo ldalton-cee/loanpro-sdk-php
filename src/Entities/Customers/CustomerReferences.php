@@ -25,7 +25,7 @@ class CustomerReferences extends \Simnang\LoanPro\Entities\BaseEntity
             "name"
         ],
         "collections"=>[
-            "relation"=>"customer reference/relation"
+            "relation"=>"customer reference.relation"
         ],
         "class"=>[
             "Address"=>"Simnang\\LoanPro\\Entities\\Customers\\Address",

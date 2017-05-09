@@ -14,36 +14,34 @@ namespace Simnang\LoanPro\Entities\Loans;
  *
  * This represents Collateral entities used in LoanPro
  */
-class ScheduleRoll extends \Simnang\LoanPro\Entities\BaseEntity
+class Portfolio extends \Simnang\LoanPro\Entities\BaseEntity
 {
     /**
      * The metadata string for it
      * @var string
      */
-    public $metaDataName = "ScheduleRoll";
+    public $metaDataName = "Portfolios";
+    public $entityName = 'Portfolio';
 
     /**
      * Validation array for all of the collateral fields
      * @var array
      */
     protected $validationArray = [
-        "numbers"=>[
-            "amount",
-            "percentage",
-            "advancedTerms",
-            "balance",
-        ],
         "int"=>[
             "id",
-            "term",
-            "rate"
-        ],
-        "collections"=>[
-            "solveUsing"=>"loan.rollScheduleSolve",
-            "solveFor"=>"loan.rollScheduleFor",
+            "categoryId"
         ],
         "ranges"=>[
-            "forceBalloon"=>[0,1]
+            "active"=>[0,1],
+        ],
+        "entityType"=>[
+            "entityType"
+        ],
+        "string"=>[
+            "title",
+            "numPrefix",
+            "numSuffix",
         ],
     ];
 }

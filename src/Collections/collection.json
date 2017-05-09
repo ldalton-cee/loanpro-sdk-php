@@ -1,0 +1,1119 @@
+{
+  "loan": {
+    "alt": "Loan",
+    "children": {
+      "rollScheduleSolve": {
+        "alt": "Roll Schedule Solve Using",
+        "children": {
+          "advanced": { "alt": "Advanced" },
+          "dollar": { "alt": "Dollar Amount" },
+          "interestOnly": { "alt": "Interest Only" },
+          "interestOnlyPlus": { "alt": "Interest Only Plus" },
+          "percBalance": { "alt": "% of Remaining Balance" },
+          "percPrincipal": { "alt": "% of Principal" },
+          "percPrincUnder": { "alt": "% of Principal + Underwriting" }
+        }
+      },
+      "rollScheduleSolveFor": {
+        "alt": "Roll Schedule Solve For",
+        "children": {
+          "balance": { "alt": "Balance" },
+          "payment": { "alt": "Payment" }
+        }
+      },
+      "stopInterestType": {
+        "alt": "Stop Interest Type",
+        "children": {
+          "suspend": { "alt": "Suspend" },
+          "resume": { "alt": "Resume" }
+        }
+      },
+      "apd": {
+        "alt": "Amount Past Due",
+        "children": {
+          "adjust": {
+            "alt": "Adjustment",
+            "children": {
+              "type": {
+                "alt": "Type",
+                "children": {
+                  "fixed": { "alt": "Fixed" },
+                  "zero": { "alt": "Zero" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "escrowpayoff": {
+        "alt": "Escrow Payoff",
+        "children": {
+          "full": { "alt": "Full" },
+          "none": { "alt": "None" },
+          "standard": { "alt": "Standard" },
+          "standardPlus": { "alt": "Standard Plus" },
+          "straightline": { "alt": "Straight Line" }
+        }
+      },
+      "rollPayment": {
+        "alt": "Roll Payment Loans",
+        "children": {
+          "fee": { "alt": "Underwriting/Refinance Fee" },
+          "loanRate": { "alt": "Underwriting/Refinance Fee" },
+          "term": { "alt": "Underwriting/Refinance Fee" },
+          "termExact": { "alt": "Underwriting/Refinance Fee" }
+        }
+      },
+      "rollPaymentLease": {
+        "alt": "Roll Payment Lease",
+        "children": {
+          "loanRate": { "alt": "Underwriting/Refinance Fee" },
+          "termExact": { "alt": "Underwriting/Refinance Fee" }
+        }
+      },
+      "customerRole": {
+        "alt":"CustomerRole",
+        "children": {
+          "additional": {
+            "alt": "Additional"
+          },
+          "secondary": {
+            "alt": "Secondary"
+          },
+          "primary": {
+            "alt": "Primary"
+          },
+          "unassigned": {
+            "alt": "Unassigned"
+          }
+        }
+      },
+      "escrowAvailability": {
+        "alt": "Escrow Availability",
+        "children": {
+          "both": { "alt": "Both" },
+          "lease": { "alt": "Lease" },
+          "loan": { "alt": "Loan" }
+        }
+      },
+      "escrowextendfinal": {
+        "alt": "Escrow Extend Final",
+        "children": {
+          "yes": { "alt": "Yes" },
+          "no": { "alt": "No" }
+        }
+      },
+      "escrowPercentBase": {
+        "alt": "Escrow Percent Base",
+        "children": {
+          "basePayment": { "alt": "Base Payment" },
+          "loanAmount": { "alt": "Loan Amount" },
+          "salesPrice": { "alt": "Sales Price" }
+        }
+      },
+      "escrowProrateFirst": {
+        "alt": "Escrow Prorate First",
+        "children": {
+          "full": { "alt": "full" },
+          "shortOnly": { "alt": "Short Only" },
+          "none": { "alt": "None" }
+        }
+      },
+      "escrowpmtapp": {
+        "alt": "Escrow Payment Application",
+        "children": {
+          "next": { "alt": "Next" },
+          "nextStandard": { "alt": "Next Standard" },
+          "prorate": { "alt": "Prorate" },
+          "standard": { "alt": "Standard" }
+        }
+      },
+      "escrowmap": {
+        "alt": "Escrow Map",
+        "children": {
+          "yes": { "alt": "Yes" },
+          "no": { "alt": "No" }
+        }
+      },
+      "class": {
+        "alt": "Class",
+        "children": {
+          "carLoan": {
+            "alt": "Automobile"
+          },
+          "consumer": {
+            "alt": "Consumer"
+          },
+          "mortgage": {
+            "alt": "Mortgage"
+          },
+          "other": {
+            "alt": "Other"
+          }
+        }
+      },
+      "interestApplication": {
+        "alt": "Interest Application",
+        "children": {
+          "betweenPeriods": { "alt": "Between Periods" },
+          "betweenTransactions": { "alt": "Between Transactions" }
+        }
+      },
+      "frequency": {
+        "alt": "Payment Frequency",
+        "children": {
+          "annually": {
+            "alt": "Annually"
+          },
+          "biweekly": {
+            "alt": "Bi-Weekly"
+          },
+          "monthly": {
+            "alt": "Monthly"
+          },
+          "quarterly": {
+            "alt": "Quarterly"
+          },
+          "semiannually": {
+            "alt": "Semi-Annually"
+          },
+          "semimonthly": {
+            "alt": "Semi-Monthly"
+          },
+          "single": {
+            "alt": "Single"
+          },
+          "weekly": {
+            "alt": "Weekly"
+          }
+        }
+      },
+      "calcType": {
+        "alt": "Calculation Type",
+        "children": {
+          "interestOnly": {
+            "alt": "Interest Only"
+          },
+          "rule78": {
+            "alt": "Rule 78"
+          },
+          "simpleInterest": {
+            "alt": "Simple Interest"
+          },
+          "simpleIntLocked": {
+            "alt": "Simple Interest Locked"
+          }
+        }
+      },
+      "daysInYear": {
+        "alt": "Days In Year",
+        "children": {
+          "actual": {
+            "alt": "Actual"
+          },
+          "frequency": {
+            "alt": "Frequency"
+          }
+        }
+      },
+      "begend": {
+        "alt": "Beg/End",
+        "children": {
+          "beg": {
+            "alt": "Beginning"
+          },
+          "end": {
+            "alt": "End"
+          }
+        }
+      },
+      "firstPeriodDays": {
+        "alt": "First Period Days",
+        "children": {
+          "actual": {
+            "alt": "Actual"
+          },
+          "frequency": {
+            "alt": "Frequency"
+          }
+        }
+      },
+      "firstdayinterest": {
+        "alt": "First Day Interest",
+        "children": {
+          "yes": {
+            "alt": "Yes"
+          },
+          "no": {
+            "alt": "No"
+          }
+        }
+      },
+      "discountCalc": {
+        "alt": "Discount Calculation",
+        "children": {
+          "full": {
+            "alt": "Full"
+          },
+          "percentage": {
+            "alt": "Percentage"
+          },
+          "percentFixed": {
+            "alt": "Percentage Fixed"
+          },
+          "rebalancing": {
+            "alt": "Rebalancing"
+          },
+          "straightLine": {
+            "alt": "Straight Line"
+          }
+        }
+      },
+      "diyalt": {
+        "alt": "Days in Year Alt",
+        "children": {
+          "yes": {
+            "alt": "Yes"
+          },
+          "no": {
+            "alt": "No"
+          }
+        }
+      },
+      "daysinperiod": {
+        "alt": "Days in Period",
+        "children": {
+          "1": { },
+          "1B": {
+            "alt": "Every Business Day"
+          },
+          "2": { },
+          "3": { },
+          "4": { },
+          "5": { },
+          "6": { },
+          "8": { },
+          "9": { },
+          "10": { },
+          "12": { },
+          "13": { },
+          "15": { },
+          "18": { },
+          "20": { },
+          "24": { },
+          "26": { },
+          "28": { },
+          "30": { },
+          "36": { },
+          "40": { },
+          "45": { },
+          "52": { },
+          "60": { },
+          "72": { },
+          "73": { },
+          "90": { },
+          "91": { },
+          "120": { },
+          "180": { },
+          "182": { },
+          "360": { },
+          "364": { },
+          "365": { }
+        }
+      },
+      "lastasfinal": {
+        "alt": "Last as Final",
+        "children": {
+          "yes": { "alt": "Yes" },
+          "no": { "alt": "No" }
+        }
+      },
+      "curtailpercentbase": {
+        "alt": "Curtailment Percent Base",
+        "children": {
+          "loanAmount": { "alt": "Loan Amount" }
+        }
+      },
+      "nddCalc": {
+        "alt": "NDD Calculation",
+        "children": {
+          "interestOnly": {
+            "alt": "Interest Only"
+          },
+          "standard": {
+            "alt": "Standard"
+          }
+        }
+      },
+      "endInterest": {
+        "alt": "End Interest",
+        "children": {
+          "loanExp": { "alt": "Original Loan Expiration Date" },
+          "no": { "alt": "None" }
+        }
+      },
+      "feesPaidBy": {
+        "alt": "Fees Paid By",
+        "children": {
+          "date": {
+            "alt": "Date"
+          },
+          "period": {
+            "alt": "Period"
+          }
+        }
+      },
+      "lateFee": {
+        "alt": "Late Fee Type",
+        "children": {
+          "1": { "alt": "Fixed Amount" },
+          "2": { "alt": "Flat Dollar Amount" },
+          "3": { "alt": "Percentage" },
+          "4": { "alt": "Greater of Flat or Percentage" },
+          "5": { "alt": "Lesser of Flat or Percentage" }
+        }
+      },
+      "lateFeeCalc": {
+        "alt": "Late Fee Calculation",
+        "children": {
+          "current": { "alt": "Current" },
+          "standard": { "alt": "Standard" },
+          "standardFee": { "alt": "Standard Fee" }
+        }
+      },
+      "latefeepercentbase": {
+        "alt": "Late Fee Percentage Base",
+        "children": {
+          "escrow": { "alt": "Regular Payment + Escrow" },
+          "escrowHold": { "alt": "Regular Payment + Escrow + Hold" },
+          "hold": { "alt": "Regular Payment + Hold" },
+          "regular": { "alt": "Regular Payment" }
+        }
+      },
+      "pmtdateapp": {
+        "alt": "Payment Date Application",
+        "children": {
+          "actual": { "alt": "Actual-Next" },
+          "last": { "alt": "Last-Next" }
+        }
+      },
+      "type": {
+        "alt": "Type",
+        "children": {
+          "creditLimit": {
+            "alt": "Credit Limit"
+          },
+          "flooring": {
+            "alt": "Flooring"
+          },
+          "installment": {
+            "alt": "Installment"
+          },
+          "lease": {
+            "alt": "Lease"
+          }
+        }
+      },
+      "cardfee": {
+        "alt": "Card Fee",
+        "children": {
+          "types": {
+            "alt": "Types",
+            "children": {
+              "0": {
+                "alt": "Waive Fee"
+              },
+              "1": {
+                "alt": "Flat Fee"
+              },
+              "2": {
+                "alt": "Percentage"
+              },
+              "3": {
+                "alt": "Greater of Fee or Percentage"
+              },
+              "4": {
+                "alt": "Lesser of Fee or Percentage"
+              }
+            }
+          }
+        }
+      },
+      "ebilling": {
+        "alt": "eBilling",
+        "children": {
+          "yes": {
+            "alt": "Yes"
+          },
+          "no": {
+            "alt": "No"
+          }
+        }
+      },
+      "ecoacodes": {
+        "alt": "ECOACode",
+        "children": {
+          "0": {
+            "alt": "Not Specified"
+          },
+          "1": {
+            "alt": "Individual or Primary"
+          },
+          "2": {
+            "alt": "Joint Contract"
+          },
+          "7": {
+            "alt": "Maker"
+          },
+          "A": {
+            "alt": "System Managed"
+          },
+          "T": {
+            "alt": "Associate Terminated"
+          },
+          "X": {
+            "alt": "Consumer Deceased"
+          },
+          "Z": {
+            "alt": "Delete Borrower"
+          }
+        }
+      },
+      "funding": {
+        "alt": "Funding",
+        "children": {
+          "auth": {
+            "alt": "Authorization",
+            "children": {
+              "ccd": { "alt": "Company Signature" },
+              "ppd": { "alt": "Individual Signature" },
+              "tel": { "alt": "Telephone" },
+              "web": { "alt": "Web" }
+            }
+          },
+          "method": {
+            "cashdrawer": { "alt": "Cash Drawer" },
+            "deposit": { "alt": "Bank Account / ACH Deposit" },
+            "transfer": { "alt": "EFT Bank Transfer" }
+          }
+        }
+      },
+      "creditstatus": {
+        "alt": "Credit Status",
+        "children": {
+          "0": {
+            "alt": "AUTO"
+          },
+          "11": {
+            "alt": "Current"
+          },
+          "13": {
+            "alt": "Paid or Closed Zero Balance"
+          },
+          "5": {
+            "alt": "Transferred Offices"
+          },
+          "61": {
+            "alt": "Account Paid, Voluntary Surrender"
+          },
+          "62": {
+            "alt": "Account Paid, Collection Account"
+          },
+          "63": {
+            "alt": "Account Paid, Repossession"
+          },
+          "64": {
+            "alt": "Account Paid, Charge-off"
+          },
+          "71": {
+            "alt": "30-59 DPD"
+          },
+          "78": {
+            "alt": "60-89 DPD"
+          },
+          "80": {
+            "alt": "90-119 DPD"
+          },
+          "82": {
+            "alt": "120-149 DPD"
+          },
+          "83": {
+            "alt": "150-179 DPD"
+          },
+          "93": {
+            "alt": "Assigned to Collections"
+          },
+          "95": {
+            "alt": "Voluntary Surrender"
+          },
+          "96": {
+            "alt": "Repossessed, possible balance due"
+          },
+          "99": {
+            "alt": "Do Not Send"
+          },
+          "DA": {
+            "alt": "Delete Entire Account (not fraud)"
+          },
+          "DF": {
+            "alt": "Delete Entire Account (fraud)"
+          }
+        }
+      },
+      "creditbureau": {
+        "alt": "Credit Bureau",
+        "children": {
+          "00": {
+            "alt": "Auto"
+          },
+          "01": {
+            "alt": "Unsecured"
+          },
+          "02": {
+            "alt": "Secured"
+          },
+          "03": {
+            "alt": "Partially Secured"
+          },
+          "04": {
+            "alt": "Home Improvements"
+          },
+          "06": {
+            "alt": "Installment Sales - Contract"
+          },
+          "08": {
+            "alt": "Real Estate - specific type unknown"
+          },
+          "0A": {
+            "alt": "Timeshare"
+          },
+          "0G": {
+            "alt": "Flexible Spending Credit Card"
+          },
+          "11": {
+            "alt": "Recreational Merchandise"
+          },
+          "12": {
+            "alt": "Education"
+          },
+          "13": {
+            "alt": "Non-Auto Lease"
+          },
+          "15": {
+            "alt": "Personal Line of Credit"
+          },
+          "17": {
+            "alt": "Manufactured Housing"
+          },
+          "18": {
+            "alt": "Credit Card"
+          },
+          "1C": {
+            "alt": "Household Goods"
+          },
+          "20": {
+            "alt": "Note Loan"
+          },
+          "22": {
+            "alt": "Secured by Household Goods"
+          },
+          "23": {
+            "alt": "Secured by Household Goods & Other Collateral"
+          },
+          "26": {
+            "alt": "Conventional Real Estate Mortgage"
+          },
+          "3A": {
+            "alt": "Auto Lease"
+          },
+          "47": {
+            "alt": "Credit Line Secured"
+          },
+          "5A": {
+            "alt": "Real Estate - Junior Liens & Non-Purchase Money First"
+          },
+          "5B": {
+            "alt": "Second Mortgage"
+          },
+          "6A": {
+            "alt": "Commercial Installment Loan"
+          },
+          "6B": {
+            "alt": "Commercial Mortgage Loan"
+          },
+          "6D": {
+            "alt": "Home Equity Installment Payments"
+          },
+          "7A": {
+            "alt": "Commercial Line of Credit"
+          },
+          "89": {
+            "alt": "Home Equity Line of Credit"
+          },
+          "90": {
+            "alt": "Medical Debt"
+          },
+          "91": {
+            "alt": "Debt Consolidation"
+          }
+        }
+      },
+      "latefeeapp": {
+        "payoff": {
+          "alt": "Payoff"
+        },
+        "standard": {
+          "alt": "Standard"
+        }
+      },
+      "reportingtype": {
+        "alt": "Reporting Type",
+        "children": {
+          "C": {
+            "alt": "Line of Credit"
+          },
+          "I": {
+            "alt": "Installment"
+          },
+          "M": {
+            "alt": "Mortgage"
+          },
+          "O": {
+            "alt": "Open"
+          },
+          "R": {
+            "alt": "Revolving"
+          }
+        }
+      },
+      "rateType": {
+        "alt": "Rate Type",
+        "children": {
+          "annually": {
+            "alt": "Annual"
+          },
+          "biweekly": {
+            "alt": "Bi-Weekly"
+          },
+          "monthly": {
+            "alt": "Monthly"
+          },
+          "semiannually": {
+            "alt": "Semi-Annually"
+          },
+          "semimonthly": {
+            "alt": "Semi-Monthly"
+          },
+          "weekly": {
+            "alt": "Weekly"
+          }
+        }
+      }
+    }
+  },
+  "collateral": {
+    "alt": "Collateral",
+    "children": {
+      "type": {
+        "alt": "Type",
+        "children": {
+          "car": {
+            "alt": "Automobile"
+          },
+          "consumer": {
+            "alt": "Consumer"
+          },
+          "mortgage": {
+            "alt": "Mortgage"
+          },
+          "other": {
+            "alt": "Other"
+          }
+        }
+      },
+      "gpsstatus": {
+        "alt": "GPS Status",
+        "children": {
+          "installed": {
+            "alt": "Installed"
+          },
+          "notinstalled": {
+            "alt": "Not Installed"
+          },
+          "none": {
+            "alt": "None"
+          }
+        }
+      }
+    }
+  },
+  "payment": {
+    "alt": "Payment",
+    "children": {
+      "extra": {
+        "alt": "Extra",
+        "children": {
+          "tx": {
+            "alt": "Transaction",
+            "children": {
+              "principal": { "alt": "Principal" },
+              "principalonly": { "alt": "Principal Only" }
+            }
+          },
+          "periods": {
+            "alt": "Periods",
+            "children": {
+              "next": { "alt": "Next" },
+              "principalonly": { "alt": "Principal Only" }
+            }
+          }
+        }
+      },
+      "cardfee": {
+        "alt": "Card Fee",
+        "children": {
+          "types": {
+            "alt": "Types",
+            "children": {
+              "0": { "alt": "Waive Fee" },
+              "1": { "alt": "Flat Fee" },
+              "2": { "alt": "Percentage" },
+              "3": { "alt": "Greater of Fee or Percentage" },
+              "4": { "alt": "Lesser of Fee or Percentage" }
+            }
+          }
+        }
+      },
+      "echeckauth": {
+        "alt": "E-check Authorization",
+        "children": {
+          "CCD": { "alt": "Company Signature" },
+          "PPD": { "alt": "Individual Signature" },
+          "TEL": { "alt": "Telephone" },
+          "WEB": { "alt": "Web" }
+        }
+      },
+      "methods": {
+        "alt": "Method",
+        "children": {
+          "debit": { "alt": "Debit" },
+          "echeck": { "alt": "E-Check" }
+        }
+      }
+    }
+  },
+  "loanpromise": {
+    "alt": "Promise",
+    "children": {
+      "type": {
+        "alt": "Type",
+        "children": {
+          "other": { "alt": "Other" },
+          "insurance": { "alt": "Insurance" },
+          "payment": { "alt": "Payment" }
+        }
+      }
+    }
+  },
+  "transaction": {
+    "alt": "Transaction",
+    "children": {
+      "type": {
+        "alt": "Type",
+        "children": {
+          "deposit": { "alt": "Deposit" },
+          "withdrawal": { "alt": "Withdrawal" }
+        }
+      }
+    }
+  },
+  "company": {
+    "alt": "Company",
+    "children": {
+      "country": {
+        "alt": "Country",
+        "children": {
+          "usa": { "alt": "United States of America" },
+          "can": { "alt": "Canada" }
+        }
+      }
+    }
+  },
+  "autopay": {
+    "alt": "Autopay",
+    "children": {
+      "amountType": {
+        "alt": "Amount Type",
+        "children": {
+          "feesDue": { "alt": "Fees Due" },
+          "nextDue": { "alt": "Next Due" },
+          "pastDue": { "alt": "Past Due" },
+          "piPastDue": { "alt": "P&I Past Due" },
+          "static": { "alt": "Static" }
+        }
+      },
+      "methodType": {
+        "alt": "Method Type",
+        "children": {
+          "debit": { "alt": "Debit" },
+          "echeck": { "alt": "E-Check" },
+          "eft": { "alt": "EFT" }
+        }
+      },
+      "recurringFrequency": {
+        "alt": "Recurring Frequency",
+        "children": {
+          "annually": { "alt": "Annually" },
+          "biWeekly": { "alt": "Bi-Weekly" },
+          "custom": { "alt": "Custom" },
+          "monthly": { "alt": "Monthly" },
+          "quarterly": { "alt": "Quarterly" },
+          "semiannually": { "alt": "Semi-Annually" },
+          "semiMonthly": { "alt": "Semi-Monthly" },
+          "single": { "alt": "Single" },
+          "weekly": { "alt": "Weekly" }
+        }
+      },
+      "status": {
+        "alt": "Status",
+        "children": {
+          "cancelled": { "alt": "Cancelled" },
+          "completed": { "alt": "Completed" },
+          "failed": { "alt": "Failed" },
+          "pending": { "alt": "Pending" }
+        }
+      },
+      "type": {
+        "alt": "Type",
+        "children": {
+          "multiple": { "alt": "Multiple" },
+          "recurring": { "alt": "Recurring" },
+          "recurringMatch": { "alt": "Recurring Match Schedule" },
+          "Single": {"alt": "Single"}
+        }
+      }
+    },
+    "type": {
+      "alt": "Type",
+      "children": {
+        "multiple": { "alt": "Multiple" },
+        "recurring": { "alt": "Recurring" },
+        "recurringMatch": { "alt": "Recurring Match Schedule" },
+        "single": { "alt": "Single" }
+      }
+    },
+    "status": {
+      "alt": "Status",
+      "children": {
+        "cancelled": { "alt": "Cancelled" },
+        "completed": { "alt": "Completed" },
+        "failed": { "alt": "Failed" },
+        "pending": { "alt": "Pending" }
+      }
+    },
+    "recurringFrequency": {
+      "alt": "Recurring Frequency",
+      "children": {
+        "annually": { "alt": "Annually" },
+        "biWeekly": { "alt": "Bi-Weekly" },
+        "custom": { "alt": "Custom" },
+        "monthly": { "alt": "Monthly" },
+        "quarterly": { "alt": "Quarterly" },
+        "semiannually": { "alt": "Semi-Annually" },
+        "semiMonthly": { "alt": "Semi-Monthly" },
+        "single": { "alt": "Single" },
+        "weekly": { "alt": "Weekly" }
+      }
+    },
+    "methodType": {
+      "alt": "Method Type",
+      "children": {
+        "debit": { "alt": "Debit" },
+        "echeck": { "alt": "E-Check" },
+        "eft": { "alt": "EFT" }
+      }
+    }
+  },
+  "geo": {
+    "alt": "Geographic",
+    "children": {
+      "state": {
+        "alt": "State",
+        "children": {
+          "AA": { "alt": "US Armed Forces - Americas" },
+          "AE": { "alt": "US Armed Forces - Europe" },
+          "AK": { "alt": "Alaska" },
+          "AL": { "alt": "Alabama" },
+          "AP": { "alt": "US Armed Forces - Pacific" },
+          "AR": { "alt": "Arkansas" },
+          "AS": { "alt": "Amirican Samoa" },
+          "AZ": { "alt": "Arizona" },
+          "CA": { "alt": "California" },
+          "CO": { "alt": "Colorado" },
+          "CT": { "alt": "Connecticut" },
+          "DC": { "alt": "District of Columbia" },
+          "DE": { "alt": "Delaware" },
+          "FL": { "alt": "Florida" },
+          "FM": { "alt": "Federated States of Micronesia" },
+          "GA": { "alt": "Georgia" },
+          "GU": { "alt": "Guam" },
+          "HI": { "alt": "Hawaii" },
+          "IA": { "alt": "Iowa" },
+          "ID": { "alt": "Idaho" },
+          "IL": { "alt": "Illinois" },
+          "IN": { "alt": "Indiana" },
+          "KS": { "alt": "Kansas" },
+          "KY": { "alt": "Kentucky" },
+          "LA": { "alt": "Louisiana" },
+          "MA": { "alt": "Massachusetts" },
+          "MD": { "alt": "Maryland" },
+          "ME": { "alt": "Maine" },
+          "MH": { "alt": "Marshal Islands" },
+          "MI": { "alt": "Michigan" },
+          "MN": { "alt": "Minnesota" },
+          "MO": { "alt": "Missouri" },
+          "MP": { "alt": "Northern Mariana Islands" },
+          "MS": { "alt": "Mississippi" },
+          "MT": { "alt": "Montana" },
+          "NC": { "alt": "North Carolina" },
+          "ND": { "alt": "North Dakota" },
+          "NE": { "alt": "Nebraska" },
+          "NH": { "alt": "New Hampshire" },
+          "NJ": { "alt": "New Jersey" },
+          "NM": { "alt": "New Mexico" },
+          "NV": { "alt": "Nevada" },
+          "NY": { "alt": "New York" },
+          "OH": { "alt": "Ohio" },
+          "OK": { "alt": "Oklahoma" },
+          "OR": { "alt": "Oregon" },
+          "PA": { "alt": "Pennsylvanioa" },
+          "PR": { "alt": "Puerto Rico" },
+          "PW": { "alt": "Palau" },
+          "RI": { "alt": "Rhode Island" },
+          "SC": { "alt": "South Carolina" },
+          "SD": { "alt": "South Dakota" },
+          "TN": { "alt": "Tennessee" },
+          "TX": { "alt": "Texas" },
+          "UT": { "alt": "Utah" },
+          "VA": { "alt": "Virginia" },
+          "VI": { "alt": "Virgin Islands" },
+          "VT": { "alt": "Vermont" },
+          "WA": { "alt": "Washington" },
+          "WI": { "alt": "Wisconsin" },
+          "WV": { "alt": "West Virginia" },
+          "WY": { "alt": "Wyoming" }
+        }
+      },
+      "province": {
+        "alt": "Province",
+        "children": {
+          "AB": { "alt": "Alberta" },
+          "BC": { "alt": "British Columbia" },
+          "MB": { "alt": "Manitoba" },
+          "NB": { "alt": "New Brunswick" },
+          "NL": { "alt": "Newfoundland" },
+          "NS": { "alt": "Nova Scotia" },
+          "NT": { "alt": "Northwest Territories" },
+          "NU": { "alt": "Nunavut" },
+          "ON": { "alt": "Ontario" },
+          "PE": { "alt": "Prince Edward Island" },
+          "QC": { "alt": "Quebec" },
+          "SK": { "alt": "Saskwatchewan" },
+          "YT": { "alt": "Yukon Territories" }
+        }
+      }
+    }
+  },
+  "customer": {
+    "alt": "Customer",
+    "children": {
+      "type": {
+        "alt": "Type",
+        "children": {
+          "company": { "alt": "Company" },
+          "individual": { "alt": "Individual" },
+          "flooringCustomer": { "alt": "Flooring Customer" }
+        }
+      },
+      "gender": {
+        "alt": "Gender",
+        "children": {
+          "male": { "alt": "Male" },
+          "famale": { "alt": "Female" },
+          "unknown": { "alt": "Unknown" }
+        }
+      },
+      "generationCode": {
+        "alt": "Generation Code",
+        "children": {
+          "ii": { "alt": "II" },
+          "iii": { "alt": "III" },
+          "iv": { "alt": "IV" },
+          "v": { "alt": "V" },
+          "vi": { "alt": "VI" },
+          "vii": { "alt": "VII" },
+          "viii": { "alt": "VIII" },
+          "ix": { "alt": "ix" },
+          "sr": { "alt": "sr" },
+          "jr": { "alt": "jr" },
+          "none": { "alt": "None" }
+        }
+      },
+      "idType": {
+        "alt": "ID Type",
+        "children": {
+          "employerNumber": { "alt": "EIN" },
+          "sin": { "alt": "SIN" },
+          "ssn": { "alt": "SSN" }
+        }
+      },
+      "phoneType": {
+        "alt": "Phone Type",
+        "children": {
+          "cell": { "alt": "Cell" },
+          "cellSmartPhone": { "alt": "Cell Smart Phone" },
+          "home": { "alt": "Home" },
+          "fax": { "alt": "Fax" },
+          "office": { "alt": "Office" },
+          "other": { "alt": "Other" }
+        }
+      },
+      "customerReference": {
+        "alt": "Customer Reference",
+        "children": {
+          "brother": { "alt": "Brother" },
+          "coWorker": { "alt": "Co-Worker" },
+          "daughter": { "alt": "Daughetr" },
+          "father": { "alt": "Father" },
+          "friend": { "alt": "Friend" },
+          "Husband": { "alt": "Husband" },
+          "mother": { "alt": "Mother" },
+          "sister": { "alt": "Sister" },
+          "son": { "alt": "Son" },
+          "wife": { "alt": "Wife" }
+        }
+      }
+    }
+  },
+  "bankacct":
+  {
+    "alt":"Bank Account",
+    "children":{
+      "type":
+      {
+        "alt":"Account Type",
+        "children":{
+          "checking":{"alt":"Checking"},
+          "savings":{"alt":"Savings"}
+        }
+      },
+      "checktype":{
+        "alt":"Checking Type",
+        "children":{
+          "business":{"alt":"Business"},
+          "personal":{"alt":"Personal"}
+        }
+      }
+    }
+  }
+}

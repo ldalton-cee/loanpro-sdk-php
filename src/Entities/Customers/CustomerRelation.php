@@ -22,7 +22,7 @@ class CustomerRelation extends MetaData
 
     public function SetRelation($relation = "")
     {
-        if(CollectionRetriever::IsValidItem("loan/customerRole/".$this->loanRelationship))
+        if(CollectionRetriever::IsValidItem("loan.customerRole.".$this->loanRelationship))
             $this->loanRelationship = $relation;
     }
 
@@ -36,8 +36,7 @@ class CustomerRelation extends MetaData
      */
     public function jsonSerialize()
     {
-        $rel = CollectionRetriever::GetLoanProPath("loan/customerRole/".$this->loanRelationship);
-        var_dump($rel);
+        $rel = CollectionRetriever::GetLoanProPath("loan.customerRole.".$this->loanRelationship);
         if($this->update && !$this->destroy)
         {
             $obj = [
@@ -62,5 +61,17 @@ class CustomerRelation extends MetaData
         }
 
         return $obj;
+    }
+
+    public function PopulateFromJson($jsonStr = "")
+    {
+        if(is_string($jsonStr))
+            $json = json_decode($jsonStr);
+
+        $this->loanRelationship = explode(".",$json->__setLoanRole)[2];
+        $id = $json->__metadata->uri;
+        $id = str_replace("/api/public/api/1/odata.svc/Customers(id=", "", $id);
+        $id = str_replace(")", "", $id);
+        $this->id = intval($id);
     }
 }

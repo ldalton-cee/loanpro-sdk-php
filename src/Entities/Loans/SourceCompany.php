@@ -14,49 +14,40 @@ namespace Simnang\LoanPro\Entities\Loans;
  *
  * This represents Collateral entities used in LoanPro
  */
-class Collateral extends \Simnang\LoanPro\Entities\BaseEntity
+class SourceCompany extends \Simnang\LoanPro\Entities\BaseEntity
 {
     /**
      * The metadata string for it
      * @var string
      */
-    public $metaDataName = "Collateral";
+    public $metaDataName = "SourceCompany";
 
     /**
      * Validation array for all of the collateral fields
      * @var array
      */
     protected $validationArray = [
-        "numbers"=>[
-            "gap",
-            "warranty",
-            "distance",
-            "bookValue"
-        ],
         "int"=>[
-            "loanId"
-        ],
-        "timestamp"=>[
-            "startDate",
-            "endDate"
+            "id",
+            "numPrefix",
+            "numSuffix"
         ],
         "string"=>[
-            "a",
-            "b",
-            "c",
-            "d",
-            "additional",
-            "gpsCode",
-            "licensePlate",
-            "vin",
-            "color"
+            "companyName",
+            "contactName",
         ],
-        "collections"=>[
-            "collateralType"=>"collateral.type",
-            "gpsStatus"=>"collateral.gpsstatus"
+        "class"=>[
+            "BankAccount"=>"Simnang\\LoanPro\\Entities\\Misc\\BankAccount",
+            "Address"=>"Simnang\\LoanPro\\Entities\\Customers\\Address",
+        ],
+        "email"=>[
+            "contactEmail"
+        ],
+        "phone"=>[
+            "contactPhone"
         ],
         "classArray"=>[
             "CustomFieldValues"=>"Simnang\\LoanPro\\Entities\\Misc\\CustomFieldValue",
-        ],
+        ]
     ];
 }

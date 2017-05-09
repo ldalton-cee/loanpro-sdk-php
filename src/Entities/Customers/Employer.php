@@ -32,8 +32,8 @@ class Employer extends \Simnang\LoanPro\Entities\BaseEntity
             "phone"
         ],
         "collections"=>[
-            "incomeFrequency"=>"customer employer/incomeFrequency",
-            "payDateFrequency"=>"customer employer/payDateFrequency",
+            "incomeFrequency"=>"customer employer.incomeFrequency",
+            "payDateFrequency"=>"customer employer.payDateFrequency",
         ],
         "class"=>[
             "Address"=>"Simnang\\LoanPro\\Entities\\Customers\\Address",

@@ -277,7 +277,7 @@ class BaseEntity implements \JsonSerializable
             $obj = json_decode($jsonStr);
         else
             $obj = $jsonStr;
-        if(property_exists($obj, "d"))
+        if(property_exists($obj, "d") && count(get_object_vars($obj)) == 1)
             $obj = $obj->d;
         $objVars = get_object_vars($obj);
 
@@ -324,14 +324,14 @@ class BaseEntity implements \JsonSerializable
         //Reverse collections (collection paths in the sdk use a '/', loanpro ones don't)
         if(isset($this->validationArray["collections"]) && isset($this->validationArray["collections"][$key]))
         {
-            $parts =  explode("/",\Simnang\LoanPro\Collections\CollectionRetriever::ReverseTranslate($val));
-            $numPartsGiven = count(explode("/",$this->validationArray["collections"][$key]));
+            $parts =  explode(".",\Simnang\LoanPro\Collections\CollectionRetriever::ReverseTranslate($val));
+            $numPartsGiven = count(explode(".",$this->validationArray["collections"][$key]));
             $val = [];
             if(count($parts) < 3)
                 return '';
             for($i = $numPartsGiven; $i < 3; ++$i)
                 $val[] = $parts[$i];
-            $val = implode("/",$val);
+            $val = implode(".",$val);
         }
         //Get the class instance from a class
         if((isset($this->validationArray["class"]) && isset($this->validationArray["class"][$key])))
@@ -344,6 +344,9 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["classArray"]) && isset($this->validationArray["classArray"][$key]))
         {
             $arr = [];
+
+            if(is_array($val))
+                return null;
             if(!property_exists($val, "results"))
                 return null;
             foreach($val->results as $object)
@@ -368,7 +371,11 @@ class BaseEntity implements \JsonSerializable
                 if($this->validationArray["metadataLink"][$key] == "Simnang\\LoanPro\\Entities\\Customers\\Customer")
                 {
                     $metadata = new CustomerRelation();
-                    $metadata->SetRelation($object->GetRelation());
+                    if(method_exists($object, "GetRelation")){
+                        $metadata->SetRelation($object->GetRelation());
+                    }else{
+                        $metadata->PopulateFromJson(json_encode($object));
+                    }
                 }
                 else
                     $metadata = new MetaData();
@@ -396,9 +403,8 @@ class BaseEntity implements \JsonSerializable
         //convert collections to the LoanPro version
         if(isset($this->validationArray["collections"]) && isset($this->validationArray["collections"][$key]))
         {
-            $collItem = $this->validationArray["collections"][$key]."/".$val;
+            $collItem = $this->validationArray["collections"][$key].".".$val;
             $val =  \Simnang\LoanPro\Collections\CollectionRetriever::TranslatePath($collItem);
-            $val = str_replace("/", ".", $val);
         }
         //Convert timestamps to the LoanPro version
         if(isset($this->validationArray["timestamp"]) && in_array($key, $this->validationArray["timestamp"]))
@@ -546,7 +552,7 @@ class BaseEntity implements \JsonSerializable
         //validate collections
         if(isset($this->validationArray["collections"]) && isset($this->validationArray["collections"][$key]))
         {
-            $collItem = $this->validationArray["collections"][$key]."/".$val;
+            $collItem = $this->validationArray["collections"][$key].".".$val;
             return \Simnang\LoanPro\Collections\CollectionRetriever::IsValidItem($collItem);
         }
         //validate classes

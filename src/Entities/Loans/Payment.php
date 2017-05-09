@@ -70,7 +70,6 @@ class Payment extends \Simnang\LoanPro\Entities\BaseEntity
             "resetPastDue"=>[0,1],
             "payoffFlag"=>[0,1],
             "chargeOffRecovery"=>[0,1],
-            "early"=>[0,1],
         ],
         "bool"=>[
             "payoffPayment",
@@ -85,9 +84,9 @@ class Payment extends \Simnang\LoanPro\Entities\BaseEntity
             "status",
         ],
         "collections"=>[
-            "extra"=>"payment",
-            "cardFeeType"=>"loan/cardfee.types",
-            "echeckAuthType"=>"payment/echeckauth",
+            "extra"=>"payment.extra",
+            "cardFeeType"=>"loan.cardfee.types",
+            "echeckAuthType"=>"payment.echeckauth",
         ],
         "classArray"=>[
             "CustomFieldValues"=>"Simnang\\LoanPro\\Entities\\Misc\\CustomFieldValue",

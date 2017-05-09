@@ -48,9 +48,9 @@ class Funding extends \Simnang\LoanPro\Entities\BaseEntity
             "date",
         ],
         "collections"=>[
-            "authorizationType"=>"loan/funding.auth",
-            "method"=>"loan/funding.method",
-            "country"=>"company/country",
+            "authorizationType"=>"loan.funding.auth",
+            "method"=>"loan.funding.method",
+            "country"=>"company.country",
         ],
         "entityType"=>[
             "whoEntityType"

@@ -42,7 +42,7 @@ class Promises extends \Simnang\LoanPro\Entities\BaseEntity
             "dueDate",
         ],
         "collections"=>[
-            "type"=>"loanpromise/type",
+            "type"=>"loanpromise.type",
         ],
         "string"=>[
             "note",
