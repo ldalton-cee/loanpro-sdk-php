@@ -16,6 +16,14 @@ namespace Simnang\LoanPro\Entities\Loans;
  */
 class Loan extends \Simnang\LoanPro\Entities\BaseEntity
 {
+
+    static function PullFromServer($loanProSDK, $id)
+    {
+        $loan = new Loan();
+        $loan->PopulateFromJSON($loanProSDK->tx("GET","/odata.svc/Loans($id)"));
+        return $loan;
+    }
+
     /**
      * Represents the metadata name for the Loan
      * @var string

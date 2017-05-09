@@ -51,6 +51,12 @@ class LoanPro {
     private $log = null;
 
     /**
+     * This holds the last HTTP response code from the server
+     * @var 0
+     */
+    private $lastHTTPCode = 0;
+
+    /**
      * Constructor; all parameters affect logging options (great for debugging)
      * Please note that logging may affect performance
      *
@@ -248,8 +254,14 @@ class LoanPro {
 
         $this->logDebug($verboseLog);
 
+	$this->lastHTTPCode = curl_getinfo($request, CURLINFO_HTTP_CODE);
+
         curl_close($request);
         return $response;
+    }
+
+    public function getLastHTTPCode(){
+        return $this->lastHTTPCode;
     }
 
     /**

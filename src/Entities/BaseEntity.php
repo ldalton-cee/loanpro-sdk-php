@@ -119,6 +119,7 @@ class BaseEntity implements \JsonSerializable
         {
             if(is_subclass_of($prop, "Simnang\\LoanPro\\Entities\\BaseEntity"))
             {
+		if(!$nested || $this->skipNestedUpdate) continue;
                 $props[$key] = $prop->GetUpdate(true);
                 if($props[$key] == null)
                     $props[$key] = $prop;
@@ -126,6 +127,7 @@ class BaseEntity implements \JsonSerializable
             //Need to update all instances of nested classes
             elseif($prop instanceof ClassArray)
             {
+		if(!$nested || $this->skipNestedUpdate) continue;
                 $p = new ClassArray();
                 foreach($prop->items as $item)
                 {
@@ -139,6 +141,7 @@ class BaseEntity implements \JsonSerializable
             //Need to update any metadata links
             elseif($prop instanceof MetadataLink)
             {
+		if(!$nested || $this->skipNestedUpdate) continue;
                 $p = new MetadataLink();
                 foreach($prop->items as $item)
                 {
@@ -149,6 +152,7 @@ class BaseEntity implements \JsonSerializable
             }
             elseif($prop instanceof MetaData)
             {
+		if(!$nested || $this->skipNestedUpdate) continue;
                 $p = new MetaData();
                 $p->destroy = $prop->destroy;
                 $p->metaDataName = $prop->metaDataName;
