@@ -380,17 +380,25 @@ class BaseEntity implements \JsonSerializable
         {
             $arr = [];
 
-            if(is_array($val))
-                return null;
-            if(!property_exists($val, "results"))
-                return null;
-            foreach($val->results as $object)
-            {
-                $obj = new $this->validationArray["classArray"][$key]();
-                $obj->PopulateFromJSON(json_encode($object));
-                $arr[] = $obj;
+            if(is_array($val)){
+                foreach($val as $object)
+                {
+                    $obj = new $this->validationArray["classArray"][$key]();
+                    $obj->PopulateFromJSON(json_encode($object));
+                    $arr[] = $obj;
+                }
             }
-            $val = $arr;
+            else{
+                if(!property_exists($val, "results"))
+                    return null;
+                foreach($val->results as $object)
+                {
+                    $obj = new $this->validationArray["classArray"][$key]();
+                    $obj->PopulateFromJSON(json_encode($object));
+                    $arr[] = $obj;
+                }
+                $val = $arr;
+            }
         }
         //handles metadata information
         if(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]))

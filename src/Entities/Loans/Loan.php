@@ -21,9 +21,11 @@ class Loan extends \Simnang\LoanPro\Entities\BaseEntity
     {
         $loan = new Loan();
         if($getAll){
-            $loan->PopulateFromJSON($loanProSDK->tx("GET","/odata.svc/Loans($id)?all&\$expand=".
+            $json = $loanProSDK->tx("GET","/odata.svc/Loans($id)?all&\$expand=".
             "Collateral,Insurance,LoanSetup,LoanSettings,Advancements,APDAdjustments,Autopays,Charges,ChecklistItemValues,Credits,CustomFieldValues,DPDAdjustments,EscrowAdjustments,"
-            ."EscrowTransactions,LinkedLoanValues,LoanFunding,PayNearMeOrders,Payments,Promises,Notes,RecurrentCharges,RuleAppliedLoanSettings,ScheduleRolls&nopaging=true"));
+            ."EscrowTransactions,LinkedLoanValues,LoanFunding,PayNearMeOrders,Payments,Promises,Notes,RecurrentCharges,RuleAppliedLoanSettings,ScheduleRolls&nopaging=true");
+            $loan->PopulateFromJSON($json);
+            //var_dump($json);
         }
         else{
             $expandStr = "";

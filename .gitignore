@@ -7,3 +7,4 @@ TestEnvironment/.vagrant*
 TestEnvironment/profiler*
 TestEnvironment/html/composer/v*
 tests/credentials.ini
+*.log
