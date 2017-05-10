@@ -4,6 +4,9 @@ require_once(__DIR__."/../vendor/autoload.php");
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Runs basic tests on the Loan Object
+ */
 final class LoanTest extends TestCase
 {
 
@@ -22,8 +25,8 @@ final class LoanTest extends TestCase
 	}
 
 	/**
-         * @depends testCanSetCredentials
-         */
+	 * @depends testCanSetCredentials
+	 */
 	public function testGetLoan3($sdk)
 	{
 		$loan = \Simnang\LoanPro\Entities\Loans\Loan::PullFromServer($sdk, 3);
@@ -32,9 +35,9 @@ final class LoanTest extends TestCase
 		return [$sdk, $loan];
 	}
 
-        /**
-         * @depends testGetLoan3
-         */
+	/**
+	 * @depends testGetLoan3
+	 */
 	public function testGetUpdate($stack)
 	{
 		$sdk = $stack[0];

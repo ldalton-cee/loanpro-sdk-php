@@ -17,10 +17,24 @@ namespace Simnang\LoanPro\Entities\Loans;
 class Loan extends \Simnang\LoanPro\Entities\BaseEntity
 {
 
-    static function PullFromServer($loanProSDK, $id)
+    static function PullFromServer($loanProSDK, $id, $getAll = false, $expand=[], $nopaging = false)
     {
         $loan = new Loan();
-        $loan->PopulateFromJSON($loanProSDK->tx("GET","/odata.svc/Loans($id)"));
+        if($getAll){
+            $loan->PopulateFromJSON($loanProSDK->tx("GET","/odata.svc/Loans($id)?all&\$expand=".
+            "Collateral,Insurance,LoanSetup,LoanSettings,Advancements,APDAdjustments,Autopays,Charges,ChecklistItemValues,Credits,CustomFieldValues,DPDAdjustments,EscrowAdjustments,"
+            ."EscrowTransactions,LinkedLoanValues,LoanFunding,PayNearMeOrders,Payments,Promises,Notes,RecurrentCharges,RuleAppliedLoanSettings,ScheduleRolls&nopaging=true"));
+        }
+        else{
+            $expandStr = "";
+            if(sizeof($expand)){
+                $expandStr = "?all&\$expand=".implode(",",$expand);
+                if($nopaging){
+                    $expandStr .= "&nopaging=true";
+                }
+            }
+            $loan->PopulateFromJSON($loanProSDK->tx("GET","/odata.svc/Loans($id)$expandStr"));
+        }
         return $loan;
     }
 

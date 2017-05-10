@@ -30,9 +30,52 @@ class BaseEntity implements \JsonSerializable
 
     protected $skipNestedUpdate = false;
 
+    /**
+     * Allows destruction of single links
+     * @param $key
+     */
+    public function __unset($key)
+    {
+        if(isset($this->validationArray["metadata"]) && isset($this->validationArray["metadata"][$key]) && isset($this->properties[$key]))
+        {
+            $this->properties[$key]->destroy = true;
+        }
+        elseif(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]) && isset($this->properties[$key]))
+        {
+            $this->properties[$key]->DestroyAll();
+        }
+        elseif(isset($this->validationArray['classArray']) && isset($this->validationArray['classArray'][$key]) && isset($this->properties[$key]))
+        {
+            $this->properties[$key]->DestroyAll();
+        }
+        else
+            unset($this->properties[$key]);
+    }
+
+    public function __isset($key)
+    {
+        return isset($this->properties[$key]);
+    }
+
+    /**
+     * This creates the ignore warnings property
+     *
+     * @return 
+     */
     public function IgnoreWarnings()
     {
         $this->properties["__ignoreWarnings"] = true;
+    }
+
+    /**
+     * This removes the ignore warnings property
+     *
+     * @return 
+     */
+    public function HeedWarnings()
+    {
+        if(isset($this->properties["__ignoreWarnings"]))
+            unset($this->properties["__ignoreWarnings"]);
     }
 
     /**
@@ -63,47 +106,42 @@ class BaseEntity implements \JsonSerializable
     }
 
     /**
-     * Allows destruction of single links
-     * @param $key
+     * This returns the json data for destroying an entity, and it returns null if it fails
+     *
+     * It fails is there is no "id" property set
+     * @return null|array
      */
-    public function __unset($key)
+    public function GetDestroy($destroy = true)
     {
-        if(isset($this->validationArray["metadata"]) && isset($this->validationArray["metadata"][$key]) && isset($this->properties[$key]))
-        {
-            $this->properties[$key]->destroy = true;
-        }
-        elseif(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]) && isset($this->properties[$key]))
-        {
-            $this->properties[$key]->DestroyAll();
-        }
-        elseif(isset($this->validationArray['classArray']) && isset($this->validationArray['classArray'][$key]) && isset($this->properties[$key]))
-        {
-            $this->properties[$key]->DestroyAll();
-        }
-        else
-            unset($this->properties[$key]);
-    }
-
-    public function Destroy($destroy = true)
-    {
-        $this->properties["__destroy"] = $destroy;
+        $props = $this->GetJsonOfSelf(false);
+        //set special update fields
+        $props["__destroy"] = $destroy;
         if(isset($this->properties["id"]))
-            $this->properties["__id"] = $this->properties["id"];
-    }
-
-    public function __isset($key)
-    {
-        return isset($this->properties[$key]);
+            $props["__id"] = $this->properties["id"];
+        return $props;
     }
 
     /**
-     * This returns the json string for updating an entity, and it returns null if it fails
+     * This returns the json data for updating an entity, and it returns null if it fails
      *
      * It fails is there is no "id" property set
-     * @return null|string
+     * @return null|array
      */
     public function GetUpdate($nested = false)
     {
+        $props = $this->GetJsonOfSelf($nested);
+        //set special update fields
+        $props["__id"] = $this->id;
+        $props["__update"] = "true";
+        return $props;
+    }
+
+    /**
+     * This returns the json data representation for the entity
+     *
+     * @return array
+     */
+    protected function GetJsonOfSelf($nested){
         if($nested && $this->skipNestedUpdate) {
             $jsonArr = $this->jsonSerialize();
             if(isset($jsonArr['id']))
@@ -163,9 +201,6 @@ class BaseEntity implements \JsonSerializable
             else
                 $props[$key] = $prop;
         }
-        //set special update fields
-        $props["__id"] = $this->id;
-        $props["__update"] = "true";
         return $props;
     }
 
@@ -652,6 +687,12 @@ class BaseEntity implements \JsonSerializable
         return false;
     }
 
+    /**
+     * Parses a string of "true" or "false" into a boolean value
+     *
+     * @param $bool - the value to parse
+     * @return bool|int
+     */
     public static function ParseBool($bool)
     {
         if($bool == "true")
