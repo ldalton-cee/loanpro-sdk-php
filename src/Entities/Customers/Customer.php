@@ -14,6 +14,29 @@ class Customer extends \Simnang\LoanPro\Entities\BaseEntity
     public $metaDataName = "Customers";
     public $entityName = "Customer";
 
+    static function PullFromServer($loanProSDK, $id, $getAll = false, $expand=[], $nopaging = false)
+    {
+        $customer = new Customer();
+        if($getAll){
+            $json = $loanProSDK->tx("GET","/odata.svc/Customers($id)?all&\$expand=".
+            "PrimaryAddress,MailAddress,Employer,CreditScore,Phones,PaymentMethods,References,CustomFieldValuesnopaging=true");
+            $customer->PopulateFromJSON($json);
+            //var_dump($json);
+        }
+        else{
+            $expandStr = "";
+            if(sizeof($expand)){
+                $expandStr = "?all&\$expand=".implode(",",$expand);
+                if($nopaging){
+                    $expandStr .= "&nopaging=true";
+                }
+            }
+            //var_dump($loanProSDK->tx("GET","/odata.svc/Customers($id)$expandStr"));
+            $customer->PopulateFromJSON($loanProSDK->tx("GET","/odata.svc/Customers($id)$expandStr"));
+        }
+        return $customer;
+    }
+
     protected $validationArray = [
         "numbers"=>[
             "creditLimit"

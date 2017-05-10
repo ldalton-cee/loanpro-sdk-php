@@ -442,6 +442,8 @@ class BaseEntity implements \JsonSerializable
             $val = str_replace(")/", "", $val);
             $val = intval($val);
         }
+        if(is_null($val))
+            return "";
 
         return $val;
     }
