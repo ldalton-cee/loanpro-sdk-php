@@ -29,8 +29,10 @@ class APDAdjustment extends \Simnang\LoanPro\Entities\BaseEntity
     protected $validationArray = [
         "int"=>[
             "id",
+            "entityId",
+            "modId"
         ],
-        "dates"=>[
+        "timestamp"=>[
             "date"
         ],
         "numbers"=>[
@@ -38,6 +40,9 @@ class APDAdjustment extends \Simnang\LoanPro\Entities\BaseEntity
         ],
         "collections"=>[
             "type"=>"loan.apd.adjust.type"
+        ],
+        "entityType"=>[
+            "entityType"
         ],
     ];
 }

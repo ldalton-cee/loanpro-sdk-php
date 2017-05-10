@@ -29,9 +29,14 @@ class DPDAdjustment extends \Simnang\LoanPro\Entities\BaseEntity
     protected $validationArray = [
         "int"=>[
             "id",
+            "modId",
+            "entityId"
         ],
-        "dates"=>[
+        "timestamp"=>[
             "date"
+        ],
+        "entityType"=>[
+            "entityType"
         ],
     ];
 }

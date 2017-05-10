@@ -48,7 +48,7 @@ class Credit extends \Simnang\LoanPro\Entities\BaseEntity
         "ranges"=>[
             "resetPastDue"=>[0,1]
         ],
-        "dates"=>[
+        "timestamp"=>[
             "date",
         ],
         "string"=>[
