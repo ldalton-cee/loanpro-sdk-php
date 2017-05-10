@@ -39,7 +39,7 @@ final class LoanSettingsTest extends TestCase
 	/**
 	 * @depends testGetLoan3
 	 */
-	public function testSettingsAreValid($stack)
+	public function testIsValid($stack)
 	{
 		$sdk = $stack[0];
 		$lsettings = $stack[1];
@@ -67,7 +67,7 @@ final class LoanSettingsTest extends TestCase
 	/**
 	 * @depends testGetLoan3
 	 */
-	public function testCanAccessSettingsThroughLoan($stack)
+	public function testCanAccessThroughLoan($stack)
 	{
 		$sdk = $stack[0];
 		$loan = $stack[2];

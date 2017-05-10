@@ -42,7 +42,7 @@ class Advancement extends \Simnang\LoanPro\Entities\BaseEntity
             "modId",
             "category",
         ],
-        "dates"=>[
+        "timestamp"=>[
             "date",
         ],
         "string"=>[

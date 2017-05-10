@@ -43,19 +43,31 @@ class LoanSetup extends \Simnang\LoanPro\Entities\BaseEntity
             "creditLimit",
             "lateFeeAmount",
             "lateFeePercent",
-            "scheduleRound"
+            "scheduleRound",
+            "origFinalPaymentAmount",
+            "tilFinanceCharge",
+            "tilTotalOfPayments",
+            "tilLoanAmount",
+            "tilSalesPrice",
+            "tilPaymentSchedule",
+            "regzApr",
+            "regzFinanceCharge",
+            "regzAmountFinanced",
+            "regzTotalOfPayments",
         ],
         "int"=>[
-            "id"
+            "id",
+            "regzCustomEnabled"
         ],
         "ranges"=>[
             "graceDays"=>[0, 30],
             "roundDecimals"=>[2, 7],
             "discountSplit"=>[0,1]
         ],
-        "dates"=>[
+        "timestamp"=>[
             "contractDate",
-            "firstPaymentDate"
+            "firstPaymentDate",
+            "origFinalPaymentDate"
         ],
         "collections"=>[
             "loanRateType"=>"loan.rateType",

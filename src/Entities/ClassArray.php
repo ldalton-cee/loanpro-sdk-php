@@ -47,6 +47,14 @@ class ClassArray implements \JsonSerializable
         }
     }
 
+    public function GetUpdate(){
+        $updateArr = [];
+        foreach($this->items as $i){
+            $updateArr[] = $i->GetUpdate();
+        }
+        return ["results"=>$updateArr];
+    }
+
     /**
      * Returns the Json serializable array
      * @return array

@@ -269,6 +269,10 @@ class BaseEntity implements \JsonSerializable
     {
         if(isset($this->properties[$key]))
         {
+            if(isset($this->validationArray["timestamp"]) && in_array($key, $this->validationArray["timestamp"]))
+            {
+                return intval(str_replace("/Date(","",str_replace(")/","",$this->properties[$key])));
+            }
             return $this->properties[$key];
         }
         return null;
@@ -289,8 +293,9 @@ class BaseEntity implements \JsonSerializable
             {
                 $this->properties[$key]->items[] = $this->TranslateProperty($key, $val);
             }
-            else
+            else{
                 $this->properties[$key] = $this->TranslateProperty($key, $val);
+            }
         }
 //        else
 //        {
@@ -341,7 +346,7 @@ class BaseEntity implements \JsonSerializable
             //Just get the reverse translated property and use that
             else
             {
-                $this->$key = $this->ReverseTranslateProperty($key, $val);
+                $this->properties[$key] = $this->ReverseTranslateProperty($key, $val);
             }
         }
     }
@@ -397,8 +402,8 @@ class BaseEntity implements \JsonSerializable
                     $obj->PopulateFromJSON(json_encode($object));
                     $arr[] = $obj;
                 }
-                $val = $arr;
             }
+            $val = $arr;
         }
         //handles metadata information
         if(isset($this->validationArray["metadataLink"]) && isset($this->validationArray["metadataLink"][$key]))
@@ -429,6 +434,14 @@ class BaseEntity implements \JsonSerializable
 
             $val = $arr;
         }
+        //Convert timestamps to the LoanPro version
+        if(isset($this->validationArray["timestamp"]) && in_array($key, $this->validationArray["timestamp"]))
+        {
+            //We don't enforce that the wrapper will always be valid, so remove any part of the wrapper and add a valid version
+            $val = str_replace("/Date(", "", $val);
+            $val = str_replace(")/", "", $val);
+            $val = intval($val);
+        }
 
         return $val;
     }
@@ -453,6 +466,8 @@ class BaseEntity implements \JsonSerializable
         if(isset($this->validationArray["timestamp"]) && in_array($key, $this->validationArray["timestamp"]))
         {
             //We don't enforce that the wrapper will always be valid, so remove any part of the wrapper and add a valid version
+            if(!is_string($val))
+                $val = "$val";
             $val = str_replace("/Date(", "", $val);
             $val = str_replace(")/", "", $val);
             $val = "/Date(".$val.")/";
