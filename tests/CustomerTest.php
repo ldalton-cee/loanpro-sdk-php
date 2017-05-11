@@ -27,7 +27,7 @@ final class CustomerTest extends TestCase
 	/**
 	 * @depends testCanSetCredentials
 	 */
-	public function testGetLoan3($sdk)
+	public function testGetCustomer3($sdk)
 	{
 		$customer = \Simnang\LoanPro\Entities\Customers\Customer::PullFromServer($sdk, 3);
 		
@@ -61,7 +61,7 @@ final class CustomerTest extends TestCase
 	}
 
 	/**
-	 * @depends testGetLoan3
+	 * @depends testGetCustomer3
 	 */
 	public function testGetUpdate($stack)
 	{

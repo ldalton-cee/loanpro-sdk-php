@@ -13,6 +13,14 @@ use Simnang\LoanPro\Entities\BaseEntity;
 
 class AdminStats extends BaseEntity
 {
+
+    static function PullFromServer($loanProSDK, $id)
+    {
+        $stats = new AdminStats();
+        $stats->PopulateFromJSON($loanProSDK->tx("GET","/Loans($id)/Autopal.GetAdminStats()"));
+        //var_dump($loanProSDK->tx("GET","/Loans($id)/Autopal.GetAdminStats()"));
+        return $stats;
+    }
     /**
      * The metadata string for it
      * @var string
