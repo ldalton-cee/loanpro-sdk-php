@@ -254,7 +254,7 @@ class LoanPro {
 
         $this->logDebug($verboseLog);
 
-	$this->lastHTTPCode = curl_getinfo($request, CURLINFO_HTTP_CODE);
+	    $this->lastHTTPCode = curl_getinfo($request, CURLINFO_HTTP_CODE);
 
         curl_close($request);
         return $response;

@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Runs basic tests on the Loan Object
  */
-final class LoanTest extends TestCase
+final class AdminStatsTest extends TestCase
 {
 
 	public function testCanSetCredentials()
