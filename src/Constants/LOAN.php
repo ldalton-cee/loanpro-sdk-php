@@ -14,16 +14,18 @@ namespace Simnang\LoanPro\Constants;
  * @package Simnang\LoanPro\Constants
  */
 class LOAN{
-    const LSETUP        = 'LoanSetup';
-    const LSETTINGS     = 'LoanSettings';
-    const COLLATERAL    = 'Collateral';
-    const PAYMENTS      = 'Payments';
-    const INSURANCE     = 'Insurance';
-    const DISP_ID       = 'displayId';
-    const TITLE         = 'title';
-    const LOAN_ALERT    = 'loanAlert';
-    const MOD_TOTAL     = 'modTotal';
-    const MOD_ID        = 'modId';
-    const ACTIVE        = 'active';
-    const DELETED       = 'deleted';
+    const LSETUP            = 'LoanSetup';
+    const LSETTINGS         = 'LoanSettings';
+    const COLLATERAL        = 'Collateral';
+    const LSRULES_APPLIED   = 'RuleAppliedLoanSettings';
+    const PAYMENTS          = 'Payments';
+    const PORTFOLIOS        = 'Portfolios';
+    const INSURANCE         = 'Insurance';
+    const DISP_ID           = 'displayId';
+    const TITLE             = 'title';
+    const LOAN_ALERT        = 'loanAlert';
+    const MOD_TOTAL         = 'modTotal';
+    const MOD_ID            = 'modId';
+    const ACTIVE            = 'active';
+    const DELETED           = 'deleted';
 }

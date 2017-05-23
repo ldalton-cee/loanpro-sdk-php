@@ -16,6 +16,8 @@ use Simnang\LoanPro\Loans\InsuranceEntity;
 use Simnang\LoanPro\Loans\LoanSettingsEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
 use Simnang\LoanPro\Loans\PaymentEntity;
+use Simnang\LoanPro\Loans\PortfolioEntity;
+use Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity;
 
 class LoanProSDK
 {
@@ -71,6 +73,14 @@ class LoanProSDK
 
     public static function CreatePayment($amt, $date, $info, $payMethodId, $paymentTypeId){
         return new PaymentEntity($amt, $date, $info, $payMethodId, $paymentTypeId);
+    }
+
+    public static function CreatePortfolio($id){
+        return new PortfolioEntity($id);
+    }
+
+    public static function CreateRulesAppliedLoanSettings($id, $enabled){
+        return new RulesAppliedLoanSettingsEntity($id, $enabled);
     }
 
     private static function CreateLoanSetupFromJSON($json = []){

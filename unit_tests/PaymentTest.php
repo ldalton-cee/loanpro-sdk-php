@@ -186,4 +186,34 @@ class PaymentTest extends TestCase
 
         $loan->append(LOAN::PAYMENTS, $payment, LOAN::INSURANCE, LPSDK::CreateInsurance());
     }
+
+    public function testAppendFailNoValues(){
+        // create loan and payments
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected two parameters, only got one');
+        $payment = LPSDK::CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
+        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
+
+        $loan->append(LOAN::PAYMENTS);
+    }
+
+    public function testAppendFailMissingValues1(){
+        // create loan and payments
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing fields for \''.LOAN::PAYMENTS.'\'');
+        $payment = LPSDK::CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
+        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
+
+        $loan->append(LOAN::PAYMENTS,LOAN::PAYMENTS,$payment);
+    }
+
+    public function testAppendFailMissingValues2(){
+        // create loan and payments
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing fields for \''.LOAN::PAYMENTS.'\'');
+        $payment = LPSDK::CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
+        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
+
+        $loan->append(LOAN::PAYMENTS,$payment,LOAN::PAYMENTS,LOAN::PAYMENTS,$payment);
+    }
 }

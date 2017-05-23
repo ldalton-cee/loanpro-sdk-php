@@ -21,7 +21,7 @@ class LoanEntity extends BaseEntity
      */
     public function __construct($dispId){
         parent::__construct();
-        if(!$this->IsValidField(LOAN::DISP_ID, $dispId))
+        if(!$this->IsValidField(LOAN::DISP_ID, $dispId) || is_null($dispId))
             throw new \InvalidArgumentException("Invalid value '$dispId' for property ".LOAN::DISP_ID);
         $this->properties[LOAN::DISP_ID] = $this->GetValidField(LOAN::DISP_ID, $dispId);
     }
@@ -56,21 +56,23 @@ class LoanEntity extends BaseEntity
      * @var array
      */
     protected static $fields = [
-        LOAN::DISP_ID       => FieldValidator::STRING,
-        LOAN::LOAN_ALERT    => FieldValidator::STRING,
-        LOAN::TITLE         => FieldValidator::STRING,
+        LOAN::DISP_ID           => FieldValidator::STRING,
+        LOAN::LOAN_ALERT        => FieldValidator::STRING,
+        LOAN::TITLE             => FieldValidator::STRING,
 
-        LOAN::MOD_ID        => FieldValidator::INT,
-        LOAN::MOD_TOTAL     => FieldValidator::INT,
+        LOAN::MOD_ID            => FieldValidator::INT,
+        LOAN::MOD_TOTAL         => FieldValidator::INT,
 
-        LOAN::ACTIVE        => FieldValidator::BOOL,
-        LOAN::DELETED       => FieldValidator::BOOL,
+        LOAN::ACTIVE            => FieldValidator::BOOL,
+        LOAN::DELETED           => FieldValidator::BOOL,
 
-        LOAN::LSETUP        => FieldValidator::OBJECT,
-        LOAN::LSETTINGS     => FieldValidator::OBJECT,
-        LOAN::COLLATERAL    => FieldValidator::OBJECT,
-        LOAN::INSURANCE     => FieldValidator::OBJECT,
+        LOAN::LSETUP            => FieldValidator::OBJECT,
+        LOAN::LSETTINGS         => FieldValidator::OBJECT,
+        LOAN::COLLATERAL        => FieldValidator::OBJECT,
+        LOAN::INSURANCE         => FieldValidator::OBJECT,
 
-        LOAN::PAYMENTS     => FieldValidator::OBJECT_LIST,
+        LOAN::PAYMENTS          => FieldValidator::OBJECT_LIST,
+        LOAN::PORTFOLIOS        => FieldValidator::OBJECT_LIST,
+        LOAN::LSRULES_APPLIED   => FieldValidator::OBJECT_LIST,
     ];
 }

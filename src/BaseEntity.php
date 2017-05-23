@@ -250,15 +250,16 @@ abstract class BaseEntity{
 
         $obj = clone $this;
         foreach($args as $key){
-            if($key === BASE_ENTITY::ID){
-                $obj->id = null;
-            }
-            else if(!$this->IsField($key)){
+            if(!$this->IsField($key)){
                 throw new \InvalidArgumentException("Invalid property '$key'");
             }
             else if(in_array($key, static::$required, true)){
                 throw new \InvalidArgumentException("Cannot delete '$key', field is required.");
-            }else if (isset($obj->properties[$key])){
+            }
+            else if($key === BASE_ENTITY::ID){
+                $obj->id = null;
+            }
+            else if (isset($obj->properties[$key])){
                 unset($obj->properties[$key]);
                 $obj->deletedProperties[$key] = true;
             }
@@ -323,6 +324,8 @@ abstract class BaseEntity{
      * @return mixed - Returns the formatted value of the field
      */
     protected function GetValidField($fieldName, $val){
+        if($fieldName == BASE_ENTITY::ID && FieldValidator::IsValidInt($val))
+            return FieldValidator::GetInt($val);
         if(isset(static::$validConstsByVal[$fieldName])){
             if(isset(static::$fields[$fieldName])) {
                 return FieldValidator::GetByType($val, static::$fields[$fieldName], static::$constCollectionPrefix.'\\'.static::$constCollectionPrefix.'_'.static::$validConstsByVal[$fieldName]);
@@ -341,6 +344,8 @@ abstract class BaseEntity{
      * @return bool - Whether or not the field-value combo is correct
      */
     protected function IsValidField($fieldName, $val){
+        if($fieldName == BASE_ENTITY::ID && FieldValidator::IsValidInt($val))
+            return true;
         if(isset(static::$validConstsByVal[$fieldName]) && !is_null($val)){
             if(isset(static::$fields[$fieldName]))
                 return FieldValidator::ValidateByType($val, static::$fields[$fieldName], static::$constCollectionPrefix.'\\'.static::$constCollectionPrefix.'_'.static::$validConstsByVal[$fieldName]);
@@ -357,6 +362,8 @@ abstract class BaseEntity{
      */
     protected function IsField($fieldName){
         if(isset(static::$validConstsByVal[$fieldName]))
+            return true;
+        if($fieldName == BASE_ENTITY::ID)
             return true;
         return false;
     }
