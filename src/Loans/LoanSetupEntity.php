@@ -26,12 +26,12 @@ class LoanSetupEntity extends BaseEntity
             throw new \InvalidArgumentException("Cannot have Loan Class be null");
         if(is_null($type))
             throw new \InvalidArgumentException("Cannot have Loan Type be null");
-        if(!$this->IsValidField(LSETUP::LCLASS_C, $class))
-            throw new \InvalidArgumentException("Invalid value '$class' for property ".LSETUP::LCLASS_C);
-        if(!$this->IsValidField(LSETUP::LTYPE_C, $type))
-            throw new \InvalidArgumentException("Invalid value '$type' for property ".LSETUP::LTYPE_C);
-        $this->properties[LSETUP::LCLASS_C] = $this->GetValidField(LSETUP::LCLASS_C, $class);
-        $this->properties[LSETUP::LTYPE_C] = $this->GetValidField(LSETUP::LTYPE_C, $type);
+        if(!$this->IsValidField(LSETUP::LCLASS__C, $class))
+            throw new \InvalidArgumentException("Invalid value '$class' for property ".LSETUP::LCLASS__C);
+        if(!$this->IsValidField(LSETUP::LTYPE__C, $type))
+            throw new \InvalidArgumentException("Invalid value '$type' for property ".LSETUP::LTYPE__C);
+        $this->properties[LSETUP::LCLASS__C] = $this->GetValidField(LSETUP::LCLASS__C, $class);
+        $this->properties[LSETUP::LTYPE__C] = $this->GetValidField(LSETUP::LTYPE__C, $type);
     }
 
     /**
@@ -39,8 +39,8 @@ class LoanSetupEntity extends BaseEntity
      * @var array
      */
     protected static $required = [
-        LSETUP::LCLASS_C,
-        LSETUP::LTYPE_C,
+        LSETUP::LCLASS__C,
+        LSETUP::LTYPE__C,
     ];
 
     /**
@@ -66,28 +66,28 @@ class LoanSetupEntity extends BaseEntity
     protected static $fields = [
         LSETUP::DISCOUNT_SPLIT        => FieldValidator::BOOL,
 
-        LSETUP::BEG_END_C             => FieldValidator::COLLECTION,
-        LSETUP::CALC_TYPE_C           => FieldValidator::COLLECTION,
-        LSETUP::CURTAIL_PERC_BASE_C   => FieldValidator::COLLECTION,
-        LSETUP::DAYS_IN_PERIOD_C      => FieldValidator::COLLECTION,
-        LSETUP::DAYS_IN_YEAR_C        => FieldValidator::COLLECTION,
-        LSETUP::DISCOUNT_CALC_C       => FieldValidator::COLLECTION,
-        LSETUP::DIY_ALT_C             => FieldValidator::COLLECTION,
-        LSETUP::END_INTEREST_C        => FieldValidator::COLLECTION,
-        LSETUP::FEES_PAID_BY_C        => FieldValidator::COLLECTION,
-        LSETUP::FIRST_DAY_INT_C       => FieldValidator::COLLECTION,
-        LSETUP::FIRST_PER_DAYS_C      => FieldValidator::COLLECTION,
-        LSETUP::INTEREST_APP_C        => FieldValidator::COLLECTION,
-        LSETUP::NDD_CALC_C            => FieldValidator::COLLECTION,
-        LSETUP::PAYMENT_DATE_APP_C    => FieldValidator::COLLECTION,
-        LSETUP::PAY_FREQ_C            => FieldValidator::COLLECTION,
-        LSETUP::LAST_AS_FINAL_C       => FieldValidator::COLLECTION,
-        LSETUP::LATE_FEE_CALC_C       => FieldValidator::COLLECTION,
-        LSETUP::LATE_FEE_TYPE_C       => FieldValidator::COLLECTION,
-        LSETUP::LATE_FEE_PERC_BASE_C  => FieldValidator::COLLECTION,
-        LSETUP::LCLASS_C              => FieldValidator::COLLECTION,
-        LSETUP::LRATE_TYPE_C          => FieldValidator::COLLECTION,
-        LSETUP::LTYPE_C               => FieldValidator::COLLECTION,
+        LSETUP::BEG_END__C             => FieldValidator::COLLECTION,
+        LSETUP::CALC_TYPE__C           => FieldValidator::COLLECTION,
+        LSETUP::CURTAIL_PERC_BASE__C   => FieldValidator::COLLECTION,
+        LSETUP::DAYS_IN_PERIOD__C      => FieldValidator::COLLECTION,
+        LSETUP::DAYS_IN_YEAR__C        => FieldValidator::COLLECTION,
+        LSETUP::DISCOUNT_CALC__C       => FieldValidator::COLLECTION,
+        LSETUP::DIY_ALT__C             => FieldValidator::COLLECTION,
+        LSETUP::END_INTEREST__C        => FieldValidator::COLLECTION,
+        LSETUP::FEES_PAID_BY__C        => FieldValidator::COLLECTION,
+        LSETUP::FIRST_DAY_INT__C       => FieldValidator::COLLECTION,
+        LSETUP::FIRST_PER_DAYS__C      => FieldValidator::COLLECTION,
+        LSETUP::INTEREST_APP__C        => FieldValidator::COLLECTION,
+        LSETUP::NDD_CALC__C            => FieldValidator::COLLECTION,
+        LSETUP::PAYMENT_DATE_APP__C    => FieldValidator::COLLECTION,
+        LSETUP::PAY_FREQ__C            => FieldValidator::COLLECTION,
+        LSETUP::LAST_AS_FINAL__C       => FieldValidator::COLLECTION,
+        LSETUP::LATE_FEE_CALC__C       => FieldValidator::COLLECTION,
+        LSETUP::LATE_FEE_TYPE__C       => FieldValidator::COLLECTION,
+        LSETUP::LATE_FEE_PERC_BASE__C  => FieldValidator::COLLECTION,
+        LSETUP::LCLASS__C              => FieldValidator::COLLECTION,
+        LSETUP::LRATE_TYPE__C          => FieldValidator::COLLECTION,
+        LSETUP::LTYPE__C               => FieldValidator::COLLECTION,
 
 
         LSETUP::CONTRACT_DATE         => FieldValidator::DATE,

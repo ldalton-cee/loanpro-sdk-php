@@ -16,8 +16,8 @@ use PHPUnit\Framework\TestCase;
 
 use Simnang\LoanPro\LoanProSDK as LPSDK,
     Simnang\LoanPro\Constants\LSETUP as LSETUP,
-    Simnang\LoanPro\Constants\LSETUP\LSETUP_LCLASS_C as LSETUP_LCLASS,
-    Simnang\LoanPro\Constants\LSETUP\LSETUP_LTYPE_C as LSETUP_LTYPE
+    Simnang\LoanPro\Constants\LSETUP\LSETUP_LCLASS__C as LSETUP_LCLASS,
+    Simnang\LoanPro\Constants\LSETUP\LSETUP_LTYPE__C as LSETUP_LTYPE
     ;
 
 ////////////////////
@@ -28,8 +28,8 @@ class LoanSetupTest extends TestCase
 {
     public function testCreateLoanSetupNoVals(){
         $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
-        $this->assertEquals(LSETUP_LCLASS::CONSUMER, $loanSetup->get(LSETUP::LCLASS_C));
-        $this->assertEquals(LSETUP_LTYPE::INSTALLMENT, $loanSetup->get(LSETUP::LTYPE_C));
+        $this->assertEquals(LSETUP_LCLASS::CONSUMER, $loanSetup->get(LSETUP::LCLASS__C));
+        $this->assertEquals(LSETUP_LTYPE::INSTALLMENT, $loanSetup->get(LSETUP::LTYPE__C));
 
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LSETUP');
@@ -37,7 +37,7 @@ class LoanSetupTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            if($key === LSETUP::LCLASS_C || $key == LSETUP::LTYPE_C)
+            if($key === LSETUP::LCLASS__C || $key == LSETUP::LTYPE__C)
                 continue;
             $this->assertNull(null,$loanSetup->get($field));
         }
@@ -45,8 +45,8 @@ class LoanSetupTest extends TestCase
 
     public function testLoanSetupSetCollections(){
         $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
-        $this->assertEquals(LSETUP_LCLASS::CONSUMER, $loanSetup->get(LSETUP::LCLASS_C));
-        $this->assertEquals(LSETUP_LTYPE::INSTALLMENT, $loanSetup->get(LSETUP::LTYPE_C));
+        $this->assertEquals(LSETUP_LCLASS::CONSUMER, $loanSetup->get(LSETUP::LCLASS__C));
+        $this->assertEquals(LSETUP_LTYPE::INSTALLMENT, $loanSetup->get(LSETUP::LTYPE__C));
 
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LSETUP');
@@ -54,7 +54,7 @@ class LoanSetupTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            if(substr($key, -2) === "_C"){
+            if(substr($key, -3) === '__C'){
                 $collName = '\Simnang\LoanPro\Constants\LSETUP\LSETUP_' . $key;
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
@@ -83,19 +83,19 @@ class LoanSetupTest extends TestCase
 
     public function testLoanSetupDelClass(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot delete \''.LSETUP::LCLASS_C.'\', field is required.');
+        $this->expectExceptionMessage('Cannot delete \''.LSETUP::LCLASS__C.'\', field is required.');
         $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
 
         // should throw exception
-        $loanSetup->del(LSETUP::LCLASS_C);
+        $loanSetup->del(LSETUP::LCLASS__C);
     }
 
     public function testLoanSetupDelType(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot delete \''.LSETUP::LTYPE_C.'\', field is required.');
+        $this->expectExceptionMessage('Cannot delete \''.LSETUP::LTYPE__C.'\', field is required.');
         $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
 
         // should throw exception
-        $loanSetup->del(LSETUP::LTYPE_C);
+        $loanSetup->del(LSETUP::LTYPE__C);
     }
 }

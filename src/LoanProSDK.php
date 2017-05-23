@@ -11,6 +11,8 @@ namespace Simnang\LoanPro;
 
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETUP;
+use Simnang\LoanPro\Loans\CollateralEntity;
+use Simnang\LoanPro\Loans\InsuranceEntity;
 use Simnang\LoanPro\Loans\LoanSettingsEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
 
@@ -34,7 +36,13 @@ class LoanProSDK
                 $setVars[$key] = LoanProSDK::CreateLoanSetupFromJSON($val);
             }
             else if($key == LOAN::LSETTINGS && !is_null($val)){
-                $setVars[$key] = LoanProSDK::CreateLoanSettingsFromJSON($val);
+                $setVars[$key] = LoanProSDK::CreateGenericJSONClass(LoanSettingsEntity::class,$val);
+            }
+            else if($key == LOAN::COLLATERAL && !is_null($val)){
+                $setVars[$key] = LoanProSDK::CreateGenericJSONClass(CollateralEntity::class,$val);
+            }
+            else if($key == LOAN::INSURANCE && !is_null($val)){
+                $setVars[$key] = LoanProSDK::CreateGenericJSONClass(InsuranceEntity::class,$val);
             }
             else if (!is_null($val)){
                 $setVars[$key] = $val;
@@ -52,35 +60,38 @@ class LoanProSDK
         return new LoanSettingsEntity();
     }
 
+    public static function CreateCollateral(){
+        return new CollateralEntity();
+    }
+
+    public static function CreateInsurance(){
+        return new InsuranceEntity();
+    }
+
     private static function CreateLoanSetupFromJSON($json = []){
         if(!is_array($json))
             throw new \InvalidArgumentException("Expected a parsed JSON array");
 
-        if(!isset($json[LSETUP::LCLASS_C]))
+        if(!isset($json[LSETUP::LCLASS__C]) || is_null($json[LSETUP::LCLASS__C]))
             throw new \InvalidArgumentException("Missing LoanSetup - Loan Class");
-        if(!isset($json[LSETUP::LTYPE_C]))
+        if(!isset($json[LSETUP::LTYPE__C]) || is_null($json[LSETUP::LTYPE__C]))
             throw new \InvalidArgumentException("Missing LoanSetup - Loan Type");
 
-        $genVals = [];
-        foreach($json as $key=>$val)
-            if(!is_null($val))
-                $genVals[$key]=$val;
-        $json = $genVals;
-
-        return (new LoanSetupEntity($json[LSETUP::LCLASS_C], $json[LSETUP::LTYPE_C]))->set($json);
+        return (new LoanSetupEntity($json[LSETUP::LCLASS__C], $json[LSETUP::LTYPE__C]))->set(LoanProSDK::CleanJSON($json));
     }
 
-    private static function CreateLoanSettingsFromJSON($json = []){
+    private static function CreateGenericJSONClass($class, $json){
         if(!is_array($json))
             throw new \InvalidArgumentException("Expected a parsed JSON array");
+        return (new $class())->set(LoanProSDK::CleanJSON($json));
+    }
 
-        $genVals = [];
+    private static function CleanJSON($json){
+        $clean_json = [];
         foreach($json as $key=>$val)
             if(!is_null($val))
-                $genVals[$key]=$val;
-        $json = $genVals;
-
-        return (new LoanSettingsEntity())->set($json);
+                $clean_json[$key]=$val;
+        return $clean_json;
     }
 }
 

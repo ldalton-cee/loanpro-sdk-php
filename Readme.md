@@ -28,7 +28,7 @@ eg.
 
 ### Fields
 
-Fields in the constant list will always be in all caps with underscores separating words. If it is a collection field it always ends with "\_C", otherwise it never ends with "\_C" (this allows developers to quickly tell if a field is a collection list or not). 
+Fields in the constant list will always be in all caps with underscores separating words. If it is a collection field it always ends with "\_\_C", otherwise it never ends with "\_\_C" (this allows developers to quickly tell if a field is a collection list or not). 
 
 ## Collection Lists
 
@@ -36,6 +36,6 @@ Collection lists will be in a namespace with the constant list name for the enti
  
 eg.
 
-* For the loan class in Loan Setup, the field name is "LCLASS_C", so the collection list will be called "LSETUP_LCLASS_C".
-* For the payment frequency in Loan Setup, the field name is "PAY_FREQ_C", so the collection list will be called "LSETUP_PAY_FREQ_C".
+* For the loan class in Loan Setup, the field name is "LCLASS__C", so the collection list will be called "LSETUP_LCLASS__C".
+* For the payment frequency in Loan Setup, the field name is "PAY_FREQ__C", so the collection list will be called "LSETUP_PAY_FREQ__C".
 

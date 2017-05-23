@@ -279,7 +279,7 @@ abstract class BaseEntity{
                 if(!isset($fields[$field])){
                     throw new \ReflectionException("Cannot find type for field '$field'' for '$className' (constant is $key)");
                 }
-                else if(substr($key, -2) == "_C"){
+                else if(substr($key, -3) == "__C"){
                     if($fields[$field] == FieldValidator::COLLECTION) {
                         $listName = '\Simnang\LoanPro\Constants\\'.static::$constCollectionPrefix.'\\'.static::$constCollectionPrefix . '_' . $key;
                         if (!class_exists($listName)) {
@@ -287,12 +287,12 @@ abstract class BaseEntity{
                         }
                     }
                     else{
-                        $keyShould = substr($key, 0, -2);
+                        $keyShould = substr($key, 0, -3);
                         throw new \ReflectionException("Constant $key does not follow the naming convention! It should just be $keyShould");
                     }
                 }
                 else if($fields[$field] == FieldValidator::COLLECTION){
-                    throw new \ReflectionException("Constant $key does not follow the naming convention! It should just be $key".'_C');
+                    throw new \ReflectionException("Constant $key does not follow the naming convention! It should just be $key".'__C');
                 }
             }
         }

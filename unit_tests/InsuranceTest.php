@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 ////////////////////
 
 use Simnang\LoanPro\LoanProSDK as LPSDK,
-    Simnang\LoanPro\Constants\LSETTINGS as LSETTINGS,
+    Simnang\LoanPro\Constants\INSURANCE as INSURANCE,
     Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY
     ;
 
@@ -23,35 +23,35 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 /// Done Setting Up Aliasing
 ////////////////////
 
-class LoanSettingsTest extends TestCase
+class InsuranceTest extends TestCase
 {
-    public function testLoanSettingsInstantiate(){
-        $loanSettings = LPSDK::CreateLoanSettings();
+    public function testInsuranceInstantiate(){
+        $insurance = LPSDK::CreateInsurance();
 
-        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LSETTINGS');
+        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\INSURANCE');
         $consts = $rclass->getConstants();
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$loanSettings->get($field));
+            $this->assertNull(null,$insurance->get($field));
         }
     }
 
-    public function testLoanSettingsSetCollections(){
-        $loanSettings = LPSDK::CreateLoanSettings();
+    public function testInsuranceSetCollections(){
+        $insurance = LPSDK::CreateInsurance();
 
 
-        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LSETTINGS');
+        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\INSURANCE');
         $consts = $rclass->getConstants();
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
             if(substr($key, -3) === '__C'){
-                $collName = '\Simnang\LoanPro\Constants\LSETTINGS\LSETTINGS_' . $key;
+                $collName = '\Simnang\LoanPro\Constants\INSURANCE\INSURANCE_' . $key;
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
-                    $this->assertEquals($cval, $loanSettings->set($field, $cval)->get($field));
+                    $this->assertEquals($cval, $insurance->set($field, $cval)->get($field));
                 }
             }
         }
@@ -59,28 +59,28 @@ class LoanSettingsTest extends TestCase
 
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value \'\' for property '.LSETTINGS::AGENT);
-        LPSDK::CreateLoanSettings()
-            /* should throw exception when setting LOAN_AMT to null */ ->set(LSETTINGS::AGENT, null);
+        $this->expectExceptionMessage('Invalid value \'\' for property '.INSURANCE::AGENT_NAME);
+        LPSDK::CreateInsurance()
+            /* should throw exception when setting LOAN_AMT to null */ ->set(INSURANCE::AGENT_NAME, null);
     }
 
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
-        $ls = LPSDK::CreateLoanSettings();
+        $ls = LPSDK::CreateInsurance();
         $ls->set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
         $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, null);
     }
 
-    public function testLoanSettingsDel(){
-        $loanSettings = LPSDK::CreateLoanSettings()->set([LSETTINGS::AGENT=> 2, LSETTINGS::LOAN_SUB_STATUS_ID=>5, LSETTINGS::LOAN_STATUS_ID=>6, LSETTINGS::SECURED=>1]);
-        $this->assertEquals(2, $loanSettings->get(LSETTINGS::AGENT));
+    public function testInsuranceDel(){
+        $insurance = LPSDK::CreateInsurance()->set([INSURANCE::DEDUCTIBLE=> 232.23]);
+        $this->assertEquals(232.23, $insurance->get(INSURANCE::DEDUCTIBLE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($loanSettings->del(LSETTINGS::AGENT)->get(LSETTINGS::AGENT));
+        $this->assertNull($insurance->del(INSURANCE::DEDUCTIBLE)->get(INSURANCE::DEDUCTIBLE));
         /* deletions should also not affect the original object (just return a copy) */
-        $this->assertEquals(2, $loanSettings->get(LSETTINGS::AGENT));
+        $this->assertEquals(232.23, $insurance->get(INSURANCE::DEDUCTIBLE));
     }
 
 }
