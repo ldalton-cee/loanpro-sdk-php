@@ -29,4 +29,5 @@ class LOAN{
     const MOD_ID            = 'modId';
     const ACTIVE            = 'active';
     const DELETED           = 'deleted';
+    const TEMPORARY         = '__temporary';
 }

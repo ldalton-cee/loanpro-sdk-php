@@ -175,6 +175,7 @@ class LoanTest extends TestCase
         $this->assertEquals(1, $loan->get(LOAN::ACTIVE));
         $this->assertEquals("Testing alerts", $loan->get(LOAN::LOAN_ALERT));
         $this->assertEquals(1, $loan->get(LOAN::DELETED));
+        $this->assertEquals(1, $loan->get(LOAN::TEMPORARY));
     }
 
     public function testLoadFromJson_Tmpl3(){
@@ -187,6 +188,7 @@ class LoanTest extends TestCase
         $this->assertEquals(1, $loan->get(LOAN::ACTIVE));
         $this->assertEquals("Testing alerts", $loan->get(LOAN::LOAN_ALERT));
         $this->assertEquals(1, $loan->get(LOAN::DELETED));
+        $this->assertEquals(0, $loan->get(LOAN::TEMPORARY));
         $this->assertEquals(LSETUP_LCLASS::CAR, $loan->get(LOAN::LSETUP)->get(LSETUP::LCLASS__C));
         $this->assertEquals(LSETUP_LTYPE::FLOORING, $loan->get(LOAN::LSETUP)->get(LSETUP::LTYPE__C));
     }

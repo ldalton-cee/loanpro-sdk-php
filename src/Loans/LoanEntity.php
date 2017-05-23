@@ -65,6 +65,7 @@ class LoanEntity extends BaseEntity
 
         LOAN::ACTIVE            => FieldValidator::BOOL,
         LOAN::DELETED           => FieldValidator::BOOL,
+        LOAN::TEMPORARY         => FieldValidator::BOOL,
 
         LOAN::LSETUP            => FieldValidator::OBJECT,
         LOAN::LSETTINGS         => FieldValidator::OBJECT,

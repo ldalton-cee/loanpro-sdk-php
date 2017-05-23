@@ -6,6 +6,7 @@
   "active": 1,
   "loanAlert": "Testing alerts",
   "deleted": 1,
+  "__temporary": false,
   "LoanSetup":
   {
     "loanClass":"loan.class.carLoan",
