@@ -10,6 +10,7 @@ namespace Simnang\LoanPro;
 
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
 use Simnang\LoanPro\Validator\FieldValidator;
+use Simnang\LoanPro\Constants\BASE_ENTITY;
 
 abstract class BaseEntity{
 
@@ -37,6 +38,11 @@ abstract class BaseEntity{
      * @var array
      */
     protected $deletedProperties = [];
+    /**
+     * The ID of the entity; zero or null means "not set"
+     * @var int
+     */
+    protected $id = null;
     /**
      * This holds the constants list. Constants are defined in a class in the \Simnang\LoanPro\Constants namespace. A specific class in that namespace is reserved per entity and other classes are for the collections for the entity
      * @var array
@@ -103,7 +109,10 @@ abstract class BaseEntity{
                     if(isset($obj->deletedProperties[$key]))
                         unset($obj->deletedProperties[$key]);
                 }
-                else if(!$this->IsField($key)) {
+                else if($key === BASE_ENTITY::ID && FieldValidator::IsValidInt($val) && FieldValidator::GetInt($val) > 0){
+                    $obj->id = FieldValidator::GetInt($val);
+                }
+                else if(!$this->IsField($key) && $key !== "id") {
                     throw new \InvalidArgumentException("Invalid property '$key'");
                 }
                 else
@@ -135,7 +144,10 @@ abstract class BaseEntity{
 
         $obj = clone $this;
         foreach($args as $key){
-            if(!$this->IsField($key)){
+            if($key === BASE_ENTITY::ID){
+                $obj->id = null;
+            }
+            else if(!$this->IsField($key)){
                 throw new \InvalidArgumentException("Invalid property '$key'");
             }
             else if(in_array($key, static::$required, true)){
@@ -173,6 +185,9 @@ abstract class BaseEntity{
                 if(isset($this->properties[$key])){
                     $result[$key] = $this->properties[$key];
                 }
+                else if($key === BASE_ENTITY::ID){
+                    $result[$key] = $this->id;
+                }
                 else if(!$this->IsField($key))
                     throw new \InvalidArgumentException("Invalid property '$key'");
                 else
@@ -183,6 +198,9 @@ abstract class BaseEntity{
 
         if(isset($this->properties[$arg1]))
             return $this->properties[$arg1];
+        else if($arg1 === BASE_ENTITY::ID){
+            return $this->id;
+        }
         else if($this->IsField($arg1))
             return null;
         else

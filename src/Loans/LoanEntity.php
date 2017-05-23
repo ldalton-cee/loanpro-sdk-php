@@ -57,12 +57,16 @@ class LoanEntity extends BaseEntity
      */
     protected static $fields = [
         LOAN::DISP_ID       => FieldValidator::STRING,
-        LOAN::TITLE         => FieldValidator::STRING,
         LOAN::LOAN_ALERT    => FieldValidator::STRING,
-        LOAN::MOD_TOTAL     => FieldValidator::INT,
+        LOAN::TITLE         => FieldValidator::STRING,
+
         LOAN::MOD_ID        => FieldValidator::INT,
+        LOAN::MOD_TOTAL     => FieldValidator::INT,
+
         LOAN::ACTIVE        => FieldValidator::BOOL,
         LOAN::DELETED       => FieldValidator::BOOL,
-        LOAN::LSETUP        => FieldValidator::OBJECT
+
+        LOAN::LSETUP        => FieldValidator::OBJECT,
+        LOAN::LSETTINGS     => FieldValidator::OBJECT,
     ];
 }

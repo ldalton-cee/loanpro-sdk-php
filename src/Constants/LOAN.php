@@ -15,6 +15,7 @@ namespace Simnang\LoanPro\Constants;
  */
 class LOAN{
     const LSETUP        = "LoanSetup";
+    const LSETTINGS      = "LoanSettings";
     const DISP_ID       = "displayId";
     const TITLE         = "title";
     const LOAN_ALERT    = "loanAlert";
