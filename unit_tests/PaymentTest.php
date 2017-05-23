@@ -60,7 +60,7 @@ class PaymentTest extends TestCase
 
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value \'null\' for property '.PAYMENTS::INFO);
+        $this->expectExceptionMessage('Value for \''.PAYMENTS::INFO.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
         LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)
             /* should throw exception when setting LOAN_AMT to null */ ->set(PAYMENTS::INFO, null);
     }
@@ -72,7 +72,7 @@ class PaymentTest extends TestCase
         $ls->set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, null);
+        $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, 1280.32);
     }
 
     public function testPaymentDel(){

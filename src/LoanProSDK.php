@@ -11,6 +11,7 @@ namespace Simnang\LoanPro;
 
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETUP;
+use Simnang\LoanPro\Loans\ChecklistItemValueEntity;
 use Simnang\LoanPro\Loans\CollateralEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
 use Simnang\LoanPro\Loans\LoanSettingsEntity;
@@ -81,6 +82,10 @@ class LoanProSDK
 
     public static function CreateRulesAppliedLoanSettings($id, $enabled){
         return new RulesAppliedLoanSettingsEntity($id, $enabled);
+    }
+
+    public static function CreateChecklistItemValue($checklistId, $checklistItemId, $checklistItemValue){
+        return new ChecklistItemValueEntity($checklistId, $checklistItemId, $checklistItemValue);
     }
 
     private static function CreateLoanSetupFromJSON($json = []){

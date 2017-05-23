@@ -59,7 +59,7 @@ class InsuranceTest extends TestCase
 
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value \'null\' for property '.INSURANCE::AGENT_NAME);
+        $this->expectExceptionMessage('Value for \''.INSURANCE::AGENT_NAME.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
         LPSDK::CreateInsurance()
             /* should throw exception when setting LOAN_AMT to null */ ->set(INSURANCE::AGENT_NAME, null);
     }
@@ -71,7 +71,7 @@ class InsuranceTest extends TestCase
         $ls->set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, null);
+        $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, 1280.32);
     }
 
     public function testInsuranceDel(){

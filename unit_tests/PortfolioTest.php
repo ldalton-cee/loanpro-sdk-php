@@ -37,9 +37,9 @@ class PortfolioTest extends TestCase
         $this->assertEquals(12, $portfolio->get(BASE_ENTITY::ID));
     }
 
-    public function testLoanCannotSetNull(){
+    public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value \'null\' for property '.BASE_ENTITY::ID);
+        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
 
         /* should throw exception when setting LOAN_AMT to null */
         LPSDK::CreatePortfolio(5)->set(BASE_ENTITY::ID, null);

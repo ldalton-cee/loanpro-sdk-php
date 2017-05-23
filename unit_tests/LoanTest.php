@@ -98,7 +98,7 @@ class LoanTest extends TestCase
 
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value \'null\' for property '.LOAN::LOAN_ALERT);
+        $this->expectExceptionMessage('Value for \''.LOAN::LOAN_ALERT.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
         LPSDK::CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, null);
     }
 

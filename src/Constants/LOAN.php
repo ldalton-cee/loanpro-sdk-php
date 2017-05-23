@@ -18,6 +18,7 @@ class LOAN{
     const LSETTINGS         = 'LoanSettings';
     const COLLATERAL        = 'Collateral';
     const LSRULES_APPLIED   = 'RuleAppliedLoanSettings';
+    const CHECKLIST_VALUES  = 'ChecklistItemValues';
     const PAYMENTS          = 'Payments';
     const PORTFOLIOS        = 'Portfolios';
     const INSURANCE         = 'Insurance';

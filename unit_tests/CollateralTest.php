@@ -59,7 +59,7 @@ class CollateralTest extends TestCase
 
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value \'null\' for property '.COLLATERAL::ADDITIONAL);
+        $this->expectExceptionMessage('Value for \''.COLLATERAL::ADDITIONAL.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
         LPSDK::CreateCollateral()
             /* should throw exception when setting LOAN_AMT to null */ ->set(COLLATERAL::ADDITIONAL, null);
     }
@@ -71,7 +71,7 @@ class CollateralTest extends TestCase
         $ls->set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, null);
+        $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, 1280.32);
     }
 
     public function testCollateralDel(){

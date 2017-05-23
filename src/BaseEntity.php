@@ -104,7 +104,10 @@ abstract class BaseEntity{
 
         if(sizeof($args)){
             foreach($args as $key => $val){
-                if($obj->IsValidField($key, $val)) {
+                if(is_null($val)){
+                    throw new \InvalidArgumentException("Value for '$key' is null. The 'set' function cannot unset items, please us 'del' instead.");
+                }
+                else if($obj->IsValidField($key, $val)) {
                     $obj->properties[$key] = $obj->GetValidField($key, $val);
                     if(isset($obj->deletedProperties[$key]))
                         unset($obj->deletedProperties[$key]);
