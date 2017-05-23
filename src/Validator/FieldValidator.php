@@ -18,6 +18,7 @@ class FieldValidator{
     const DATE = "date";
     const BOOL = "bool";
     const OBJECT = "object";
+    const OBJECT_LIST = "object_list";
     const COLLECTION = "collection";
 
     public static function ValidateByType($val,$type = FieldValidator::STRING, $collection = ""){
@@ -34,6 +35,8 @@ class FieldValidator{
                 return FieldValidator::IsValidBool($val);
             case FieldValidator::OBJECT:
                 return FieldValidator::IsValidObject($val);
+            case FieldValidator::OBJECT_LIST:
+                return FieldValidator::IsValidObjectList($val);
             case FieldValidator::COLLECTION:
                 return FieldValidator::IsValidCollectionVal($val, $collection);
             default:
@@ -55,6 +58,8 @@ class FieldValidator{
                 return FieldValidator::GetBool($val);
             case FieldValidator::OBJECT:
                 return FieldValidator::GetObject($val);
+            case FieldValidator::OBJECT_LIST:
+                return FieldValidator::GetObjectList($val);
             case FieldValidator::COLLECTION:
                 return FieldValidator::GetCollectionVal($val, $collection);
             default:
@@ -87,6 +92,17 @@ class FieldValidator{
 
     public static function IsValidObject($obj){
         return is_object($obj);
+    }
+
+    public static function IsValidObjectList($obj){
+        if(is_object($obj))
+            return true;
+        if(!is_array($obj))
+            return false;
+        foreach($obj as $o)
+            if(!FieldValidator::IsValidObject($o))
+                return false;
+        return true;
     }
 
     public static function IsValidCollectionVal($val, $collection){
@@ -134,6 +150,18 @@ class FieldValidator{
 
     public static function GetObject($obj){
         return clone $obj;
+    }
+
+    public static function GetObjectList($obj){
+        if(!FieldValidator::IsValidObjectList($obj))
+            return [];
+        if(is_object($obj))
+            return [$obj];
+
+        $list = [];
+        foreach($obj as $k => $o)
+            $list[$k] = clone $o;
+        return $list;
     }
 
     public static function GetCollectionVal($val, $collection){

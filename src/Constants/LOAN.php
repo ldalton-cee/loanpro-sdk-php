@@ -17,6 +17,7 @@ class LOAN{
     const LSETUP        = 'LoanSetup';
     const LSETTINGS     = 'LoanSettings';
     const COLLATERAL    = 'Collateral';
+    const PAYMENTS      = 'Payments';
     const INSURANCE     = 'Insurance';
     const DISP_ID       = 'displayId';
     const TITLE         = 'title';

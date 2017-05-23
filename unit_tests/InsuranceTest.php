@@ -59,7 +59,7 @@ class InsuranceTest extends TestCase
 
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value \'\' for property '.INSURANCE::AGENT_NAME);
+        $this->expectExceptionMessage('Invalid value \'null\' for property '.INSURANCE::AGENT_NAME);
         LPSDK::CreateInsurance()
             /* should throw exception when setting LOAN_AMT to null */ ->set(INSURANCE::AGENT_NAME, null);
     }

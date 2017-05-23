@@ -15,6 +15,7 @@ use Simnang\LoanPro\Loans\CollateralEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
 use Simnang\LoanPro\Loans\LoanSettingsEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
+use Simnang\LoanPro\Loans\PaymentEntity;
 
 class LoanProSDK
 {
@@ -66,6 +67,10 @@ class LoanProSDK
 
     public static function CreateInsurance(){
         return new InsuranceEntity();
+    }
+
+    public static function CreatePayment($amt, $date, $info, $payMethodId, $paymentTypeId){
+        return new PaymentEntity($amt, $date, $info, $payMethodId, $paymentTypeId);
     }
 
     private static function CreateLoanSetupFromJSON($json = []){

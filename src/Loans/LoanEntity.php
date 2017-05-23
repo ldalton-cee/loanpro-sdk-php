@@ -70,5 +70,7 @@ class LoanEntity extends BaseEntity
         LOAN::LSETTINGS     => FieldValidator::OBJECT,
         LOAN::COLLATERAL    => FieldValidator::OBJECT,
         LOAN::INSURANCE     => FieldValidator::OBJECT,
+
+        LOAN::PAYMENTS     => FieldValidator::OBJECT_LIST,
     ];
 }

@@ -104,15 +104,121 @@ abstract class BaseEntity{
 
         if(sizeof($args)){
             foreach($args as $key => $val){
-                if($this->IsValidField($key, $val)) {
-                    $obj->properties[$key] = $this->GetValidField($key, $val);
+                if($obj->IsValidField($key, $val)) {
+                    $obj->properties[$key] = $obj->GetValidField($key, $val);
                     if(isset($obj->deletedProperties[$key]))
                         unset($obj->deletedProperties[$key]);
                 }
                 else if($key === BASE_ENTITY::ID && FieldValidator::IsValidInt($val) && FieldValidator::GetInt($val) > 0){
                     $obj->id = FieldValidator::GetInt($val);
                 }
-                else if(!$this->IsField($key) && $key !== "id") {
+                else if(!$obj->IsField($key) && $key !== "id") {
+                    throw new \InvalidArgumentException("Invalid property '$key'");
+                }
+                else {
+                    $val = json_encode($val);
+                    throw new \InvalidArgumentException("Invalid value '$val' for property $key");
+                }
+            }
+        }
+
+        return $obj;
+    }
+
+    /**
+     * This returns a copy of the object with the changes to the specified object lists. Cannot be used to unset values or to set values to null (see del). Cannot be used to modify fields that aren't object lists.
+     *
+     * It accepts a list of alternating fields and values (eg. field1, val1, field2, val2, ...), an array where the field is the key (eg. [field1=>val1, field2=>val2]), a list of fields and followed by several values (eg. field1, val1_1, val1_2, ..., field2, val2_1, val2_2, ...), or an array where the field is the key and an array of values (eg. [field1=>[val1_1, val1_2], field2=>[val2_1, val2_1]]),
+     *
+     * @param $arg1
+     * @param ...$args
+     * @return BaseEntity
+     */
+    public function append($arg1, ...$args){
+        $obj = clone $this;
+
+        if(is_array($arg1)) {
+            $args = $arg1;
+            $argFinal = [];
+            foreach($args as $key => $val){
+                if(!is_string($key)){
+                    throw new \InvalidArgumentException("Array parameters need to have property names as the key");
+                }
+                if(is_array($val))
+                    $argFinal[$key] = $val;
+                else
+                    $argFinal[$key] = [$val];
+            }
+            $args = $argFinal;
+        }
+        else if(!sizeof($args))
+            throw new \InvalidArgumentException("Expected two parameters, only got one");
+        else if(sizeof($args)){
+            $curKey = $arg1;
+            $curArr = [];
+            if(!is_string($curKey))
+                throw new \InvalidArgumentException("Invalid field name '$curKey'");
+            if(!$obj->IsField($curKey))
+                throw new \InvalidArgumentException("Invalid field '$curKey'");
+            if(static::$fields[$curKey] != FieldValidator::OBJECT_LIST)
+                throw new \InvalidArgumentException("Property '$curKey' is not an object list, can only append to object lists!");
+            $argFinal = [];
+
+            foreach($args as $arg){
+                if(is_string($arg)){
+                    if(!$obj->IsField($arg))
+                        throw new \InvalidArgumentException("Invalid field '$curKey'");
+                    if(static::$fields[$arg] != FieldValidator::OBJECT_LIST)
+                        throw new \InvalidArgumentException("Property '$arg' is not an object list, can only append to object lists!");
+                    if(count($curArr) == 0)
+                        throw new \InvalidArgumentException("Missing fields for '$curKey'");
+                    if(isset($argFinal[$curKey]))
+                        $argFinal[$curKey] = array_merge($argFinal[$curKey], $curArr);
+                    else
+                        $argFinal[$curKey] = $curArr;
+                    $curArr = [];
+                    $curKey = $arg;
+                }
+                else if(is_object($arg)){
+                    $curArr[] = $arg;
+                }
+                else if(is_array($arg) && count($arg)){
+                    foreach($arg as $a){
+                        if(is_object($a))
+                            $curArr[] = $a;
+                        else
+                            throw new \InvalidArgumentException("Invalid value '$a' in array for key '$curKey'");
+                    }
+                }
+                else{
+                    throw new \InvalidArgumentException("Invalid value '$arg' for key '$curKey'");
+                }
+            }
+            if(count($curArr) == 0)
+                throw new \InvalidArgumentException("Missing fields for '$curKey'");
+            if(isset($argFinal[$curKey]))
+                $argFinal[$curKey] = array_merge($argFinal[$curKey], $curArr);
+            else
+                $argFinal[$curKey] = $curArr;
+
+            $args = $argFinal;
+        }
+
+
+        if(sizeof($args)){
+            foreach($args as $key => $val){
+                if($obj->IsValidField($key, $val)) {
+                    $props = $obj->get($key);
+                    if(!$props)
+                        $props = [];
+                    $obj->properties[$key] = array_merge($props, $obj->GetValidField($key, $val));
+                    if(isset($obj->deletedProperties[$key]))
+                        unset($obj->deletedProperties[$key]);
+                }
+                else if($key === BASE_ENTITY::ID && FieldValidator::IsValidInt($val) && FieldValidator::GetInt($val) > 0){
+                    $obj->id = FieldValidator::GetInt($val);
+                }
+                else if(!$obj->IsField($key) && $key !== "id") {
                     throw new \InvalidArgumentException("Invalid property '$key'");
                 }
                 else

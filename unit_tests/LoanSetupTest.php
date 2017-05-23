@@ -67,7 +67,7 @@ class LoanSetupTest extends TestCase
 
     public function testLoanSetupCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value \'\' for property '.LSETUP::LOAN_AMT);
+        $this->expectExceptionMessage('Invalid value \'null\' for property '.LSETUP::LOAN_AMT);
         LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT)
             /* should throw exception when setting LOAN_AMT to null */ ->set(LSETUP::LOAN_AMT, null);
     }

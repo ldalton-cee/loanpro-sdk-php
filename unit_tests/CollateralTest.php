@@ -59,7 +59,7 @@ class CollateralTest extends TestCase
 
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value \'\' for property '.COLLATERAL::ADDITIONAL);
+        $this->expectExceptionMessage('Invalid value \'null\' for property '.COLLATERAL::ADDITIONAL);
         LPSDK::CreateCollateral()
             /* should throw exception when setting LOAN_AMT to null */ ->set(COLLATERAL::ADDITIONAL, null);
     }
