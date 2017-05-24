@@ -33,9 +33,13 @@ class PAYMENTS{
     const PAYMENT_ACCT_ID       = 'paymentAccountId';
     const CUSTOM_FIELD_VALUES   = 'CustomFieldValues';
     const CASH_DRAWER_ID        = 'cashDrawerId';
-    const CARD_FEE_TYPE__C      = 'cardFeeType';
-    const CARD_FEE_AMOUNT       = 'cardFeeAmount';
-    const CARD_FEE_PERCENT      = 'cardFeePercent';
+    const CARD_FEE_TYPE__C      = 'chargeFeeType';
+    const CARD_FEE_AMOUNT       = 'chargeFeeAmount';
+    const CARD_FEE_PERCENT      = 'chargeFeePercentage';
     const LOG_ONLY              = '__logOnly';
     const PAYOFF_FLAG           = 'payoffFlag';
+    const REVERSE_REASON__C     = 'reverseReason';
+    const COMMENTS              = 'comments';
+    const NACHA_RETURN_CODE__C  = 'nachaReturnCode';
+    const NON_EDITABLE          = '_notEditable';
 }

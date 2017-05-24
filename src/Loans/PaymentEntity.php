@@ -83,29 +83,39 @@ class PaymentEntity extends BaseEntity
      * @var array
      */
     protected static $fields = [
-        PAYMENTS::SELECTED_PROCESSOR    => FieldValidator::STRING,
-        PAYMENTS::PAYMENT_METHOD_ID     => FieldValidator::INT,
-        PAYMENTS::EARLY                 => FieldValidator::BOOL,
-        PAYMENTS::ECHECK_AUTH_TYPE__C   => FieldValidator::COLLECTION,
-        PAYMENTS::AMOUNT                => FieldValidator::NUMBER,
-        PAYMENTS::DATE                  => FieldValidator::DATE,
-        PAYMENTS::INFO                  => FieldValidator::STRING,
-        PAYMENTS::PAYMENT_TYPE_ID       => FieldValidator::INT,
         PAYMENTS::ACTIVE                => FieldValidator::BOOL,
-        PAYMENTS::RESET_PAST_DUE        => FieldValidator::BOOL,
-        PAYMENTS::PAYOFF_PAYMENT        => FieldValidator::BOOL,
-        PAYMENTS::QUICK_PAY             => FieldValidator::STRING,
-        PAYMENTS::SAVE_PROFILE          => FieldValidator::BOOL,
-        PAYMENTS::EXTRA__C              => FieldValidator::COLLECTION,
-        PAYMENTS::PROCESSOR_NAME        => FieldValidator::STRING,
+        PAYMENTS::EARLY                 => FieldValidator::BOOL,
         PAYMENTS::IS_ONE_TIME_ONLY      => FieldValidator::BOOL,
-        PAYMENTS::PAYMENT_ACCT_ID       => FieldValidator::INT,
-        PAYMENTS::CUSTOM_FIELD_VALUES   => FieldValidator::OBJECT_LIST,
-        PAYMENTS::CASH_DRAWER_ID        => FieldValidator::INT,
+        PAYMENTS::LOG_ONLY              => FieldValidator::BOOL,
+        PAYMENTS::NON_EDITABLE          => FieldValidator::BOOL,
+        PAYMENTS::PAYOFF_FLAG           => FieldValidator::BOOL,
+        PAYMENTS::PAYOFF_PAYMENT        => FieldValidator::BOOL,
+        PAYMENTS::RESET_PAST_DUE        => FieldValidator::BOOL,
+        PAYMENTS::SAVE_PROFILE          => FieldValidator::BOOL,
+
+        PAYMENTS::ECHECK_AUTH_TYPE__C   => FieldValidator::COLLECTION,
+        PAYMENTS::EXTRA__C              => FieldValidator::COLLECTION,
         PAYMENTS::CARD_FEE_TYPE__C      => FieldValidator::COLLECTION,
+        PAYMENTS::NACHA_RETURN_CODE__C  => FieldValidator::COLLECTION,
+        PAYMENTS::REVERSE_REASON__C     => FieldValidator::COLLECTION,
+
+        PAYMENTS::DATE                  => FieldValidator::DATE,
+
+        PAYMENTS::CASH_DRAWER_ID        => FieldValidator::INT,
+        PAYMENTS::PAYMENT_ACCT_ID       => FieldValidator::INT,
+        PAYMENTS::PAYMENT_METHOD_ID     => FieldValidator::INT,
+        PAYMENTS::PAYMENT_TYPE_ID       => FieldValidator::INT,
+
+        PAYMENTS::AMOUNT                => FieldValidator::NUMBER,
         PAYMENTS::CARD_FEE_AMOUNT       => FieldValidator::NUMBER,
         PAYMENTS::CARD_FEE_PERCENT      => FieldValidator::NUMBER,
-        PAYMENTS::LOG_ONLY              => FieldValidator::BOOL,
-        PAYMENTS::PAYOFF_FLAG           => FieldValidator::BOOL,
+
+        PAYMENTS::COMMENTS              => FieldValidator::STRING,
+        PAYMENTS::INFO                  => FieldValidator::STRING,
+        PAYMENTS::PROCESSOR_NAME        => FieldValidator::STRING,
+        PAYMENTS::QUICK_PAY             => FieldValidator::STRING,
+        PAYMENTS::SELECTED_PROCESSOR    => FieldValidator::STRING,
+
+        PAYMENTS::CUSTOM_FIELD_VALUES   => FieldValidator::OBJECT_LIST,
     ];
 }

@@ -9,6 +9,7 @@
 namespace Simnang\LoanPro;
 
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
+use Simnang\LoanPro\Utils\ArrayUtils;
 use Simnang\LoanPro\Validator\FieldValidator;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
 
@@ -86,19 +87,7 @@ abstract class BaseEntity{
         else if(!sizeof($args))
             throw new \InvalidArgumentException("Expected two parameters, only got one");
         else if(sizeof($args)){
-            $args = array_merge([$arg1], $args);
-            $numArgs = sizeof($args);
-            $argFinal = [];
-            if($numArgs % 2)
-                throw new \InvalidArgumentException('Expected '.($numArgs + 1).' parameters, only got '.$numArgs);
-            else if($numArgs == 2)
-                $argFinal = [$args[0]=>$args[1]];
-            else {
-                foreach (range(0, sizeof($args) - 1, 2) as $i) {
-                    $argFinal[$args[$i]] = $args[$i + 1];
-                }
-            }
-            $args = $argFinal;
+            $args = ArrayUtils::ConvertToKeyedArray(array_merge([$arg1], $args));
         }
 
 

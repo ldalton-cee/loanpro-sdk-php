@@ -11,6 +11,7 @@ namespace Simnang\LoanPro;
 
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETUP;
+use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Loans\ChecklistItemValueEntity;
 use Simnang\LoanPro\Loans\CollateralEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
@@ -47,6 +48,9 @@ class LoanProSDK
             }
             else if($key == LOAN::INSURANCE && !is_null($val)){
                 $setVars[$key] = LoanProSDK::CreateGenericJSONClass(InsuranceEntity::class,$val);
+            }
+            else if($key == LOAN::PAYMENTS && !is_null($val)){
+                $setVars[$key] = LoanProSDK::CreatePaymentsFromJSONClass($val);
             }
             else if (!is_null($val)){
                 $setVars[$key] = $val;
@@ -98,6 +102,30 @@ class LoanProSDK
             throw new \InvalidArgumentException("Missing LoanSetup - Loan Type");
 
         return (new LoanSetupEntity($json[LSETUP::LCLASS__C], $json[LSETUP::LTYPE__C]))->set(LoanProSDK::CleanJSON($json));
+    }
+
+    private static function CreatePaymentsFromJSONClass($json){
+        if(isset($json['results']))
+            $json = $json['results'];
+        $json = static::CleanJSON($json);
+        $pmts = [];
+
+        foreach($json as $pmt){
+            if(!is_array($pmt))
+                throw new \InvalidArgumentException("Received an invalid payment!");
+            if(!isset($pmt[PAYMENTS::AMOUNT]))
+                throw new \InvalidArgumentException("Missing payment amount!");
+            if(!isset($pmt[PAYMENTS::DATE]))
+                throw new \InvalidArgumentException("Missing payment date!");
+            if(!isset($pmt[PAYMENTS::INFO]))
+                throw new \InvalidArgumentException("Missing payment info!");
+            if(!isset($pmt[PAYMENTS::PAYMENT_METHOD_ID]))
+                throw new \InvalidArgumentException("Missing payment method id!");
+            if(!isset($pmt[PAYMENTS::PAYMENT_TYPE_ID]))
+                throw new \InvalidArgumentException("Missing payment type id!");
+            $pmts[] = (new PaymentEntity($pmt[PAYMENTS::AMOUNT],$pmt[PAYMENTS::DATE],$pmt[PAYMENTS::INFO],$pmt[PAYMENTS::PAYMENT_METHOD_ID],$pmt[PAYMENTS::PAYMENT_TYPE_ID]))->set($pmt);
+        }
+        return $pmts;
     }
 
     private static function CreateGenericJSONClass($class, $json){

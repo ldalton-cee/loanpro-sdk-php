@@ -216,4 +216,10 @@ class PaymentTest extends TestCase
 
         $loan->append(LOAN::PAYMENTS,$payment,LOAN::PAYMENTS,LOAN::PAYMENTS,$payment);
     }
+
+    public function testLoadReversePayment(){
+        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)->set(PAYMENTS::NACHA_RETURN_CODE__C, PAYMENTS\PAYMENTS_NACHA_RETURN_CODE__C::ADDENDA_ERROR, PAYMENTS::REVERSE_REASON__C, PAYMENTS\PAYMENTS_REVERSE_REASON__C::NACHA_ERR_CODE, PAYMENTS::COMMENTS, "NACHA returned an error");
+        $arr = \Simnang\LoanPro\Utils\ArrayUtils::ConvertToKeyedArray([PAYMENTS::NACHA_RETURN_CODE__C, PAYMENTS\PAYMENTS_NACHA_RETURN_CODE__C::ADDENDA_ERROR, PAYMENTS::REVERSE_REASON__C, PAYMENTS\PAYMENTS_REVERSE_REASON__C::NACHA_ERR_CODE, PAYMENTS::COMMENTS, "NACHA returned an error"]);
+        $this->assertEquals($arr,$payment->get(array_keys($arr)));
+    }
 }
