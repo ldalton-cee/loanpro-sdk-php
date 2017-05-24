@@ -19,6 +19,7 @@ use Simnang\LoanPro\Loans\InsuranceEntity;
 use Simnang\LoanPro\Loans\LoanSettingsEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
 use Simnang\LoanPro\Loans\PaymentEntity;
+use Simnang\LoanPro\Loans\PaynearmeOrderEntity;
 use Simnang\LoanPro\Loans\PortfolioEntity;
 use Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity;
 
@@ -87,6 +88,10 @@ class LoanProSDK
 
     public static function CreatePortfolio($id){
         return new PortfolioEntity($id);
+    }
+
+    public static function CreatePayNearMeOrder($customerId, $customerName, $email, $phone, $address, $city, $state, $zip){
+        return new PaynearmeOrderEntity($customerId, $customerName, $email, $phone, $address, $city, $state, $zip);
     }
 
     public static function CreateRulesAppliedLoanSettings($id, $enabled){

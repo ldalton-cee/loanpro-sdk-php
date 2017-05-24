@@ -56,26 +56,27 @@ class LoanEntity extends BaseEntity
      * @var array
      */
     protected static $fields = [
-        LOAN::DISP_ID           => FieldValidator::STRING,
-        LOAN::LOAN_ALERT        => FieldValidator::STRING,
-        LOAN::TITLE             => FieldValidator::STRING,
+        LOAN::DISP_ID               => FieldValidator::STRING,
+        LOAN::LOAN_ALERT            => FieldValidator::STRING,
+        LOAN::TITLE                 => FieldValidator::STRING,
 
-        LOAN::MOD_ID            => FieldValidator::INT,
-        LOAN::MOD_TOTAL         => FieldValidator::INT,
+        LOAN::MOD_ID                => FieldValidator::INT,
+        LOAN::MOD_TOTAL             => FieldValidator::INT,
 
-        LOAN::ACTIVE            => FieldValidator::BOOL,
-        LOAN::DELETED           => FieldValidator::BOOL,
-        LOAN::TEMPORARY         => FieldValidator::BOOL,
+        LOAN::ACTIVE                => FieldValidator::BOOL,
+        LOAN::DELETED               => FieldValidator::BOOL,
+        LOAN::TEMPORARY             => FieldValidator::BOOL,
 
-        LOAN::LSETUP            => FieldValidator::OBJECT,
-        LOAN::LSETTINGS         => FieldValidator::OBJECT,
-        LOAN::COLLATERAL        => FieldValidator::OBJECT,
-        LOAN::INSURANCE         => FieldValidator::OBJECT,
+        LOAN::LSETUP                => FieldValidator::OBJECT,
+        LOAN::LSETTINGS             => FieldValidator::OBJECT,
+        LOAN::COLLATERAL            => FieldValidator::OBJECT,
+        LOAN::INSURANCE             => FieldValidator::OBJECT,
 
-        LOAN::PAYMENTS          => FieldValidator::OBJECT_LIST,
-        LOAN::PORTFOLIOS        => FieldValidator::OBJECT_LIST,
-        LOAN::LSRULES_APPLIED   => FieldValidator::OBJECT_LIST,
-        LOAN::CHECKLIST_VALUES  => FieldValidator::OBJECT_LIST,
-        LOAN::CHARGES           => FieldValidator::OBJECT_LIST,
+        LOAN::PAYMENTS              => FieldValidator::OBJECT_LIST,
+        LOAN::PORTFOLIOS            => FieldValidator::OBJECT_LIST,
+        LOAN::LSRULES_APPLIED       => FieldValidator::OBJECT_LIST,
+        LOAN::CHECKLIST_VALUES      => FieldValidator::OBJECT_LIST,
+        LOAN::CHARGES               => FieldValidator::OBJECT_LIST,
+        LOAN::PAY_NEAR_ME_ORDERS    => FieldValidator::OBJECT_LIST
     ];
 }

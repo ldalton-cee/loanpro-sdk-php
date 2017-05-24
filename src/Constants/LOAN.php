@@ -14,21 +14,22 @@ namespace Simnang\LoanPro\Constants;
  * @package Simnang\LoanPro\Constants
  */
 class LOAN{
-    const LSETUP            = 'LoanSetup';
-    const LSETTINGS         = 'LoanSettings';
-    const COLLATERAL        = 'Collateral';
-    const CHARGES           = 'Charges';
-    const LSRULES_APPLIED   = 'RuleAppliedLoanSettings';
-    const CHECKLIST_VALUES  = 'ChecklistItemValues';
-    const PAYMENTS          = 'Payments';
-    const PORTFOLIOS        = 'Portfolios';
-    const INSURANCE         = 'Insurance';
-    const DISP_ID           = 'displayId';
-    const TITLE             = 'title';
-    const LOAN_ALERT        = 'loanAlert';
-    const MOD_TOTAL         = 'modTotal';
-    const MOD_ID            = 'modId';
-    const ACTIVE            = 'active';
-    const DELETED           = 'deleted';
-    const TEMPORARY         = '__temporary';
+    const LSETUP                = 'LoanSetup';
+    const LSETTINGS             = 'LoanSettings';
+    const COLLATERAL            = 'Collateral';
+    const CHARGES               = 'Charges';
+    const LSRULES_APPLIED       = 'RuleAppliedLoanSettings';
+    const CHECKLIST_VALUES      = 'ChecklistItemValues';
+    const PAYMENTS              = 'Payments';
+    const PAY_NEAR_ME_ORDERS    = 'PayNearMeOrders';
+    const PORTFOLIOS            = 'Portfolios';
+    const INSURANCE             = 'Insurance';
+    const DISP_ID               = 'displayId';
+    const TITLE                 = 'title';
+    const LOAN_ALERT            = 'loanAlert';
+    const MOD_TOTAL             = 'modTotal';
+    const MOD_ID                = 'modId';
+    const ACTIVE                = 'active';
+    const DELETED               = 'deleted';
+    const TEMPORARY             = '__temporary';
 }
