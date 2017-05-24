@@ -12,6 +12,7 @@ namespace Simnang\LoanPro;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETUP;
 use Simnang\LoanPro\Constants\PAYMENTS;
+use Simnang\LoanPro\Loans\ChargeEntity;
 use Simnang\LoanPro\Loans\ChecklistItemValueEntity;
 use Simnang\LoanPro\Loans\CollateralEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
@@ -30,7 +31,7 @@ class LoanProSDK
     public static function CreateLoanFromJSON(string $json){
         if(!is_string($json))
             throw new \InvalidArgumentException("Expected a JSON string");
-        $json = json_decode($json, true);
+        $json = static::CleanJSON(json_decode($json, true));
         if(!isset($json[LOAN::DISP_ID]))
             throw new \InvalidArgumentException("Missing display ID");
 
@@ -78,6 +79,10 @@ class LoanProSDK
 
     public static function CreatePayment($amt, $date, $info, $payMethodId, $paymentTypeId){
         return new PaymentEntity($amt, $date, $info, $payMethodId, $paymentTypeId);
+    }
+
+    public static function CreateCharge($amount, $date, $info, $typeId, $appType, $interestBearing){
+        return new ChargeEntity($amount, $date, $info, $typeId, $appType, $interestBearing);
     }
 
     public static function CreatePortfolio($id){
@@ -137,7 +142,7 @@ class LoanProSDK
     private static function CleanJSON($json){
         $clean_json = [];
         foreach($json as $key=>$val)
-            if(!is_null($val))
+            if(!is_null($val) && $key !== '__update' && $key !== '__id')
                 $clean_json[$key]=$val;
         return $clean_json;
     }
