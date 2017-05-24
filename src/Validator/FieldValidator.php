@@ -56,6 +56,10 @@ class FieldValidator{
      * Read only data type (means not sent to the server, so it can be anything in memory)
      */
     const READ_ONLY = "read_only";
+    /**
+     * Read only data type (means not sent to the server, so it can be anything in memory)
+     */
+    const ENTITY_TYPE = "entity_type";
 
     /**
      * Validates a value based on a type. Returns "true" if valid, "false" otherwise
@@ -84,6 +88,8 @@ class FieldValidator{
                 return FieldValidator::IsValidCollectionVal($val, $collection);
             case FieldValidator::READ_ONLY:
                 return true;
+            case FieldValidator::ENTITY_TYPE:
+                return is_string($val) && in_array($val, static::$entityTypes);
             default:
                 throw new \InvalidArgumentException("Unknown type '$type'");
         }
@@ -117,6 +123,8 @@ class FieldValidator{
                 return FieldValidator::GetCollectionVal($val, $collection);
             case FieldValidator::READ_ONLY:
                 return $val;
+            case FieldValidator::ENTITY_TYPE:
+                return (is_string($val) && in_array($val, static::$entityTypes)) ? $val : null;
             default:
                 throw new \InvalidArgumentException("Unknown type '$type'");
         }
@@ -317,4 +325,6 @@ class FieldValidator{
             return $val;
         return null;
     }
+
+    private static $entityTypes = ["Entity.Loan", "Entity.Customer"];
 }

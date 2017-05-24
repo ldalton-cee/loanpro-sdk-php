@@ -25,10 +25,20 @@ use Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity;
 
 class LoanProSDK
 {
+    /**
+     * Creates a new loan with the minimal amount of information required
+     * @param string $dispId
+     * @return Loans\LoanEntity
+     */
     public static function CreateLoan(string $dispId){
         return new Loans\LoanEntity($dispId);
     }
 
+    /**
+     * Creates a new loan and nested entities from a JSON string
+     * @param string $json
+     * @return BaseEntity
+     */
     public static function CreateLoanFromJSON(string $json){
         if(!is_string($json))
             throw new \InvalidArgumentException("Expected a JSON string");
@@ -52,7 +62,16 @@ class LoanProSDK
                 $setVars[$key] = LoanProSDK::CreateGenericJSONClass(InsuranceEntity::class,$val);
             }
             else if($key == LOAN::PAYMENTS && !is_null($val)){
-                $setVars[$key] = LoanProSDK::CreatePaymentsFromJSONClass($val);
+                $setVars[$key] = LoanProSDK::CreateObjectListFromJSONClass(PaymentEntity::class, $val);
+            }
+            else if($key == LOAN::CHECKLIST_VALUES && !is_null($val)){
+                $setVars[$key] = LoanProSDK::CreateObjectListFromJSONClass(ChecklistItemValueEntity::class, $val);
+            }
+            else if($key == LOAN::CHARGES && !is_null($val)){
+                $setVars[$key] = LoanProSDK::CreateObjectListFromJSONClass(ChargeEntity::class, $val);
+            }
+            else if($key == LOAN::PAY_NEAR_ME_ORDERS && !is_null($val)){
+                $setVars[$key] = LoanProSDK::CreateObjectListFromJSONClass(PaynearmeOrderEntity::class, $val);
             }
             else if (!is_null($val)){
                 $setVars[$key] = $val;
@@ -62,46 +81,118 @@ class LoanProSDK
         return (new Loans\LoanEntity($json[LOAN::DISP_ID]))->set($setVars);
     }
 
+    /**
+     * Creates a new loan setup entity with the minimal amount of data needed.
+     * @param string $class -
+     * @param string $type
+     * @return LoanSetupEntity
+     */
     public static function CreateLoanSetup(string $class, string $type){
         return new LoanSetupEntity($class, $type);
     }
 
+    /**
+     * Creates a new, empty loan settings entity
+     * @return LoanSettingsEntity
+     */
     public static function CreateLoanSettings(){
         return new LoanSettingsEntity();
     }
 
+    /**
+     * Creates a new, empty collateral entity
+     * @return LoanSettingsEntity
+     */
     public static function CreateCollateral(){
         return new CollateralEntity();
     }
 
+    /**
+     * Creates a new, empty insurance entity
+     * @return LoanSettingsEntity
+     */
     public static function CreateInsurance(){
         return new InsuranceEntity();
     }
 
+    /**
+     * Create a new payment entity
+     * @param $amt - payment amount
+     * @param $date - payment date
+     * @param $info - payment info
+     * @param $payMethodId - payment method id
+     * @param $paymentTypeId - payment type id
+     * @return PaymentEntity
+     */
     public static function CreatePayment($amt, $date, $info, $payMethodId, $paymentTypeId){
         return new PaymentEntity($amt, $date, $info, $payMethodId, $paymentTypeId);
     }
 
+    /**
+     * Creates a new charge entity
+     * @param $amount - charge amount
+     * @param $date - charge date
+     * @param $info - charge info
+     * @param $typeId - charge type id
+     * @param $appType - charge application type
+     * @param $interestBearing - if the charge is interest bearing
+     * @return ChargeEntity
+     */
     public static function CreateCharge($amount, $date, $info, $typeId, $appType, $interestBearing){
         return new ChargeEntity($amount, $date, $info, $typeId, $appType, $interestBearing);
     }
 
+    /**
+     * Creates a loan portfolio
+     * @param $id - portfolio id
+     * @return PortfolioEntity
+     */
     public static function CreatePortfolio($id){
         return new PortfolioEntity($id);
     }
 
+    /**
+     * Create pay near me order
+     * @param $customerId - customer id
+     * @param $customerName - customer name
+     * @param $email - customer email
+     * @param $phone - customer phone number
+     * @param $address - customer address
+     * @param $city  - customer city
+     * @param $state - customer state
+     * @param $zip - customer zip
+     * @return PaynearmeOrderEntity
+     */
     public static function CreatePayNearMeOrder($customerId, $customerName, $email, $phone, $address, $city, $state, $zip){
         return new PaynearmeOrderEntity($customerId, $customerName, $email, $phone, $address, $city, $state, $zip);
     }
 
+    /**
+     * Create rules applied loan settings
+     * @param $id - ID of rules applied
+     * @param $enabled - whether or not it's enabled
+     * @return RulesAppliedLoanSettingsEntity
+     */
     public static function CreateRulesAppliedLoanSettings($id, $enabled){
         return new RulesAppliedLoanSettingsEntity($id, $enabled);
     }
 
+    /**
+     * Create checklist item value entity
+     * @param $checklistId - checklist id
+     * @param $checklistItemId - checklist item id
+     * @param $checklistItemValue - checklist item value
+     * @return ChecklistItemValueEntity
+     */
     public static function CreateChecklistItemValue($checklistId, $checklistItemId, $checklistItemValue){
         return new ChecklistItemValueEntity($checklistId, $checklistItemId, $checklistItemValue);
     }
 
+    /**
+     * Creates a loan setup object from JSON
+     * @param array $json - json object
+     * @return BaseEntity
+     */
     private static function CreateLoanSetupFromJSON($json = []){
         if(!is_array($json))
             throw new \InvalidArgumentException("Expected a parsed JSON array");
@@ -114,40 +205,54 @@ class LoanProSDK
         return (new LoanSetupEntity($json[LSETUP::LCLASS__C], $json[LSETUP::LTYPE__C]))->set(LoanProSDK::CleanJSON($json));
     }
 
-    private static function CreatePaymentsFromJSONClass($json){
+    /**
+     * Creates an object list from JSON
+     * @param string $class - name of class to create
+     * @param array $json - json array
+     * @return array
+     */
+    private static function CreateObjectListFromJSONClass(string $class, array $json){
         if(isset($json['results']))
             $json = $json['results'];
-        $json = static::CleanJSON($json);
         $pmts = [];
 
         foreach($json as $pmt){
             if(!is_array($pmt))
                 throw new \InvalidArgumentException("Received an invalid payment!");
-            if(!isset($pmt[PAYMENTS::AMOUNT]))
-                throw new \InvalidArgumentException("Missing payment amount!");
-            if(!isset($pmt[PAYMENTS::DATE]))
-                throw new \InvalidArgumentException("Missing payment date!");
-            if(!isset($pmt[PAYMENTS::INFO]))
-                throw new \InvalidArgumentException("Missing payment info!");
-            if(!isset($pmt[PAYMENTS::PAYMENT_METHOD_ID]))
-                throw new \InvalidArgumentException("Missing payment method id!");
-            if(!isset($pmt[PAYMENTS::PAYMENT_TYPE_ID]))
-                throw new \InvalidArgumentException("Missing payment type id!");
-            $pmts[] = (new PaymentEntity($pmt[PAYMENTS::AMOUNT],$pmt[PAYMENTS::DATE],$pmt[PAYMENTS::INFO],$pmt[PAYMENTS::PAYMENT_METHOD_ID],$pmt[PAYMENTS::PAYMENT_TYPE_ID]))->set($pmt);
+            $pmt = static::CleanJSON($pmt);
+            $reqFields = $class::getReqFields();
+            $params = [];
+            foreach($reqFields as $r){
+                if(!isset($pmt[$r]))
+                    throw new \InvalidArgumentException("Missing '$r'!");
+                $params[] = $pmt[$r];
+            }
+            $pmts[] = (new $class(...$params))->set($pmt);
         }
         return $pmts;
     }
 
-    private static function CreateGenericJSONClass($class, $json){
+    /**
+     * Creates an object from JSON
+     * @param string $class - name of class to create
+     * @param array $json - json array
+     * @return mixed
+     */
+    private static function CreateGenericJSONClass(string $class, array $json){
         if(!is_array($json))
             throw new \InvalidArgumentException("Expected a parsed JSON array");
         return (new $class())->set(LoanProSDK::CleanJSON($json));
     }
 
-    private static function CleanJSON($json){
+    /**
+     * Cleans null, '__update', and '__id' from a JSON object (only does top level)
+     * @param array $json
+     * @return array
+     */
+    private static function CleanJSON(array $json){
         $clean_json = [];
         foreach($json as $key=>$val)
-            if(!is_null($val) && $key !== '__update' && $key !== '__id')
+            if(!is_null($val) && $key != '__update' && $key != '__id')
                 $clean_json[$key]=$val;
         return $clean_json;
     }

@@ -23,7 +23,11 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
     Simnang\LoanPro\Constants\LSETTINGS as LSETTINGS,
     \Simnang\LoanPro\Constants\INSURANCE as INSURANCE,
     \Simnang\LoanPro\Constants\PAYMENTS as PAYMENTS,
-    Simnang\LoanPro\Constants\BASE_ENTITY as ENTITY
+    \Simnang\LoanPro\Constants\CHARGES as CHARGES,
+    \Simnang\LoanPro\Constants\BASE_ENTITY as ENTITY,
+    \Simnang\LoanPro\Constants\STATE_COLLECTIONS as STATES,
+    \Simnang\LoanPro\Constants\PAY_NEAR_ME_ORDERS as PAY_NEAR_ME_ORDERS,
+    \Simnang\LoanPro\Constants\CHARGES\CHARGES_CHARGE_APP_TYPE__C as CHARGES_CHARGE_APP_TYPE__C
     ;
 
 ////////////////////
@@ -470,6 +474,37 @@ class LoanTest extends TestCase
         );
 
         $this->assertEquals([$payment1, $payment2], $loan->get(LOAN::PAYMENTS));
+    }
+
+
+    public function testLoadFromJson_Tmpl11(){
+        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_11.json"));
+        $this->assertEquals(20, $loan->get(ENTITY::ID));
+        $this->assertEquals("My Loan", $loan->get(LOAN::DISP_ID));
+        $this->assertNull($loan->get(LOAN::TITLE));
+        $this->assertEquals(0, $loan->get(LOAN::MOD_TOTAL));
+        $this->assertEquals(0, $loan->get(LOAN::MOD_ID));
+        $this->assertEquals(0, $loan->get(LOAN::ACTIVE));
+        $this->assertNull($loan->get(LOAN::LOAN_ALERT));
+        $this->assertEquals(0, $loan->get(LOAN::DELETED));
+        $this->assertNotNull($loan->get(LOAN::CHECKLIST_VALUES));
+
+        $checklistItem = LPSDK::CreateChecklistItemValue(1, 8, 1);
+
+        $this->assertEquals([$checklistItem], $loan->get(LOAN::CHECKLIST_VALUES));
+
+        $charge = LPSDK::CreateCharge(1250.00, '2017-05-29', 'Late Fee 05/29/2017', 1, CHARGES_CHARGE_APP_TYPE__C::STANDARD, 1)->set(
+            CHARGES::DISPLAY_ID, 3651, CHARGES::PRIOR_CUTOFF, 0, CHARGES::PAID_AMT, 60.00, CHARGES::PAID_PERCENT, 4.80, ENTITY::ID, 1840, CHARGES::ACTIVE, 1, CHARGES::NOT_EDITABLE, 0, CHARGES::PARENT_CHARGE, [], CHARGES::CHILD_CHARGE, [], CHARGES::ORDER, 0, CHARGES::EDIT_COMMENT, "Test",
+            CHARGES::EXPANSION, json_decode('{"1": {"create": [{"label": "Date/Time","value": "05/24/2017 10:28:13 am PDT","type": "date"},{"label": "IP Address","value": "73.98.150.163","type": "number"},{"label": "User","value": "Ronald","type": "string"}],"update": []}}', true)
+        );
+
+        $this->assertEquals([$charge], $loan->get(LOAN::CHARGES));
+
+        $pnm_order = LPSDK::CreatePayNearMeOrder(5, 'Bob', 'none@none.com', '5551231234', '123 Oak Lane', 'Baltimore', STATES::CALIFORNIA, '12345')->set(
+            PAY_NEAR_ME_ORDERS::SEND_SMS, 0,PAY_NEAR_ME_ORDERS::STATUS, 'open', PAY_NEAR_ME_ORDERS::CARD_NUMBER, '1234567890'
+        );
+
+        $this->assertEquals([$pnm_order], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
     }
 }
 

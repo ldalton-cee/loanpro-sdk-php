@@ -118,6 +118,14 @@ abstract class BaseEntity{
     }
 
     /**
+     * Returns which fields are required by the entity
+     * @return array
+     */
+    public static function getReqFields(){
+        return static::$required;
+    }
+
+    /**
      * This returns a copy of the object with the changes to the specified object lists. Cannot be used to unset values or to set values to null (see del). Cannot be used to modify fields that aren't object lists.
      *
      * It accepts a list of alternating fields and values (eg. field1, val1, field2, val2, ...), an array where the field is the key (eg. [field1=>val1, field2=>val2]), a list of fields and followed by several values (eg. field1, val1_1, val1_2, ..., field2, val2_1, val2_2, ...), or an array where the field is the key and an array of values (eg. [field1=>[val1_1, val1_2], field2=>[val2_1, val2_1]]),
