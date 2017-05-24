@@ -86,6 +86,7 @@ class PaymentEntity extends BaseEntity
         PAYMENTS::ACTIVE                => FieldValidator::BOOL,
         PAYMENTS::EARLY                 => FieldValidator::BOOL,
         PAYMENTS::IS_ONE_TIME_ONLY      => FieldValidator::BOOL,
+        PAYMENTS::IS_SPLIT              => FieldValidator::BOOL,
         PAYMENTS::LOG_ONLY              => FieldValidator::BOOL,
         PAYMENTS::NON_EDITABLE          => FieldValidator::BOOL,
         PAYMENTS::PAYOFF_FLAG           => FieldValidator::BOOL,
@@ -115,6 +116,7 @@ class PaymentEntity extends BaseEntity
         PAYMENTS::PROCESSOR_NAME        => FieldValidator::STRING,
         PAYMENTS::QUICK_PAY             => FieldValidator::STRING,
         PAYMENTS::SELECTED_PROCESSOR    => FieldValidator::STRING,
+        PAYMENTS::SPLIT_PMT_IN_LOANS    => FieldValidator::STRING,
 
         PAYMENTS::CUSTOM_FIELD_VALUES   => FieldValidator::OBJECT_LIST,
     ];

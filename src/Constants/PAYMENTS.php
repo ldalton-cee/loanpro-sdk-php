@@ -42,4 +42,6 @@ class PAYMENTS{
     const COMMENTS              = 'comments';
     const NACHA_RETURN_CODE__C  = 'nachaReturnCode';
     const NON_EDITABLE          = '_notEditable';
+    const SPLIT_PMT_IN_LOANS    = '__splitPaymentInLoans';
+    const IS_SPLIT              = '__isSplited';
 }
