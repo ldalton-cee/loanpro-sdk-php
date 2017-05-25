@@ -26,6 +26,9 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class LoanSetupTest extends TestCase
 {
+    /**
+     * @group create_correctness
+     */
     public function testCreateLoanSetupNoVals(){
         $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
         $this->assertEquals(LSETUP_LCLASS::CONSUMER, $loanSetup->get(LSETUP::LCLASS__C));
@@ -43,6 +46,9 @@ class LoanSetupTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanSetupSetCollections(){
         $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
         $this->assertEquals(LSETUP_LCLASS::CONSUMER, $loanSetup->get(LSETUP::LCLASS__C));
@@ -65,6 +71,9 @@ class LoanSetupTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanSetupCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Value for \''.LSETUP::LOAN_AMT.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
@@ -72,6 +81,9 @@ class LoanSetupTest extends TestCase
             /* should throw exception when setting LOAN_AMT to null */ ->set(LSETUP::LOAN_AMT, null);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testLoanSetupDel(){
         $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT)->set(LSETUP::LOAN_AMT, 1250.01);
         $this->assertEquals(1250.01, $loanSetup->get(LSETUP::LOAN_AMT));
@@ -81,6 +93,9 @@ class LoanSetupTest extends TestCase
         $this->assertEquals(1250.01, $loanSetup->get(LSETUP::LOAN_AMT));
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testLoanSetupDelClass(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.LSETUP::LCLASS__C.'\', field is required.');
@@ -90,6 +105,9 @@ class LoanSetupTest extends TestCase
         $loanSetup->del(LSETUP::LCLASS__C);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testLoanSetupDelType(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.LSETUP::LTYPE__C.'\', field is required.');

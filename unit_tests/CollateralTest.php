@@ -25,6 +25,9 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class CollateralTest extends TestCase
 {
+    /**
+     * @group create_correctness
+     */
     public function testCollateralInstantiate(){
         $collateral = LPSDK::CreateCollateral();
 
@@ -37,6 +40,9 @@ class CollateralTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testCollateralSetCollections(){
         $collateral = LPSDK::CreateCollateral();
 
@@ -57,6 +63,9 @@ class CollateralTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Value for \''.COLLATERAL::ADDITIONAL.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
@@ -64,6 +73,9 @@ class CollateralTest extends TestCase
             /* should throw exception when setting LOAN_AMT to null */ ->set(COLLATERAL::ADDITIONAL, null);
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
@@ -74,6 +86,9 @@ class CollateralTest extends TestCase
         $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, 1280.32);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testCollateralDel(){
         $collateral = LPSDK::CreateCollateral()->set([COLLATERAL::DISTANCE=> 232.23]);
         $this->assertEquals(232.23, $collateral->get(COLLATERAL::DISTANCE));

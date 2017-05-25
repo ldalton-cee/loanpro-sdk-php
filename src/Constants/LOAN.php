@@ -20,6 +20,7 @@ class LOAN{
     const CHARGES               = 'Charges';
     const LSRULES_APPLIED       = 'RuleAppliedLoanSettings';
     const CHECKLIST_VALUES      = 'ChecklistItemValues';
+    const ESCROW_CALCULATORS    = 'EscrowCalculators';
     const PAYMENTS              = 'Payments';
     const PAY_NEAR_ME_ORDERS    = 'PayNearMeOrders';
     const PORTFOLIOS            = 'Portfolios';

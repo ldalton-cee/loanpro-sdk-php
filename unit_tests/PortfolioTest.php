@@ -27,12 +27,18 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class PortfolioTest extends TestCase
 {
+    /**
+     * @group create_correctness
+     */
     public function testPortfolioInstantiate(){
         $portfolio = LPSDK::CreatePortfolio(5);
 
         $this->assertEquals(5, $portfolio->get(BASE_ENTITY::ID));
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testPortfolioSet(){
         $arr = [
             PORTFOLIO::TITLE, 'Sample Portfolio',
@@ -50,6 +56,9 @@ class PortfolioTest extends TestCase
         $this->assertEquals(ArrayUtils::ConvertToKeyedArray($arr), $portfolio->get(array_keys(ArrayUtils::ConvertToKeyedArray($arr))));
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
@@ -58,6 +67,9 @@ class PortfolioTest extends TestCase
         LPSDK::CreatePortfolio(5)->set(BASE_ENTITY::ID, null);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testPortfolioDelPortfolioId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.BASE_ENTITY::ID.'\', field is required.');
@@ -67,6 +79,9 @@ class PortfolioTest extends TestCase
         $portfolio->del(BASE_ENTITY::ID);
     }
 
+    /**
+     * @group add_correctness
+     */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
         $portfolio = LPSDK::CreatePortfolio(5);

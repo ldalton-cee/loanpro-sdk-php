@@ -26,6 +26,9 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class PayNearMeOrderTest extends TestCase
 {
+    /**
+     * @group create_correctness
+     */
     public function testPayNearMeOrderInstantiate(){
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
@@ -38,6 +41,9 @@ class PayNearMeOrderTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testPayNearMeOrderSetCollections(){
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
@@ -58,6 +64,9 @@ class PayNearMeOrderTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Value for \''.PAY_NEAR_ME_ORDERS::PHONE.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
@@ -65,6 +74,9 @@ class PayNearMeOrderTest extends TestCase
             /* should throw exception when setting LOAN_AMT to null */ ->set(PAY_NEAR_ME_ORDERS::PHONE, null);
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
@@ -75,6 +87,9 @@ class PayNearMeOrderTest extends TestCase
         $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, 1280.32);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testPayNearMeOrderDel(){
         $charge = $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345')->set([PAY_NEAR_ME_ORDERS::CARD_NUMBER=> "123456789"]);
         $this->assertEquals("123456789", $charge->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
@@ -84,6 +99,9 @@ class PayNearMeOrderTest extends TestCase
         $this->assertEquals("123456789", $charge->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testPayNearMeOrderDelCustId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::CUSTOMER_ID.'\', field is required.');
@@ -93,6 +111,9 @@ class PayNearMeOrderTest extends TestCase
         $charge->del(PAY_NEAR_ME_ORDERS::CUSTOMER_ID);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testPayNearMeOrderDelCustName(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::CUSTOMER_NAME.'\', field is required.');
@@ -102,6 +123,9 @@ class PayNearMeOrderTest extends TestCase
         $charge->del(PAY_NEAR_ME_ORDERS::CUSTOMER_NAME);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testPayNearMeOrderDelEmail(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::EMAIL.'\', field is required.');
@@ -111,6 +135,9 @@ class PayNearMeOrderTest extends TestCase
         $charge->del(PAY_NEAR_ME_ORDERS::EMAIL);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testPayNearMeOrderDelPhone(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::PHONE.'\', field is required.');
@@ -120,6 +147,9 @@ class PayNearMeOrderTest extends TestCase
         $charge->del(PAY_NEAR_ME_ORDERS::PHONE);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testPayNearMeOrderDelAddress(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::ADDRESS_1.'\', field is required.');
@@ -129,6 +159,9 @@ class PayNearMeOrderTest extends TestCase
         $charge->del(PAY_NEAR_ME_ORDERS::ADDRESS_1);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testPayNearMeOrderDelCity(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::CITY.'\', field is required.');
@@ -138,6 +171,9 @@ class PayNearMeOrderTest extends TestCase
         $charge->del(PAY_NEAR_ME_ORDERS::CITY);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testPayNearMeOrderDelState(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::STATE__C.'\', field is required.');
@@ -147,6 +183,9 @@ class PayNearMeOrderTest extends TestCase
         $charge->del(PAY_NEAR_ME_ORDERS::STATE__C);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testPayNearMeOrderDelZip(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::ZIP_CODE.'\', field is required.');
@@ -156,12 +195,18 @@ class PayNearMeOrderTest extends TestCase
         $charge->del(PAY_NEAR_ME_ORDERS::ZIP_CODE);
     }
 
+    /**
+     * @group add_correctness
+     */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
         $this->assertEquals([$charge], $loan->set(LOAN::PAY_NEAR_ME_ORDERS, $charge)->get(LOAN::PAY_NEAR_ME_ORDERS));
     }
 
+    /**
+     * @group append_correctness
+     */
     public function testAppendToLoan(){
         // create loan and payments
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
@@ -195,6 +240,9 @@ class PayNearMeOrderTest extends TestCase
         $this->assertEquals([$charge2], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
     }
 
+    /**
+     * @group append_correctness
+     */
     public function testAppendFail(){
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);

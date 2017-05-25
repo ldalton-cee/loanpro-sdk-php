@@ -20,7 +20,7 @@ class ESCROW_CALCULATORS{
     const SUBSET                = "subset";
     const TERM                  = "term";
     const TOTAL                 = "total";
-    const PERCENT               = "perccent";
+    const PERCENT               = "percent";
     const FIRST_PERIOD          = "firstPeriod";
     const REGULAR_PERIOD        = "regularPeriod";
     const PERCENT_BASE__C       = "percentBase";

@@ -26,6 +26,9 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class ChargeTest extends TestCase
 {
+    /**
+     * @group create_correctness
+     */
     public function testChargeInstantiate(){
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
@@ -38,6 +41,9 @@ class ChargeTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testChargeSetCollections(){
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
@@ -58,14 +64,20 @@ class ChargeTest extends TestCase
         }
     }
 
-    public function testLoanCannotSetNull(){
+    /**
+     * @group set_correctness
+     */
+    public function testChargeCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Value for \''.CHARGES::INFO.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)
             /* should throw exception when setting LOAN_AMT to null */ ->set(CHARGES::INFO, null);
     }
 
-    public function testLoanCheckValidProp(){
+    /**
+     * @group set_correctness
+     */
+    public function testChargeCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
         $ls = $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
@@ -75,6 +87,9 @@ class ChargeTest extends TestCase
         $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, 1280.32);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testChargeDel(){
         $charge = $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->set([CHARGES::ACTIVE=> 1]);
         $this->assertEquals(1, $charge->get(CHARGES::ACTIVE));
@@ -84,6 +99,9 @@ class ChargeTest extends TestCase
         $this->assertEquals(1, $charge->get(CHARGES::ACTIVE));
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testChargeDelAmount(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHARGES::AMOUNT.'\', field is required.');
@@ -93,6 +111,9 @@ class ChargeTest extends TestCase
         $charge->del(CHARGES::AMOUNT);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testChargeDelDate(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHARGES::DATE.'\', field is required.');
@@ -102,6 +123,9 @@ class ChargeTest extends TestCase
         $charge->del(CHARGES::DATE);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testChargeDelInfo(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHARGES::INFO.'\', field is required.');
@@ -111,6 +135,9 @@ class ChargeTest extends TestCase
         $charge->del(CHARGES::INFO);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testChargeDelChargeTypeId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHARGES::CHARGE_TYPE_ID.'\', field is required.');
@@ -120,6 +147,9 @@ class ChargeTest extends TestCase
         $charge->del(CHARGES::CHARGE_TYPE_ID);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testChargeDelChargeAppTypeId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHARGES::CHARGE_APP_TYPE__C.'\', field is required.');
@@ -129,6 +159,9 @@ class ChargeTest extends TestCase
         $charge->del(CHARGES::CHARGE_APP_TYPE__C);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testChargeDelChargeInterestBearId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHARGES::INTEREST_BEARING.'\', field is required.');
@@ -138,12 +171,18 @@ class ChargeTest extends TestCase
         $charge->del(CHARGES::INTEREST_BEARING);
     }
 
-    public function testAddToLoan(){
+    /**
+     * @group add_correctness
+     */
+    public function testAddToCharge(){
         $loan = LPSDK::CreateLoan("Test ID");
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
         $this->assertEquals([$charge], $loan->set(LOAN::CHARGES, $charge)->get(LOAN::CHARGES));
     }
 
+    /**
+     * @group append_correctness
+     */
     public function testAppendToLoan(){
         // create loan and payments
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
@@ -177,6 +216,9 @@ class ChargeTest extends TestCase
         $this->assertEquals([$charge2], $loan->get(LOAN::CHARGES));
     }
 
+    /**
+     * @group append_correctness
+     */
     public function testAppendFail(){
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
@@ -186,6 +228,9 @@ class ChargeTest extends TestCase
         $charge->append(CHARGES::CHARGE_TYPE_ID, "1");
     }
 
+    /**
+     * @group append_correctness
+     */
     public function testAppendFailList(){
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
@@ -196,6 +241,9 @@ class ChargeTest extends TestCase
         $loan->append(LOAN::CHARGES, $charge, LOAN::INSURANCE, LPSDK::CreateInsurance());
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testReadOnly(){
         // create loan and payments
         $charge = LPSDK::CreateCharge(435, "2017-08-29", "INFO 3", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->set(CHARGES::EXPANSION, [4, 56, 2, 1]);
@@ -203,6 +251,9 @@ class ChargeTest extends TestCase
         $this->assertEquals("4, 56, 2, 1", $charge->set(CHARGES::EXPANSION, implode(", ", $charge->get(CHARGES::EXPANSION)))->get(CHARGES::EXPANSION));
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoadReverseCharge(){
         $charge = $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->set(CHARGES::EDIT_COMMENT, "This is a comment", CHARGES::IS_REVERSAL, 1);
         $arr = \Simnang\LoanPro\Utils\ArrayUtils::ConvertToKeyedArray([CHARGES::EDIT_COMMENT, "This is a comment", CHARGES::IS_REVERSAL, 1]);

@@ -16,6 +16,7 @@ use Simnang\LoanPro\Loans\ChargeEntity;
 use Simnang\LoanPro\Loans\ChecklistItemValueEntity;
 use Simnang\LoanPro\Loans\CollateralEntity;
 use Simnang\LoanPro\Loans\CustomFieldValuesEntity;
+use Simnang\LoanPro\Loans\EscrowCalculatorEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
 use Simnang\LoanPro\Loans\LoanSettingsEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
@@ -25,6 +26,11 @@ use Simnang\LoanPro\Loans\PortfolioEntity;
 use Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity;
 use Simnang\LoanPro\Loans\SubPortfolioEntity;
 
+/**
+ * Class LoanProSDK
+ * This is the interface for the LoanPro SDK. It provides wrappers for creating entities either in code or from JSON
+ * @package Simnang\LoanPro
+ */
 class LoanProSDK
 {
     /**
@@ -67,6 +73,10 @@ class LoanProSDK
      */
     public static function CreateLoanSetup(string $class, string $type){
         return new LoanSetupEntity($class, $type);
+    }
+
+    public static function CreateEscrowCalculator(int $subset){
+        return new EscrowCalculatorEntity($subset);
     }
 
     /**
@@ -225,6 +235,9 @@ class LoanProSDK
         }
         else if($key === LSETUP::CUSTOM_FIELD_VALUES){
             return LoanProSDK::CreateObjectListFromJSONClass(CustomFieldValuesEntity::class, $json);
+        }
+        else if($key === LOAN::ESCROW_CALCULATORS){
+            return LoanProSDK::CreateObjectListFromJSONClass(EscrowCalculatorEntity::class, $json);
         }
         return $json;
     }

@@ -79,5 +79,28 @@
         "cardNumber": "1234567890"
       }
     ]
+  },
+  "EscrowCalculators": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/EscrowCalculators(id=12)",
+          "type": "Entity.EscrowCalculatorEntity"
+        },
+        "id": 12,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": 0,
+        "subset": 3,
+        "term": 360,
+        "total": "0.00",
+        "percent": "0.00",
+        "firstPeriod": "0.00",
+        "regularPeriod": "0.00",
+        "percentBase": "loan.escrowPercentBase.loanAmount",
+        "proRate1st": "loan.escrowProrateFirst.none",
+        "extendFinal": 0
+      }
+    ]
   }
 }

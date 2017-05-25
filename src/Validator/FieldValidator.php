@@ -8,6 +8,7 @@
 
 
 namespace Simnang\LoanPro\Validator;
+use Simnang\LoanPro\Constants\ENTITY_TYPES;
 
 /**
  * Class FieldValidator
@@ -89,6 +90,7 @@ class FieldValidator{
             case FieldValidator::READ_ONLY:
                 return true;
             case FieldValidator::ENTITY_TYPE:
+                FieldValidator::EnsureTypesSetup();
                 return is_string($val) && in_array($val, static::$entityTypes);
             default:
                 throw new \InvalidArgumentException("Unknown type '$type'");
@@ -124,6 +126,7 @@ class FieldValidator{
             case FieldValidator::READ_ONLY:
                 return $val;
             case FieldValidator::ENTITY_TYPE:
+                FieldValidator::EnsureTypesSetup();
                 return (is_string($val) && in_array($val, static::$entityTypes)) ? $val : null;
             default:
                 throw new \InvalidArgumentException("Unknown type '$type'");
@@ -328,5 +331,15 @@ class FieldValidator{
         return null;
     }
 
-    private static $entityTypes = ["Entity.Loan", "Entity.Customer", "Entity.LoanSetup", "Entity.LoanSettings"];
+    private static function EnsureTypesSetup(){
+        if(count(FieldValidator::$entityTypes) == 0){
+            $rclass = new \ReflectionClass(ENTITY_TYPES::class);
+            $consts = $rclass->getConstants();
+            foreach($consts as $key => $field){
+                FieldValidator::$entityTypes[] = $field;
+            }
+        }
+    }
+
+    private static $entityTypes = [];
 }

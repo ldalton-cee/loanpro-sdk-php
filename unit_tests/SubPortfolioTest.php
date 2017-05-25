@@ -27,6 +27,9 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class SubPortfolioTest extends TestCase
 {
+    /**
+     * @group create_correctness
+     */
     public function testSubPortfolioInstantiate(){
         $subportfolio = LPSDK::CreateSubPortfolio(5, 1);
 
@@ -34,6 +37,9 @@ class SubPortfolioTest extends TestCase
         $this->assertEquals(1, $subportfolio->get(SUB_PORTFOLIO::PARENT));
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testSubPortfolioSet(){
         $arr = ArrayUtils::ConvertToKeyedArray([
             SUB_PORTFOLIO::TITLE, 'Sample SubPortfolio',
@@ -47,6 +53,9 @@ class SubPortfolioTest extends TestCase
         $this->assertEquals($arr, $subportfolio->get(array_keys($arr)));
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
@@ -55,6 +64,9 @@ class SubPortfolioTest extends TestCase
         LPSDK::CreateSubPortfolio(5, 12)->set(BASE_ENTITY::ID, null);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testSubPortfolioDelSubPortfolioId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.BASE_ENTITY::ID.'\', field is required.');
@@ -64,6 +76,9 @@ class SubPortfolioTest extends TestCase
         $subportfolio->del(BASE_ENTITY::ID);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testSubPortfolioDelSubPortfolioParent(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.SUB_PORTFOLIO::PARENT.'\', field is required.');
@@ -73,6 +88,9 @@ class SubPortfolioTest extends TestCase
         $subportfolio->del(SUB_PORTFOLIO::PARENT);
     }
 
+    /**
+     * @group add_correctness
+     */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
         $subportfolio = LPSDK::CreateSubPortfolio(5, 12);

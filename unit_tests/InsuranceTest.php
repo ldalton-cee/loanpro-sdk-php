@@ -25,6 +25,9 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class InsuranceTest extends TestCase
 {
+    /**
+     * @group create_correctness
+     */
     public function testInsuranceInstantiate(){
         $insurance = LPSDK::CreateInsurance();
 
@@ -37,6 +40,9 @@ class InsuranceTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testInsuranceSetCollections(){
         $insurance = LPSDK::CreateInsurance();
 
@@ -57,6 +63,9 @@ class InsuranceTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Value for \''.INSURANCE::AGENT_NAME.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
@@ -64,6 +73,9 @@ class InsuranceTest extends TestCase
             /* should throw exception when setting LOAN_AMT to null */ ->set(INSURANCE::AGENT_NAME, null);
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
@@ -74,6 +86,9 @@ class InsuranceTest extends TestCase
         $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, 1280.32);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testInsuranceDel(){
         $insurance = LPSDK::CreateInsurance()->set([INSURANCE::DEDUCTIBLE=> 232.23]);
         $this->assertEquals(232.23, $insurance->get(INSURANCE::DEDUCTIBLE));

@@ -26,17 +26,26 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class ChecklistItemValueTest extends TestCase
 {
+    /**
+     * @group create_correctness
+     */
     public function testChecklistItemValueInstantiate(){
         $checklistValue = LPSDK::CreateChecklistItemValue(6, 12, 1);
 
         $this->assertEquals([CHECKLIST_VALUES::CHECKLIST_ID=>6, CHECKLIST_VALUES::CHECKLIST_ITEM_ID=>12, CHECKLIST_VALUES::CHECKLIST_ITEM_VAL=>1], $checklistValue->get(CHECKLIST_VALUES::CHECKLIST_ID, CHECKLIST_VALUES::CHECKLIST_ITEM_ID, CHECKLIST_VALUES::CHECKLIST_ITEM_VAL));
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testChecklistItemValueSet(){
         $checklistValue = LPSDK::CreateChecklistItemValue(6, 12, 1)->set(BASE_ENTITY::ID, 12);
         $this->assertEquals(12, $checklistValue->get(BASE_ENTITY::ID));
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
@@ -45,6 +54,9 @@ class ChecklistItemValueTest extends TestCase
         LPSDK::CreateChecklistItemValue(6, 12, 1)->set(BASE_ENTITY::ID, null);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testChecklistItemValueDelChecklistId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHECKLIST_VALUES::CHECKLIST_ID.'\', field is required.');
@@ -54,6 +66,9 @@ class ChecklistItemValueTest extends TestCase
         $checklistValue->del(CHECKLIST_VALUES::CHECKLIST_ID);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testChecklistItemValueDelChecklistItemVal(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHECKLIST_VALUES::CHECKLIST_ITEM_VAL.'\', field is required.');
@@ -63,6 +78,9 @@ class ChecklistItemValueTest extends TestCase
         $checklistValue->del(CHECKLIST_VALUES::CHECKLIST_ITEM_VAL);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testChecklistItemValueDelChecklistItemId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHECKLIST_VALUES::CHECKLIST_ITEM_ID.'\', field is required.');
@@ -72,6 +90,9 @@ class ChecklistItemValueTest extends TestCase
         $checklistValue->del(CHECKLIST_VALUES::CHECKLIST_ITEM_ID);
     }
 
+    /**
+     * @group add_correctness
+     */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
         $checklistValue = LPSDK::CreateChecklistItemValue(6, 12, 1);

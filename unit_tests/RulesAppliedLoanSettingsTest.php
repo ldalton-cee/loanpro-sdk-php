@@ -26,17 +26,26 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class RulesAppliedLoanSettingsTest extends TestCase
 {
+    /**
+     * @group create_correctness
+     */
     public function testRulesAppliedLoanSettingsInstantiate(){
         $rulesApplied = LPSDK::CreateRulesAppliedLoanSettings(5, true);
 
         $this->assertEquals(5, $rulesApplied->get(BASE_ENTITY::ID));
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testRulesAppliedLoanSettingsSet(){
         $rulesApplied = LPSDK::CreateRulesAppliedLoanSettings(5, true)->set(BASE_ENTITY::ID, 12)->set(LSRULES_APPLIED::ENABLED, false);
         $this->assertEquals(12, $rulesApplied->get(BASE_ENTITY::ID));
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testRulesAppliedLoanSettingsCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
@@ -45,6 +54,9 @@ class RulesAppliedLoanSettingsTest extends TestCase
         LPSDK::CreateRulesAppliedLoanSettings(5, true)->set(BASE_ENTITY::ID, null);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testRulesAppliedLoanSettings_DelId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.BASE_ENTITY::ID.'\', field is required.');
@@ -54,6 +66,9 @@ class RulesAppliedLoanSettingsTest extends TestCase
         $rulesApplied->del(BASE_ENTITY::ID);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testRulesAppliedLoanSettings_DelEnabled(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.LSRULES_APPLIED::ENABLED.'\', field is required.');
@@ -63,6 +78,9 @@ class RulesAppliedLoanSettingsTest extends TestCase
         $rulesApplied->del(LSRULES_APPLIED::ENABLED);
     }
 
+    /**
+     * @group add_correctness
+     */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
         $rulesApplied = LPSDK::CreateRulesAppliedLoanSettings(5, true);

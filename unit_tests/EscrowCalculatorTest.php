@@ -4,7 +4,7 @@
  * User: Matt T.
  * Date: 5/17/17
  * Time: 3:12 PM
- * /
+ */
 
 require(__DIR__."/../vendor/autoload.php");
 
@@ -16,192 +16,186 @@ use PHPUnit\Framework\TestCase;
 
 use Simnang\LoanPro\LoanProSDK as LPSDK,
     Simnang\LoanPro\Constants\LOAN as LOAN,
-    Simnang\LoanPro\Constants\PAY_NEAR_ME_ORDERS as PAY_NEAR_ME_ORDERS,
-    Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY
+    Simnang\LoanPro\Constants\ESCROW_CALCULATORS as ESCROW_CALCULATORS,
+    Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY,
+    \Simnang\LoanPro\Constants\ENTITY_TYPES as ENTITY_TYPES
     ;
 
 ////////////////////
 /// Done Setting Up Aliasing
 ////////////////////
 
-class PayNearMeOrderTest extends TestCase
+class EscrowCalculatorTest extends TestCase
 {
-    public function testPayNearMeOrderInstantiate(){
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
+    /**
+     * @group create_correctness
+     */
+    public function testEscrowCalculatorInstantiate(){
+        $escrowCalc = LPSDK::CreateEscrowCalculator(1);
 
-        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\PAY_NEAR_ME_ORDERS');
+        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\ESCROW_CALCULATORS');
         $consts = $rclass->getConstants();
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$charge->get($field));
+            $this->assertNull(null,$escrowCalc->get($field));
         }
     }
 
-    public function testPayNearMeOrderSetCollections(){
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
+    /**
+     * @group set_correctness
+     */
+    public function testEscrowCalculatorSetCollections(){
+        $escrowCalc = LPSDK::CreateEscrowCalculator(2);
 
 
-        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\PAY_NEAR_ME_ORDERS');
+        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\ESCROW_CALCULATORS');
         $consts = $rclass->getConstants();
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
             if(substr($key, -3) === '__C'){
-                $collName = '\Simnang\LoanPro\Constants\PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_' . $key;
+                $collName = '\Simnang\LoanPro\Constants\ESCROW_CALCULATORS\ESCROW_CALCULATORS_' . $key;
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
-                    $this->assertEquals($cval, $charge->set($field, $cval)->get($field));
+                    $this->assertEquals($cval, $escrowCalc->set($field, $cval)->get($field));
                 }
             }
         }
     }
 
-    public function testLoanCannotSetNull(){
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.PAY_NEAR_ME_ORDERS::PHONE.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345')
-        // should throw exception when setting LOAN_AMT to null
-             ->set(PAY_NEAR_ME_ORDERS::PHONE, null);
+    /**
+     * @group set_correctness
+     */
+    public function testEscrowCalculatorSet(){
+        $vals = [
+            ESCROW_CALCULATORS::DISCLOSURE_LN_AMT_ADD => 1,
+            ESCROW_CALCULATORS::EXTEND_FINAL => 0,
+            ESCROW_CALCULATORS::SAVED => 1,
+            ESCROW_CALCULATORS::PERCENT_BASE__C => ESCROW_CALCULATORS\ESCROW_CALCULATORS_PERCENT_BASE__C::BASE_PAYMENT,
+            ESCROW_CALCULATORS::PRO_RATE_1ST__C => ESCROW_CALCULATORS\ESCROW_CALCULATORS_PRO_RATE_1ST__C::FULL,
+            ESCROW_CALCULATORS::ENTITY_TYPE => ENTITY_TYPES::LOAN,
+            ESCROW_CALCULATORS::ENTITY_ID => 1,
+            ESCROW_CALCULATORS::MOD_ID => 2,
+            ESCROW_CALCULATORS::SUBSET => 3,
+            ESCROW_CALCULATORS::TERM => 36.0,
+            ESCROW_CALCULATORS::TOTAL => 1240.53,
+            ESCROW_CALCULATORS::PERCENT => 24.32,
+            ESCROW_CALCULATORS::FIRST_PERIOD => 12.3,
+            ESCROW_CALCULATORS::REGULAR_PERIOD => 23
+        ];
+
+        $escrowCalc = LPSDK::CreateEscrowCalculator(1)->set($vals);
+        $this->assertEquals($vals, $escrowCalc->get(array_keys($vals)));
     }
 
+    /**
+     * @group set_correctness
+     */
+    public function testLoanCannotSetNull(){
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Value for \''.ESCROW_CALCULATORS::REGULAR_PERIOD.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
+        $escrowCalc = LPSDK::CreateEscrowCalculator(1)
+        // should throw exception when setting LOAN_AMT to null
+             ->set(ESCROW_CALCULATORS::REGULAR_PERIOD, null);
+    }
+
+    /**
+     * @group set_correctness
+     */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
-        $ls = $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
+        $ls = $escrowCalc = LPSDK::CreateEscrowCalculator(1);
         $ls->set(BASE_ENTITY::ID, 120);
 
         // should throw exception when setting AGENT to null
         $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, 1280.32);
     }
 
-    public function testPayNearMeOrderDel(){
-        $charge = $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345')->set([PAY_NEAR_ME_ORDERS::CARD_NUMBER=> "123456789"]);
-        $this->assertEquals("123456789", $charge->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
-        //* deletions should have 'get' return 'null' *
-        $this->assertNull($charge->del(PAY_NEAR_ME_ORDERS::CARD_NUMBER)->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
-        //* deletions should also not affect the original object (just return a copy) *
-        $this->assertEquals("123456789", $charge->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
+    /**
+     * @group del_correctness
+     */
+    public function testEscrowCalculatorDel(){
+        $vals = [
+            ESCROW_CALCULATORS::DISCLOSURE_LN_AMT_ADD => 1,
+            ESCROW_CALCULATORS::EXTEND_FINAL => 0,
+            ESCROW_CALCULATORS::SAVED => 1,
+            ESCROW_CALCULATORS::PERCENT_BASE__C => ESCROW_CALCULATORS\ESCROW_CALCULATORS_PERCENT_BASE__C::BASE_PAYMENT,
+            ESCROW_CALCULATORS::PRO_RATE_1ST__C => ESCROW_CALCULATORS\ESCROW_CALCULATORS_PRO_RATE_1ST__C::FULL,
+            ESCROW_CALCULATORS::ENTITY_TYPE => ENTITY_TYPES::LOAN,
+            ESCROW_CALCULATORS::ENTITY_ID => 1,
+            ESCROW_CALCULATORS::MOD_ID => 2,
+            ESCROW_CALCULATORS::SUBSET => 3,
+            ESCROW_CALCULATORS::TERM => 36.0,
+            ESCROW_CALCULATORS::TOTAL => 1240.53,
+            ESCROW_CALCULATORS::PERCENT => 24.32,
+            ESCROW_CALCULATORS::FIRST_PERIOD => 12.3,
+            ESCROW_CALCULATORS::REGULAR_PERIOD => 23
+        ];
+
+        $escrowCalc = LPSDK::CreateEscrowCalculator(1)->set($vals);
+        $this->assertEquals($vals, $escrowCalc->get(array_keys($vals)));
+        unset($vals[ESCROW_CALCULATORS::REGULAR_PERIOD]);
+
+        $this->assertEquals($vals, $escrowCalc->del(ESCROW_CALCULATORS::REGULAR_PERIOD)->get(array_keys($vals)));
     }
 
-    public function testPayNearMeOrderDelCustId(){
+    /**
+     * @group del_correctness
+     */
+    public function testEscrowCalculatorDelSubset(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::CUSTOMER_ID.'\', field is required.');
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
+        $this->expectExceptionMessage('Cannot delete \''.ESCROW_CALCULATORS::SUBSET.'\', field is required.');
+        $escrowCalc = LPSDK::CreateEscrowCalculator(1);
 
         // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::CUSTOMER_ID);
+        $escrowCalc->del(ESCROW_CALCULATORS::SUBSET);
     }
 
-    public function testPayNearMeOrderDelCustName(){
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::CUSTOMER_NAME.'\', field is required.');
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-
-        // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::CUSTOMER_NAME);
-    }
-
-    public function testPayNearMeOrderDelEmail(){
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::EMAIL.'\', field is required.');
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-
-        // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::EMAIL);
-    }
-
-    public function testPayNearMeOrderDelPhone(){
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::PHONE.'\', field is required.');
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-
-        // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::PHONE);
-    }
-
-    public function testPayNearMeOrderDelAddress(){
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::ADDRESS_1.'\', field is required.');
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-
-        // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::ADDRESS_1);
-    }
-
-    public function testPayNearMeOrderDelCity(){
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::CITY.'\', field is required.');
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-
-        // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::CITY);
-    }
-
-    public function testPayNearMeOrderDelState(){
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::STATE__C.'\', field is required.');
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-
-        // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::STATE__C);
-    }
-
-    public function testPayNearMeOrderDelZip(){
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot delete \''.PAY_NEAR_ME_ORDERS::ZIP_CODE.'\', field is required.');
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-
-        // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::ZIP_CODE);
-    }
-
+    /**
+     * @group add_correctness
+     */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-        $this->assertEquals([$charge], $loan->set(LOAN::PAY_NEAR_ME_ORDERS, $charge)->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $escrowCalc = LPSDK::CreateEscrowCalculator(1);
+        $this->assertEquals([$escrowCalc], $loan->set(LOAN::ESCROW_CALCULATORS, $escrowCalc)->get(LOAN::ESCROW_CALCULATORS));
     }
 
+    /**
+     * @group append_correctness
+     */
     public function testAppendToLoan(){
         // create loan and payments
-        $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-        $charge2 = LPSDK::CreatePayNearMeOrder(2, "Jane", "jane@none.com","5552231234", '1234 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-        $charge3 = LPSDK::CreatePayNearMeOrder(3, "Jack", "jack@none.com","5551231235", '125 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::PAY_NEAR_ME_ORDERS, $charge);
+        $escrowCalc = LPSDK::CreateEscrowCalculator(1);
+        $escrowCalc2 = LPSDK::CreateEscrowCalculator(2);
+        $escrowCalc3 = LPSDK::CreateEscrowCalculator(3);
+        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::ESCROW_CALCULATORS, $escrowCalc);
 
         // test append
-        $this->assertEquals([$charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
-        $loan = $loan->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2);
-        $this->assertEquals([$charge, $charge2], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $this->assertEquals([$escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));
+        $loan = $loan->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2);
+        $this->assertEquals([$escrowCalc, $escrowCalc2], $loan->get(LOAN::ESCROW_CALCULATORS));
 
         // test list append
-        $loan = $loan->del(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2, $charge3, $charge);
-        $this->assertEquals([$charge2, $charge3, $charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $loan = $loan->del(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2, $escrowCalc3, $escrowCalc);
+        $this->assertEquals([$escrowCalc2, $escrowCalc3, $escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));
 
         // test list append with multiple keys
-        $loan = $loan->del(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2, $charge, LOAN::PAY_NEAR_ME_ORDERS, $charge);
-        $this->assertEquals([$charge2, $charge, $charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $loan = $loan->del(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2, $escrowCalc, LOAN::ESCROW_CALCULATORS, $escrowCalc);
+        $this->assertEquals([$escrowCalc2, $escrowCalc, $escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));
 
         // test array notation 1
-        $loan = $loan->del(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, [$charge3, $charge2, $charge]);
-        $this->assertEquals([$charge3, $charge2, $charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $loan = $loan->del(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, [$escrowCalc3, $escrowCalc2, $escrowCalc]);
+        $this->assertEquals([$escrowCalc3, $escrowCalc2, $escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));
 
         // test array notation 2
-        $loan = $loan->del(LOAN::PAY_NEAR_ME_ORDERS)->append([LOAN::PAY_NEAR_ME_ORDERS => [$charge, $charge3, $charge2]]);
-        $this->assertEquals([$charge, $charge3, $charge2], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $loan = $loan->del(LOAN::ESCROW_CALCULATORS)->append([LOAN::ESCROW_CALCULATORS => [$escrowCalc, $escrowCalc3, $escrowCalc2]]);
+        $this->assertEquals([$escrowCalc, $escrowCalc3, $escrowCalc2], $loan->get(LOAN::ESCROW_CALCULATORS));
 
         // test array notation 3
-        $loan = $loan->del(LOAN::PAY_NEAR_ME_ORDERS)->append([LOAN::PAY_NEAR_ME_ORDERS => $charge2]);
-        $this->assertEquals([$charge2], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $loan = $loan->del(LOAN::ESCROW_CALCULATORS)->append([LOAN::ESCROW_CALCULATORS => $escrowCalc2]);
+        $this->assertEquals([$escrowCalc2], $loan->get(LOAN::ESCROW_CALCULATORS));
     }
-
-    public function testAppendFail(){
-        // create loan and payments
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Property \''.PAY_NEAR_ME_ORDERS::CARD_NUMBER.'\' is not an object list, can only append to object lists!');
-        $charge = LPSDK::CreatePayNearMeOrder(2, "Jane", "jane@none.com","5552231234", '1234 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-
-        $charge->append(PAY_NEAR_ME_ORDERS::CARD_NUMBER, "1");
-    }
-}*/
+}

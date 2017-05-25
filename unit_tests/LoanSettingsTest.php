@@ -25,6 +25,9 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class LoanSettingsTest extends TestCase
 {
+    /**
+     * @group create_correctness
+     */
     public function testLoanSettingsInstantiate(){
         $loanSettings = LPSDK::CreateLoanSettings();
 
@@ -37,6 +40,9 @@ class LoanSettingsTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanSettingsSetCollections(){
         $loanSettings = LPSDK::CreateLoanSettings();
 
@@ -57,6 +63,9 @@ class LoanSettingsTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Value for \''.LSETTINGS::AGENT.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
@@ -64,6 +73,9 @@ class LoanSettingsTest extends TestCase
             /* should throw exception when setting LOAN_AMT to null */ ->set(LSETTINGS::AGENT, null);
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
@@ -74,6 +86,9 @@ class LoanSettingsTest extends TestCase
         $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, 1280.32);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testLoanSettingsDel(){
         $loanSettings = LPSDK::CreateLoanSettings()->set([LSETTINGS::AGENT=> 2, LSETTINGS::LOAN_SUB_STATUS_ID=>5, LSETTINGS::LOAN_STATUS_ID=>6, LSETTINGS::SECURED=>1]);
         $this->assertEquals(2, $loanSettings->get(LSETTINGS::AGENT));

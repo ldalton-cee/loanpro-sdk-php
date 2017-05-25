@@ -27,7 +27,10 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
     \Simnang\LoanPro\Constants\BASE_ENTITY as ENTITY,
     \Simnang\LoanPro\Constants\STATE_COLLECTIONS as STATES,
     \Simnang\LoanPro\Constants\PAY_NEAR_ME_ORDERS as PAY_NEAR_ME_ORDERS,
-    \Simnang\LoanPro\Constants\CHARGES\CHARGES_CHARGE_APP_TYPE__C as CHARGES_CHARGE_APP_TYPE__C
+    \Simnang\LoanPro\Constants\CHARGES\CHARGES_CHARGE_APP_TYPE__C as CHARGES_CHARGE_APP_TYPE__C,
+    \Simnang\LoanPro\Constants\ESCROW_CALCULATORS as ESCROW_CALCULATORS,
+    \Simnang\LoanPro\Constants\ENTITY_TYPES as ENTITY_TYPES,
+    \Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY
     ;
 
 ////////////////////
@@ -37,6 +40,9 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 class LoanTest extends TestCase
 {
 
+    /**
+     * @group create_correctness
+     */
     public function testLoanMinCreate(){
         $loan = LPSDK::CreateLoan("DISP ID");
 
@@ -54,6 +60,9 @@ class LoanTest extends TestCase
         }
     }
 
+    /**
+     * @group create_correctness
+     */
     public function testLoanMinCreateChangeId(){
         $loan = LPSDK::CreateLoan("DISP ID");
 
@@ -73,6 +82,9 @@ class LoanTest extends TestCase
         }
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanSelOnlyValid(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.LSETUP::LOAN_AMT.'\'');
@@ -82,6 +94,9 @@ class LoanTest extends TestCase
         $loan->set(LSETUP::LOAN_AMT, 12500);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testLoanDelOnlyValid(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.LSETUP::LOAN_AMT.'\'');
@@ -91,6 +106,9 @@ class LoanTest extends TestCase
         $loan->del(LSETUP::LOAN_AMT);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testLoanDel(){
         $loan = LPSDK::CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, "This is an alert");
 
@@ -101,12 +119,18 @@ class LoanTest extends TestCase
         $this->assertEquals("This is an alert", $loan->get(LOAN::LOAN_ALERT));
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Value for \''.LOAN::LOAN_ALERT.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
         LPSDK::CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, null);
     }
 
+    /**
+     * @group del_correctness
+     */
     public function testLoanDelDispID(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.LOAN::DISP_ID.'\', field is required.');
@@ -116,6 +140,9 @@ class LoanTest extends TestCase
         $loan->del(LOAN::DISP_ID);
     }
 
+    /**
+     * @group set_correctness
+     */
     public function testSetLoanSetup()
     {
         // properties and collection values will be set as constants in a namespace or class; here it assumes its for a class
@@ -156,6 +183,9 @@ class LoanTest extends TestCase
         $this->assertEquals($loan->get(LOAN::LSETUP)->get(LSETUP::DISCOUNT), $loanSetup->get(LSETUP::DISCOUNT));
     }
 
+    /**
+     * @group json_correctness
+     */
     public function testLoadFromJson_Tmpl1(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_1.json"));
         $this->assertEquals("L150342", $loan->get(LOAN::DISP_ID));
@@ -171,6 +201,9 @@ class LoanTest extends TestCase
         }
     }
 
+    /**
+     * @group json_correctness
+     */
     public function testLoadFromJson_Tmpl2(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_2.json"));
         $this->assertEquals("L150342", $loan->get(LOAN::DISP_ID));
@@ -183,6 +216,9 @@ class LoanTest extends TestCase
         $this->assertEquals(1, $loan->get(LOAN::TEMPORARY));
     }
 
+    /**
+     * @group json_correctness
+     */
     public function testLoadFromJson_Tmpl3(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_3.json"));
         $this->assertNull($loan->get(ENTITY::ID));
@@ -198,6 +234,9 @@ class LoanTest extends TestCase
         $this->assertEquals(LSETUP_LTYPE::FLOORING, $loan->get(LOAN::LSETUP)->get(LSETUP::LTYPE__C));
     }
 
+    /**
+     * @group json_correctness
+     */
     public function testLoadFromJson_Tmpl4(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_4.json"));
         $this->assertEquals("L150342", $loan->get(LOAN::DISP_ID));
@@ -256,6 +295,9 @@ class LoanTest extends TestCase
         $this->assertEquals($loanSetupVals,$loan->get(LOAN::LSETUP)->get(array_keys($loanSetupVals)));
     }
 
+    /**
+     * @group json_correctness
+     */
     public function testLoadFromJson_Tmpl5(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_5.json"));
         $this->assertEquals(20, $loan->get(ENTITY::ID));
@@ -277,6 +319,9 @@ class LoanTest extends TestCase
         }
     }
 
+    /**
+     * @group json_correctness
+     */
     public function testLoadFromJson_Tmpl6(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_6.json"));
         $this->assertEquals(24, $loan->get(ENTITY::ID));
@@ -301,6 +346,9 @@ class LoanTest extends TestCase
         }
     }
 
+    /**
+     * @group json_correctness
+     */
     public function testLoadFromJson_Tmpl7(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_7.json"));
         $this->assertEquals(24, $loan->get(ENTITY::ID));
@@ -384,6 +432,9 @@ class LoanTest extends TestCase
         $this->assertEquals($loanSettingsVals,$loan->get(LOAN::LSETTINGS)->get(array_keys($loanSettingsVals)));
     }
 
+    /**
+     * @group json_correctness
+     */
     public function testLoadFromJson_Tmpl8(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_8.json"));
         $this->assertEquals(20, $loan->get(ENTITY::ID));
@@ -405,6 +456,9 @@ class LoanTest extends TestCase
         }
     }
 
+    /**
+     * @group json_correctness
+     */
     public function testLoadFromJson_Tmpl9(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_9.json"));
         $this->assertEquals(20, $loan->get(ENTITY::ID));
@@ -428,6 +482,9 @@ class LoanTest extends TestCase
         $this->assertEquals(1427829732, $loan->get(LOAN::INSURANCE)->get(INSURANCE::END_DATE));
     }
 
+    /**
+     * @group json_correctness
+     */
     public function testLoadFromJson_Tmpl10(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_10.json"));
         $this->assertEquals(20, $loan->get(ENTITY::ID));
@@ -476,7 +533,9 @@ class LoanTest extends TestCase
         $this->assertEquals([$payment1, $payment2], $loan->get(LOAN::PAYMENTS));
     }
 
-
+    /**
+     * @group json_correctness
+     */
     public function testLoadFromJson_Tmpl11(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_11.json"));
         $this->assertEquals(20, $loan->get(ENTITY::ID));
@@ -505,6 +564,14 @@ class LoanTest extends TestCase
         );
 
         $this->assertEquals([$pnm_order], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+
+        $escrow_cal = LPSDK::CreateEscrowCalculator(3)->set(ESCROW_CALCULATORS::ENTITY_TYPE, ENTITY_TYPES::LOAN, ESCROW_CALCULATORS::ENTITY_ID, 3,
+            ESCROW_CALCULATORS::MOD_ID, 0, ESCROW_CALCULATORS::TERM, 360, ESCROW_CALCULATORS::TOTAL, 0.00, ESCROW_CALCULATORS::PERCENT, 0.00,
+            ESCROW_CALCULATORS::FIRST_PERIOD, 0.00, ESCROW_CALCULATORS::REGULAR_PERIOD, 0.00, ESCROW_CALCULATORS::PERCENT_BASE__C, ESCROW_CALCULATORS\ESCROW_CALCULATORS_PERCENT_BASE__C::LOAN_AMT,
+            ESCROW_CALCULATORS::PRO_RATE_1ST__C, ESCROW_CALCULATORS\ESCROW_CALCULATORS_PRO_RATE_1ST__C::NONE, ESCROW_CALCULATORS::EXTEND_FINAL, 0, BASE_ENTITY::ID, 12
+        );
+
+        $this->assertEquals([$escrow_cal], $loan->get(LOAN::ESCROW_CALCULATORS));
     }
 }
 

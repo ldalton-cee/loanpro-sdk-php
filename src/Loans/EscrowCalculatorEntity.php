@@ -16,11 +16,14 @@ use Simnang\LoanPro\Validator\FieldValidator;
 class EscrowCalculatorEntity extends BaseEntity
 {
     /**
-     * Creates a new loan settings entity. This entity will pull defaults when created, so there aren't any minimum fields required
+     * Creates a new entity. This entity will pull defaults when created, so there aren't any minimum fields required
      * @throws \ReflectionException
      */
-    public function __construct(){
+    public function __construct($subset){
         parent::__construct();
+        if(!$this->IsValidField(ESCROW_CALCULATORS::SUBSET, $subset) || is_null($subset))
+            throw new \InvalidArgumentException("Invalid value '$subset' for property ".ESCROW_CALCULATORS::SUBSET);
+        $this->properties[ESCROW_CALCULATORS::SUBSET] = $this->GetValidField(ESCROW_CALCULATORS::SUBSET, $subset);
     }
 
     /**
@@ -28,6 +31,7 @@ class EscrowCalculatorEntity extends BaseEntity
      * @var array
      */
     protected static $required = [
+        ESCROW_CALCULATORS::SUBSET
     ];
 
     /**

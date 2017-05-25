@@ -79,5 +79,6 @@ class LoanEntity extends BaseEntity
         LOAN::CHARGES               => FieldValidator::OBJECT_LIST,
         LOAN::PAY_NEAR_ME_ORDERS    => FieldValidator::OBJECT_LIST,
         LOAN::SUB_PORTFOLIOS        => FieldValidator::OBJECT_LIST,
+        LOAN::ESCROW_CALCULATORS    => FieldValidator::OBJECT_LIST,
     ];
 }
