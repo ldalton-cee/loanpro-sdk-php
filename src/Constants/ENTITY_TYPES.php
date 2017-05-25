@@ -13,4 +13,5 @@ class ENTITY_TYPES{
     const CUSTOMER      = 'Entity.Customer';
     const LOAN_SETUP    = 'Entity.LoanSetup';
     const LOAN_SETTINGS = 'Entity.LoanSettings';
+    const COLLATERAL    = 'Entity.Collateral';
 }

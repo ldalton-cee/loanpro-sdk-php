@@ -30,7 +30,9 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
     \Simnang\LoanPro\Constants\CHARGES\CHARGES_CHARGE_APP_TYPE__C as CHARGES_CHARGE_APP_TYPE__C,
     \Simnang\LoanPro\Constants\ESCROW_CALCULATORS as ESCROW_CALCULATORS,
     \Simnang\LoanPro\Constants\ENTITY_TYPES as ENTITY_TYPES,
-    \Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY
+    \Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY,
+    \Simnang\LoanPro\Constants\CUSTOM_FIELD_VALUES as CUSTOM_FIELD_VALUES,
+    \Simnang\LoanPro\Constants\COLLATERAL as COLLATERAL
     ;
 
 ////////////////////
@@ -572,6 +574,15 @@ class LoanTest extends TestCase
         );
 
         $this->assertEquals([$escrow_cal], $loan->get(LOAN::ESCROW_CALCULATORS));
+
+        $collateral = LPSDK::CreateCollateral()->set(json_decode('{"id": 312,"loanId": 69,"a": "a","b": "b","c": "c","d": "d","additional": "additional",'.
+            '"collateralType": "collateral.type.other","vin": "123456789123456","distance": 134.23,"bookValue": 13000,"color": "blue","gpsStatus": "collateral.gpsstatus.installed",'.
+            '"gpsCode": "132s4f56","licensePlate": "111 222","gap": 554.32,"warranty": 123.45}', true))->set(
+            COLLATERAL::LOAN, "2", COLLATERAL::CUSTOM_FIELD_VALUES, LPSDK::CreateCustomField(312, ENTITY_TYPES::COLLATERAL)->set(
+            BASE_ENTITY::ID, 7357, CUSTOM_FIELD_VALUES::CUSTOM_FIELD_ID, 276, CUSTOM_FIELD_VALUES::CUSTOM_FIELD_VALUE, 0
+        ))->del(COLLATERAL::LOAN);
+
+        $this->assertEquals(json_encode($collateral), json_encode($loan->get(LOAN::COLLATERAL)->del(COLLATERAL::LOAN)));
     }
 }
 

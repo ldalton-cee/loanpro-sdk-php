@@ -186,6 +186,16 @@ class LoanProSDK
     }
 
     /**
+     * Create custom field value entity
+     * @param $id - The ID of the associated entity
+     * @param $entityType - The type of associated entity
+     * @return CustomFieldValuesEntity
+     */
+    public static function CreateCustomField($entityId,$entityType){
+        return new CustomFieldValuesEntity($entityId,$entityType);
+    }
+
+    /**
      * Preps an array to be used to create an object by cleaning it and getting the object form (if applicable)
      * @param array $json - JSON to prep
      * @return array

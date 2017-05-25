@@ -19,13 +19,13 @@ class CustomFieldValuesEntity extends BaseEntity
      * Creates a new loan settings entity. This entity will pull defaults when created, so there aren't any minimum fields required
      * @throws \ReflectionException
      */
-    public function __construct($id, $entityType){
+    public function __construct($entityid, $entityType){
         parent::__construct();
-        if(!$this->IsValidField(BASE_ENTITY::ID, $id) || is_null($id))
-            throw new \InvalidArgumentException("Invalid value '$id' for property ".BASE_ENTITY::ID);
+        if(!$this->IsValidField(CUSTOM_FIELD_VALUES::ENTITY_ID, $entityid) || is_null($entityid))
+            throw new \InvalidArgumentException("Invalid value '$entityid' for property ".CUSTOM_FIELD_VALUES::ENTITY_ID);
         if(!$this->IsValidField(CUSTOM_FIELD_VALUES::ENTITY_TYPE, $entityType) || is_null($entityType))
             throw new \InvalidArgumentException("Invalid value '$entityType' for property ".CUSTOM_FIELD_VALUES::ENTITY_TYPE);
-        $this->properties[BASE_ENTITY::ID] = $this->GetValidField(BASE_ENTITY::ID, $id);
+        $this->properties[CUSTOM_FIELD_VALUES::ENTITY_ID] = $this->GetValidField(CUSTOM_FIELD_VALUES::ENTITY_ID, $entityid);
         $this->properties[CUSTOM_FIELD_VALUES::ENTITY_TYPE] = $this->GetValidField(CUSTOM_FIELD_VALUES::ENTITY_TYPE, $entityType);
     }
 
@@ -33,7 +33,7 @@ class CustomFieldValuesEntity extends BaseEntity
      * List of required fields
      * @var array
      */
-    protected static $required = [ BASE_ENTITY::ID, CUSTOM_FIELD_VALUES::ENTITY_TYPE ];
+    protected static $required = [ CUSTOM_FIELD_VALUES::ENTITY_ID, CUSTOM_FIELD_VALUES::ENTITY_TYPE ];
 
     /**
      * The name of the constant collection list

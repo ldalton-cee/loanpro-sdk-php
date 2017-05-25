@@ -102,5 +102,44 @@
         "extendFinal": 0
       }
     ]
+  },
+  "Collateral":{
+    "__metadata": {
+      "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/Collateral(id=312)",
+      "type": "Entity.Collateral"
+    },
+    "Loan": {
+      "__deferred": {
+        "uri": "Collateral(id=312)/Loan"
+      }
+    },
+    "CustomFieldValues": {
+      "results": [
+        {
+          "id": 7357,
+          "entityId": 312,
+          "entityType": "Entity.Collateral",
+          "customFieldId": 276,
+          "customFieldValue": "0"
+        }
+      ]
+    },
+    "id": 312,
+    "loanId": 69,
+    "a": "a",
+    "b": "b",
+    "c": "c",
+    "d": "d",
+    "additional": "additional",
+    "collateralType": "collateral.type.other",
+    "vin": "123456789123456",
+    "distance": 134.23,
+    "bookValue": 13000,
+    "color": "blue",
+    "gpsStatus": "collateral.gpsstatus.installed",
+    "gpsCode": "132s4f56",
+    "licensePlate": "111 222",
+    "gap": 554.32,
+    "warranty": 123.45
   }
 }

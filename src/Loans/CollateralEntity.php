@@ -49,24 +49,28 @@ class CollateralEntity extends BaseEntity
      * @var array
      */
     protected static $fields = [
-        COLLATERAL::GPS_STATUS__C  => FieldValidator::COLLECTION,
-        COLLATERAL::TYPE__C        => FieldValidator::COLLECTION,
+        COLLATERAL::GPS_STATUS__C       => FieldValidator::COLLECTION,
+        COLLATERAL::TYPE__C             => FieldValidator::COLLECTION,
 
-        COLLATERAL::LOAN_ID       => FieldValidator::INT,
+        COLLATERAL::LOAN_ID             => FieldValidator::INT,
 
-        COLLATERAL::ADDITIONAL    => FieldValidator::STRING,
-        COLLATERAL::COLOR         => FieldValidator::STRING,
-        COLLATERAL::FIELD_A       => FieldValidator::STRING,
-        COLLATERAL::FIELD_B       => FieldValidator::STRING,
-        COLLATERAL::FIELD_C       => FieldValidator::STRING,
-        COLLATERAL::FIELD_D       => FieldValidator::STRING,
-        COLLATERAL::GPS_CODE      => FieldValidator::STRING,
-        COLLATERAL::LICENSE_PLATE => FieldValidator::STRING,
-        COLLATERAL::VIN           => FieldValidator::STRING,
+        COLLATERAL::BOOK_VAL            => FieldValidator::NUMBER,
+        COLLATERAL::DISTANCE            => FieldValidator::NUMBER,
+        COLLATERAL::GAP                 => FieldValidator::NUMBER,
+        COLLATERAL::WARRANTY            => FieldValidator::NUMBER,
 
-        COLLATERAL::BOOK_VAL      => FieldValidator::NUMBER,
-        COLLATERAL::DISTANCE      => FieldValidator::NUMBER,
-        COLLATERAL::GAP           => FieldValidator::NUMBER,
-        COLLATERAL::WARRANTY      => FieldValidator::NUMBER,
+        COLLATERAL::CUSTOM_FIELD_VALUES => FieldValidator::OBJECT_LIST,
+
+        COLLATERAL::LOAN                => FieldValidator::READ_ONLY,
+
+        COLLATERAL::ADDITIONAL          => FieldValidator::STRING,
+        COLLATERAL::COLOR               => FieldValidator::STRING,
+        COLLATERAL::FIELD_A             => FieldValidator::STRING,
+        COLLATERAL::FIELD_B             => FieldValidator::STRING,
+        COLLATERAL::FIELD_C             => FieldValidator::STRING,
+        COLLATERAL::FIELD_D             => FieldValidator::STRING,
+        COLLATERAL::GPS_CODE            => FieldValidator::STRING,
+        COLLATERAL::LICENSE_PLATE       => FieldValidator::STRING,
+        COLLATERAL::VIN                 => FieldValidator::STRING,
     ];
 }
