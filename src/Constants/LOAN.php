@@ -34,4 +34,5 @@ class LOAN{
     const ACTIVE                = 'active';
     const DELETED               = 'deleted';
     const TEMPORARY             = '__temporary';
+    const DOCUMENTS             = 'Documents';
 }

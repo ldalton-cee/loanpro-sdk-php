@@ -9,6 +9,7 @@
 namespace Simnang\LoanPro;
 
 
+use Simnang\LoanPro\Constants\DOCUMENTS;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETUP;
 use Simnang\LoanPro\Constants\PAYMENTS;
@@ -16,7 +17,10 @@ use Simnang\LoanPro\Loans\ChargeEntity;
 use Simnang\LoanPro\Loans\ChecklistItemValueEntity;
 use Simnang\LoanPro\Loans\CollateralEntity;
 use Simnang\LoanPro\Loans\CustomFieldValuesEntity;
+use Simnang\LoanPro\Loans\DocSectionEntity;
+use Simnang\LoanPro\Loans\DocumentEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatorEntity;
+use Simnang\LoanPro\Loans\FileAttachmentEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
 use Simnang\LoanPro\Loans\LoanSettingsEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
@@ -203,7 +207,9 @@ class LoanProSDK
     private static function PrepArray(array $json){
         $finalJson = [];
         foreach($json as $key => $val) {
-            $finalJson[$key] = LoanProSDK::GetObjectForm($key, LoanProSDK::CleanJSON($val));
+            $val = LoanProSDK::GetObjectForm($key, LoanProSDK::CleanJSON($val));
+            if(!is_null($val))
+            $finalJson[$key] = $val;
         }
         return $finalJson;
     }
@@ -249,6 +255,15 @@ class LoanProSDK
         else if($key === LOAN::ESCROW_CALCULATORS){
             return LoanProSDK::CreateObjectListFromJSONClass(EscrowCalculatorEntity::class, $json);
         }
+        else if($key === LOAN::DOCUMENTS){
+            return LoanProSDK::CreateObjectListFromJSONClass(DocumentEntity::class, $json);
+        }
+        else if($key === DOCUMENTS::DOC_SECTION){
+            return LoanProSDK::CreateGenericJSONClass(DocSectionEntity::class, $json);
+        }
+        else if($key === DOCUMENTS::FILE_ATTACMENT){
+            return LoanProSDK::CreateGenericJSONClass(FileAttachmentEntity::class, $json);
+        }
         return $json;
     }
 
@@ -261,13 +276,15 @@ class LoanProSDK
     private static function CreateObjectListFromJSONClass(string $class, array $json){
         if(isset($json['results']))
             $json = $json['results'];
+        if(isset($json['__deferred']))
+            return [];
         $list = [];
         $reqFields = $class::getReqFields();
 
         foreach($json as $j){
             if(!is_array($j))
                 throw new \InvalidArgumentException("Received an invalid object for class '$class''!");
-            $j = static::CleanJSON($j);
+            $j = LoanProSDK::PrepArray(LoanProSDK::CleanJSON($j));
             $params = [];
             foreach($reqFields as $r){
                 if(!isset($j[$r]))
@@ -288,6 +305,8 @@ class LoanProSDK
     private static function CreateGenericJSONClass(string $class, array $json){
         if(!is_array($json))
             throw new \InvalidArgumentException("Expected a parsed JSON array");
+        if(isset($json['__deferred']))
+            return null;
 
         $reqFields = $class::getReqFields();
         $params = [];

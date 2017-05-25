@@ -14,4 +14,5 @@ class ENTITY_TYPES{
     const LOAN_SETUP    = 'Entity.LoanSetup';
     const LOAN_SETTINGS = 'Entity.LoanSettings';
     const COLLATERAL    = 'Entity.Collateral';
+    const LOAN_DOCUMENT = 'Entity.LoanDocument';
 }

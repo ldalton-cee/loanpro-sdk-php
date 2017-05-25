@@ -84,7 +84,7 @@
     "results": [
       {
         "__metadata": {
-          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/EscrowCalculators(id=12)",
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/EscrowCalculators(id=12)",
           "type": "Entity.EscrowCalculatorEntity"
         },
         "id": 12,
@@ -105,7 +105,7 @@
   },
   "Collateral":{
     "__metadata": {
-      "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/Collateral(id=312)",
+      "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/Collateral(id=312)",
       "type": "Entity.Collateral"
     },
     "Loan": {
@@ -141,5 +141,105 @@
     "licensePlate": "111 222",
     "gap": 554.32,
     "warranty": 123.45
+  },
+  "Documents": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanDocuments(id=33)",
+          "type": "Entity.Document"
+        },
+        "Loan": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=33)/Loan"
+          }
+        },
+        "User": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=33)/User"
+          }
+        },
+        "DocSection": {
+          "__metadata": {
+            "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/DocSections(id=12)",
+            "type": "Entity.DocSection"
+          },
+          "id": 12,
+          "title": "Custom Forms",
+          "entityType": "Entity.Loan",
+          "created": "/Date(1442596555)/",
+          "active": 1
+        },
+        "FileAttachment": {
+          "__metadata": {
+            "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/FileAttachments(id=47)",
+            "type": "Entity.FileAttachment"
+          },
+          "id": 47,
+          "parentType": "Entity.LoanDocument",
+          "parentId": 33,
+          "fileName": "dummy_pdf_1493662865.pdf",
+          "fileOriginalName": "dummy_pdf.pdf",
+          "fileSize": 7363,
+          "fileMime": "application/pdf"
+        },
+        "id": 33,
+        "loanId": 69,
+        "userId": 7,
+        "sectionId": 12,
+        "fileAttachmentId": 47,
+        "userName": "Joey",
+        "remoteAddress": "387.301.330.352",
+        "fileName": "dummy_pdf.pdf",
+        "description": "asdfsadf",
+        "ip": 3150545560,
+        "size": 7363,
+        "active": 1,
+        "created": "/Date(1493662865)/",
+        "archived": 0,
+        "customerVisible": 1
+      },
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanDocuments(id=34)",
+          "type": "Entity.Document"
+        },
+        "Loan": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=34)/Loan"
+          }
+        },
+        "User": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=34)/User"
+          }
+        },
+        "DocSection": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=34)/DocSection"
+          }
+        },
+        "FileAttachment": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=34)/FileAttachment"
+          }
+        },
+        "id": 34,
+        "loanId": 69,
+        "userId": 2,
+        "sectionId": 12,
+        "fileAttachmentId": 47,
+        "userName": "jane",
+        "remoteAddress": "187.201.130.152",
+        "fileName": "dummy2_pdf.pdf",
+        "description": "asdfsadfasdf",
+        "ip": 3150545560,
+        "size": 7363,
+        "active": 1,
+        "created": "/Date(1523662865)/",
+        "archived": 0,
+        "customerVisible": 1
+      }
+    ]
   }
 }
