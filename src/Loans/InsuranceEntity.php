@@ -59,5 +59,7 @@ class InsuranceEntity extends BaseEntity
         INSURANCE::INSURED          => FieldValidator::STRING,
         INSURANCE::PHONE            => FieldValidator::STRING,
         INSURANCE::POLICY_NUMBER    => FieldValidator::STRING,
+
+        INSURANCE::LOAN             => FieldValidator::READ_ONLY,
     ];
 }

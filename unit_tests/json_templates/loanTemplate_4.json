@@ -54,6 +54,27 @@
     "lateFeePercent": "10.00",
     "lateFeeCalc": "loan.lateFeeCalc.standard",
     "lateFeePercentBase": "loan.latefeepercentbase.regular",
-    "paymentDateApp": "loan.pmtdateapp.actual"
+    "paymentDateApp": "loan.pmtdateapp.actual",
+
+    "CustomFieldValues": {
+      "results": [
+        {
+          "__metadata": {
+            "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/CustomFieldValues(id=7750)",
+            "type": "Entity.CustomFieldValue"
+          },
+          "CustomField": {
+            "__deferred": {
+              "uri": "CustomFieldValues(id=7750)/CustomField"
+            }
+          },
+          "id": 7750,
+          "entityId": 3,
+          "entityType": "Entity.LoanSetup",
+          "customFieldId": 288,
+          "customFieldValue": null
+        }
+      ]
+    }
   }
 }

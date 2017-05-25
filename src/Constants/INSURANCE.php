@@ -22,4 +22,5 @@ class INSURANCE{
     const DEDUCTIBLE    = "deductible";
     const START_DATE    = "startDate";
     const END_DATE      = "endDate";
+    const LOAN          = "Loan";
 }

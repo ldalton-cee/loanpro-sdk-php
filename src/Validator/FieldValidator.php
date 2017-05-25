@@ -328,5 +328,5 @@ class FieldValidator{
         return null;
     }
 
-    private static $entityTypes = ["Entity.Loan", "Entity.Customer"];
+    private static $entityTypes = ["Entity.Loan", "Entity.Customer", "Entity.LoanSetup", "Entity.LoanSettings"];
 }
