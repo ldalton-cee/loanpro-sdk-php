@@ -31,6 +31,7 @@ use Simnang\LoanPro\Loans\PaymentEntity;
 use Simnang\LoanPro\Loans\PaynearmeOrderEntity;
 use Simnang\LoanPro\Loans\PortfolioEntity;
 use Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity;
+use Simnang\LoanPro\Loans\SourceCompanyEntity;
 use Simnang\LoanPro\Loans\SubPortfolioEntity;
 
 /**
@@ -275,6 +276,9 @@ class LoanProSDK
         }
         else if($key === LSETTINGS::LOAN_SUB_STATUS){
             return LoanProSDK::CreateGenericJSONClass(LoanSubStatusEntity::class, $json);
+        }
+        else if($key === LSETTINGS::SOURCE_COMPANY){
+            return LoanProSDK::CreateGenericJSONClass(SourceCompanyEntity::class, $json);
         }
         return $json;
     }

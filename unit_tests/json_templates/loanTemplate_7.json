@@ -78,6 +78,39 @@
     "closedDate": "/Date(1427829732)/",
     "liquidationDate": "/Date(1427829732)/",
     "isStoplightManuallySet": "0",
+    "SrcCompany": {
+      "__metadata": {
+        "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/SourceCompanies(id=4)",
+        "type": "Entity.SourceCompany"
+      },
+      "Address": {
+        "__deferred": {
+          "uri": "SourceCompanies(id=4)/Address"
+        }
+      },
+      "CheckingAccount": {
+        "__deferred": {
+          "uri": "SourceCompanies(id=4)/CheckingAccount"
+        }
+      },
+      "CustomFieldValues": {
+        "__deferred": {
+          "uri": "SourceCompanies(id=4)/CustomFieldValues"
+        }
+      },
+      "id": 4,
+      "companyName": "CTEST Source Company",
+      "contactName": "CTEST",
+      "contactPhone": "1111111111",
+      "contactEmail": "Contactemail@email.com",
+      "numPrefix": "# Prefix",
+      "numSuffix": "# Suffix",
+      "addressId": 596,
+      "checkingAccountId": 12,
+      "mcId": 10,
+      "created": "/Date(1446664249)/",
+      "active": 1
+    },
     "LoanStatus": {
       "__metadata": {
         "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanStatus(id=2)",

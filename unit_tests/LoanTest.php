@@ -36,7 +36,8 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
     \Simnang\LoanPro\Constants\DOCUMENTS as DOCUMENTS,
     \Simnang\LoanPro\Constants\DOC_SECTION as DOC_SECTION,
     \Simnang\LoanPro\Constants\FILE_ATTACHMENT as FILE_ATTACHMENT,
-    \Simnang\LoanPro\Constants\LOAN_SUB_STATUS as LOAN_SUB_STATUS
+    \Simnang\LoanPro\Constants\LOAN_SUB_STATUS as LOAN_SUB_STATUS,
+    \Simnang\LoanPro\Constants\SOURCE_COMPANY as SOURCE_COMPANY
     ;
 
 ////////////////////
@@ -444,6 +445,20 @@ class LoanTest extends TestCase
                 LOAN_SUB_STATUS::DISPLAY_ORDER, 7,
                 LOAN_SUB_STATUS::ACTIVE, 1
             ]),
+            LSETTINGS::SOURCE_COMPANY => (new \Simnang\LoanPro\Loans\SourceCompanyEntity())->set(
+                SOURCE_COMPANY::COMPANY_NAME, 'CTEST Source Company',
+                BASE_ENTITY::ID, 4,
+                SOURCE_COMPANY::CONTACT_NAME, 'CTEST',
+                SOURCE_COMPANY::CONTACT_PHONE, '1111111111',
+                SOURCE_COMPANY::CONTACT_EMAIL, 'Contactemail@email.com',
+                SOURCE_COMPANY::NUM_PREFIX, '# Prefix',
+                SOURCE_COMPANY::NUM_SUFFIX, '# Suffix',
+                SOURCE_COMPANY::ADDRESS_ID, 596,
+                SOURCE_COMPANY::CHECKING_ACCT_ID, 12,
+                SOURCE_COMPANY::MC_ID, 10,
+                SOURCE_COMPANY::CREATED, 1446664249,
+                SOURCE_COMPANY::ACTIVE, 1
+            )
         ];
 
         // Validate Loan Settings
