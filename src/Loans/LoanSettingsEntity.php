@@ -69,9 +69,17 @@ class LoanSettingsEntity extends BaseEntity
         LSETTINGS::AGENT                    => FieldValidator::INT,
         LSETTINGS::LOAN_STATUS_ID           => FieldValidator::INT,
         LSETTINGS::LOAN_SUB_STATUS_ID       => FieldValidator::INT,
-        LSETTINGS::SOURCE_COMPANY           => FieldValidator::INT,
+        LSETTINGS::SOURCE_COMPANY_ID        => FieldValidator::INT,
 
         LSETTINGS::CARD_FEE_AMT             => FieldValidator::NUMBER,
         LSETTINGS::CARD_FEE_PERC            => FieldValidator::NUMBER,
+
+        LSETTINGS::LOAN_STATUS              => FieldValidator::OBJECT,
+        LSETTINGS::LOAN_SUB_STATUS          => FieldValidator::OBJECT,
+        LSETTINGS::SOURCE_COMPANY           => FieldValidator::OBJECT,
+
+        LSETTINGS::CUSTOM_FIELD_VALUES      => FieldValidator::OBJECT_LIST,
+
+        LSETTINGS::LOAN                     => FieldValidator::READ_ONLY,
     ];
 }

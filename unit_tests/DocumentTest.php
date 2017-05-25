@@ -150,9 +150,9 @@ class DocumentTest extends TestCase
     public function testAppendFail(){
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Property \''.DOCUMENTS::DISCRIPTION.'\' is not an object list, can only append to object lists!');
+        $this->expectExceptionMessage('Property \''.DOCUMENTS::DESCRIPTION.'\' is not an object list, can only append to object lists!');
         $doc = new \Simnang\LoanPro\Loans\DocumentEntity();
 
-        $doc->append(DOCUMENTS::DISCRIPTION, "1");
+        $doc->append(DOCUMENTS::DESCRIPTION, "1");
     }
 }

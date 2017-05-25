@@ -67,7 +67,7 @@ class DocumentEntity extends BaseEntity
         DOCUMENTS::DOC_SECTION          => FieldValidator::OBJECT,
         DOCUMENTS::FILE_ATTACMENT       => FieldValidator::OBJECT,
 
-        DOCUMENTS::DISCRIPTION          => FieldValidator::STRING,
+        DOCUMENTS::DESCRIPTION          => FieldValidator::STRING,
         DOCUMENTS::FILE_NAME            => FieldValidator::STRING,
         DOCUMENTS::REMOTE_ADDR          => FieldValidator::STRING,
         DOCUMENTS::USER_NAME            => FieldValidator::STRING,

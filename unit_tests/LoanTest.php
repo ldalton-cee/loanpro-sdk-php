@@ -32,7 +32,11 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
     \Simnang\LoanPro\Constants\ENTITY_TYPES as ENTITY_TYPES,
     \Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY,
     \Simnang\LoanPro\Constants\CUSTOM_FIELD_VALUES as CUSTOM_FIELD_VALUES,
-    \Simnang\LoanPro\Constants\COLLATERAL as COLLATERAL
+    \Simnang\LoanPro\Constants\COLLATERAL as COLLATERAL,
+    \Simnang\LoanPro\Constants\DOCUMENTS as DOCUMENTS,
+    \Simnang\LoanPro\Constants\DOC_SECTION as DOC_SECTION,
+    \Simnang\LoanPro\Constants\FILE_ATTACHMENT as FILE_ATTACHMENT,
+    \Simnang\LoanPro\Constants\LOAN_SUB_STATUS as LOAN_SUB_STATUS
     ;
 
 ////////////////////
@@ -415,7 +419,7 @@ class LoanTest extends TestCase
             LSETTINGS::AGENT=>12,
             LSETTINGS::LOAN_STATUS_ID=>2,
             LSETTINGS::LOAN_SUB_STATUS_ID=>10,
-            LSETTINGS::SOURCE_COMPANY=>3,
+            LSETTINGS::SOURCE_COMPANY_ID=>3,
             LSETTINGS::EBILLING__C=>LSETTINGS\LSETTINGS_EBILLING__C::NO,
             LSETTINGS::ECOA_CODE__C=>LSETTINGS\LSETTINGS_ECOA_CODE__C::NOT_SPECIFIED,
             LSETTINGS::CO_BUYER_ECOA_CODE__C=>LSETTINGS\LSETTINGS_CO_BUYER_ECOA_CODE__C::NOT_SPECIFIED,
@@ -427,7 +431,19 @@ class LoanTest extends TestCase
             LSETTINGS::REPO_DATE=>1427829732,
             LSETTINGS::CLOSED_DATE=> 1427829732,
             LSETTINGS::LIQUIDATION_DATE=>1427829732,
-            LSETTINGS::STOPLGHT_MANUALLY_SET=>0
+            LSETTINGS::STOPLGHT_MANUALLY_SET=>0,
+            LSETTINGS::LOAN_STATUS=>(new \Simnang\LoanPro\Loans\LoanStatusEntity())->set([BASE_ENTITY::ID,2,\Simnang\LoanPro\Constants\LOAN_STATUS::ACTIVE,1, \Simnang\LoanPro\Constants\LOAN_STATUS::TITLE,'Active']),
+            LSETTINGS::LOAN_SUB_STATUS=>(new \Simnang\LoanPro\Loans\LoanSubStatusEntity())->set([
+                BASE_ENTITY::ID,38,
+                LOAN_SUB_STATUS::TITLE, 'CTEST Active',
+                LOAN_SUB_STATUS::PARENT, 2,
+                LOAN_SUB_STATUS::LATE_FEES, 1,
+                LOAN_SUB_STATUS::EMAIL_ENROLL, 1,
+                LOAN_SUB_STATUS::WEB_ACCESS, 1,
+                LOAN_SUB_STATUS::SMS_ENROLL, 1,
+                LOAN_SUB_STATUS::DISPLAY_ORDER, 7,
+                LOAN_SUB_STATUS::ACTIVE, 1
+            ]),
         ];
 
         // Validate Loan Settings
@@ -583,6 +599,21 @@ class LoanTest extends TestCase
         ))->del(COLLATERAL::LOAN);
 
         $this->assertEquals(json_encode($collateral), json_encode($loan->get(LOAN::COLLATERAL)->del(COLLATERAL::LOAN)));
+
+        $doc1vars = [
+            BASE_ENTITY::ID, 33, DOCUMENTS::LOAN_ID, 69, DOCUMENTS::USER_ID, 7, DOCUMENTS::SECTION_ID, 12, DOCUMENTS::FILE_ATTACHMENT_ID, 47, DOCUMENTS::USER_NAME, "Joey", DOCUMENTS::REMOTE_ADDR, '387.301.330.352', DOCUMENTS::FILE_NAME, 'dummy_pdf.pdf',
+            DOCUMENTS::DESCRIPTION, 'asdfsadf', DOCUMENTS::IP, 3150545560, DOCUMENTS::SIZE, 7363, DOCUMENTS::ACTIVE, 1, DOCUMENTS::CREATED, 1493662865, DOCUMENTS::ARCHIVED, 0,DOCUMENTS::CUSTOMER_VISIBLE, 1,
+            DOCUMENTS::DOC_SECTION, (new \Simnang\LoanPro\Loans\DocSectionEntity())->set(BASE_ENTITY::ID,12,DOC_SECTION::TITLE, 'Custom Forms', DOC_SECTION::ENTITY_TYPE,'Entity.Loan', DOC_SECTION::CREATED, 1442596555, DOC_SECTION::ACTIVE, 1),
+            DOCUMENTS::FILE_ATTACMENT, (new \Simnang\LoanPro\Loans\FileAttachmentEntity())->set(BASE_ENTITY::ID, 47, FILE_ATTACHMENT::PARENT_TYPE, ENTITY_TYPES::LOAN_DOCUMENT, FILE_ATTACHMENT::PARENT_ID, 33, FILE_ATTACHMENT::FILE_NAME, 'dummy_pdf_1493662865.pdf', FILE_ATTACHMENT::FILE_ORIG_NAME, 'dummy_pdf.pdf', FILE_ATTACHMENT::FILE_SIZE, 7363, FILE_ATTACHMENT::FILE_MIME, 'application/pdf' )
+        ];
+        $doc1 = (new \Simnang\LoanPro\Loans\DocumentEntity())->set($doc1vars);
+        $doc2vars = [
+            BASE_ENTITY::ID, 34, DOCUMENTS::LOAN_ID, 69, DOCUMENTS::USER_ID, 2, DOCUMENTS::SECTION_ID, 12, DOCUMENTS::FILE_ATTACHMENT_ID, 47, DOCUMENTS::USER_NAME, "Jane", DOCUMENTS::REMOTE_ADDR, '387.301.330.352',DOCUMENTS::FILE_NAME, 'dummy2_pdf.pdf',
+            DOCUMENTS::DESCRIPTION, 'asdfsadfasdf', DOCUMENTS::IP, 3150545560, DOCUMENTS::SIZE, 7363, DOCUMENTS::ACTIVE, 1, DOCUMENTS::CREATED, 1523662865, DOCUMENTS::ARCHIVED, 0,DOCUMENTS::CUSTOMER_VISIBLE, 1
+        ];
+        $doc2 = (new \Simnang\LoanPro\Loans\DocumentEntity())->set($doc2vars);
+
+        $this->assertEquals([$doc1, $doc2], $loan->get(LOAN::DOCUMENTS));
     }
 }
 

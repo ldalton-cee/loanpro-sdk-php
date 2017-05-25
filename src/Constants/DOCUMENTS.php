@@ -16,7 +16,7 @@ class DOCUMENTS{
     const USER_NAME             = 'userName';
     const REMOTE_ADDR           = 'remoteAddress';
     const FILE_NAME             = 'fileName';
-    const DISCRIPTION           = 'description';
+    const DESCRIPTION           = 'description';
     const IP                    = 'ip';
     const SIZE                  = 'size';
     const ACTIVE                = 'active';

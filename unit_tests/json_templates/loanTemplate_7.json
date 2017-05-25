@@ -77,6 +77,40 @@
     "repoDate": "/Date(1427829732)/",
     "closedDate": "/Date(1427829732)/",
     "liquidationDate": "/Date(1427829732)/",
-    "isStoplightManuallySet": "0"
+    "isStoplightManuallySet": "0",
+    "LoanStatus": {
+      "__metadata": {
+        "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanStatus(id=2)",
+        "type": "Entity.LoanStatus"
+      },
+      "LoanSubStatus": {
+        "__deferred": {
+          "uri": "LoanStatus(id=2)/LoanSubStatus"
+        }
+      },
+      "id": 2,
+      "title": "Active",
+      "active": 1
+    },
+    "LoanSubStatus": {
+      "__metadata": {
+        "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanSubStatus(id=38)",
+        "type": "Entity.LoanSubStatus"
+      },
+      "LoanStatus": {
+        "__deferred": {
+          "uri": "LoanSubStatus(id=38)/LoanStatus"
+        }
+      },
+      "id": 38,
+      "title": "CTEST Active",
+      "parent": 2,
+      "lateFees": 1,
+      "emailEnroll": 1,
+      "webAccess": 1,
+      "smsEnroll": 1,
+      "displayOrder": 7,
+      "active": 1
+    }
   }
 }

@@ -11,6 +11,7 @@ namespace Simnang\LoanPro;
 
 use Simnang\LoanPro\Constants\DOCUMENTS;
 use Simnang\LoanPro\Constants\LOAN;
+use Simnang\LoanPro\Constants\LSETTINGS;
 use Simnang\LoanPro\Constants\LSETUP;
 use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Loans\ChargeEntity;
@@ -24,6 +25,8 @@ use Simnang\LoanPro\Loans\FileAttachmentEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
 use Simnang\LoanPro\Loans\LoanSettingsEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
+use Simnang\LoanPro\Loans\LoanStatusEntity;
+use Simnang\LoanPro\Loans\LoanSubStatusEntity;
 use Simnang\LoanPro\Loans\PaymentEntity;
 use Simnang\LoanPro\Loans\PaynearmeOrderEntity;
 use Simnang\LoanPro\Loans\PortfolioEntity;
@@ -223,9 +226,12 @@ class LoanProSDK
     private static function GetObjectForm($key, $json){
         if(is_null($json))
             return null;
-        if(!is_array($json))
+        else if(!is_array($json))
             return $json;
-        if($key == LOAN::LSETUP){
+        // deferred objects often don't have required fields, so for simplicity we just ignore them
+        else if(isset($json['__deferred']))
+            return null;
+        else if($key == LOAN::LSETUP){
             return LoanProSDK::CreateGenericJSONClass(LoanSetupEntity::class, $json);
         }
         else if($key == LOAN::LSETTINGS){
@@ -264,6 +270,12 @@ class LoanProSDK
         else if($key === DOCUMENTS::FILE_ATTACMENT){
             return LoanProSDK::CreateGenericJSONClass(FileAttachmentEntity::class, $json);
         }
+        else if($key === LSETTINGS::LOAN_STATUS){
+            return LoanProSDK::CreateGenericJSONClass(LoanStatusEntity::class, $json);
+        }
+        else if($key === LSETTINGS::LOAN_SUB_STATUS){
+            return LoanProSDK::CreateGenericJSONClass(LoanSubStatusEntity::class, $json);
+        }
         return $json;
     }
 
@@ -276,8 +288,6 @@ class LoanProSDK
     private static function CreateObjectListFromJSONClass(string $class, array $json){
         if(isset($json['results']))
             $json = $json['results'];
-        if(isset($json['__deferred']))
-            return [];
         $list = [];
         $reqFields = $class::getReqFields();
 
@@ -305,8 +315,6 @@ class LoanProSDK
     private static function CreateGenericJSONClass(string $class, array $json){
         if(!is_array($json))
             throw new \InvalidArgumentException("Expected a parsed JSON array");
-        if(isset($json['__deferred']))
-            return null;
 
         $reqFields = $class::getReqFields();
         $params = [];
