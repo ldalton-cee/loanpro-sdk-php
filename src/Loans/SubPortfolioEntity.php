@@ -10,33 +10,39 @@ namespace Simnang\LoanPro\Loans;
 
 use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
-use Simnang\LoanPro\Constants\PORTFOLIO;
+use Simnang\LoanPro\Constants\SUB_PORTFOLIO;
 use Simnang\LoanPro\Validator\FieldValidator;
 
-class PortfolioEntity extends BaseEntity
+class SubPortfolioEntity extends BaseEntity
 {
     /**
      * Creates a new loan settings entity. This entity will pull defaults when created, so there aren't any minimum fields required
      * @throws \ReflectionException
      */
-    public function __construct($id){
+    public function __construct($id, $parent){
         parent::__construct();
         if(!$this->IsValidField(BASE_ENTITY::ID, $id) || is_null($id))
             throw new \InvalidArgumentException("Invalid value '$id' for property ".BASE_ENTITY::ID);
+        if(!$this->IsValidField(SUB_PORTFOLIO::PARENT, $parent) || is_null($parent))
+            throw new \InvalidArgumentException("Invalid value '$parent' for property ".SUB_PORTFOLIO::PARENT);
         $this->properties[BASE_ENTITY::ID] = $this->GetValidField(BASE_ENTITY::ID, $id);
+        $this->properties[SUB_PORTFOLIO::PARENT] = $this->GetValidField(SUB_PORTFOLIO::PARENT, $parent);
     }
 
     /**
      * List of required fields
      * @var array
      */
-    protected static $required = [ BASE_ENTITY::ID ];
+    protected static $required = [
+        BASE_ENTITY::ID,
+        SUB_PORTFOLIO::PARENT,
+    ];
 
     /**
      * The name of the constant collection list
      * @var string
      */
-    protected static $constCollectionPrefix = "PORTFOLIO";
+    protected static $constCollectionPrefix = "SUB_PORTFOLIO";
 
     /**
      * Required to keep type fields from colliding with other types
@@ -54,18 +60,12 @@ class PortfolioEntity extends BaseEntity
      * @var array
      */
     protected static $fields = [
-        PORTFOLIO::ACTIVE => FieldValidator::BOOL,
+        SUB_PORTFOLIO::ACTIVE => FieldValidator::BOOL,
 
-        PORTFOLIO::CREATED => FieldValidator::DATE,
+        SUB_PORTFOLIO::CREATED => FieldValidator::DATE,
 
-        PORTFOLIO::ENTITY_TYPE => FieldValidator::ENTITY_TYPE,
+        SUB_PORTFOLIO::PARENT => FieldValidator::INT,
 
-        PORTFOLIO::CATEGORY_ID => FieldValidator::INT,
-
-        PORTFOLIO::NUM_PREFIX => FieldValidator::STRING,
-        PORTFOLIO::NUM_SUFFIX => FieldValidator::STRING,
-        PORTFOLIO::TITLE => FieldValidator::STRING,
-
-        PORTFOLIO::SUB_PORTFOLIO => FieldValidator::READ_ONLY,
+        SUB_PORTFOLIO::TITLE => FieldValidator::STRING,
     ];
 }

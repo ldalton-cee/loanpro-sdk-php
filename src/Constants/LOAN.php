@@ -23,6 +23,7 @@ class LOAN{
     const PAYMENTS              = 'Payments';
     const PAY_NEAR_ME_ORDERS    = 'PayNearMeOrders';
     const PORTFOLIOS            = 'Portfolios';
+    const SUB_PORTFOLIOS        = 'SubPortfolios';
     const INSURANCE             = 'Insurance';
     const DISP_ID               = 'displayId';
     const TITLE                 = 'title';

@@ -22,6 +22,7 @@ use Simnang\LoanPro\Loans\PaymentEntity;
 use Simnang\LoanPro\Loans\PaynearmeOrderEntity;
 use Simnang\LoanPro\Loans\PortfolioEntity;
 use Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity;
+use Simnang\LoanPro\Loans\SubPortfolioEntity;
 
 class LoanProSDK
 {
@@ -152,6 +153,15 @@ class LoanProSDK
     }
 
     /**
+     * Creates a loan sub-portfolio
+     * @param $id - portfolio id
+     * @return SubPortfolioEntity
+     */
+    public static function CreateSubPortfolio($id, $parent){
+        return new SubPortfolioEntity($id, $parent);
+    }
+
+    /**
      * Create pay near me order
      * @param $customerId - customer id
      * @param $customerName - customer name
@@ -252,7 +262,7 @@ class LoanProSDK
     private static function CleanJSON(array $json){
         $clean_json = [];
         foreach($json as $key=>$val)
-            if(!is_null($val) && $key != '__update' && $key != '__id')
+            if(!is_null($val) && $key != '__update' && $key != '__id' && $key != '__metadata')
                 $clean_json[$key]=$val;
         return $clean_json;
     }

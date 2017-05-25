@@ -170,7 +170,7 @@ class FieldValidator{
      */
     public static function IsValidDate($date){
         $d = \DateTime::createFromFormat('Y-m-d', $date);
-        return ($d && $d->format('Y-m-d') === $date) || preg_match(FieldValidator::$dateRegEx, $date) ;
+        return ($d && $d->format('Y-m-d') === $date) || preg_match(FieldValidator::$dateRegEx, $date) || is_int($date);
     }
 
     /**
@@ -259,6 +259,8 @@ class FieldValidator{
      * @return int|null
      */
     public static function GetDate($date){
+        if(is_int($date))
+            return $date;
         if(preg_match(FieldValidator::$dateRegEx, $date)){
             return FieldValidator::GetInt(preg_replace(FieldValidator::$dateRegEx, "$1", $date));
         }

@@ -14,4 +14,12 @@ namespace Simnang\LoanPro\Constants;
  * @package Simnang\LoanPro\Constants
  */
 class PORTFOLIO{
+    const TITLE         = 'title';
+    const NUM_PREFIX    = 'numPrefix';
+    const NUM_SUFFIX    = 'numSuffix';
+    const CATEGORY_ID   = 'categoryId';
+    const ENTITY_TYPE   = 'entityType';
+    const CREATED       = 'created';
+    const ACTIVE        = 'active';
+    const SUB_PORTFOLIO = 'SubPortfolios';
 }

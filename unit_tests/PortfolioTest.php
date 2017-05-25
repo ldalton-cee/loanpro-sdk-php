@@ -16,8 +16,9 @@ use PHPUnit\Framework\TestCase;
 
 use Simnang\LoanPro\LoanProSDK as LPSDK,
     Simnang\LoanPro\Constants\LOAN as LOAN,
-    Simnang\LoanPro\Constants\PORTFOLIOS as PORTFOLIOS,
-    Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY
+    Simnang\LoanPro\Constants\PORTFOLIO as PORTFOLIO,
+    Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY,
+    Simnang\LoanPro\Utils\ArrayUtils
     ;
 
 ////////////////////
@@ -33,8 +34,20 @@ class PortfolioTest extends TestCase
     }
 
     public function testPortfolioSet(){
-        $portfolio = LPSDK::CreatePortfolio(5)->set(BASE_ENTITY::ID, 12);
+        $arr = [
+            PORTFOLIO::TITLE, 'Sample Portfolio',
+            PORTFOLIO::NUM_PREFIX, 'PRE',
+            PORTFOLIO::NUM_SUFFIX, 'FIX',
+            PORTFOLIO::CATEGORY_ID, 3,
+            PORTFOLIO::ENTITY_TYPE, 'Entity.Loan',
+            PORTFOLIO::CREATED, 1454000514,
+            PORTFOLIO::ACTIVE, 1,
+            PORTFOLIO::SUB_PORTFOLIO, "SUBPORT"
+        ];
+
+        $portfolio = LPSDK::CreatePortfolio(5)->set(BASE_ENTITY::ID, 12)->set( $arr );
         $this->assertEquals(12, $portfolio->get(BASE_ENTITY::ID));
+        $this->assertEquals(ArrayUtils::ConvertToKeyedArray($arr), $portfolio->get(array_keys(ArrayUtils::ConvertToKeyedArray($arr))));
     }
 
     public function testCannotSetNull(){

@@ -83,13 +83,15 @@ abstract class BaseEntity{
         $obj = clone $this;
         if(is_array($arg1)) {
             $args = $arg1;
+            if(isset($arg1[0])){
+                $args = ArrayUtils::ConvertToKeyedArray(array_merge($args));
+            }
         }
         else if(!sizeof($args))
             throw new \InvalidArgumentException("Expected two parameters, only got one");
         else if(sizeof($args)){
             $args = ArrayUtils::ConvertToKeyedArray(array_merge([$arg1], $args));
         }
-
 
         if(sizeof($args)){
             foreach($args as $key => $val){
