@@ -241,5 +241,40 @@
         "customerVisible": 1
       }
     ]
+  },
+  "Notes":{
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/Notes(id=595)",
+          "type": "Entity.Note"
+        },
+        "Category": {
+          "__deferred": {
+            "uri": "Notes(id=595)/Category"
+          }
+        },
+        "Author": {
+          "__deferred": {
+            "uri": "Notes(id=595)/Author"
+          }
+        },
+        "Attachments": {
+          "__deferred": {
+            "uri": "Notes(id=595)/Attachments"
+          }
+        },
+        "id": 595,
+        "parentType": "Entity.Loan",
+        "parentId": 3,
+        "categoryId": 3,
+        "subject": "Test Queue 2",
+        "body": "<p>test note</p>",
+        "authorId": 10,
+        "authorName": "George",
+        "remoteAddress": "127.0.0.1",
+        "created": "/Date(1494525662)/"
+      }
+    ]
   }
 }

@@ -35,4 +35,6 @@ class LOAN{
     const DELETED               = 'deleted';
     const TEMPORARY             = '__temporary';
     const DOCUMENTS             = 'Documents';
+    const NOTES                 = 'Notes';
+    const PROMISES              = 'Promises';
 }

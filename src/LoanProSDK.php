@@ -27,9 +27,11 @@ use Simnang\LoanPro\Loans\LoanSettingsEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
 use Simnang\LoanPro\Loans\LoanStatusEntity;
 use Simnang\LoanPro\Loans\LoanSubStatusEntity;
+use Simnang\LoanPro\Loans\NotesEntity;
 use Simnang\LoanPro\Loans\PaymentEntity;
 use Simnang\LoanPro\Loans\PaynearmeOrderEntity;
 use Simnang\LoanPro\Loans\PortfolioEntity;
+use Simnang\LoanPro\Loans\PromisesEntity;
 use Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity;
 use Simnang\LoanPro\Loans\SourceCompanyEntity;
 use Simnang\LoanPro\Loans\SubPortfolioEntity;
@@ -204,6 +206,30 @@ class LoanProSDK
     }
 
     /**
+     * Creates a new promise entity
+     * @param $subject - promise subject
+     * @param $note - promise note
+     * @param $dueDate - promise due date
+     * @param float $amount - promise amount
+     * @param int $fulfilled - whether or not the promise is fulfilled
+     * @return PromisesEntity
+     */
+    public static function CreatePromise($subject, $note, $dueDate, $amount = 0.0, $fulfilled = 0){
+        return new PromisesEntity($subject, $note, $dueDate, $amount, $fulfilled);
+    }
+
+    /**
+     * Creates note entity
+     * @param $categoryId - ID of note category
+     * @param $subject - subject line of note
+     * @param $body - body text of note
+     * @return NotesEntity
+     */
+    public static function CreateNotes($categoryId, $subject, $body){
+        return new NotesEntity($categoryId, $subject, $body);
+    }
+
+    /**
      * Preps an array to be used to create an object by cleaning it and getting the object form (if applicable)
      * @param array $json - JSON to prep
      * @return array
@@ -219,6 +245,35 @@ class LoanProSDK
     }
 
     /**
+     * Holds information for creating entities from JSON
+     *  key - The field to use to create the entity
+     *  value - How to create the Entity
+     *      class - The class to make it with
+     *      isList - If set to true, then it will create an object list, otherwise it'll just create an object (defaults to false if not found)
+     * @var array
+     */
+    private static $entities = [
+        LOAN::LSETUP                =>['class'=>LoanSetupEntity::class      ],
+        LOAN::LSETTINGS             =>['class'=>LoanSettingsEntity::class   ],
+        LOAN::COLLATERAL            =>['class'=>CollateralEntity::class     ],
+        LOAN::INSURANCE             =>['class'=>InsuranceEntity::class      ],
+        DOCUMENTS::DOC_SECTION      =>['class'=>DocSectionEntity::class     ],
+        DOCUMENTS::FILE_ATTACMENT   =>['class'=>FileAttachmentEntity::class ],
+        LSETTINGS::LOAN_STATUS      =>['class'=>LoanStatusEntity::class     ],
+        LSETTINGS::LOAN_SUB_STATUS  =>['class'=>LoanSubStatusEntity::class  ],
+        LSETTINGS::SOURCE_COMPANY   =>['class'=>SourceCompanyEntity::class  ],
+
+        LOAN::PAYMENTS              =>['class'=>PaymentEntity::class,            'isList'=>true ],
+        LOAN::CHECKLIST_VALUES      =>['class'=>ChecklistItemValueEntity::class, 'isList'=>true ],
+        LOAN::CHARGES               =>['class'=>ChargeEntity::class,             'isList'=>true ],
+        LOAN::PAY_NEAR_ME_ORDERS    =>['class'=>PaynearmeOrderEntity::class,     'isList'=>true ],
+        LSETUP::CUSTOM_FIELD_VALUES =>['class'=>CustomFieldValuesEntity::class,  'isList'=>true ],
+        LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,   'isList'=>true ],
+        LOAN::DOCUMENTS             =>['class'=>DocumentEntity::class,           'isList'=>true ],
+        LOAN::NOTES                 =>['class'=>NotesEntity::class,              'isList'=>true ],
+    ];
+
+    /**
      * Gets the object form of json given a specific key
      * @param $key - object key
      * @param $json - JSON form
@@ -229,56 +284,22 @@ class LoanProSDK
             return null;
         else if(!is_array($json))
             return $json;
-        // deferred objects often don't have required fields, so for simplicity we just ignore them
+        //  deferred objects often don't have required fields, so for simplicity we just ignore them
         else if(isset($json['__deferred']))
             return null;
-        else if($key == LOAN::LSETUP){
-            return LoanProSDK::CreateGenericJSONClass(LoanSetupEntity::class, $json);
-        }
-        else if($key == LOAN::LSETTINGS){
-            return LoanProSDK::CreateGenericJSONClass(LoanSettingsEntity::class,$json);
-        }
-        else if($key == LOAN::COLLATERAL){
-            return LoanProSDK::CreateGenericJSONClass(CollateralEntity::class,$json);
-        }
-        else if($key == LOAN::INSURANCE){
-            return LoanProSDK::CreateGenericJSONClass(InsuranceEntity::class,$json);
-        }
-        else if($key == LOAN::PAYMENTS){
-            return LoanProSDK::CreateObjectListFromJSONClass(PaymentEntity::class, $json);
-        }
-        else if($key == LOAN::CHECKLIST_VALUES){
-            return LoanProSDK::CreateObjectListFromJSONClass(ChecklistItemValueEntity::class, $json);
-        }
-        else if($key == LOAN::CHARGES){
-            return LoanProSDK::CreateObjectListFromJSONClass(ChargeEntity::class, $json);
-        }
-        else if($key == LOAN::PAY_NEAR_ME_ORDERS){
-            return LoanProSDK::CreateObjectListFromJSONClass(PaynearmeOrderEntity::class, $json);
-        }
-        else if($key === LSETUP::CUSTOM_FIELD_VALUES){
-            return LoanProSDK::CreateObjectListFromJSONClass(CustomFieldValuesEntity::class, $json);
-        }
-        else if($key === LOAN::ESCROW_CALCULATORS){
-            return LoanProSDK::CreateObjectListFromJSONClass(EscrowCalculatorEntity::class, $json);
-        }
-        else if($key === LOAN::DOCUMENTS){
-            return LoanProSDK::CreateObjectListFromJSONClass(DocumentEntity::class, $json);
-        }
-        else if($key === DOCUMENTS::DOC_SECTION){
-            return LoanProSDK::CreateGenericJSONClass(DocSectionEntity::class, $json);
-        }
-        else if($key === DOCUMENTS::FILE_ATTACMENT){
-            return LoanProSDK::CreateGenericJSONClass(FileAttachmentEntity::class, $json);
-        }
-        else if($key === LSETTINGS::LOAN_STATUS){
-            return LoanProSDK::CreateGenericJSONClass(LoanStatusEntity::class, $json);
-        }
-        else if($key === LSETTINGS::LOAN_SUB_STATUS){
-            return LoanProSDK::CreateGenericJSONClass(LoanSubStatusEntity::class, $json);
-        }
-        else if($key === LSETTINGS::SOURCE_COMPANY){
-            return LoanProSDK::CreateGenericJSONClass(SourceCompanyEntity::class, $json);
+        //  Creates an entity from an entry in the $entities array
+        else if(isset(LoanProSDK::$entities[$key])){
+            $e = LoanProSDK::$entities[$key];
+            //  isList defaults to 'false' if not found
+            $isList = (isset($e['isList']))?$e['isList']:false;
+            switch($isList){
+                case true:
+                    return LoanProSDK::CreateObjectListFromJSONClass($e['class'], $json);
+                case false:
+                    return LoanProSDK::CreateGenericJSONClass($e['class'], $json);
+                default:
+                    throw new \InvalidArgumentException("Unknown option ".$isList);
+            }
         }
         return $json;
     }

@@ -37,7 +37,8 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
     \Simnang\LoanPro\Constants\DOC_SECTION as DOC_SECTION,
     \Simnang\LoanPro\Constants\FILE_ATTACHMENT as FILE_ATTACHMENT,
     \Simnang\LoanPro\Constants\LOAN_SUB_STATUS as LOAN_SUB_STATUS,
-    \Simnang\LoanPro\Constants\SOURCE_COMPANY as SOURCE_COMPANY
+    \Simnang\LoanPro\Constants\SOURCE_COMPANY as SOURCE_COMPANY,
+    \Simnang\LoanPro\Constants\NOTES as NOTES
     ;
 
 ////////////////////
@@ -463,6 +464,7 @@ class LoanTest extends TestCase
 
         // Validate Loan Settings
         $this->assertEquals($loanSettingsVals,$loan->get(LOAN::LSETTINGS)->get(array_keys($loanSettingsVals)));
+        $this->assertEquals(\Simnang\LoanPro\Utils\ArrayUtils::ConvertToIndexedArray($loanSettingsVals), \Simnang\LoanPro\Utils\ArrayUtils::ConvertToIndexedArray($loan->get(LOAN::LSETTINGS)->get(array_keys($loanSettingsVals))));
     }
 
     /**
@@ -629,6 +631,12 @@ class LoanTest extends TestCase
         $doc2 = (new \Simnang\LoanPro\Loans\DocumentEntity())->set($doc2vars);
 
         $this->assertEquals([$doc1, $doc2], $loan->get(LOAN::DOCUMENTS));
+
+        $note = LPSDK::CreateNotes(3, 'Test Queue 2', '<p>test note</p>')->set(
+            BASE_ENTITY::ID, 595, NOTES::PARENT_ID, 3, NOTES::PARENT_TYPE, ENTITY_TYPES::LOAN, NOTES::CATEGORY_ID, 3, NOTES::AUTHOR_ID, 10, NOTES::AUTHOR_NAME, "George", NOTES::REMOTE_ADDR,'127.0.0.1', NOTES::CREATED, 1494525662
+        );
+
+        $this->assertEquals([$note], $loan->get(LOAN::NOTES));
     }
 }
 

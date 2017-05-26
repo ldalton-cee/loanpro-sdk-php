@@ -22,6 +22,7 @@
     },
     "files":["src/Constants/Constants.php"],
     "scripts": {
-        "test": "phpunit unit_tests/"
+        "test": "phpunit unit_tests/",
+	"coverage": "phpunit --configuration phpunit.xml --coverage-html cov_html/ --coverage-clover cov_xml/clover.xml  unit_tests"
     }
 }
