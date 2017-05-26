@@ -271,6 +271,7 @@ class LoanProSDK
         LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,   'isList'=>true ],
         LOAN::DOCUMENTS             =>['class'=>DocumentEntity::class,           'isList'=>true ],
         LOAN::NOTES                 =>['class'=>NotesEntity::class,              'isList'=>true ],
+        LOAN::PROMISES              =>['class'=>PromisesEntity::class,           'isList'=>true ],
     ];
 
     /**

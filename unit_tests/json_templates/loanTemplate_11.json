@@ -276,5 +276,34 @@
         "created": "/Date(1494525662)/"
       }
     ]
+  },
+  "Promises": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/Promises(id=217)",
+          "type": "Entity.Promise"
+        },
+        "Loan": {
+          "__deferred": {
+            "uri": "Promises(id=217)/Loan"
+          }
+        },
+        "id": 217,
+        "loanId": 69,
+        "subject": "Test Promise",
+        "note": "<p>Things</p>",
+        "amount": 100,
+        "fulfilled": 0,
+        "dueDate": "/Date(1494460800)/",
+        "fulfillmentDate": "2017-05-17",
+        "type": "loanpromise.type.payment",
+        "created": "/Date(1494259673)/",
+        "fulfilledDate": "2017-05-17",
+        "loggedBy": "David",
+        "fulfilledBy": "Test Item"
+      }
+    ]
   }
+
 }

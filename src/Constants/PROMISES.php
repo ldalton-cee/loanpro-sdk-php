@@ -25,4 +25,5 @@ class PROMISES{
     const FULFILLED_DATE    = 'fulfilledDate';
     const LOGGED_BY         = 'loggedBy';
     const FULFILLED_BY      = 'fulfilledBy';
+    const LOAN              = 'Loan';
 }

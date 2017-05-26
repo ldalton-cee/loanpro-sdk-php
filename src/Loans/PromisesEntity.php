@@ -44,15 +44,15 @@ class PromisesEntity extends BaseEntity
     }
 
     /**
-     * List of required fields
+     * List of required fields (Order must match order of variables in the constructor)
      * @var array
      */
     protected static $required = [
         PROMISES::SUBJECT,
         PROMISES::NOTE,
+        PROMISES::DUE_DATE,
         PROMISES::AMOUNT,
         PROMISES::FULFILLED,
-        PROMISES::DUE_DATE,
     ];
 
     /**
@@ -83,7 +83,6 @@ class PromisesEntity extends BaseEntity
 
         PROMISES::CREATED           => FieldValidator::DATE,
         PROMISES::DUE_DATE          => FieldValidator::DATE,
-        PROMISES::FULFILLED_BY      => FieldValidator::DATE,
         PROMISES::FULFILLED_DATE    => FieldValidator::DATE,
         PROMISES::FULFILLMENT_DATE  => FieldValidator::DATE,
 
@@ -91,6 +90,9 @@ class PromisesEntity extends BaseEntity
 
         PROMISES::AMOUNT            => FieldValidator::NUMBER,
 
+        PROMISES::LOAN              => FieldValidator::READ_ONLY,
+
+        PROMISES::FULFILLED_BY      => FieldValidator::STRING,
         PROMISES::LOGGED_BY         => FieldValidator::STRING,
         PROMISES::NOTE              => FieldValidator::STRING,
         PROMISES::SUBJECT           => FieldValidator::STRING,
