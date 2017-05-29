@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 ////////////////////
 
 use Simnang\LoanPro\LoanProSDK as LPSDK,
+    Simnang\LoanPro\Constants as CONSTS,
     Simnang\LoanPro\Constants\LOAN as LOAN,
     Simnang\LoanPro\Constants\LSETUP as LSETUP,
     Simnang\LoanPro\Constants\LSETUP\LSETUP_LCLASS__C as LSETUP_LCLASS,
@@ -637,6 +638,42 @@ class LoanTest extends TestCase
         );
 
         $this->assertEquals([$note], $loan->get(LOAN::NOTES));
+
+        $funding = LPSDK::CreateLoanFunding(1500.00, 1464048000, ENTITY_TYPES::CUSTOMER, CONSTS\LOAN_FUNDING\LOAN_FUNDING_METHOD__C::CASH_DRAWER, 36)->set(
+            BASE_ENTITY::ID, 1,
+            CONSTS\LOAN_FUNDING::LOAN_ID, 109,
+            CONSTS\LOAN_FUNDING::CASH_DRAWER_ID, 1,
+            CONSTS\LOAN_FUNDING::CASH_DRAWER_TX_ID, 109,
+            CONSTS\LOAN_FUNDING::PAYMENT_PROCESSOR, "{\"id\":\"nacha\",\"name\":\"ACH\",\"default\":\"1\"}",
+            CONSTS\LOAN_FUNDING::AUTHORIZATION_TYPE__C, CONSTS\LOAN_FUNDING\LOAN_FUNDING_AUTHORIZATION_TYPE__C::WEB,
+            CONSTS\LOAN_FUNDING::METHOD__C, CONSTS\LOAN_FUNDING\LOAN_FUNDING_METHOD__C::CASH_DRAWER,
+            CONSTS\LOAN_FUNDING::STATUS__C, CONSTS\LOAN_FUNDING\LOAN_FUNDING_STATUS__C::SUCCESS,
+            CONSTS\LOAN_FUNDING::CREATED, 1464104008,
+            CONSTS\LOAN_FUNDING::ACTIVE, 1,
+            CONSTS\LOAN_FUNDING::AGENT, 44
+        );
+
+        $this->assertEquals([$funding], $loan->get(LOAN::LOAN_FUNDING));
+
+
+        $advancement = LPSDK::CreateAdvancment("Test Advancement", 1494374400, 120.00, 4)->set(
+            BASE_ENTITY::ID, 36,
+            CONSTS\ADVANCEMENTS::ENTITY_TYPE, ENTITY_TYPES::LOAN,
+            CONSTS\ADVANCEMENTS::ENTITY_ID, 3
+        );
+
+        $this->assertEquals([$advancement], $loan->get(LOAN::ADVANCEMENTS));
+
+
+        $ddChange = LPSDK::CreateDueDateChange(1451088000, 1452038400)->set(
+            BASE_ENTITY::ID, 161,
+            CONSTS\DUE_DATE_CHANGES::ENTITY_TYPE, ENTITY_TYPES::LOAN,
+            CONSTS\DUE_DATE_CHANGES::ENTITY_ID, 84,
+            CONSTS\DUE_DATE_CHANGES::CHANGED_DATE,1453766400,
+            CONSTS\DUE_DATE_CHANGES::DUE_DATE_ON_LAST_DOM, 0
+        );
+
+        $this->assertEquals([$ddChange], $loan->get(LOAN::DUE_DATE_CHANGES));
     }
 }
 

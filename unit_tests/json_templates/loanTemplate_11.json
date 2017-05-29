@@ -375,6 +375,76 @@
         "category": 4
       }
     ]
+  },
+  "Credits": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/LoanCredits(id=88)",
+          "type": "Entity.Credit"
+        },
+        "CustomPaymentType": {
+          "__metadata": {
+            "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/CustomPaymentTypes(id=1)",
+            "type": "Entity.CustomPaymentType"
+          },
+          "id": 1,
+          "static": 1,
+          "title": "Regular",
+          "application": "[\"payment.application.fees\",\"payment.application.escrow\",\"payment.application.interest\",\"payment.application.discount\",\"payment.application.principal\"]",
+          "escrowApplication": null,
+          "description": "A Regular payment will ALWAYS apply on the transaction date if the account has any balance due at the time of payment. If the loan is current it will apply on the next due date, or the date entered into the Payment Date field above, whichever is greater. A Regular payment applies a loan payment according to the waterfall application shown above. If a partial payment is applied it will still use the same waterfall application. If extra (more than the amount due on the loan) is paid, you can elect how it will apply with the payment setting selection of \"Extra Towards.\" If \"next\" is selected the extra amount will apply to future due dates using the above waterfall application, if another option is selected for the \"Extra Towards\" it will apply as specified by that option.",
+          "created": "/Date(1436902602)/",
+          "active": 1
+        },
+        "ChargeOff": {
+          "results": []
+        },
+        "APDAdjustment": {
+          "__deferred": {
+            "uri": "LoanCredits(id=88)/APDAdjustment"
+          }
+        },
+        "DPDAdjustment": {
+          "__deferred": {
+            "uri": "LoanCredits(id=88 )/DPDAdjustment"
+          }
+        },
+        "id": 88,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "importId": null,
+        "title": "Test credit",
+        "date": "/Date(1494374400)/",
+        "amount": "900.00",
+        "category": 1,
+        "paymentType": 1,
+        "customApplication": "[]",
+        "resetPastDue": 0,
+        "apdAdjustmentId": null,
+        "dpdAdjustmentId": null,
+        "chargeOffFlag": null
+      }
+    ]
+  },
+  "DueDateChanges": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/LoanDueDateChanges(id=161)",
+          "type": "Entity.DueDateChange"
+        },
+        "id": 161,
+        "entityType": "Entity.Loan",
+        "entityId": 84,
+        "modId": null,
+        "originalDate": "/Date(1451088000)/",
+        "newDate": "/Date(1452038400)/",
+        "changedDate": "/Date(1453766400)/",
+        "dueDateOnLastDOM": 0
+      }
+    ]
   }
 
 }

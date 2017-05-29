@@ -18,9 +18,11 @@ use Simnang\LoanPro\Loans\AdvancementsEntity;
 use Simnang\LoanPro\Loans\ChargeEntity;
 use Simnang\LoanPro\Loans\ChecklistItemValueEntity;
 use Simnang\LoanPro\Loans\CollateralEntity;
+use Simnang\LoanPro\Loans\CreditEntity;
 use Simnang\LoanPro\Loans\CustomFieldValuesEntity;
 use Simnang\LoanPro\Loans\DocSectionEntity;
 use Simnang\LoanPro\Loans\DocumentEntity;
+use Simnang\LoanPro\Loans\DueDateChangesEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatorEntity;
 use Simnang\LoanPro\Loans\FileAttachmentEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
@@ -242,6 +244,18 @@ class LoanProSDK
         return new LoanFundingEntity($amount, $date, $whoEntityType, $method, $whoEntityId);
     }
 
+    public static function CreateAdvancment($title, $date, $amount, $category){
+        return new AdvancementsEntity($title, $date, $amount, $category);
+    }
+
+    public static function CreateCredit($title, $date, $amount, $category){
+        return new CreditEntity($title, $date, $amount, $category);
+    }
+
+    public static function CreateDueDateChange($origDate, $newDate){
+        return new DueDateChangesEntity($origDate, $newDate);
+    }
+
     /**
      * Preps an array to be used to create an object by cleaning it and getting the object form (if applicable)
      * @param array $json - JSON to prep
@@ -270,23 +284,30 @@ class LoanProSDK
         LOAN::LSETTINGS             =>['class'=>LoanSettingsEntity::class   ],
         LOAN::COLLATERAL            =>['class'=>CollateralEntity::class     ],
         LOAN::INSURANCE             =>['class'=>InsuranceEntity::class      ],
+
         DOCUMENTS::DOC_SECTION      =>['class'=>DocSectionEntity::class     ],
         DOCUMENTS::FILE_ATTACMENT   =>['class'=>FileAttachmentEntity::class ],
+
         LSETTINGS::LOAN_STATUS      =>['class'=>LoanStatusEntity::class     ],
         LSETTINGS::LOAN_SUB_STATUS  =>['class'=>LoanSubStatusEntity::class  ],
         LSETTINGS::SOURCE_COMPANY   =>['class'=>SourceCompanyEntity::class  ],
+
+
 
         LOAN::ADVANCEMENTS          =>['class'=>AdvancementsEntity::class,       'isList'=>true ],
         LOAN::PAYMENTS              =>['class'=>PaymentEntity::class,            'isList'=>true ],
         LOAN::CHECKLIST_VALUES      =>['class'=>ChecklistItemValueEntity::class, 'isList'=>true ],
         LOAN::CHARGES               =>['class'=>ChargeEntity::class,             'isList'=>true ],
+        LOAN::CREDITS               =>['class'=>CreditEntity::class,             'isList'=>true ],
+        LOAN::DUE_DATE_CHANGES      =>['class'=>DueDateChangesEntity::class,     'isList'=>true ],
         LOAN::PAY_NEAR_ME_ORDERS    =>['class'=>PaynearmeOrderEntity::class,     'isList'=>true ],
-        LSETUP::CUSTOM_FIELD_VALUES =>['class'=>CustomFieldValuesEntity::class,  'isList'=>true ],
         LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,   'isList'=>true ],
         LOAN::DOCUMENTS             =>['class'=>DocumentEntity::class,           'isList'=>true ],
         LOAN::NOTES                 =>['class'=>NotesEntity::class,              'isList'=>true ],
         LOAN::PROMISES              =>['class'=>PromisesEntity::class,           'isList'=>true ],
         LOAN::LOAN_FUNDING          =>['class'=>LoanFundingEntity::class,        'isList'=>true ],
+
+        LSETUP::CUSTOM_FIELD_VALUES =>['class'=>CustomFieldValuesEntity::class,  'isList'=>true ],
     ];
 
     /**
@@ -335,6 +356,7 @@ class LoanProSDK
         foreach($json as $j){
             if(!is_array($j))
                 throw new \InvalidArgumentException("Received an invalid object for class '$class''!");
+            if(!count($j)) continue;
             $j = LoanProSDK::PrepArray(LoanProSDK::CleanJSON($j));
             $params = [];
             foreach($reqFields as $r){
