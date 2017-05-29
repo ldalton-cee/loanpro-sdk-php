@@ -37,4 +37,6 @@ class LOAN{
     const DOCUMENTS             = 'Documents';
     const NOTES                 = 'Notes';
     const PROMISES              = 'Promises';
+    const LOAN_FUNDING          = 'LoanFunding';
+    const ADVANCEMENTS          = 'Advancements';
 }

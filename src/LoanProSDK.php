@@ -14,6 +14,7 @@ use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETTINGS;
 use Simnang\LoanPro\Constants\LSETUP;
 use Simnang\LoanPro\Constants\PAYMENTS;
+use Simnang\LoanPro\Loans\AdvancementsEntity;
 use Simnang\LoanPro\Loans\ChargeEntity;
 use Simnang\LoanPro\Loans\ChecklistItemValueEntity;
 use Simnang\LoanPro\Loans\CollateralEntity;
@@ -23,6 +24,7 @@ use Simnang\LoanPro\Loans\DocumentEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatorEntity;
 use Simnang\LoanPro\Loans\FileAttachmentEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
+use Simnang\LoanPro\Loans\LoanFundingEntity;
 use Simnang\LoanPro\Loans\LoanSettingsEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
 use Simnang\LoanPro\Loans\LoanStatusEntity;
@@ -230,6 +232,17 @@ class LoanProSDK
     }
 
     /**
+     * Creates loan funding entity
+     * @param $categoryId - ID of note category
+     * @param $subject - subject line of note
+     * @param $body - body text of note
+     * @return NotesEntity
+     */
+    public static function CreateLoanFunding($amount, $date, $whoEntityType, $method, $whoEntityId){
+        return new LoanFundingEntity($amount, $date, $whoEntityType, $method, $whoEntityId);
+    }
+
+    /**
      * Preps an array to be used to create an object by cleaning it and getting the object form (if applicable)
      * @param array $json - JSON to prep
      * @return array
@@ -263,6 +276,7 @@ class LoanProSDK
         LSETTINGS::LOAN_SUB_STATUS  =>['class'=>LoanSubStatusEntity::class  ],
         LSETTINGS::SOURCE_COMPANY   =>['class'=>SourceCompanyEntity::class  ],
 
+        LOAN::ADVANCEMENTS          =>['class'=>AdvancementsEntity::class,       'isList'=>true ],
         LOAN::PAYMENTS              =>['class'=>PaymentEntity::class,            'isList'=>true ],
         LOAN::CHECKLIST_VALUES      =>['class'=>ChecklistItemValueEntity::class, 'isList'=>true ],
         LOAN::CHARGES               =>['class'=>ChargeEntity::class,             'isList'=>true ],
@@ -272,6 +286,7 @@ class LoanProSDK
         LOAN::DOCUMENTS             =>['class'=>DocumentEntity::class,           'isList'=>true ],
         LOAN::NOTES                 =>['class'=>NotesEntity::class,              'isList'=>true ],
         LOAN::PROMISES              =>['class'=>PromisesEntity::class,           'isList'=>true ],
+        LOAN::LOAN_FUNDING          =>['class'=>LoanFundingEntity::class,        'isList'=>true ],
     ];
 
     /**

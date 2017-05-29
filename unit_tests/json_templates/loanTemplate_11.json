@@ -304,6 +304,77 @@
         "fulfilledBy": "Test Item"
       }
     ]
+  },
+  "LoanFunding": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanFunding(id=1)",
+          "type": "Entity.LoanFunding"
+        },
+        "Loan": {
+          "__deferred": {
+            "uri": "LoanFunding(id=1)/Loan"
+          }
+        },
+        "CashDrawer": {
+          "__deferred": {
+            "uri": "LoanFunding(id=1)/CashDrawer"
+          }
+        },
+        "CashDrawerTransaction": {
+          "__deferred": {
+            "uri": "LoanFunding(id=1)/CashDrawerTransaction"
+          }
+        },
+        "PaymentAccount": {
+          "__deferred": {
+            "uri": "LoanFunding(id=1)/PaymentAccount"
+          }
+        },
+        "Payment": {
+          "__deferred": {
+            "uri": "LoanFunding(id=1)/Payment"
+          }
+        },
+        "id": 1,
+        "loanId": 109,
+        "whoEntityType": "Entity.Customer",
+        "whoEntityId": 36,
+        "cashDrawerId": 1,
+        "cashDrawerTxId": 109,
+        "paymentAccountId": null,
+        "paymentProcessor": "{\"id\":\"nacha\",\"name\":\"ACH\",\"default\":\"1\"}",
+        "merchantTxId": null,
+        "paymentId": null,
+        "agent": 44,
+        "authorizationType": "loan.funding.auth.web",
+        "method": "loan.funding.method.cashdrawer",
+        "amount": "1500.00",
+        "date": "/Date(1464048000)/",
+        "status": "loan.funding.status.success",
+        "created": "/Date(1464104008)/",
+        "active": 1
+      }
+    ]
+  },
+  "Advancements": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanAdvancements(id=36)",
+          "type": "Entity.Advancement"
+        },
+        "id": 36,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "title": "Test Advancement",
+        "date": "/Date(1494374400)/",
+        "amount": "120.00",
+        "category": 4
+      }
+    ]
   }
 
 }
