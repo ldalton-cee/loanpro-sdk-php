@@ -850,6 +850,16 @@ class LoanTest extends TestCase
         );
 
         $this->assertEquals([$apdAdjustmentEntity], $loan->get(LOAN::APD_ADJUSTMENTS));
+
+
+        $loanMod = LPSDK::CreateLoanModification(1496102400)->set(
+            BASE_ENTITY::ID, 36,
+            CONSTS\LOAN_MODIFICATION::CREATED, 1496102400,
+            CONSTS\LOAN_MODIFICATION::ENTITY_ID, 3,
+            CONSTS\LOAN_MODIFICATION::ENTITY_TYPE, ENTITY_TYPES::LOAN
+        );
+
+        $this->assertEquals([$loanMod], $loan->get(LOAN::LOAN_MODIFICATIONS));
     }
 }
 

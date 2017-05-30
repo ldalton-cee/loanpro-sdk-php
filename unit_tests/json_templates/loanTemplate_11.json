@@ -672,6 +672,22 @@
         "date": "/Date(1494460800)/"
       }
     ]
+  },
+  "LoanModifications": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanModifications(id=36)",
+          "type": "Entity.LoanModification"
+        },
+        "id": 36,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "date": "/Date(1496102400)/",
+        "created": "/Date(1496102400)/",
+        "parent": null
+      }
+    ]
   }
 
 }

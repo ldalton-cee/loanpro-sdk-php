@@ -49,4 +49,5 @@ class LOAN{
     const APD_ADJUSTMENTS       = 'APDAdjustments';
     const DPD_ADJUSTMENTS       = 'DPDAdjustments';
     const ESCROW_ADJUSTMENTS    = 'EscrowAdjustments';
+    const LOAN_MODIFICATIONS    = 'LoanModifications';
 }

@@ -33,6 +33,7 @@ use Simnang\LoanPro\Loans\EscrowCalculatorEntity;
 use Simnang\LoanPro\Loans\FileAttachmentEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
 use Simnang\LoanPro\Loans\LoanFundingEntity;
+use Simnang\LoanPro\Loans\LoanModificationEntity;
 use Simnang\LoanPro\Loans\LoanSettingsEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
 use Simnang\LoanPro\Loans\LoanStatusArchiveEntity;
@@ -274,6 +275,10 @@ class LoanProSDK
         return new APDAdjustmentEntity($date,$amount,$type);
     }
 
+    public static function CreateLoanModification($date){
+        return new LoanModificationEntity($date);
+    }
+
     /**
      * Preps an array to be used to create an object by cleaning it and getting the object form (if applicable)
      * @param array $json - JSON to prep
@@ -321,6 +326,7 @@ class LoanProSDK
         LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,   'isList'=>true ],
         LOAN::ESCROW_CALCULATED_TX  =>['class'=>EscrowCalculatedTxEntity::class, 'isList'=>true ],
         LOAN::DUE_DATE_CHANGES      =>['class'=>DueDateChangesEntity::class,     'isList'=>true ],
+        LOAN::LOAN_MODIFICATIONS    =>['class'=>LoanModificationEntity::class,   'isList'=>true ],
         LOAN::LOAN_FUNDING          =>['class'=>LoanFundingEntity::class,        'isList'=>true ],
         LOAN::LSTATUS_ARCHIVE       =>['class'=>LoanStatusArchiveEntity::class,  'isList'=>true ],
         LOAN::PAY_NEAR_ME_ORDERS    =>['class'=>PaynearmeOrderEntity::class,     'isList'=>true ],
