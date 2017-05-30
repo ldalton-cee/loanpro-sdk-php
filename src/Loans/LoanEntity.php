@@ -80,6 +80,7 @@ class LoanEntity extends BaseEntity
         LOAN::DOCUMENTS             => FieldValidator::OBJECT_LIST,
         LOAN::DPD_ADJUSTMENTS       => FieldValidator::OBJECT_LIST,
         LOAN::DUE_DATE_CHANGES      => FieldValidator::OBJECT_LIST,
+        LOAN::ESCROW_ADJUSTMENTS    => FieldValidator::OBJECT_LIST,
         LOAN::ESCROW_CALCULATED_TX  => FieldValidator::OBJECT_LIST,
         LOAN::ESCROW_CALCULATORS    => FieldValidator::OBJECT_LIST,
         LOAN::LOAN_FUNDING          => FieldValidator::OBJECT_LIST,

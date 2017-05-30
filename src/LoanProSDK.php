@@ -27,6 +27,7 @@ use Simnang\LoanPro\Loans\DocSectionEntity;
 use Simnang\LoanPro\Loans\DocumentEntity;
 use Simnang\LoanPro\Loans\DPDAdjustmentEntity;
 use Simnang\LoanPro\Loans\DueDateChangesEntity;
+use Simnang\LoanPro\Loans\EscrowAdjustmentsEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatedTxEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatorEntity;
 use Simnang\LoanPro\Loans\FileAttachmentEntity;
@@ -316,6 +317,7 @@ class LoanProSDK
         LOAN::CHECKLIST_VALUES      =>['class'=>ChecklistItemValueEntity::class, 'isList'=>true ],
         LOAN::DOCUMENTS             =>['class'=>DocumentEntity::class,           'isList'=>true ],
         LOAN::DPD_ADJUSTMENTS       =>['class'=>DPDAdjustmentEntity::class,      'isList'=>true ],
+        LOAN::ESCROW_ADJUSTMENTS    =>['class'=>EscrowAdjustmentsEntity::class,  'isList'=>true ],
         LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,   'isList'=>true ],
         LOAN::ESCROW_CALCULATED_TX  =>['class'=>EscrowCalculatedTxEntity::class, 'isList'=>true ],
         LOAN::DUE_DATE_CHANGES      =>['class'=>DueDateChangesEntity::class,     'isList'=>true ],
