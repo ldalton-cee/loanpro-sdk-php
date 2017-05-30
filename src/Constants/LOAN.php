@@ -45,4 +45,5 @@ class LOAN{
     const LSTATUS_ARCHIVE       = 'StatusArchive';
     const ESCROW_CALCULATED_TX  = 'EscrowCalculatedTx';
     const SCHEDULE_ROLLS        = 'ScheduleRolls';
+    const STOP_INTEREST_DATES   = 'StopInterestDates';
 }

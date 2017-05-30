@@ -818,6 +818,20 @@ class LoanTest extends TestCase
         );
 
         $this->assertEquals([$schedRoll], $loan->get(LOAN::SCHEDULE_ROLLS));
+
+        $stpIntDate1 = (new \Simnang\LoanPro\Loans\StopInterestDateEntity(1496275200, CONSTS\STOP_INTEREST_DATE\STOP_INTEREST_DATE_TYPE__C::RESUME))->set(
+            BASE_ENTITY::ID, 34,
+            CONSTS\STOP_INTEREST_DATE::ENTITY_TYPE, ENTITY_TYPES::LOAN,
+            CONSTS\STOP_INTEREST_DATE::ENTITY_ID, 3
+        );
+
+        $stpIntDate2 = (new \Simnang\LoanPro\Loans\StopInterestDateEntity(1496188800, CONSTS\STOP_INTEREST_DATE\STOP_INTEREST_DATE_TYPE__C::SUSPEND))->set(
+            BASE_ENTITY::ID, 33,
+            CONSTS\STOP_INTEREST_DATE::ENTITY_TYPE, ENTITY_TYPES::LOAN,
+            CONSTS\STOP_INTEREST_DATE::ENTITY_ID, 3
+        );
+
+        $this->assertEquals([$stpIntDate1, $stpIntDate2], $loan->get(LOAN::STOP_INTEREST_DATES));
     }
 }
 

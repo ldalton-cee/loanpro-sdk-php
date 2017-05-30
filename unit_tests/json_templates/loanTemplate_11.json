@@ -612,6 +612,34 @@
         "sortOrder": 2
       }
     ]
+  },
+  "StopInterestDates": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/StopInterestDates(id=34)",
+          "type": "Entity.StopInterestDate"
+        },
+        "id": 34,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "date": "/Date(1496275200)/",
+        "type": "loan.stopInterestType.resume"
+      },
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/StopInterestDates(id=33)",
+          "type": "Entity.StopInterestDate"
+        },
+        "id": 33,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "date": "/Date(1496188800)/",
+        "type": "loan.stopInterestType.suspend"
+      }
+    ]
   }
 
 }

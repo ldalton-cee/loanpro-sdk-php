@@ -43,6 +43,7 @@ use Simnang\LoanPro\Loans\PromisesEntity;
 use Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity;
 use Simnang\LoanPro\Loans\ScheduleRollEntity;
 use Simnang\LoanPro\Loans\SourceCompanyEntity;
+use Simnang\LoanPro\Loans\StopInterestDateEntity;
 use Simnang\LoanPro\Loans\SubPortfolioEntity;
 
 /**
@@ -313,6 +314,7 @@ class LoanProSDK
         LOAN::PROMISES              =>['class'=>PromisesEntity::class,           'isList'=>true ],
         LOAN::NOTES                 =>['class'=>NotesEntity::class,              'isList'=>true ],
         LOAN::SCHEDULE_ROLLS        =>['class'=>ScheduleRollEntity::class,       'isList'=>true ],
+        LOAN::STOP_INTEREST_DATES   =>['class'=>StopInterestDateEntity::class,   'isList'=>true ],
         LOAN::TRANSACTIONS          =>['class'=>LoanTransactionEntity::class,    'isList'=>true ],
 
         LSETUP::CUSTOM_FIELD_VALUES =>['class'=>CustomFieldValuesEntity::class,  'isList'=>true ],
