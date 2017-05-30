@@ -30,6 +30,7 @@ use Simnang\LoanPro\Loans\DueDateChangesEntity;
 use Simnang\LoanPro\Loans\EscrowAdjustmentsEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatedTxEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatorEntity;
+use Simnang\LoanPro\Loans\EscrowTransactionsEntity;
 use Simnang\LoanPro\Loans\FileAttachmentEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
 use Simnang\LoanPro\Loans\LoanFundingEntity;
@@ -255,28 +256,71 @@ class LoanProSDK
         return new LoanFundingEntity($amount, $date, $whoEntityType, $method, $whoEntityId);
     }
 
-    public static function CreateAdvancment($title, $date, $amount, $category){
+    /**
+     * Create loan advancement
+     * @param $title - advancement title
+     * @param $date - advancement date
+     * @param $amount- advancement amount
+     * @param $category - advancement category
+     * @return AdvancementsEntity
+     */
+    public static function CreateAdvancement($title, $date, $amount, $category){
         return new AdvancementsEntity($title, $date, $amount, $category);
     }
 
+    /**
+     * Create credit
+     * @param $title - advancement title
+     * @param $date - advancement date
+     * @param $amount- advancement amount
+     * @param $category - advancement category
+     * @return CreditEntity
+     */
     public static function CreateCredit($title, $date, $amount, $category){
         return new CreditEntity($title, $date, $amount, $category);
     }
 
+    /**
+     * Create due date change
+     * @param $origDate - original due date
+     * @param $newDate - new due date
+     * @return DueDateChangesEntity
+     */
     public static function CreateDueDateChange($origDate, $newDate){
         return new DueDateChangesEntity($origDate, $newDate);
     }
 
+    /**
+     * Create days past due adjustment
+     * @param $date - date to used to reset days past due
+     * @return DPDAdjustmentEntity
+     */
     public static function CreateDPDAdjustment($date){
         return new DPDAdjustmentEntity($date);
     }
 
+    /**
+     * Create amount past due adjustment
+     * @param $date - date used to reset amount past due
+     * @param $amount - amount to reset to (should be 0 if $type is ZERO collection)
+     * @param $type - type collection
+     * @return APDAdjustmentEntity
+     */
     public static function CreateAPDAdjustment($date, $amount, $type){
         return new APDAdjustmentEntity($date,$amount,$type);
     }
 
-    public static function CreateLoanModification($date){
-        return new LoanModificationEntity($date);
+    /**
+     * Create escrow transaction
+     * @param $subset - subset id
+     * @param $category - category id
+     * @param $date - transaction date
+     * @param $type - transaction type
+     * @param $amount - transaction amount
+     * @return EscrowTransactionsEntity
+     */
+    public static function CreateEscrowTransactions($subset, $category, $date, $type, $amount){
+        return new EscrowTransactionsEntity($subset, $category, $date, $type, $amount);
     }
 
     /**
@@ -325,6 +369,7 @@ class LoanProSDK
         LOAN::ESCROW_ADJUSTMENTS    =>['class'=>EscrowAdjustmentsEntity::class,  'isList'=>true ],
         LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,   'isList'=>true ],
         LOAN::ESCROW_CALCULATED_TX  =>['class'=>EscrowCalculatedTxEntity::class, 'isList'=>true ],
+        LOAN::ESCROW_TRANSACTIONS   =>['class'=>EscrowTransactionsEntity::class, 'isList'=>true ],
         LOAN::DUE_DATE_CHANGES      =>['class'=>DueDateChangesEntity::class,     'isList'=>true ],
         LOAN::LOAN_MODIFICATIONS    =>['class'=>LoanModificationEntity::class,   'isList'=>true ],
         LOAN::LOAN_FUNDING          =>['class'=>LoanFundingEntity::class,        'isList'=>true ],

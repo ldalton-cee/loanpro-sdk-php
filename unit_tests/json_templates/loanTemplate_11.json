@@ -688,6 +688,30 @@
         "parent": null
       }
     ]
+  },
+  "EscrowTransactions": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/EscrowTransactions(id=80)",
+          "type": "Entity.EscrowTransaction"
+        },
+        "Vendor": {
+          "__deferred": {
+            "uri": "EscrowTransactions(id=80)/Vendor"
+          }
+        },
+        "id": 80,
+        "loanId": 3,
+        "subset": 2,
+        "category": 1,
+        "vendorId": 1,
+        "description": "test2",
+        "date": "/Date(1496102400)/",
+        "type": "transaction.type.withdrawal",
+        "amount": "50.00"
+      }
+    ]
   }
 
 }

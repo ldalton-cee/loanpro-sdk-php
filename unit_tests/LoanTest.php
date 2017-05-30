@@ -656,7 +656,7 @@ class LoanTest extends TestCase
         $this->assertEquals([$funding], $loan->get(LOAN::LOAN_FUNDING));
 
 
-        $advancement = LPSDK::CreateAdvancment("Test Advancement", 1494374400, 120.00, 4)->set(
+        $advancement = LPSDK::CreateAdvancement("Test Advancement", 1494374400, 120.00, 4)->set(
             BASE_ENTITY::ID, 36,
             CONSTS\ADVANCEMENTS::ENTITY_TYPE, ENTITY_TYPES::LOAN,
             CONSTS\ADVANCEMENTS::ENTITY_ID, 3
@@ -852,7 +852,17 @@ class LoanTest extends TestCase
         $this->assertEquals([$apdAdjustmentEntity], $loan->get(LOAN::APD_ADJUSTMENTS));
 
 
-        $loanMod = LPSDK::CreateLoanModification(1496102400)->set(
+        $escrowTrans = LPSDK::CreateEscrowTransactions(2, 1, 1496102400, CONSTS\ESCROW_TRANSACTIONS\ESCROW_TRANSACTIONS_TYPE__C::WITHDRAWAL, 50.00)->set(
+            BASE_ENTITY::ID, 80,
+            CONSTS\ESCROW_TRANSACTIONS::LOAN_ID, 3,
+            CONSTS\ESCROW_TRANSACTIONS::VENDOR_ID, 1,
+            CONSTS\ESCROW_TRANSACTIONS::DESCRIPTION, "test2"
+        );
+
+        $this->assertEquals([$escrowTrans], $loan->get(LOAN::ESCROW_TRANSACTIONS));
+
+
+        $loanMod = (new \Simnang\LoanPro\Loans\LoanModificationEntity(1496102400))->set(
             BASE_ENTITY::ID, 36,
             CONSTS\LOAN_MODIFICATION::CREATED, 1496102400,
             CONSTS\LOAN_MODIFICATION::ENTITY_ID, 3,

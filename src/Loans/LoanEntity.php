@@ -96,5 +96,7 @@ class LoanEntity extends BaseEntity
         LOAN::STOP_INTEREST_DATES   => FieldValidator::OBJECT_LIST,
         LOAN::SUB_PORTFOLIOS        => FieldValidator::OBJECT_LIST,
         LOAN::TRANSACTIONS          => FieldValidator::OBJECT_LIST,
+        LOAN::ESCROW_TRANSACTIONS   => FieldValidator::OBJECT_LIST,
+        LOAN::LOAN_MODIFICATIONS    => FieldValidator::OBJECT_LIST,
     ];
 }
