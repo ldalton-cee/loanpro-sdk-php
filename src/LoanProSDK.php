@@ -24,6 +24,7 @@ use Simnang\LoanPro\Loans\CustomFieldValuesEntity;
 use Simnang\LoanPro\Loans\DocSectionEntity;
 use Simnang\LoanPro\Loans\DocumentEntity;
 use Simnang\LoanPro\Loans\DueDateChangesEntity;
+use Simnang\LoanPro\Loans\EscrowCalculatedTxEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatorEntity;
 use Simnang\LoanPro\Loans\FileAttachmentEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
@@ -40,6 +41,7 @@ use Simnang\LoanPro\Loans\PaynearmeOrderEntity;
 use Simnang\LoanPro\Loans\PortfolioEntity;
 use Simnang\LoanPro\Loans\PromisesEntity;
 use Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity;
+use Simnang\LoanPro\Loans\ScheduleRollEntity;
 use Simnang\LoanPro\Loans\SourceCompanyEntity;
 use Simnang\LoanPro\Loans\SubPortfolioEntity;
 
@@ -297,19 +299,21 @@ class LoanProSDK
 
 
         LOAN::ADVANCEMENTS          =>['class'=>AdvancementsEntity::class,       'isList'=>true ],
-        LOAN::PAYMENTS              =>['class'=>PaymentEntity::class,            'isList'=>true ],
-        LOAN::CHECKLIST_VALUES      =>['class'=>ChecklistItemValueEntity::class, 'isList'=>true ],
         LOAN::CHARGES               =>['class'=>ChargeEntity::class,             'isList'=>true ],
         LOAN::CREDITS               =>['class'=>CreditEntity::class,             'isList'=>true ],
+        LOAN::CHECKLIST_VALUES      =>['class'=>ChecklistItemValueEntity::class, 'isList'=>true ],
+        LOAN::DOCUMENTS             =>['class'=>DocumentEntity::class,           'isList'=>true ],
+        LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,   'isList'=>true ],
+        LOAN::ESCROW_CALCULATED_TX  =>['class'=>EscrowCalculatedTxEntity::class, 'isList'=>true ],
         LOAN::DUE_DATE_CHANGES      =>['class'=>DueDateChangesEntity::class,     'isList'=>true ],
+        LOAN::LOAN_FUNDING          =>['class'=>LoanFundingEntity::class,        'isList'=>true ],
         LOAN::LSTATUS_ARCHIVE       =>['class'=>LoanStatusArchiveEntity::class,  'isList'=>true ],
         LOAN::PAY_NEAR_ME_ORDERS    =>['class'=>PaynearmeOrderEntity::class,     'isList'=>true ],
-        LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,   'isList'=>true ],
-        LOAN::DOCUMENTS             =>['class'=>DocumentEntity::class,           'isList'=>true ],
-        LOAN::NOTES                 =>['class'=>NotesEntity::class,              'isList'=>true ],
+        LOAN::PAYMENTS              =>['class'=>PaymentEntity::class,            'isList'=>true ],
         LOAN::PROMISES              =>['class'=>PromisesEntity::class,           'isList'=>true ],
+        LOAN::NOTES                 =>['class'=>NotesEntity::class,              'isList'=>true ],
+        LOAN::SCHEDULE_ROLLS        =>['class'=>ScheduleRollEntity::class,       'isList'=>true ],
         LOAN::TRANSACTIONS          =>['class'=>LoanTransactionEntity::class,    'isList'=>true ],
-        LOAN::LOAN_FUNDING          =>['class'=>LoanFundingEntity::class,        'isList'=>true ],
 
         LSETUP::CUSTOM_FIELD_VALUES =>['class'=>CustomFieldValuesEntity::class,  'isList'=>true ],
     ];

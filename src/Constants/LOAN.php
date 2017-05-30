@@ -44,4 +44,5 @@ class LOAN{
     const DUE_DATE_CHANGES      = 'DueDateChanges';
     const LSTATUS_ARCHIVE       = 'StatusArchive';
     const ESCROW_CALCULATED_TX  = 'EscrowCalculatedTx';
+    const SCHEDULE_ROLLS        = 'ScheduleRolls';
 }

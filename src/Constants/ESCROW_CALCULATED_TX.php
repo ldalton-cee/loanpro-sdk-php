@@ -19,7 +19,7 @@ class ESCROW_CALCULATED_TX{
     const TX_ID                 = 'txId';
     const DESCRIPTION           = 'description';
     const DATE                  = 'date';
-    const TYPE                  = 'type';
+    const TYPE__C               = 'type';
     const FROM_PAYMENT          = 'fromPayment';
     const ESCROW_TRANSACTION_ID = 'escrowTransactionId';
     const DEPOSIT_AMOUNT        = 'depositAmount';

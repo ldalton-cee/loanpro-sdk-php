@@ -18,11 +18,11 @@ class SCHEDULE_ROLLS{
     const MOD_ID            = 'modId';
     const TERM              = 'term';
     const RATE              = 'rate';
-    const SOLVE_USING       = 'solveUsing';
+    const SOLVE_USING__C    = 'solveUsing';
     const AMOUNT            = 'amount';
     const PERCENT           = 'percent';
     const ADVANCED_TERMS    = 'advancedTerms';
-    const SOLVE_FOR         = 'solveFor';
+    const SOLVE_FOR__C      = 'solveFor';
     const BALANCE           = 'balance';
     const BALANCE_SET       = 'balanceSet';
     const DIFFERENCE        = 'difference';
