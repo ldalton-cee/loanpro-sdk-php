@@ -40,5 +40,8 @@ class LOAN{
     const LOAN_FUNDING          = 'LoanFunding';
     const ADVANCEMENTS          = 'Advancements';
     const CREDITS               = 'Credits';
+    const TRANSACTIONS          = 'Transactions';
     const DUE_DATE_CHANGES      = 'DueDateChanges';
+    const LSTATUS_ARCHIVE       = 'StatusArchive';
+    const ESCROW_CALCULATED_TX  = 'EscrowCalculatedTx';
 }

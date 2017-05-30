@@ -13,6 +13,7 @@ use Simnang\LoanPro\Constants\DOCUMENTS;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETTINGS;
 use Simnang\LoanPro\Constants\LSETUP;
+use Simnang\LoanPro\Constants\LSTATUS_ARCHIVE;
 use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Loans\AdvancementsEntity;
 use Simnang\LoanPro\Loans\ChargeEntity;
@@ -29,8 +30,10 @@ use Simnang\LoanPro\Loans\InsuranceEntity;
 use Simnang\LoanPro\Loans\LoanFundingEntity;
 use Simnang\LoanPro\Loans\LoanSettingsEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
+use Simnang\LoanPro\Loans\LoanStatusArchiveEntity;
 use Simnang\LoanPro\Loans\LoanStatusEntity;
 use Simnang\LoanPro\Loans\LoanSubStatusEntity;
+use Simnang\LoanPro\Loans\LoanTransactionEntity;
 use Simnang\LoanPro\Loans\NotesEntity;
 use Simnang\LoanPro\Loans\PaymentEntity;
 use Simnang\LoanPro\Loans\PaynearmeOrderEntity;
@@ -293,18 +296,19 @@ class LoanProSDK
         LSETTINGS::SOURCE_COMPANY   =>['class'=>SourceCompanyEntity::class  ],
 
 
-
         LOAN::ADVANCEMENTS          =>['class'=>AdvancementsEntity::class,       'isList'=>true ],
         LOAN::PAYMENTS              =>['class'=>PaymentEntity::class,            'isList'=>true ],
         LOAN::CHECKLIST_VALUES      =>['class'=>ChecklistItemValueEntity::class, 'isList'=>true ],
         LOAN::CHARGES               =>['class'=>ChargeEntity::class,             'isList'=>true ],
         LOAN::CREDITS               =>['class'=>CreditEntity::class,             'isList'=>true ],
         LOAN::DUE_DATE_CHANGES      =>['class'=>DueDateChangesEntity::class,     'isList'=>true ],
+        LOAN::LSTATUS_ARCHIVE       =>['class'=>LoanStatusArchiveEntity::class,  'isList'=>true ],
         LOAN::PAY_NEAR_ME_ORDERS    =>['class'=>PaynearmeOrderEntity::class,     'isList'=>true ],
         LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,   'isList'=>true ],
         LOAN::DOCUMENTS             =>['class'=>DocumentEntity::class,           'isList'=>true ],
         LOAN::NOTES                 =>['class'=>NotesEntity::class,              'isList'=>true ],
         LOAN::PROMISES              =>['class'=>PromisesEntity::class,           'isList'=>true ],
+        LOAN::TRANSACTIONS          =>['class'=>LoanTransactionEntity::class,    'isList'=>true ],
         LOAN::LOAN_FUNDING          =>['class'=>LoanFundingEntity::class,        'isList'=>true ],
 
         LSETUP::CUSTOM_FIELD_VALUES =>['class'=>CustomFieldValuesEntity::class,  'isList'=>true ],
