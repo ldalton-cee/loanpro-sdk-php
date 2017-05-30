@@ -80,7 +80,6 @@ class LoanTransactionEntity extends BaseEntity
         LTRANSACTIONS::TYPE                     => FieldValidator::STRING,
         LTRANSACTIONS::TX_ID                    => FieldValidator::STRING,
 
-        
         LTRANSACTIONS::ADB                      => FieldValidator::NUMBER,
         LTRANSACTIONS::CHARGE_AMOUNT            => FieldValidator::NUMBER,
         LTRANSACTIONS::CHARGE_DISCOUNT          => FieldValidator::NUMBER,
