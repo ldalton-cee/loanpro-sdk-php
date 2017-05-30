@@ -640,6 +640,38 @@
         "type": "loan.stopInterestType.suspend"
       }
     ]
+  },
+  "APDAdjustments": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/APDAdjustments(id=34)",
+          "type": "Entity.APDAdjustment"
+        },
+        "id": 34,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "date": "/Date(1494288000)/",
+        "type": "loan.apd.adjust.type.fixed",
+        "dollarAmount": "500.00"
+      }
+    ]
+  },
+  "DPDAdjustments": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/DPDAdjustments(id=40)",
+          "type": "Entity.DPDAdjustment"
+        },
+        "id": 40,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "date": "/Date(1494460800)/"
+      }
+    ]
   }
 
 }

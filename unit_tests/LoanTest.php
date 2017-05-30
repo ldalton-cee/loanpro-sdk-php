@@ -832,6 +832,24 @@ class LoanTest extends TestCase
         );
 
         $this->assertEquals([$stpIntDate1, $stpIntDate2], $loan->get(LOAN::STOP_INTEREST_DATES));
+
+
+        $dpdAdjustmentEntity = LPSDK::CreateDPDAdjustment(1494460800)->set(
+            BASE_ENTITY::ID, 40,
+            CONSTS\DPD_ADJUSTMENTS::ENTITY_TYPE, ENTITY_TYPES::LOAN,
+            CONSTS\DPD_ADJUSTMENTS::ENTITY_ID, 3
+        );
+
+        $this->assertEquals([$dpdAdjustmentEntity], $loan->get(LOAN::DPD_ADJUSTMENTS));
+
+
+        $apdAdjustmentEntity = LPSDK::CreateAPDAdjustment(1494288000, 500.00, CONSTS\APD_ADJUSTMENTS\APD_ADJUSTMENTS_TYPE__C::FIXED)->set(
+            BASE_ENTITY::ID, 34,
+            CONSTS\DPD_ADJUSTMENTS::ENTITY_TYPE, ENTITY_TYPES::LOAN,
+            CONSTS\DPD_ADJUSTMENTS::ENTITY_ID, 3
+        );
+
+        $this->assertEquals([$apdAdjustmentEntity], $loan->get(LOAN::APD_ADJUSTMENTS));
     }
 }
 

@@ -9,6 +9,7 @@
 namespace Simnang\LoanPro;
 
 
+use Simnang\LoanPro\Constants\APD_ADJUSTMENTS;
 use Simnang\LoanPro\Constants\DOCUMENTS;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETTINGS;
@@ -16,6 +17,7 @@ use Simnang\LoanPro\Constants\LSETUP;
 use Simnang\LoanPro\Constants\LSTATUS_ARCHIVE;
 use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Loans\AdvancementsEntity;
+use Simnang\LoanPro\Loans\APDAdjustmentEntity;
 use Simnang\LoanPro\Loans\ChargeEntity;
 use Simnang\LoanPro\Loans\ChecklistItemValueEntity;
 use Simnang\LoanPro\Loans\CollateralEntity;
@@ -23,6 +25,7 @@ use Simnang\LoanPro\Loans\CreditEntity;
 use Simnang\LoanPro\Loans\CustomFieldValuesEntity;
 use Simnang\LoanPro\Loans\DocSectionEntity;
 use Simnang\LoanPro\Loans\DocumentEntity;
+use Simnang\LoanPro\Loans\DPDAdjustmentEntity;
 use Simnang\LoanPro\Loans\DueDateChangesEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatedTxEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatorEntity;
@@ -262,6 +265,14 @@ class LoanProSDK
         return new DueDateChangesEntity($origDate, $newDate);
     }
 
+    public static function CreateDPDAdjustment($date){
+        return new DPDAdjustmentEntity($date);
+    }
+
+    public static function CreateAPDAdjustment($date, $amount, $type){
+        return new APDAdjustmentEntity($date,$amount,$type);
+    }
+
     /**
      * Preps an array to be used to create an object by cleaning it and getting the object form (if applicable)
      * @param array $json - JSON to prep
@@ -298,12 +309,13 @@ class LoanProSDK
         LSETTINGS::LOAN_SUB_STATUS  =>['class'=>LoanSubStatusEntity::class  ],
         LSETTINGS::SOURCE_COMPANY   =>['class'=>SourceCompanyEntity::class  ],
 
-
+        LOAN::APD_ADJUSTMENTS       =>['class'=>APDAdjustmentEntity::class,      'isList'=>true ],
         LOAN::ADVANCEMENTS          =>['class'=>AdvancementsEntity::class,       'isList'=>true ],
         LOAN::CHARGES               =>['class'=>ChargeEntity::class,             'isList'=>true ],
         LOAN::CREDITS               =>['class'=>CreditEntity::class,             'isList'=>true ],
         LOAN::CHECKLIST_VALUES      =>['class'=>ChecklistItemValueEntity::class, 'isList'=>true ],
         LOAN::DOCUMENTS             =>['class'=>DocumentEntity::class,           'isList'=>true ],
+        LOAN::DPD_ADJUSTMENTS       =>['class'=>DPDAdjustmentEntity::class,      'isList'=>true ],
         LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,   'isList'=>true ],
         LOAN::ESCROW_CALCULATED_TX  =>['class'=>EscrowCalculatedTxEntity::class, 'isList'=>true ],
         LOAN::DUE_DATE_CHANGES      =>['class'=>DueDateChangesEntity::class,     'isList'=>true ],

@@ -46,4 +46,6 @@ class LOAN{
     const ESCROW_CALCULATED_TX  = 'EscrowCalculatedTx';
     const SCHEDULE_ROLLS        = 'ScheduleRolls';
     const STOP_INTEREST_DATES   = 'StopInterestDates';
+    const APD_ADJUSTMENTS       = 'APDAdjustments';
+    const DPD_ADJUSTMENTS       = 'DPDAdjustments';
 }

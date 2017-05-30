@@ -72,10 +72,13 @@ class LoanEntity extends BaseEntity
         LOAN::LSETUP                => FieldValidator::OBJECT,
         LOAN::LSETTINGS             => FieldValidator::OBJECT,
 
+        LOAN::ADVANCEMENTS          => FieldValidator::OBJECT_LIST,
+        LOAN::APD_ADJUSTMENTS       => FieldValidator::OBJECT_LIST,
         LOAN::CHECKLIST_VALUES      => FieldValidator::OBJECT_LIST,
         LOAN::CHARGES               => FieldValidator::OBJECT_LIST,
         LOAN::CREDITS               => FieldValidator::OBJECT_LIST,
         LOAN::DOCUMENTS             => FieldValidator::OBJECT_LIST,
+        LOAN::DPD_ADJUSTMENTS       => FieldValidator::OBJECT_LIST,
         LOAN::DUE_DATE_CHANGES      => FieldValidator::OBJECT_LIST,
         LOAN::ESCROW_CALCULATED_TX  => FieldValidator::OBJECT_LIST,
         LOAN::ESCROW_CALCULATORS    => FieldValidator::OBJECT_LIST,
@@ -91,6 +94,5 @@ class LoanEntity extends BaseEntity
         LOAN::STOP_INTEREST_DATES   => FieldValidator::OBJECT_LIST,
         LOAN::SUB_PORTFOLIOS        => FieldValidator::OBJECT_LIST,
         LOAN::TRANSACTIONS          => FieldValidator::OBJECT_LIST,
-        LOAN::ADVANCEMENTS          => FieldValidator::OBJECT_LIST,
     ];
 }
