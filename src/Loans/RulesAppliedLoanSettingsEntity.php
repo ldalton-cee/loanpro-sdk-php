@@ -20,14 +20,7 @@ class RulesAppliedLoanSettingsEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($id, $enabled){
-        parent::__construct();
-        if(!$this->IsValidField(BASE_ENTITY::ID, $id) || is_null($id))
-            throw new \InvalidArgumentException("Invalid value '$id' for property ".BASE_ENTITY::ID);
-
-        if(!$this->IsValidField(LSRULES_APPLIED::ENABLED, $enabled) || is_null($enabled))
-            throw new \InvalidArgumentException("Invalid value '$enabled' for property ".LSRULES_APPLIED::ENABLED);
-        $this->properties[BASE_ENTITY::ID] = $this->GetValidField(BASE_ENTITY::ID, $id);
-        $this->properties[LSRULES_APPLIED::ENABLED] = $this->GetValidField(LSRULES_APPLIED::ENABLED, $enabled);
+        parent::__construct($id, $enabled);
     }
 
     /**

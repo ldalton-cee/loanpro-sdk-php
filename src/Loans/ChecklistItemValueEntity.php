@@ -20,16 +20,7 @@ class ChecklistItemValueEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($checklistId, $checklistItemId, $checklistItemValue){
-        parent::__construct();
-        if(!$this->IsValidField(CHECKLIST_VALUES::CHECKLIST_ID, $checklistId) || is_null($checklistId))
-            throw new \InvalidArgumentException("Invalid value '$checklistId' for property ".CHECKLIST_VALUES::CHECKLIST_ID);
-        if(!$this->IsValidField(CHECKLIST_VALUES::CHECKLIST_ITEM_ID, $checklistItemId) || is_null($checklistItemId))
-            throw new \InvalidArgumentException("Invalid value '$checklistItemId' for property ".CHECKLIST_VALUES::CHECKLIST_ITEM_ID);
-        if(!$this->IsValidField(CHECKLIST_VALUES::CHECKLIST_ITEM_VAL, $checklistItemValue) || is_null($checklistItemValue))
-            throw new \InvalidArgumentException("Invalid value '$checklistItemValue' for property ".CHECKLIST_VALUES::CHECKLIST_ITEM_VAL);
-        $this->properties[CHECKLIST_VALUES::CHECKLIST_ID] = $this->GetValidField(CHECKLIST_VALUES::CHECKLIST_ID, $checklistId);
-        $this->properties[CHECKLIST_VALUES::CHECKLIST_ITEM_ID] = $this->GetValidField(CHECKLIST_VALUES::CHECKLIST_ITEM_ID, $checklistItemId);
-        $this->properties[CHECKLIST_VALUES::CHECKLIST_ITEM_VAL] = $this->GetValidField(CHECKLIST_VALUES::CHECKLIST_ITEM_VAL, $checklistItemValue);
+        parent::__construct($checklistId, $checklistItemId, $checklistItemValue);
     }
 
     /**

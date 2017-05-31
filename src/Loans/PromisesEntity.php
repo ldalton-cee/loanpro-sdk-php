@@ -20,27 +20,7 @@ class PromisesEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($subject, $note, $dueDate, $amount = 0.0, $fulfilled = 0){
-        parent::__construct();
-
-        if(!$this->IsValidField(PROMISES::SUBJECT, $subject) || is_null($subject))
-            throw new \InvalidArgumentException("Invalid value '$subject' for property ".PROMISES::SUBJECT);
-        $this->properties[PROMISES::SUBJECT] = $this->GetValidField(PROMISES::SUBJECT, $subject);
-
-        if(!$this->IsValidField(PROMISES::NOTE, $note) || is_null($note))
-            throw new \InvalidArgumentException("Invalid value '$note' for property ".PROMISES::NOTE);
-        $this->properties[PROMISES::NOTE] = $this->GetValidField(PROMISES::NOTE, $note);
-
-        if(!$this->IsValidField(PROMISES::AMOUNT, $amount) || is_null($amount))
-            throw new \InvalidArgumentException("Invalid value '$amount' for property ".PROMISES::AMOUNT);
-        $this->properties[PROMISES::AMOUNT] = $this->GetValidField(PROMISES::AMOUNT, $amount);
-
-        if(!$this->IsValidField(PROMISES::FULFILLED, $fulfilled) || is_null($fulfilled))
-            throw new \InvalidArgumentException("Invalid value '$fulfilled' for property ".PROMISES::FULFILLED);
-        $this->properties[PROMISES::FULFILLED] = $this->GetValidField(PROMISES::FULFILLED, $fulfilled);
-
-        if(!$this->IsValidField(PROMISES::DUE_DATE, $dueDate) || is_null($dueDate))
-            throw new \InvalidArgumentException("Invalid value '$dueDate' for property ".PROMISES::DUE_DATE);
-        $this->properties[PROMISES::DUE_DATE] = $this->GetValidField(PROMISES::DUE_DATE, $dueDate);
+        parent::__construct($subject, $note, $dueDate, $amount, $fulfilled);
     }
 
     /**

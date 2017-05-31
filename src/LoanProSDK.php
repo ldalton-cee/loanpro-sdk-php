@@ -34,6 +34,7 @@ use Simnang\LoanPro\Loans\EscrowSubsetOptionEntity;
 use Simnang\LoanPro\Loans\EscrowTransactionsEntity;
 use Simnang\LoanPro\Loans\FileAttachmentEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
+use Simnang\LoanPro\Loans\LinkedLoanValuesEntity;
 use Simnang\LoanPro\Loans\LoanEntity;
 use Simnang\LoanPro\Loans\LoanFundingEntity;
 use Simnang\LoanPro\Loans\LoanModificationEntity;
@@ -313,6 +314,19 @@ class LoanProSDK
     }
 
     /**
+     * Create linked loan values entity
+     * @param $loanId - ID of main loan
+     * @param $linkedLoanId - ID of linked loan
+     * @param $linkedLoanDisplayId - Display ID of linked loan
+     * @param $value - value of link
+     * @param $optionId - option id for link
+     * @return LinkedLoanValuesEntity
+     */
+    public static function CreateLinkedLoanValues($loanId, $linkedLoanId, $linkedLoanDisplayId, $value, $optionId){
+        return new LinkedLoanValuesEntity($loanId, $linkedLoanId, $linkedLoanDisplayId, $value, $optionId);
+    }
+
+    /**
      * Create escrow transaction
      * @param $subset - subset id
      * @param $category - category id
@@ -325,6 +339,37 @@ class LoanProSDK
         return new EscrowTransactionsEntity($subset, $category, $date, $type, $amount);
     }
 
+    /**
+     * Creates new escrow subset option entity
+     * @param $subset
+     * @param $cushion
+     * @param $cushionFixedAmt
+     * @param $cushinPerc
+     * @param $deficiencyDelimDPD
+     * @param $deficiencyDaysToPay
+     * @param $deficiencyDelemAmt
+     * @param $deficiencyDelimDollar
+     * @param $deficiencyDelimPerc
+     * @param $deficiencyCatchupPayNum
+     * @param $deficiencyActA
+     * @param $deficiencyActB
+     * @param $deficiencyActC
+     * @param $escrowCompYrStrtDate
+     * @param $nxtEscrowAnalysisDate
+     * @param $shortDaysToPay
+     * @param $shortCatchupPayNum
+     * @param $shortDelimAmnt
+     * @param $shortDelimDollar
+     * @param $shortDelimPercent
+     * @param $shortActionA
+     * @param $shortActionB
+     * @param $surplusDaysToRefund
+     * @param $surplusActA
+     * @param $surplusActB
+     * @param $surplusAllowedSurplus
+     * @param $surplusDelimDPD
+     * @return EscrowSubsetOptionEntity
+     */
     public static function CreateEscrowSubsetOption($subset, $cushion, $cushionFixedAmt, $cushinPerc, $deficiencyDelimDPD, $deficiencyDaysToPay, $deficiencyDelemAmt,
                                                     $deficiencyDelimDollar, $deficiencyDelimPerc, $deficiencyCatchupPayNum, $deficiencyActA, $deficiencyActB, $deficiencyActC, $escrowCompYrStrtDate, $nxtEscrowAnalysisDate,
                                                     $shortDaysToPay, $shortCatchupPayNum, $shortDelimAmnt, $shortDelimDollar, $shortDelimPercent, $shortActionA, $shortActionB,

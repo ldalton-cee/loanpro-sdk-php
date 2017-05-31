@@ -20,17 +20,7 @@ class NotesEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($categoryId, $subject, $body){
-        parent::__construct();
-        if(!$this->IsValidField(NOTES::CATEGORY_ID, $categoryId) || is_null($categoryId))
-            throw new \InvalidArgumentException("Invalid value '$categoryId' for property ".NOTES::CATEGORY_ID);
-        if(!$this->IsValidField(NOTES::SUBJECT, $subject) || is_null($subject))
-            throw new \InvalidArgumentException("Invalid value '$subject' for property ".NOTES::SUBJECT);
-        if(!$this->IsValidField(NOTES::BODY, $body) || is_null($body))
-            throw new \InvalidArgumentException("Invalid value '$body' for property ".NOTES::BODY);
-
-        $this->properties[NOTES::CATEGORY_ID] = $this->GetValidField(NOTES::CATEGORY_ID, $categoryId);
-        $this->properties[NOTES::SUBJECT] = $this->GetValidField(NOTES::SUBJECT, $subject);
-        $this->properties[NOTES::BODY] = $this->GetValidField(NOTES::BODY, $body);
+        parent::__construct($categoryId, $subject, $body);
     }
 
     /**

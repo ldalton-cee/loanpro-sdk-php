@@ -20,32 +20,7 @@ class PaynearmeOrderEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($customerId, $customerName, $email, $phone, $address, $city, $state, $zip){
-        parent::__construct();
-        if(is_null($customerId) || !$this->IsValidField(PAY_NEAR_ME_ORDERS::CUSTOMER_ID, $customerId))
-            throw new \InvalidArgumentException("Invalid customer id");
-        if(is_null($customerName) || !$this->IsValidField(PAY_NEAR_ME_ORDERS::CUSTOMER_NAME, $customerName))
-            throw new \InvalidArgumentException("Invalid customer name");
-        if(is_null($email) || !$this->IsValidField(PAY_NEAR_ME_ORDERS::EMAIL, $email))
-            throw new \InvalidArgumentException("Invalid email");
-        if(is_null($phone) || !$this->IsValidField(PAY_NEAR_ME_ORDERS::PHONE, $phone))
-            throw new \InvalidArgumentException("Invalid phone");
-        if(is_null($address) || !$this->IsValidField(PAY_NEAR_ME_ORDERS::ADDRESS_1, $address))
-            throw new \InvalidArgumentException("Invalid address");
-        if(is_null($city) || !$this->IsValidField(PAY_NEAR_ME_ORDERS::CITY, $city))
-            throw new \InvalidArgumentException("Invalid city");
-        if(is_null($state) || !$this->IsValidField(PAY_NEAR_ME_ORDERS::STATE__C, $state))
-            throw new \InvalidArgumentException("Invalid state");
-        if(is_null($zip) || !$this->IsValidField(PAY_NEAR_ME_ORDERS::ZIP_CODE, $zip))
-            throw new \InvalidArgumentException("Invalid zip");
-
-        $this->properties[PAY_NEAR_ME_ORDERS::CUSTOMER_ID]     = $this->GetValidField(PAY_NEAR_ME_ORDERS::CUSTOMER_ID,    $customerId);
-        $this->properties[PAY_NEAR_ME_ORDERS::CUSTOMER_NAME]   = $this->GetValidField(PAY_NEAR_ME_ORDERS::CUSTOMER_NAME,  $customerName);
-        $this->properties[PAY_NEAR_ME_ORDERS::EMAIL]           = $this->GetValidField(PAY_NEAR_ME_ORDERS::EMAIL,          $email);
-        $this->properties[PAY_NEAR_ME_ORDERS::PHONE]           = $this->GetValidField(PAY_NEAR_ME_ORDERS::PHONE,          $phone);
-        $this->properties[PAY_NEAR_ME_ORDERS::ADDRESS_1]       = $this->GetValidField(PAY_NEAR_ME_ORDERS::ADDRESS_1,      $address);
-        $this->properties[PAY_NEAR_ME_ORDERS::CITY]            = $this->GetValidField(PAY_NEAR_ME_ORDERS::CITY,           $city);
-        $this->properties[PAY_NEAR_ME_ORDERS::STATE__C]        = $this->GetValidField(PAY_NEAR_ME_ORDERS::STATE__C,       $state);
-        $this->properties[PAY_NEAR_ME_ORDERS::ZIP_CODE]        = $this->GetValidField(PAY_NEAR_ME_ORDERS::ZIP_CODE,       $zip);
+        parent::__construct($customerId, $customerName, $email, $phone, $address, $city, $state, $zip);
     }
 
     /**

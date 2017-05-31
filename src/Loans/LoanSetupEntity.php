@@ -21,18 +21,8 @@ class LoanSetupEntity extends BaseEntity
      * @param string $type - The loan type (found in LSETUP_LTYPE)
      * @throws \ReflectionException
      */
-    public function __construct(string $class, string $type){
-        parent::__construct();
-        if(is_null($class))
-            throw new \InvalidArgumentException("Cannot have Loan Class be null");
-        if(is_null($type))
-            throw new \InvalidArgumentException("Cannot have Loan Type be null");
-        if(!$this->IsValidField(LSETUP::LCLASS__C, $class))
-            throw new \InvalidArgumentException("Invalid value '$class' for property ".LSETUP::LCLASS__C);
-        if(!$this->IsValidField(LSETUP::LTYPE__C, $type))
-            throw new \InvalidArgumentException("Invalid value '$type' for property ".LSETUP::LTYPE__C);
-        $this->properties[LSETUP::LCLASS__C] = $this->GetValidField(LSETUP::LCLASS__C, $class);
-        $this->properties[LSETUP::LTYPE__C] = $this->GetValidField(LSETUP::LTYPE__C, $type);
+    public function __construct($class, $type){
+        parent::__construct($class, $type);
     }
 
     /**

@@ -20,10 +20,7 @@ class LoanEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($dispId){
-        parent::__construct();
-        if(!$this->IsValidField(LOAN::DISP_ID, $dispId) || is_null($dispId))
-            throw new \InvalidArgumentException("Invalid value '$dispId' for property ".LOAN::DISP_ID);
-        $this->properties[LOAN::DISP_ID] = $this->GetValidField(LOAN::DISP_ID, $dispId);
+        parent::__construct($dispId);
     }
 
     /**

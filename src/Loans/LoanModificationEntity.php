@@ -19,10 +19,7 @@ class LoanModificationEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($date){
-        parent::__construct();
-        if(!$this->IsValidField(LOAN_MODIFICATION::DATE, $date) || is_null($date))
-            throw new \InvalidArgumentException("Invalid value '$date' for property ".LOAN_MODIFICATION::DATE);
-        $this->properties[LOAN_MODIFICATION::DATE] = $this->GetValidField(LOAN_MODIFICATION::DATE, $date);
+        parent::__construct($date);
     }
 
     /**

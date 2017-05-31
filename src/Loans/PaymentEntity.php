@@ -20,33 +20,7 @@ class PaymentEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($amt, $date, $info, $payMethodId, $paymentTypeId){
-        parent::__construct();
-        if(is_null($amt))
-            throw new \InvalidArgumentException("Cannot have a null amount");
-        if(is_null($date))
-            throw new \InvalidArgumentException("Cannot have a null date");
-        if(is_null($info))
-            throw new \InvalidArgumentException("Cannot have info be null");
-        if(is_null($payMethodId))
-            throw new \InvalidArgumentException("Cannot have payment method id be null");
-        if(is_null($paymentTypeId))
-            throw new \InvalidArgumentException("Cannot have payment type id be null");
-        if(!$this->IsValidField(PAYMENTS::AMOUNT, $amt))
-            throw new \InvalidArgumentException("Invalid value '$amt' for property ".PAYMENTS::AMOUNT);
-        if(!$this->IsValidField(PAYMENTS::DATE, $date))
-            throw new \InvalidArgumentException("Invalid value '$date' for property ".PAYMENTS::DATE);
-        if(!$this->IsValidField(PAYMENTS::INFO, $info))
-            throw new \InvalidArgumentException("Invalid value '$info' for property ".PAYMENTS::INFO);
-        if(!$this->IsValidField(PAYMENTS::PAYMENT_METHOD_ID, $payMethodId))
-            throw new \InvalidArgumentException("Invalid value '$payMethodId' for property ".PAYMENTS::PAYMENT_METHOD_ID);
-        if(!$this->IsValidField(PAYMENTS::PAYMENT_TYPE_ID, $paymentTypeId))
-            throw new \InvalidArgumentException("Invalid value '$paymentTypeId' for property ".PAYMENTS::PAYMENT_TYPE_ID);
-
-        $this->properties[PAYMENTS::AMOUNT] = $this->GetValidField(PAYMENTS::AMOUNT, $amt);
-        $this->properties[PAYMENTS::DATE] = $this->GetValidField(PAYMENTS::DATE, $date);
-        $this->properties[PAYMENTS::INFO] = $this->GetValidField(PAYMENTS::INFO, $info);
-        $this->properties[PAYMENTS::PAYMENT_METHOD_ID] = $this->GetValidField(PAYMENTS::PAYMENT_METHOD_ID, $payMethodId);
-        $this->properties[PAYMENTS::PAYMENT_TYPE_ID] = $this->GetValidField(PAYMENTS::PAYMENT_TYPE_ID, $paymentTypeId);
+        parent::__construct($amt, $date, $info, $payMethodId, $paymentTypeId);
     }
 
     /**

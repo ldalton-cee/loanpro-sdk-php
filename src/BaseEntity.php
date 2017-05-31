@@ -27,6 +27,18 @@ abstract class BaseEntity{
         else{
             throw new \ReflectionException("Invalid state for \$constCollectionPrefix in '$class'. Please set the protected static variable it to a valid value");
         }
+        if(func_num_args()){
+            $argCnt = func_num_args();
+            $args = func_get_args();
+            $reqCnt = count(static::$required);
+            if($argCnt != $reqCnt)
+                throw new \InvalidArgumentException("Incorrect number of arguments, can't make $class");
+            for($i = 0; $i < $argCnt; ++$i){
+                if(!$this->IsValidField(static::$required[$i], $args[$i]) || is_null($args[$i]))
+                    throw new \InvalidArgumentException("Invalid value '".$args[$i]."' for property ".static::$required[$i]);
+                $this->properties[static::$required[$i]] = $this->GetValidField(static::$required[$i], $args[$i]);
+            }
+        }
     }
 
     /**

@@ -20,13 +20,7 @@ class StopInterestDateEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($date, $type){
-        parent::__construct();
-        if(!$this->IsValidField(STOP_INTEREST_DATE::DATE, $date) || is_null($date))
-            throw new \InvalidArgumentException("Invalid value '$date' for property ".STOP_INTEREST_DATE::DATE);
-        if(!$this->IsValidField(STOP_INTEREST_DATE::TYPE__C, $type) || is_null($type))
-            throw new \InvalidArgumentException("Invalid value '$type' for property ".STOP_INTEREST_DATE::TYPE__C);
-        $this->properties[STOP_INTEREST_DATE::DATE] = $this->GetValidField(STOP_INTEREST_DATE::DATE, $date);
-        $this->properties[STOP_INTEREST_DATE::TYPE__C] = $this->GetValidField(STOP_INTEREST_DATE::TYPE__C, $type);
+        parent::__construct($date, $type);
     }
 
     /**

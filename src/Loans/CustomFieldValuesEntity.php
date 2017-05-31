@@ -20,13 +20,7 @@ class CustomFieldValuesEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($entityid, $entityType){
-        parent::__construct();
-        if(!$this->IsValidField(CUSTOM_FIELD_VALUES::ENTITY_ID, $entityid) || is_null($entityid))
-            throw new \InvalidArgumentException("Invalid value '$entityid' for property ".CUSTOM_FIELD_VALUES::ENTITY_ID);
-        if(!$this->IsValidField(CUSTOM_FIELD_VALUES::ENTITY_TYPE, $entityType) || is_null($entityType))
-            throw new \InvalidArgumentException("Invalid value '$entityType' for property ".CUSTOM_FIELD_VALUES::ENTITY_TYPE);
-        $this->properties[CUSTOM_FIELD_VALUES::ENTITY_ID] = $this->GetValidField(CUSTOM_FIELD_VALUES::ENTITY_ID, $entityid);
-        $this->properties[CUSTOM_FIELD_VALUES::ENTITY_TYPE] = $this->GetValidField(CUSTOM_FIELD_VALUES::ENTITY_TYPE, $entityType);
+        parent::__construct($entityid, $entityType);
     }
 
     /**

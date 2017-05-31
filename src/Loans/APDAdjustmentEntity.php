@@ -19,17 +19,7 @@ class APDAdjustmentEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($date, $amount, $type){
-        parent::__construct();
-        if(!$this->IsValidField(APD_ADJUSTMENTS::DATE, $date) || is_null($date))
-            throw new \InvalidArgumentException("Invalid value '$date' for property ".APD_ADJUSTMENTS::DATE);
-        if(!$this->IsValidField(APD_ADJUSTMENTS::DOLLAR_AMOUNT, $amount) || is_null($amount))
-            throw new \InvalidArgumentException("Invalid value '$amount' for property ".APD_ADJUSTMENTS::DOLLAR_AMOUNT);
-        if(!$this->IsValidField(APD_ADJUSTMENTS::TYPE__C, $type) || is_null($type))
-            throw new \InvalidArgumentException("Invalid value '$type' for property ".APD_ADJUSTMENTS::TYPE__C);
-
-        $this->properties[APD_ADJUSTMENTS::DATE] = $this->GetValidField(APD_ADJUSTMENTS::DATE, $date);
-        $this->properties[APD_ADJUSTMENTS::DOLLAR_AMOUNT] = $this->GetValidField(APD_ADJUSTMENTS::DOLLAR_AMOUNT, $amount);
-        $this->properties[APD_ADJUSTMENTS::TYPE__C] = $this->GetValidField(APD_ADJUSTMENTS::TYPE__C, $type);
+        parent::__construct($date, $amount, $type);
     }
 
     /**

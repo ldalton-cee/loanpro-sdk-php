@@ -20,23 +20,7 @@ class EscrowTransactionsEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($subset, $category, $date, $type, $amount){
-        parent::__construct();
-        if(!$this->IsValidField(ESCROW_TRANSACTIONS::SUBSET, $subset) || is_null($subset))
-            throw new \InvalidArgumentException("Invalid value '$subset' for property ".ESCROW_TRANSACTIONS::SUBSET);
-        if(!$this->IsValidField(ESCROW_TRANSACTIONS::CATEGORY,  $category) || is_null($category))
-            throw new \InvalidArgumentException("Invalid value '$category' for property ".ESCROW_TRANSACTIONS::CATEGORY);
-        if(!$this->IsValidField(ESCROW_TRANSACTIONS::DATE,  $date) || is_null($date))
-            throw new \InvalidArgumentException("Invalid value '$date' for property ".ESCROW_TRANSACTIONS::DATE);
-        if(!$this->IsValidField(ESCROW_TRANSACTIONS::TYPE__C,  $type) || is_null($type))
-            throw new \InvalidArgumentException("Invalid value '$type' for property ".ESCROW_TRANSACTIONS::TYPE__C);
-        if(!$this->IsValidField(ESCROW_TRANSACTIONS::AMOUNT,  $amount) || is_null($amount))
-            throw new \InvalidArgumentException("Invalid value '$amount' for property ".ESCROW_TRANSACTIONS::AMOUNT);
-
-        $this->properties[ESCROW_TRANSACTIONS::SUBSET] = $this->GetValidField(ESCROW_TRANSACTIONS::SUBSET, $subset);
-        $this->properties[ESCROW_TRANSACTIONS::CATEGORY] = $this->GetValidField(ESCROW_TRANSACTIONS::CATEGORY, $category);
-        $this->properties[ESCROW_TRANSACTIONS::DATE] = $this->GetValidField(ESCROW_TRANSACTIONS::DATE, $date);
-        $this->properties[ESCROW_TRANSACTIONS::TYPE__C] = $this->GetValidField(ESCROW_TRANSACTIONS::TYPE__C, $type);
-        $this->properties[ESCROW_TRANSACTIONS::AMOUNT] = $this->GetValidField(ESCROW_TRANSACTIONS::AMOUNT, $amount);
+        parent::__construct($subset, $category, $date, $type, $amount);
     }
 
     /**

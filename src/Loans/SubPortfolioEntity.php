@@ -20,13 +20,7 @@ class SubPortfolioEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($id, $parent){
-        parent::__construct();
-        if(!$this->IsValidField(BASE_ENTITY::ID, $id) || is_null($id))
-            throw new \InvalidArgumentException("Invalid value '$id' for property ".BASE_ENTITY::ID);
-        if(!$this->IsValidField(SUB_PORTFOLIO::PARENT, $parent) || is_null($parent))
-            throw new \InvalidArgumentException("Invalid value '$parent' for property ".SUB_PORTFOLIO::PARENT);
-        $this->properties[BASE_ENTITY::ID] = $this->GetValidField(BASE_ENTITY::ID, $id);
-        $this->properties[SUB_PORTFOLIO::PARENT] = $this->GetValidField(SUB_PORTFOLIO::PARENT, $parent);
+        parent::__construct($id, $parent);
     }
 
     /**

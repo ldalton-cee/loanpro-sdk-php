@@ -10,30 +10,36 @@ namespace Simnang\LoanPro\Loans;
 
 use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
-use Simnang\LoanPro\Constants\PORTFOLIO;
+use Simnang\LoanPro\Constants\LINKED_LOAN_VALUES;
 use Simnang\LoanPro\Validator\FieldValidator;
 
-class PortfolioEntity extends BaseEntity
+class LinkedLoanValuesEntity extends BaseEntity
 {
     /**
      * Creates a new loan settings entity. This entity will pull defaults when created, so there aren't any minimum fields required
      * @throws \ReflectionException
      */
-    public function __construct($id){
-        parent::__construct($id);
+    public function __construct($loanId, $linkedLoanId, $linkedLoanDisplayId, $value, $optionId){
+        parent::__construct($loanId, $linkedLoanId, $linkedLoanDisplayId, $value, $optionId);
     }
 
     /**
      * List of required fields
      * @var array
      */
-    protected static $required = [ BASE_ENTITY::ID ];
+    protected static $required = [
+        LINKED_LOAN_VALUES::LOAN_ID,
+        LINKED_LOAN_VALUES::LINKED_LOAN_ID,
+        LINKED_LOAN_VALUES::LINKED_LOAN_DISPLAY_ID,
+        LINKED_LOAN_VALUES::VALUE,
+        LINKED_LOAN_VALUES::OPTION_ID,
+    ];
 
     /**
      * The name of the constant collection list
      * @var string
      */
-    protected static $constCollectionPrefix = "PORTFOLIO";
+    protected static $constCollectionPrefix = "LINKED_LOAN_VALUES";
 
     /**
      * Required to keep type fields from colliding with other types
@@ -51,18 +57,12 @@ class PortfolioEntity extends BaseEntity
      * @var array
      */
     protected static $fields = [
-        PORTFOLIO::ACTIVE => FieldValidator::BOOL,
+        LINKED_LOAN_VALUES::UPDATED => FieldValidator::DATE,
 
-        PORTFOLIO::CREATED => FieldValidator::DATE,
-
-        PORTFOLIO::ENTITY_TYPE => FieldValidator::ENTITY_TYPE,
-
-        PORTFOLIO::CATEGORY_ID => FieldValidator::INT,
-
-        PORTFOLIO::NUM_PREFIX => FieldValidator::STRING,
-        PORTFOLIO::NUM_SUFFIX => FieldValidator::STRING,
-        PORTFOLIO::TITLE => FieldValidator::STRING,
-
-        PORTFOLIO::SUB_PORTFOLIO => FieldValidator::READ_ONLY,
+        LINKED_LOAN_VALUES::LINKED_LOAN_DISPLAY_ID  => FieldValidator::INT,
+        LINKED_LOAN_VALUES::LINKED_LOAN_ID  => FieldValidator::INT,
+        LINKED_LOAN_VALUES::LOAN_ID => FieldValidator::INT,
+        LINKED_LOAN_VALUES::OPTION_ID   => FieldValidator::INT,
+        LINKED_LOAN_VALUES::VALUE   => FieldValidator::INT,
     ];
 }

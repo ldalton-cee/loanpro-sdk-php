@@ -20,10 +20,7 @@ class EscrowCalculatorEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($subset){
-        parent::__construct();
-        if(!$this->IsValidField(ESCROW_CALCULATORS::SUBSET, $subset) || is_null($subset))
-            throw new \InvalidArgumentException("Invalid value '$subset' for property ".ESCROW_CALCULATORS::SUBSET);
-        $this->properties[ESCROW_CALCULATORS::SUBSET] = $this->GetValidField(ESCROW_CALCULATORS::SUBSET, $subset);
+        parent::__construct($subset);
     }
 
     /**

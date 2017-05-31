@@ -20,14 +20,7 @@ class DueDateChangesEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($origDate, $newDate){
-        parent::__construct();
-        if(!$this->IsValidField(DUE_DATE_CHANGES::ORIGINAL_DATE, $origDate) || is_null($origDate))
-            throw new \InvalidArgumentException("Invalid value '$origDate' for property ".DUE_DATE_CHANGES::ORIGINAL_DATE);
-        if(!$this->IsValidField(DUE_DATE_CHANGES::NEW_DATE, $newDate) || is_null($newDate))
-            throw new \InvalidArgumentException("Invalid value '$newDate' for property ".DUE_DATE_CHANGES::NEW_DATE);
-
-        $this->properties[DUE_DATE_CHANGES::ORIGINAL_DATE]  = $this->GetValidField(DUE_DATE_CHANGES::ORIGINAL_DATE, $origDate);
-        $this->properties[DUE_DATE_CHANGES::NEW_DATE]       = $this->GetValidField(DUE_DATE_CHANGES::NEW_DATE, $newDate);
+        parent::__construct($origDate, $newDate);
     }
 
     /**

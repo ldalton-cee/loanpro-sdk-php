@@ -19,11 +19,7 @@ class DPDAdjustmentEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($date){
-        parent::__construct();
-        if(!$this->IsValidField(DPD_ADJUSTMENTS::DATE, $date) || is_null($date))
-            throw new \InvalidArgumentException("Invalid value '$date' for property ".DPD_ADJUSTMENTS::DATE);
-
-        $this->properties[DPD_ADJUSTMENTS::DATE] = $this->GetValidField(DPD_ADJUSTMENTS::DATE, $date);
+        parent::__construct($date);
     }
 
     /**

@@ -20,20 +20,7 @@ class AdvancementsEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($title, $date, $amount, $category){
-        parent::__construct();
-        if(!$this->IsValidField(ADVANCEMENTS::CATEGORY, $category) || is_null($category))
-            throw new \InvalidArgumentException("Invalid value '$category' for property ".ADVANCEMENTS::CATEGORY);
-        if(!$this->IsValidField(ADVANCEMENTS::AMOUNT, $amount) || is_null($amount))
-            throw new \InvalidArgumentException("Invalid value '$amount' for property ".ADVANCEMENTS::AMOUNT);
-        if(!$this->IsValidField(ADVANCEMENTS::DATE, $date) || is_null($date))
-            throw new \InvalidArgumentException("Invalid value '$date' for property ".ADVANCEMENTS::DATE);
-        if(!$this->IsValidField(ADVANCEMENTS::TITLE, $title) || is_null($title))
-            throw new \InvalidArgumentException("Invalid value '$title' for property ".ADVANCEMENTS::TITLE);
-
-        $this->properties[ADVANCEMENTS::CATEGORY] = $this->GetValidField(ADVANCEMENTS::CATEGORY, $category);
-        $this->properties[ADVANCEMENTS::AMOUNT] = $this->GetValidField(ADVANCEMENTS::AMOUNT, $amount);
-        $this->properties[ADVANCEMENTS::DATE] = $this->GetValidField(ADVANCEMENTS::DATE, $date);
-        $this->properties[ADVANCEMENTS::TITLE] = $this->GetValidField(ADVANCEMENTS::TITLE, $title);
+        parent::__construct($title, $date, $amount, $category);
     }
 
     /**

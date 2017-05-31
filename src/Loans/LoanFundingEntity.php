@@ -20,27 +20,7 @@ class LoanFundingEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($amount, $date, $whoEntityType, $method, $whoEntityId){
-        parent::__construct();
-
-        if(!$this->IsValidField(LOAN_FUNDING::AMOUNT, $amount) || is_null($amount))
-            throw new \InvalidArgumentException("Invalid value '$amount' for property ".LOAN_FUNDING::AMOUNT);
-        $this->properties[LOAN_FUNDING::AMOUNT] = $this->GetValidField(LOAN_FUNDING::AMOUNT, $amount);
-
-        if(!$this->IsValidField(LOAN_FUNDING::DATE, $date) || is_null($date))
-            throw new \InvalidArgumentException("Invalid value '$date' for property ".LOAN_FUNDING::DATE);
-        $this->properties[LOAN_FUNDING::DATE] = $this->GetValidField(LOAN_FUNDING::DATE, $date);
-
-        if(!$this->IsValidField(LOAN_FUNDING::WHO_ENTITY_TYPE, $whoEntityType) || is_null($whoEntityType))
-            throw new \InvalidArgumentException("Invalid value '$whoEntityType' for property ".LOAN_FUNDING::WHO_ENTITY_TYPE);
-        $this->properties[LOAN_FUNDING::WHO_ENTITY_TYPE] = $this->GetValidField(LOAN_FUNDING::WHO_ENTITY_TYPE, $whoEntityType);
-
-        if(!$this->IsValidField(LOAN_FUNDING::METHOD__C, $method) || is_null($method))
-            throw new \InvalidArgumentException("Invalid value '$method' for property ".LOAN_FUNDING::METHOD__C);
-        $this->properties[LOAN_FUNDING::METHOD__C] = $this->GetValidField(LOAN_FUNDING::METHOD__C, $method);
-
-        if(!$this->IsValidField(LOAN_FUNDING::WHO_ENTITY_ID, $whoEntityId) || is_null($whoEntityId))
-            throw new \InvalidArgumentException("Invalid value '$whoEntityId' for property ".LOAN_FUNDING::WHO_ENTITY_ID);
-        $this->properties[LOAN_FUNDING::WHO_ENTITY_ID] = $this->GetValidField(LOAN_FUNDING::WHO_ENTITY_ID, $whoEntityId);
+        parent::__construct($amount, $date, $whoEntityType, $method, $whoEntityId);
     }
 
     /**

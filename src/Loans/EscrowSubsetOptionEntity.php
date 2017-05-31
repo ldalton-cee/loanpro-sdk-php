@@ -23,17 +23,10 @@ class EscrowSubsetOptionEntity extends BaseEntity
                 $deficiencyDelimDollar, $deficiencyDelimPerc, $deficiencyCatchupPayNum, $deficiencyActA, $deficiencyActB, $deficiencyActC, $escrowCompYrStrtDate, $nxtEscrowAnalysisDate,
                 $shortDaysToPay, $shortCatchupPayNum, $shortDelimAmnt, $shortDelimDollar, $shortDelimPercent, $shortActionA, $shortActionB,
                 $surplusDaysToRefund, $surplusActA, $surplusActB, $surplusAllowedSurplus, $surplusDelimDPD){
-        parent::__construct();
-        $argCnt = func_num_args();
-        $args = func_get_args();
-        $reqCnt = count(static::$required);
-        if($argCnt != $reqCnt)
-            throw new \InvalidArgumentException("Incorrect number of arguments, can't make EscrowSubsetOptionEntity");
-        for($i = 0; $i < $argCnt; ++$i){
-            if(!$this->IsValidField(static::$required[$i], $args[$i]) || is_null($args[$i]))
-                throw new \InvalidArgumentException("Invalid value '".$args[$i]."' for property ".static::$required[$i]);
-            $this->properties[static::$required[$i]] = $this->GetValidField(static::$required[$i], $args[$i]);
-        }
+        parent::__construct($subset, $cushion, $cushionFixedAmt, $cushinPerc, $deficiencyDelimDPD, $deficiencyDaysToPay, $deficiencyDelemAmt,
+            $deficiencyDelimDollar, $deficiencyDelimPerc, $deficiencyCatchupPayNum, $deficiencyActA, $deficiencyActB, $deficiencyActC, $escrowCompYrStrtDate, $nxtEscrowAnalysisDate,
+            $shortDaysToPay, $shortCatchupPayNum, $shortDelimAmnt, $shortDelimDollar, $shortDelimPercent, $shortActionA, $shortActionB,
+            $surplusDaysToRefund, $surplusActA, $surplusActB, $surplusAllowedSurplus, $surplusDelimDPD);
     }
 
     /**

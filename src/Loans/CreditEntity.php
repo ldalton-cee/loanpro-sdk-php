@@ -20,20 +20,7 @@ class CreditEntity extends BaseEntity
      * @throws \ReflectionException
      */
     public function __construct($title, $date, $amount, $category){
-        parent::__construct();
-        if(!$this->IsValidField(CREDIT::CATEGORY, $category) || is_null($category))
-            throw new \InvalidArgumentException("Invalid value '$category' for property ".CREDIT::CATEGORY);
-        if(!$this->IsValidField(CREDIT::AMOUNT, $amount) || is_null($amount))
-            throw new \InvalidArgumentException("Invalid value '$amount' for property ".CREDIT::AMOUNT);
-        if(!$this->IsValidField(CREDIT::DATE, $date) || is_null($date))
-            throw new \InvalidArgumentException("Invalid value '$date' for property ".CREDIT::DATE);
-        if(!$this->IsValidField(CREDIT::TITLE, $title) || is_null($title))
-            throw new \InvalidArgumentException("Invalid value '$title' for property ".CREDIT::TITLE);
-
-        $this->properties[CREDIT::CATEGORY] = $this->GetValidField(CREDIT::CATEGORY, $category);
-        $this->properties[CREDIT::AMOUNT]   = $this->GetValidField(CREDIT::AMOUNT, $amount);
-        $this->properties[CREDIT::DATE]     = $this->GetValidField(CREDIT::DATE, $date);
-        $this->properties[CREDIT::TITLE]    = $this->GetValidField(CREDIT::TITLE, $title);
+        parent::__construct($title, $date, $amount, $category);
     }
 
     /**
