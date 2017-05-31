@@ -19,6 +19,10 @@ class LOAN{
     const COLLATERAL                = 'Collateral';
     const CHARGES                   = 'Charges';
     const LSRULES_APPLIED           = 'RuleAppliedLoanSettings';
+    const SETTINGS_ID               = 'settingsId';
+    const SETUP_ID                  = 'setupId';
+    const INSURANCE_POLICY_ID       = 'insurancePolicyId';
+    const COLLATERAL_ID             = 'collateralId';
     const CHECKLIST_VALUES          = 'ChecklistItemValues';
     const ESCROW_CALCULATORS        = 'EscrowCalculators';
     const PAYMENTS                  = 'Payments';
@@ -33,11 +37,19 @@ class LOAN{
     const MOD_ID                    = 'modId';
     const ACTIVE                    = 'active';
     const DELETED                   = 'deleted';
+    const DELETED_AT                = 'deletedAt';
     const TEMPORARY                 = '__temporary';
+    const TEMPORARY_ACCT            = 'temporaryAccount';
     const DOCUMENTS                 = 'Documents';
     const NOTES                     = 'Notes';
     const PROMISES                  = 'Promises';
     const LOAN_FUNDING              = 'LoanFunding';
+    const LINKED_LOAN               = 'linkedLoan';
+    const HUMAN_ACTIVITY_DATE       = 'humanActivityDate';
+    const LAST_MAINT_RUN            = 'lastMaintRun';
+    const CREATED                   = 'created';
+    const CREATED_BY                = 'createdBy';
+    const ARCHIVED                  = 'archived';
     const ADVANCEMENTS              = 'Advancements';
     const CREDITS                   = 'Credits';
     const TRANSACTIONS              = 'Transactions';
@@ -53,4 +65,7 @@ class LOAN{
     const ESCROW_TRANSACTIONS       = 'EscrowTransactions';
     const ESCROW_SUBSET_OPTIONS     = 'EscrowSubsetOptions';
     const ESTIMATED_DISBURSEMENTS   = 'EstimatedDisbursements';
+    const LOANS                     = 'Loans';
+    const RELATED_METADATA          = '_relatedMetadata';
+    const DYNAMIC_PROPERTIES        = '_dynamicProperties';
 }

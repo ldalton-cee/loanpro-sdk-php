@@ -60,12 +60,25 @@ class LoanEntity extends BaseEntity
         LOAN::LOAN_ALERT                => FieldValidator::STRING,
         LOAN::TITLE                     => FieldValidator::STRING,
 
+        LOAN::COLLATERAL_ID             => FieldValidator::INT,
+        LOAN::CREATED_BY                => FieldValidator::INT,
+        LOAN::INSURANCE_POLICY_ID       => FieldValidator::INT,
+        LOAN::LINKED_LOAN               => FieldValidator::INT,
         LOAN::MOD_ID                    => FieldValidator::INT,
         LOAN::MOD_TOTAL                 => FieldValidator::INT,
+        LOAN::SETTINGS_ID               => FieldValidator::INT,
+        LOAN::SETUP_ID                  => FieldValidator::INT,
 
         LOAN::ACTIVE                    => FieldValidator::BOOL,
+        LOAN::ARCHIVED                  => FieldValidator::BOOL,
         LOAN::DELETED                   => FieldValidator::BOOL,
         LOAN::TEMPORARY                 => FieldValidator::BOOL,
+        LOAN::TEMPORARY_ACCT            => FieldValidator::BOOL,
+
+        LOAN::HUMAN_ACTIVITY_DATE       => FieldValidator::DATE,
+        LOAN::CREATED                   => FieldValidator::DATE,
+        LOAN::DELETED_AT                => FieldValidator::DATE,
+        LOAN::LAST_MAINT_RUN            => FieldValidator::DATE,
 
         LOAN::COLLATERAL                => FieldValidator::OBJECT,
         LOAN::INSURANCE                 => FieldValidator::OBJECT,
@@ -83,8 +96,11 @@ class LoanEntity extends BaseEntity
         LOAN::ESCROW_ADJUSTMENTS        => FieldValidator::OBJECT_LIST,
         LOAN::ESCROW_CALCULATED_TX      => FieldValidator::OBJECT_LIST,
         LOAN::ESCROW_CALCULATORS        => FieldValidator::OBJECT_LIST,
+        LOAN::ESCROW_TRANSACTIONS       => FieldValidator::OBJECT_LIST,
+        LOAN::ESCROW_SUBSET_OPTIONS     => FieldValidator::OBJECT_LIST,
         LOAN::LOAN_FUNDING              => FieldValidator::OBJECT_LIST,
         LOAN::LOAN_MODIFICATIONS        => FieldValidator::OBJECT_LIST,
+        LOAN::LOANS                     => FieldValidator::OBJECT_LIST,
         LOAN::LSRULES_APPLIED           => FieldValidator::OBJECT_LIST,
         LOAN::LSTATUS_ARCHIVE           => FieldValidator::OBJECT_LIST,
         LOAN::NOTES                     => FieldValidator::OBJECT_LIST,
@@ -96,10 +112,9 @@ class LoanEntity extends BaseEntity
         LOAN::STOP_INTEREST_DATES       => FieldValidator::OBJECT_LIST,
         LOAN::SUB_PORTFOLIOS            => FieldValidator::OBJECT_LIST,
         LOAN::TRANSACTIONS              => FieldValidator::OBJECT_LIST,
-        LOAN::ESCROW_TRANSACTIONS       => FieldValidator::OBJECT_LIST,
-        LOAN::ESCROW_SUBSET_OPTIONS     => FieldValidator::OBJECT_LIST,
-        LOAN::LOAN_MODIFICATIONS        => FieldValidator::OBJECT_LIST,
 
         LOAN::ESTIMATED_DISBURSEMENTS   => FieldValidator::READ_ONLY,
+        LOAN::RELATED_METADATA          => FieldValidator::READ_ONLY,
+        LOAN::DYNAMIC_PROPERTIES        => FieldValidator::READ_ONLY,
     ];
 }

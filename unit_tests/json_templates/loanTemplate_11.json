@@ -764,6 +764,258 @@
         "surplusActionB": 1
       }
     ]
+  },
+  "Loans": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/Loans(id=340)",
+          "type": "Entity.Loan"
+        },
+        "Insurance": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Insurance"
+          }
+        },
+        "CustomFieldValues": {
+          "__deferred": {
+            "uri": "Loans(id=340)/CustomFieldValues"
+          }
+        },
+        "ChecklistItemValues": {
+          "__deferred": {
+            "uri": "Loans(id=340)/ChecklistItemValues"
+          }
+        },
+        "Documents": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Documents"
+          }
+        },
+        "Collateral": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Collateral"
+          }
+        },
+        "LoanSettings": {
+          "__deferred": {
+            "uri": "Loans(id=340)/LoanSettings"
+          }
+        },
+        "LoanSetup": {
+          "__deferred": {
+            "uri": "Loans(id=340)/LoanSetup"
+          }
+        },
+        "Notes": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Notes"
+          }
+        },
+        "Promises": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Promises"
+          }
+        },
+        "Charges": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Charges"
+          }
+        },
+        "Payments": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Payments"
+          }
+        },
+        "LoanFunding": {
+          "__deferred": {
+            "uri": "Loans(id=340)/LoanFunding"
+          }
+        },
+        "Advancements": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Advancements"
+          }
+        },
+        "Credits": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Credits"
+          }
+        },
+        "DueDateChanges": {
+          "__deferred": {
+            "uri": "Loans(id=340)/DueDateChanges"
+          }
+        },
+        "CurtailmentDates": {
+          "__deferred": {
+            "uri": "Loans(id=340)/CurtailmentDates"
+          }
+        },
+        "StatusArchive": {
+          "__deferred": {
+            "uri": "Loans(id=340)/StatusArchive"
+          }
+        },
+        "Transactions": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Transactions"
+          }
+        },
+        "EscrowCalculatedTx": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowCalculatedTx"
+          }
+        },
+        "ScheduleRolls": {
+          "__deferred": {
+            "uri": "Loans(id=340)/ScheduleRolls"
+          }
+        },
+        "StopInterestDates": {
+          "__deferred": {
+            "uri": "Loans(id=340)/StopInterestDates"
+          }
+        },
+        "APDAdjustments": {
+          "__deferred": {
+            "uri": "Loans(id=340)/APDAdjustments"
+          }
+        },
+        "DPDAdjustments": {
+          "__deferred": {
+            "uri": "Loans(id=340)/DPDAdjustments"
+          }
+        },
+        "LoanModifications": {
+          "__deferred": {
+            "uri": "Loans(id=340)/LoanModifications"
+          }
+        },
+        "EscrowAdjustments": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowAdjustments"
+          }
+        },
+        "EscrowTransactions": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowTransactions"
+          }
+        },
+        "EscrowSubsetOptions": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowSubsetOptions"
+          }
+        },
+        "EscrowCalculators": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowCalculators"
+          }
+        },
+        "EstimatedDisbursements": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EstimatedDisbursements"
+          }
+        },
+        "Loans": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Loans"
+          }
+        },
+        "LinkedLoanValues": {
+          "__deferred": {
+            "uri": "Loans(id=340)/LinkedLoanValues"
+          }
+        },
+        "RecurrentCharges": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RecurrentCharges"
+          }
+        },
+        "PayNearMeOrders": {
+          "__deferred": {
+            "uri": "Loans(id=340)/PayNearMeOrders"
+          }
+        },
+        "Customers": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Customers"
+          }
+        },
+        "Portfolios": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Portfolios"
+          }
+        },
+        "SubPortfolios": {
+          "__deferred": {
+            "uri": "Loans(id=340)/SubPortfolios"
+          }
+        },
+        "EscrowSubsets": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowSubsets"
+          }
+        },
+        "RuleAppliedLoanSettings": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedLoanSettings"
+          }
+        },
+        "RuleAppliedChargeOff": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedChargeOff"
+          }
+        },
+        "RuleAppliedAPDReset": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedAPDReset"
+          }
+        },
+        "RuleAppliedChecklists": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedChecklists"
+          }
+        },
+        "RuleAppliedChangeDueDates": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedChangeDueDates"
+          }
+        },
+        "RuleAppliedStopInterest": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedStopInterest"
+          }
+        },
+        "Autopays": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Autopays"
+          }
+        },
+        "id": 340,
+        "displayId": "44450071",
+        "title": "44450071",
+        "settingsId": 326,
+        "setupId": 348,
+        "insurancePolicyId": "4",
+        "collateralId": 195,
+        "linkedLoan": 69,
+        "modId": null,
+        "modTotal": 0,
+        "humanActivityDate": "/Date(1466640000)/",
+        "created": "/Date(1466439551)/",
+        "lastMaintRun": "/Date(1496245685)/",
+        "createdBy": 44,
+        "active": 1,
+        "archived": 0,
+        "loanAlert": "asdfadfs",
+        "temporaryAccount": 0,
+        "deleted": 0,
+        "deletedAt": null,
+        "_relatedMetadata": null,
+        "_dynamicProperties": null
+      }
+    ]
   }
 
 }
