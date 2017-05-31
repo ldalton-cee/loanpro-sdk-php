@@ -31,6 +31,7 @@ use Simnang\LoanPro\Loans\DueDateChangesEntity;
 use Simnang\LoanPro\Loans\EscrowAdjustmentsEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatedTxEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatorEntity;
+use Simnang\LoanPro\Loans\EscrowSubsetEntity;
 use Simnang\LoanPro\Loans\EscrowSubsetOptionEntity;
 use Simnang\LoanPro\Loans\EscrowTransactionsEntity;
 use Simnang\LoanPro\Loans\FileAttachmentEntity;
@@ -433,6 +434,7 @@ class LoanProSDK
         LOAN::ESCROW_ADJUSTMENTS    =>['class'=>EscrowAdjustmentsEntity::class,     'isList'=>true ],
         LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,      'isList'=>true ],
         LOAN::ESCROW_CALCULATED_TX  =>['class'=>EscrowCalculatedTxEntity::class,    'isList'=>true ],
+        LOAN::ESCROW_SUBSET         =>['class'=>EscrowSubsetEntity::class,          'isList'=>true ],
         LOAN::ESCROW_SUBSET_OPTIONS =>['class'=>EscrowSubsetOptionEntity::class,    'isList'=>true ],
         LOAN::ESCROW_TRANSACTIONS   =>['class'=>EscrowTransactionsEntity::class,    'isList'=>true ],
         LOAN::DUE_DATE_CHANGES      =>['class'=>DueDateChangesEntity::class,        'isList'=>true ],
