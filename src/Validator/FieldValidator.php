@@ -19,7 +19,7 @@ use Simnang\LoanPro\Constants\ENTITY_TYPES;
  * @package Simnang\LoanPro\Validator
  */
 class FieldValidator{
-    private static $dateRegEx = '/^\/Date\(([0-9]+)\)\/$/';
+    private static $dateRegEx = '/^\/Date\((-?[0-9]+)\)\/$/';
 
     /**
      * Integer data type

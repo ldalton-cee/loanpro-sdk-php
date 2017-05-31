@@ -51,4 +51,5 @@ class LOAN{
     const ESCROW_ADJUSTMENTS    = 'EscrowAdjustments';
     const LOAN_MODIFICATIONS    = 'LoanModifications';
     const ESCROW_TRANSACTIONS   = 'EscrowTransactions';
+    const ESCROW_SUBSET_OPTIONS = 'EscrowSubsetOptions';
 }

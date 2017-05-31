@@ -30,6 +30,7 @@ use Simnang\LoanPro\Loans\DueDateChangesEntity;
 use Simnang\LoanPro\Loans\EscrowAdjustmentsEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatedTxEntity;
 use Simnang\LoanPro\Loans\EscrowCalculatorEntity;
+use Simnang\LoanPro\Loans\EscrowSubsetOptionEntity;
 use Simnang\LoanPro\Loans\EscrowTransactionsEntity;
 use Simnang\LoanPro\Loans\FileAttachmentEntity;
 use Simnang\LoanPro\Loans\InsuranceEntity;
@@ -323,6 +324,17 @@ class LoanProSDK
         return new EscrowTransactionsEntity($subset, $category, $date, $type, $amount);
     }
 
+    public static function CreateEscrowSubsetOption($subset, $cushion, $cushionFixedAmt, $cushinPerc, $deficiencyDelimDPD, $deficiencyDaysToPay, $deficiencyDelemAmt,
+                                                    $deficiencyDelimDollar, $deficiencyDelimPerc, $deficiencyCatchupPayNum, $deficiencyActA, $deficiencyActB, $deficiencyActC, $escrowCompYrStrtDate, $nxtEscrowAnalysisDate,
+                                                    $shortDaysToPay, $shortCatchupPayNum, $shortDelimAmnt, $shortDelimDollar, $shortDelimPercent, $shortActionA, $shortActionB,
+                                                    $surplusDaysToRefund, $surplusActA, $surplusActB, $surplusAllowedSurplus, $surplusDelimDPD)
+    {
+        return new EscrowSubsetOptionEntity($subset, $cushion, $cushionFixedAmt, $cushinPerc, $deficiencyDelimDPD, $deficiencyDaysToPay, $deficiencyDelemAmt,
+            $deficiencyDelimDollar, $deficiencyDelimPerc, $deficiencyCatchupPayNum, $deficiencyActA, $deficiencyActB, $deficiencyActC, $escrowCompYrStrtDate, $nxtEscrowAnalysisDate,
+            $shortDaysToPay, $shortCatchupPayNum, $shortDelimAmnt, $shortDelimDollar, $shortDelimPercent, $shortActionA, $shortActionB,
+            $surplusDaysToRefund, $surplusActA, $surplusActB, $surplusAllowedSurplus, $surplusDelimDPD);
+    }
+
     /**
      * Preps an array to be used to create an object by cleaning it and getting the object form (if applicable)
      * @param array $json - JSON to prep
@@ -369,6 +381,7 @@ class LoanProSDK
         LOAN::ESCROW_ADJUSTMENTS    =>['class'=>EscrowAdjustmentsEntity::class,  'isList'=>true ],
         LOAN::ESCROW_CALCULATORS    =>['class'=>EscrowCalculatorEntity::class,   'isList'=>true ],
         LOAN::ESCROW_CALCULATED_TX  =>['class'=>EscrowCalculatedTxEntity::class, 'isList'=>true ],
+        LOAN::ESCROW_SUBSET_OPTIONS =>['class'=>EscrowSubsetOptionEntity::class, 'isList'=>true ],
         LOAN::ESCROW_TRANSACTIONS   =>['class'=>EscrowTransactionsEntity::class, 'isList'=>true ],
         LOAN::DUE_DATE_CHANGES      =>['class'=>DueDateChangesEntity::class,     'isList'=>true ],
         LOAN::LOAN_MODIFICATIONS    =>['class'=>LoanModificationEntity::class,   'isList'=>true ],

@@ -712,6 +712,58 @@
         "amount": "50.00"
       }
     ]
+  },
+  "EscrowSubsetOptions": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/EscrowSubsetOptions(id=19)",
+          "type": "Entity.EscrowSubsetOptions"
+        },
+        "EstimatedDisbursements": {
+          "__deferred": {
+            "uri": "EscrowSubsetOptions(id=19)/EstimatedDisbursements"
+          }
+        },
+        "id": 19,
+        "entityType": "Entity.Loan",
+        "entityId": 4,
+        "subset": "3",
+        "payoffOption": "loan.escrowpayoff.standard",
+        "paymentApplication": "loan.escrowpmtapp.standard",
+        "aprInclude": 0,
+        "scheduleInclude": 0,
+        "disclosureLnAmtAdd": 0,
+        "interestBearing": 1,
+        "escrowAnalysisEnabled": 1,
+        "cushion": 1,
+        "cushionFixedAmount": "0.00",
+        "cushionPercentage": "0.000",
+        "escrowComputationYearStartDate": "/Date(-62169984000)/",
+        "nextEscrowAnalysisDate": "/Date(-62169984000)/",
+        "deficiencyDelimitingDPD": 0,
+        "deficiencyDaysToPay": 0,
+        "deficiencyDelimitingAmount": 1,
+        "deficiencyDelimitingDollar": "0.00",
+        "deficiencyDelimitingPercentage": "0.000",
+        "deficiencyCatchupPaymentNumber": 2,
+        "deficiencyActionA": 1,
+        "deficiencyActionB": 1,
+        "deficiencyActionC": 1,
+        "shortageDaysToPay": 0,
+        "shortageCatchupPaymentNumber": 1,
+        "shortageDelimitingAmount": 1,
+        "shortageDelimitingDollar": "0.00",
+        "shortageDelimitingPercentage": "0.000",
+        "shortageActionA": 1,
+        "shortageActionB": 1,
+        "surplusAllowedSurplus": "0.00",
+        "surplusDaysToRefund": 0,
+        "surplusDelimitingDPD": 0,
+        "surplusActionA": 1,
+        "surplusActionB": 1
+      }
+    ]
   }
 
 }
