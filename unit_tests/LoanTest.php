@@ -923,6 +923,52 @@ class LoanTest extends TestCase
             CONSTS\ESCROW_SUBSET::SCHEDULE_INCLUDE  => 0,
             CONSTS\ESCROW_SUBSET::TITLE => "CSO Sample",
         ]);
+
+        $this->assertEquals([$escrowSub], $loan->get(LOAN::ESCROW_SUBSET));
+
+        $ruleAppliedSettings = (new \Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity(18, 1))->set(
+            [
+                CONSTS\LSRULES_APPLIED::NAME    => "C2",
+                CONSTS\LSRULES_APPLIED::RULE    => "(= status-days-past-due 2)",
+                CONSTS\LSRULES_APPLIED::EVAL_IN_REAL_TIME   => 1,
+                CONSTS\LSRULES_APPLIED::EVAL_IN_DAILY_MAINT => 0,
+                CONSTS\LSRULES_APPLIED::ENROLL_NEW_LOANS    => 1,
+                CONSTS\LSRULES_APPLIED::ENROLL_EXISTING_LOANS   => 0,
+                CONSTS\LSRULES_APPLIED::FORCING => 0,
+                CONSTS\LSRULES_APPLIED::ORDER   => 29,
+                CONSTS\LSRULES_APPLIED::LOAN_ENABLED    => 1,
+                CONSTS\LSRULES_APPLIED::SOURCE_COMPANY => 4,
+                CONSTS\LSRULES_APPLIED::DELETE_PORTFOLIOS => 0
+            ]
+        );
+
+        $this->assertEquals([$ruleAppliedSettings], $loan->get(LOAN::LSRULES_APPLIED));
+
+        $ruleAppliedChargeoff = (new \Simnang\LoanPro\Loans\RulesAppliedChargeoffEntity(4, 1))->set(
+            [
+                CONSTS\RULES_APPLIED_CHARGEOFF::NAME    => "DPD More Than 90 No GPS",
+                CONSTS\RULES_APPLIED_CHARGEOFF::RULE    => "90 status-days-past-due AND (-> collateral-gps-status (get :collateral.gpsstatus.notinstalled) :PROPERTY)",
+                CONSTS\RULES_APPLIED_CHARGEOFF::EVAL_IN_REAL_TIME   => 1,
+                CONSTS\RULES_APPLIED_CHARGEOFF::EVAL_IN_DAILY_MAINT => 0,
+                CONSTS\RULES_APPLIED_CHARGEOFF::ENROLL_NEW_LOANS    => 1,
+                CONSTS\RULES_APPLIED_CHARGEOFF::ENROLL_EXISTING_LOANS   => 0,
+                CONSTS\RULES_APPLIED_CHARGEOFF::FORCING => 0,
+                CONSTS\RULES_APPLIED_CHARGEOFF::ORDER   => 8,
+                CONSTS\RULES_APPLIED_CHARGEOFF::LOAN_ENABLED    => 1,
+                CONSTS\RULES_APPLIED_CHARGEOFF::EXTRA_TX__C => CONSTS\RULES_APPLIED_CHARGEOFF\RULES_APPLIED_CHARGEOFF_EXTRA_TX__C::BTWN_TRANS_PRINCIPAL,
+                CONSTS\RULES_APPLIED_CHARGEOFF::EXTRA_PERIODS__C => CONSTS\RULES_APPLIED_CHARGEOFF\RULES_APPLIED_CHARGEOFF_EXTRA_PERIODS__C::BTWN_PER_NEXT,
+                CONSTS\RULES_APPLIED_CHARGEOFF::AMOUNT_CALCULATION => 'apd',
+                CONSTS\RULES_APPLIED_CHARGEOFF::AMOUNT => 0.00,
+                CONSTS\RULES_APPLIED_CHARGEOFF::EARLY => 1,
+                CONSTS\RULES_APPLIED_CHARGEOFF::INFO => 'Information',
+                CONSTS\RULES_APPLIED_CHARGEOFF::IS_PAYMENT => true,
+                CONSTS\RULES_APPLIED_CHARGEOFF::CREDIT_CATEGORY => 1,
+
+                CONSTS\RULES_APPLIED_CHARGEOFF::RESET_PAST_DUE => false
+            ]
+        );
+
+        $this->assertEquals([$ruleAppliedChargeoff], $loan->get(LOAN::RULES_APPLIED_CHARGEOFF));
     }
 }
 

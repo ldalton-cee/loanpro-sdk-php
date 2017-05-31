@@ -1221,6 +1221,41 @@
         "loanEnabled": 1
       }
     ]
+  },
+  "RuleAppliedChargeOff": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedChargeOff(id=4)",
+          "type": "Entity.RuleAppliedChargeOff"
+        },
+        "id": 4,
+        "name": "DPD More Than 90 No GPS",
+        "rule": "90 status-days-past-due AND (-> collateral-gps-status (get :collateral.gpsstatus.notinstalled) :PROPERTY)",
+        "paymentTypeId": null,
+        "paymentMethodId": null,
+        "amountCalculation": "apd",
+        "amount": "0.00",
+        "extraTx": "payment.extra.tx.principal",
+        "extraPeriods": "payment.extra.periods.next",
+        "early": 1,
+        "info": "Information",
+        "enrollNewLoans": 1,
+        "enrollExistingLoans": 0,
+        "enabled": 1,
+        "evalInRealTime": 1,
+        "evalInDailyMaint": 0,
+        "forcing": 0,
+        "isPayment": 1,
+        "creditCategory": 1,
+        "resetPastDue": 0,
+        "order": 8,
+        "applyUnderPayDiffAs": null,
+        "applyOverPayDiffAs": null,
+        "advancementCategory": null,
+        "loanEnabled": 1
+      }
+    ]
   }
 
 }

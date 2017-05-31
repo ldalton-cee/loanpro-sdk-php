@@ -108,6 +108,7 @@ class LoanEntity extends BaseEntity
         LOAN::PORTFOLIOS                => FieldValidator::OBJECT_LIST,
         LOAN::PROMISES                  => FieldValidator::OBJECT_LIST,
         LOAN::RECURRENT_CHARGES         => FieldValidator::OBJECT_LIST,
+        LOAN::RULES_APPLIED_CHARGEOFF   => FieldValidator::OBJECT_LIST,
         LOAN::SCHEDULE_ROLLS            => FieldValidator::OBJECT_LIST,
         LOAN::STOP_INTEREST_DATES       => FieldValidator::OBJECT_LIST,
         LOAN::SUB_PORTFOLIOS            => FieldValidator::OBJECT_LIST,
