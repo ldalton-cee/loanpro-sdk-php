@@ -63,6 +63,7 @@ class LOAN{
     const RECURRENT_CHARGES         = 'RecurrentCharges';
     const RELATED_METADATA          = '_relatedMetadata';
     const RULES_APPLIED_CHARGEOFF   = 'RuleAppliedChargeOff';
+    const RULES_APPLIED_APD_RESET   = 'RuleAppliedAPDReset';
     const SCHEDULE_ROLLS            = 'ScheduleRolls';
     const SETTINGS_ID               = 'settingsId';
     const SETUP_ID                  = 'setupId';

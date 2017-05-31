@@ -52,6 +52,7 @@ use Simnang\LoanPro\Loans\PaynearmeOrderEntity;
 use Simnang\LoanPro\Loans\PortfolioEntity;
 use Simnang\LoanPro\Loans\PromisesEntity;
 use Simnang\LoanPro\Loans\RecurrentChargesEntity;
+use Simnang\LoanPro\Loans\RulesAppliedAPDResetEntity;
 use Simnang\LoanPro\Loans\RulesAppliedChargeoffEntity;
 use Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity;
 use Simnang\LoanPro\Loans\ScheduleRollEntity;
@@ -449,6 +450,7 @@ class LoanProSDK
         LOAN::PROMISES                  =>['class'=>PromisesEntity::class,                  'isList'=>true ],
         LOAN::RECURRENT_CHARGES         =>['class'=>RecurrentChargesEntity::class,          'isList'=>true ],
         LOAN::RULES_APPLIED_CHARGEOFF   =>['class'=>RulesAppliedChargeoffEntity::class,     'isList'=>true ],
+        LOAN::RULES_APPLIED_APD_RESET   =>['class'=>RulesAppliedAPDResetEntity::class,      'isList'=>true ],
         LOAN::NOTES                     =>['class'=>NotesEntity::class,                     'isList'=>true ],
         LOAN::SCHEDULE_ROLLS            =>['class'=>ScheduleRollEntity::class,              'isList'=>true ],
         LOAN::STOP_INTEREST_DATES       =>['class'=>StopInterestDateEntity::class,          'isList'=>true ],

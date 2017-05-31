@@ -1256,6 +1256,31 @@
         "loanEnabled": 1
       }
     ]
+  },
+  "RuleAppliedAPDReset": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedAPDReset(id=2)",
+          "type": "Entity.RuleAppliedAPDReset"
+        },
+        "id": 2,
+        "name": "Days Old 25",
+        "rule": "(= (u/date-compare (u/today) setup-contract-date) 25)",
+        "amount": "0.00",
+        "dpdReset": "0",
+        "daysFromToday": "0",
+        "adjustmentType": "loan.apd.adjust.type.zero",
+        "enrollNewLoans": 1,
+        "enrollExistingLoans": 0,
+        "enabled": 0,
+        "evalInRealTime": 1,
+        "evalInDailyMaint": 0,
+        "forcing": 0,
+        "order": 15,
+        "loanEnabled": 1
+      }
+    ]
   }
 
 }
