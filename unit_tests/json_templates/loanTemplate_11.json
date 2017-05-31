@@ -1016,6 +1016,46 @@
         "_dynamicProperties": null
       }
     ]
+  },
+  "LinkedLoanValues": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/LinkedLoanValues(id=1)",
+          "type": "Entity.LinkedLoan"
+        },
+        "LinkedLoanOption": {
+          "__deferred": {
+            "uri": "LinkedLoanValues(id=1)/LinkedLoanOption"
+          }
+        },
+        "id": 1,
+        "loanId": 86,
+        "linkedLoanId": 73,
+        "optionId": 9,
+        "value": 1,
+        "updated": "/Date(1462807872)/",
+        "linkedLoanDisplay": "73"
+      },
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/LinkedLoanValues(id=2)",
+          "type": "Entity.LinkedLoan"
+        },
+        "LinkedLoanOption": {
+          "__deferred": {
+            "uri": "LinkedLoanValues(id=2)/LinkedLoanOption"
+          }
+        },
+        "id": 2,
+        "loanId": 86,
+        "linkedLoanId": 73,
+        "optionId": 5,
+        "value": 1,
+        "updated": "/Date(1462807872)/",
+        "linkedLoanDisplay": "73"
+      }
+    ]
   }
 
 }

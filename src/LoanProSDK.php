@@ -11,6 +11,7 @@ namespace Simnang\LoanPro;
 
 use Simnang\LoanPro\Constants\APD_ADJUSTMENTS;
 use Simnang\LoanPro\Constants\DOCUMENTS;
+use Simnang\LoanPro\Constants\LINKED_LOAN_VALUES;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETTINGS;
 use Simnang\LoanPro\Constants\LSETUP;
@@ -430,6 +431,7 @@ class LoanProSDK
         LOAN::ESCROW_SUBSET_OPTIONS =>['class'=>EscrowSubsetOptionEntity::class,    'isList'=>true ],
         LOAN::ESCROW_TRANSACTIONS   =>['class'=>EscrowTransactionsEntity::class,    'isList'=>true ],
         LOAN::DUE_DATE_CHANGES      =>['class'=>DueDateChangesEntity::class,        'isList'=>true ],
+        LOAN::LINKED_LOAN_VALUES    =>['class'=>LinkedLoanValuesEntity::class,      'isList'=>true ],
         LOAN::LOAN_MODIFICATIONS    =>['class'=>LoanModificationEntity::class,      'isList'=>true ],
         LOAN::LOAN_FUNDING          =>['class'=>LoanFundingEntity::class,           'isList'=>true ],
         LOAN::LOANS                 =>['class'=>LoanEntity::class,                  'isList'=>true ],

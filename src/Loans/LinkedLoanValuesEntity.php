@@ -64,5 +64,7 @@ class LinkedLoanValuesEntity extends BaseEntity
         LINKED_LOAN_VALUES::LOAN_ID => FieldValidator::INT,
         LINKED_LOAN_VALUES::OPTION_ID   => FieldValidator::INT,
         LINKED_LOAN_VALUES::VALUE   => FieldValidator::INT,
+
+        LINKED_LOAN_VALUES::LINKED_LOAN_OPTION => FieldValidator::READ_ONLY,
     ];
 }

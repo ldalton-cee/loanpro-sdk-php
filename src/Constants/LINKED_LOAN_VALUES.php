@@ -19,4 +19,5 @@ class LINKED_LOAN_VALUES{
     const VALUE                     = 'value';
     const UPDATED                   = 'updated';
     const LINKED_LOAN_DISPLAY_ID    = 'linkedLoanDisplay';
+    const LINKED_LOAN_OPTION        = 'LinkedLoanOption';
 }
