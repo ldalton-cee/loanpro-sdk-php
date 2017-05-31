@@ -50,6 +50,7 @@ use Simnang\LoanPro\Loans\PaymentEntity;
 use Simnang\LoanPro\Loans\PaynearmeOrderEntity;
 use Simnang\LoanPro\Loans\PortfolioEntity;
 use Simnang\LoanPro\Loans\PromisesEntity;
+use Simnang\LoanPro\Loans\RecurrentChargesEntity;
 use Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity;
 use Simnang\LoanPro\Loans\ScheduleRollEntity;
 use Simnang\LoanPro\Loans\SourceCompanyEntity;
@@ -314,6 +315,10 @@ class LoanProSDK
         return new APDAdjustmentEntity($date,$amount,$type);
     }
 
+    public static function CreateRecurringCharge($isEnabled, $applyInNewLoan, $title, $info, $calculation, $triggerType){
+        return new RecurrentChargesEntity($isEnabled, $applyInNewLoan, $title, $info, $calculation, $triggerType);
+    }
+
     /**
      * Create linked loan values entity
      * @param $loanId - ID of main loan
@@ -439,6 +444,7 @@ class LoanProSDK
         LOAN::PAY_NEAR_ME_ORDERS    =>['class'=>PaynearmeOrderEntity::class,        'isList'=>true ],
         LOAN::PAYMENTS              =>['class'=>PaymentEntity::class,               'isList'=>true ],
         LOAN::PROMISES              =>['class'=>PromisesEntity::class,              'isList'=>true ],
+        LOAN::RECURRENT_CHARGES     =>['class'=>RecurrentChargesEntity::class,      'isList'=>true ],
         LOAN::NOTES                 =>['class'=>NotesEntity::class,                 'isList'=>true ],
         LOAN::SCHEDULE_ROLLS        =>['class'=>ScheduleRollEntity::class,          'isList'=>true ],
         LOAN::STOP_INTEREST_DATES   =>['class'=>StopInterestDateEntity::class,      'isList'=>true ],

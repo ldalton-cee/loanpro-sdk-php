@@ -46,6 +46,7 @@ class LOAN{
     const LOAN_FUNDING              = 'LoanFunding';
     const LINKED_LOAN               = 'linkedLoan';
     const LINKED_LOAN_VALUES        = 'LinkedLoanValues';
+    const RECURRENT_CHARGES         = 'RecurrentCharges';
     const HUMAN_ACTIVITY_DATE       = 'humanActivityDate';
     const LAST_MAINT_RUN            = 'lastMaintRun';
     const CREATED                   = 'created';

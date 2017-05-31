@@ -887,6 +887,25 @@ class LoanTest extends TestCase
         );
 
         $this->assertEquals([$escrowSubOpt], $loan->get(LOAN::ESCROW_SUBSET_OPTIONS));
+
+        $recChrg = LPSDK::CreateRecurringCharge(1, 1, 'NSF Charge RType', 'NSF Charge aR', CONSTS\RECURRENT_CHARGES\RECURRENT_CHARGES_CALCULATION__C::FIXED, CONSTS\RECURRENT_CHARGES\RECURRENT_CHARGES_TRIGGER_TYPE__C::EVENT)
+        ->set(
+            [
+                BASE_ENTITY::ID => 16,
+                CONSTS\RECURRENT_CHARGES::INTEREST_BEARING => 0,
+                CONSTS\RECURRENT_CHARGES::CHARGE_APPLICATION_TYPE__C => CONSTS\RECURRENT_CHARGES\RECURRENT_CHARGES_CHARGE_APPLICATION_TYPE__C::STANDARD,
+                CONSTS\RECURRENT_CHARGES::TRIGGER_EVENT__C => CONSTS\RECURRENT_CHARGES\RECURRENT_CHARGES_TRIGGER_EVENT__C::PAYMENT_REVERSAL,
+                CONSTS\RECURRENT_CHARGES::TRIGGER_SUB_EVENT__C => CONSTS\RECURRENT_CHARGES\RECURRENT_CHARGES_TRIGGER_SUB_EVENT__C::NFS,
+                CONSTS\RECURRENT_CHARGES::CREATED => 1460567502,
+                CONSTS\RECURRENT_CHARGES::STATUS => 1,
+                CONSTS\RECURRENT_CHARGES::RESTRICTION_UI => "{\"portfolios\":[{\"category\":\"\",\"portfolio\":\"\",\"subportfolio\":\"\"}],\"triggerRuleUI\":\"\"}",
+                CONSTS\RECURRENT_CHARGES::TRIGGER_RULE => "sample",
+                CONSTS\RECURRENT_CHARGES::FIXED_AMOUNT => 25.00,
+                CONSTS\RECURRENT_CHARGES::PERCENTAGE => 0.00,
+            ]
+        );
+
+        $this->assertEquals([$recChrg], $loan->get(LOAN::RECURRENT_CHARGES));
     }
 }
 

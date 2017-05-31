@@ -1056,6 +1056,45 @@
         "linkedLoanDisplay": "73"
       }
     ]
+  },
+  "RecurrentCharges": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/RecurrentCharges(id=16)",
+          "type": "Entity.RecurrentCharge"
+        },
+        "Bracket": {
+          "__deferred": {
+            "uri": "RecurrentCharges(id=16)/Bracket"
+          }
+        },
+        "id": 16,
+        "triggerEvent": "charge.recurring.event.paymentreversal",
+        "triggerSubEvent": "charge.recurring.event.paymentreversal.nfs",
+        "triggerEventValue": null,
+        "triggerRule": "sample",
+        "restrictionRule": null,
+        "restrictionUI": "{\"portfolios\":[{\"category\":\"\",\"portfolio\":\"\",\"subportfolio\":\"\"}],\"triggerRuleUI\":\"\"}",
+        "chargeApplicationType": "loan.latefeeapp.standard",
+        "isEnabled": 1,
+        "applyInNewLoan": 1,
+        "title": "NSF Charge RType",
+        "info": "NSF Charge aR",
+        "calculation": "charge.recurring.calculation.fixed",
+        "fixedAmount": "25.00",
+        "percentage": "0.00",
+        "percentageBase": null,
+        "contingencyBracketId": null,
+        "triggerType": "charge.recurring.triggertype.event",
+        "loanType": null,
+        "interestBearing": 0,
+        "status": 1,
+        "active": null,
+        "created": "/Date(1460567502)/",
+        "__modifyLoans": null
+      }
+    ]
   }
 
 }
