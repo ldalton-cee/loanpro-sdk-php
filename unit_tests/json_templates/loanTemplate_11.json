@@ -1145,6 +1145,82 @@
         "surplusActionB": 1
       }
     ]
+  },
+  "RuleAppliedLoanSettings": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedLoanSettings(id=18)",
+          "type": "Entity.RuleAppliedLoanSettings"
+        },
+        "LoanStatus": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/LoanStatus"
+          }
+        },
+        "LoanSubStatus": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/LoanSubStatus"
+          }
+        },
+        "CustomFieldValues": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/CustomFieldValues"
+          }
+        },
+        "Portfolios": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/Portfolios"
+          }
+        },
+        "PortfoliosToDelete": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/PortfoliosToDelete"
+          }
+        },
+        "SubPortfolios": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/SubPortfolios"
+          }
+        },
+        "SubPortfoliosToDelete": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/SubPortfoliosToDelete"
+          }
+        },
+        "id": 18,
+        "name": "C2",
+        "rule": "(= status-days-past-due 2)",
+        "cardFeeAmount": null,
+        "cardFeeType": null,
+        "cardFeePercent": null,
+        "agent": null,
+        "loanStatusId": null,
+        "loanSubStatusId": null,
+        "sourceCompany": 4,
+        "eBilling": null,
+        "ECOACode": null,
+        "coBuyerECOACode": null,
+        "creditStatus": null,
+        "creditBureau": null,
+        "reportingType": null,
+        "secured": null,
+        "autopayEnabled": null,
+        "repoDate": null,
+        "closedDate": null,
+        "liquidationDate": null,
+        "isStoplightManuallySet": null,
+        "deletePortfolios": 0,
+        "enrollNewLoans": 1,
+        "enrollExistingLoans": 0,
+        "enabled": 1,
+        "evalInRealTime": 1,
+        "evalInDailyMaint": 0,
+        "forcing": 0,
+        "order": 29,
+        "loanEnabled": 1
+      }
+    ]
   }
 
 }

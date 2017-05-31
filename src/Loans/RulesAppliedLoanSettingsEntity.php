@@ -51,6 +51,48 @@ class RulesAppliedLoanSettingsEntity extends BaseEntity
      * @var array
      */
     protected static $fields = [
-        LSRULES_APPLIED::ENABLED => FieldValidator::BOOL,
+        LSRULES_APPLIED::ENABLED                    => FieldValidator::BOOL,
+        LSRULES_APPLIED::NAME                       => FieldValidator::STRING,
+        LSRULES_APPLIED::RULE                       => FieldValidator::STRING,
+        LSRULES_APPLIED::EVAL_IN_REAL_TIME          => FieldValidator::BOOL,
+        LSRULES_APPLIED::EVAL_IN_DAILY_MAINT        => FieldValidator::BOOL,
+        LSRULES_APPLIED::ENROLL_NEW_LOANS           => FieldValidator::BOOL,
+        LSRULES_APPLIED::ENROLL_EXISTING_LOANS      => FieldValidator::BOOL,
+        LSRULES_APPLIED::FORCING                    => FieldValidator::BOOL,
+        LSRULES_APPLIED::ORDER                      => FieldValidator::INT,
+        LSRULES_APPLIED::LOAN_ENABLED               => FieldValidator::BOOL,
+
+        LSRULES_APPLIED::AUTOPAY_ENABLED            => FieldValidator::BOOL,
+        LSRULES_APPLIED::SECURED                    => FieldValidator::BOOL,
+        LSRULES_APPLIED::IS_STOPLIGHT_MANUALLY_SET  => FieldValidator::BOOL,
+        LSRULES_APPLIED::DELETE_PORTFOLIOS          => FieldValidator::BOOL,
+
+        LSRULES_APPLIED::CARD_FEE_TYPE__C          => FieldValidator::COLLECTION,
+        LSRULES_APPLIED::CREDIT_STATUS__C          => FieldValidator::COLLECTION,
+        LSRULES_APPLIED::CREDIT_BUREAU__C          => FieldValidator::COLLECTION,
+        LSRULES_APPLIED::E_BILLING__C              => FieldValidator::COLLECTION,
+        LSRULES_APPLIED::ECOA_CODE__C              => FieldValidator::COLLECTION,
+        LSRULES_APPLIED::CO_BUYER_ECOA_CODE__C     => FieldValidator::COLLECTION,
+        LSRULES_APPLIED::REPORTING_TYPE__C         => FieldValidator::COLLECTION,
+
+        LSRULES_APPLIED::CLOSED_DATE              => FieldValidator::DATE,
+        LSRULES_APPLIED::LIQUIDATION_DATE         => FieldValidator::DATE,
+        LSRULES_APPLIED::REPO_DATE                => FieldValidator::DATE,
+
+        LSRULES_APPLIED::AGENT                    => FieldValidator::INT,
+        LSRULES_APPLIED::LOAN_STATUS_ID           => FieldValidator::INT,
+        LSRULES_APPLIED::LOAN_SUB_STATUS_ID       => FieldValidator::INT,
+        LSRULES_APPLIED::SOURCE_COMPANY           => FieldValidator::INT,
+
+        LSRULES_APPLIED::CARD_FEE_AMT             => FieldValidator::NUMBER,
+        LSRULES_APPLIED::CARD_FEE_PERC            => FieldValidator::NUMBER,
+
+        LSRULES_APPLIED::LOAN_STATUS    => FieldValidator::READ_ONLY,
+        LSRULES_APPLIED::LOAN_SUB_STATUS    => FieldValidator::READ_ONLY,
+        LSRULES_APPLIED::CUSTOM_FIELD_VALUES    => FieldValidator::READ_ONLY,
+        LSRULES_APPLIED::PORTFOLIOS => FieldValidator::READ_ONLY,
+        LSRULES_APPLIED::PORTFOLIOS_TO_DELETE   => FieldValidator::READ_ONLY,
+        LSRULES_APPLIED::SUB_PORTFOLIOS => FieldValidator::READ_ONLY,
+        LSRULES_APPLIED::SUB_PORTFOLIOS_TO_DELETE   => FieldValidator::READ_ONLY,
     ];
 }
