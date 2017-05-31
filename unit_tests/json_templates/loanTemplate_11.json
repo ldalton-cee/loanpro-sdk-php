@@ -1281,6 +1281,32 @@
         "loanEnabled": 1
       }
     ]
+  },
+  "RuleAppliedChecklists": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedChecklists(id=2)",
+          "type": "Entity.RuleAppliedChecklist"
+        },
+        "ChecklistItemValues": {
+          "__deferred": {
+            "uri": "RuleAppliedChecklists(id=2)/ChecklistItemValues"
+          }
+        },
+        "id": 2,
+        "name": "Original Maturity Date Passed",
+        "rule": "(>= (u/date-compare (u/today :format :date) status-orig-maturity-date) 0)",
+        "enrollNewLoans": 1,
+        "enrollExistingLoans": 0,
+        "enabled": 1,
+        "evalInRealTime": 1,
+        "evalInDailyMaint": 0,
+        "forcing": 0,
+        "order": 3,
+        "loanEnabled": 1
+      }
+    ]
   }
 
 }
