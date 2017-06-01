@@ -338,8 +338,6 @@ abstract class BaseEntity{
      * @return mixed - Returns the formatted value of the field
      */
     protected function GetValidField($fieldName, $val){
-        if($fieldName == BASE_ENTITY::ID && FieldValidator::IsValidInt($val))
-            return FieldValidator::GetInt($val);
         if(isset(static::$validConstsByVal[$fieldName])){
             if(isset(static::$fields[$fieldName])) {
                 return FieldValidator::GetByType($val, static::$fields[$fieldName], static::$constCollectionPrefix.'\\'.static::$constCollectionPrefix.'_'.static::$validConstsByVal[$fieldName]);
@@ -347,8 +345,11 @@ abstract class BaseEntity{
             else
                 throw new InvalidArgumentException("Field type not set for '$fieldName'");
         }
-        else
+        else{
+            if($fieldName == BASE_ENTITY::ID && FieldValidator::IsValidInt($val))
+                return FieldValidator::GetInt($val);
             throw new InvalidArgumentException("Unknown field '$fieldName'");
+        }
     }
 
     /**
@@ -358,14 +359,14 @@ abstract class BaseEntity{
      * @return bool - Whether or not the field-value combo is correct
      */
     protected function IsValidField($fieldName, $val){
-        if($fieldName == BASE_ENTITY::ID && FieldValidator::IsValidInt($val))
-            return true;
         if(isset(static::$validConstsByVal[$fieldName]) && !is_null($val)){
             if(isset(static::$fields[$fieldName]))
                 return FieldValidator::ValidateByType($val, static::$fields[$fieldName], static::$constCollectionPrefix.'\\'.static::$constCollectionPrefix.'_'.static::$validConstsByVal[$fieldName]);
             else
                 throw new InvalidArgumentException("Field type not set for '$fieldName'");
         }
+        if($fieldName == BASE_ENTITY::ID && FieldValidator::IsValidInt($val))
+            return true;
         return false;
     }
 

@@ -10,15 +10,18 @@ namespace Simnang\LoanPro;
 
 
 use Simnang\LoanPro\Constants\APD_ADJUSTMENTS;
+use Simnang\LoanPro\Constants\AUTOPAYS;
 use Simnang\LoanPro\Constants\DOCUMENTS;
 use Simnang\LoanPro\Constants\LINKED_LOAN_VALUES;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETTINGS;
 use Simnang\LoanPro\Constants\LSETUP;
 use Simnang\LoanPro\Constants\LSTATUS_ARCHIVE;
+use Simnang\LoanPro\Constants\MC_PROCESSOR;
 use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Loans\AdvancementsEntity;
 use Simnang\LoanPro\Loans\APDAdjustmentEntity;
+use Simnang\LoanPro\Loans\AutopayEntity;
 use Simnang\LoanPro\Loans\ChargeEntity;
 use Simnang\LoanPro\Loans\ChecklistItemValueEntity;
 use Simnang\LoanPro\Loans\CollateralEntity;
@@ -46,9 +49,11 @@ use Simnang\LoanPro\Loans\LoanStatusArchiveEntity;
 use Simnang\LoanPro\Loans\LoanStatusEntity;
 use Simnang\LoanPro\Loans\LoanSubStatusEntity;
 use Simnang\LoanPro\Loans\LoanTransactionEntity;
+use Simnang\LoanPro\Loans\MCProcessorEntity;
 use Simnang\LoanPro\Loans\NotesEntity;
 use Simnang\LoanPro\Loans\PaymentEntity;
 use Simnang\LoanPro\Loans\PaynearmeOrderEntity;
+use Simnang\LoanPro\Loans\PCIWalletTokenEntity;
 use Simnang\LoanPro\Loans\PortfolioEntity;
 use Simnang\LoanPro\Loans\PromisesEntity;
 use Simnang\LoanPro\Loans\RecurrentChargesEntity;
@@ -415,20 +420,23 @@ class LoanProSDK
      * @var array
      */
     private static $entities = [
-        LOAN::LSETUP                =>['class'=>LoanSetupEntity::class      ],
-        LOAN::LSETTINGS             =>['class'=>LoanSettingsEntity::class   ],
-        LOAN::COLLATERAL            =>['class'=>CollateralEntity::class     ],
-        LOAN::INSURANCE             =>['class'=>InsuranceEntity::class      ],
+        AUTOPAYS::MC_PROCESSOR          =>['class'=>MCProcessorEntity::class],
 
-        DOCUMENTS::DOC_SECTION      =>['class'=>DocSectionEntity::class     ],
-        DOCUMENTS::FILE_ATTACMENT   =>['class'=>FileAttachmentEntity::class ],
+        LOAN::LSETUP                    =>['class'=>LoanSetupEntity::class      ],
+        LOAN::LSETTINGS                 =>['class'=>LoanSettingsEntity::class   ],
+        LOAN::COLLATERAL                =>['class'=>CollateralEntity::class     ],
+        LOAN::INSURANCE                 =>['class'=>InsuranceEntity::class      ],
 
-        LSETTINGS::LOAN_STATUS      =>['class'=>LoanStatusEntity::class     ],
-        LSETTINGS::LOAN_SUB_STATUS  =>['class'=>LoanSubStatusEntity::class  ],
-        LSETTINGS::SOURCE_COMPANY   =>['class'=>SourceCompanyEntity::class  ],
+        DOCUMENTS::DOC_SECTION          =>['class'=>DocSectionEntity::class     ],
+        DOCUMENTS::FILE_ATTACMENT       =>['class'=>FileAttachmentEntity::class ],
+
+        LSETTINGS::LOAN_STATUS          =>['class'=>LoanStatusEntity::class     ],
+        LSETTINGS::LOAN_SUB_STATUS      =>['class'=>LoanSubStatusEntity::class  ],
+        LSETTINGS::SOURCE_COMPANY       =>['class'=>SourceCompanyEntity::class  ],
 
         LOAN::APD_ADJUSTMENTS           =>['class'=>APDAdjustmentEntity::class,             'isList'=>true ],
         LOAN::ADVANCEMENTS              =>['class'=>AdvancementsEntity::class,              'isList'=>true ],
+        LOAN::AUTOPAY                   =>['class'=>AutopayEntity::class,                   'isList'=>true ],
         LOAN::CHARGES                   =>['class'=>ChargeEntity::class,                    'isList'=>true ],
         LOAN::CREDITS                   =>['class'=>CreditEntity::class,                    'isList'=>true ],
         LOAN::CHECKLIST_VALUES          =>['class'=>ChecklistItemValueEntity::class,        'isList'=>true ],
@@ -459,7 +467,10 @@ class LoanProSDK
         LOAN::LSRULES_APPLIED           =>['class'=>RulesAppliedLoanSettingsEntity::class,  'isList'=>true ],
         LOAN::TRANSACTIONS              =>['class'=>LoanTransactionEntity::class,           'isList'=>true ],
 
-        LSETUP::CUSTOM_FIELD_VALUES =>['class'=>CustomFieldValuesEntity::class, 'isList'=>true ],
+        LSETUP::CUSTOM_FIELD_VALUES     =>['class'=>CustomFieldValuesEntity::class, 'isList'=>true ],
+
+        MC_PROCESSOR::BANK_ACCOUNT      =>['class'=>PCIWalletTokenEntity::class],
+        MC_PROCESSOR::CREDIT_CARD       =>['class'=>PCIWalletTokenEntity::class],
     ];
 
     /**

@@ -717,7 +717,7 @@
     "results": [
       {
         "__metadata": {
-          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/EscrowSubsetOptions(id=19)",
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/EscrowSubsetOptions(id=19)",
           "type": "Entity.EscrowSubsetOptions"
         },
         "EstimatedDisbursements": {
@@ -769,7 +769,7 @@
     "results": [
       {
         "__metadata": {
-          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/Loans(id=340)",
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/Loans(id=340)",
           "type": "Entity.Loan"
         },
         "Insurance": {
@@ -1021,7 +1021,7 @@
     "results": [
       {
         "__metadata": {
-          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/LinkedLoanValues(id=1)",
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LinkedLoanValues(id=1)",
           "type": "Entity.LinkedLoan"
         },
         "LinkedLoanOption": {
@@ -1039,7 +1039,7 @@
       },
       {
         "__metadata": {
-          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/LinkedLoanValues(id=2)",
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LinkedLoanValues(id=2)",
           "type": "Entity.LinkedLoan"
         },
         "LinkedLoanOption": {
@@ -1061,7 +1061,7 @@
     "results": [
       {
         "__metadata": {
-          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/RecurrentCharges(id=16)",
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/RecurrentCharges(id=16)",
           "type": "Entity.RecurrentCharge"
         },
         "Bracket": {
@@ -1100,7 +1100,7 @@
     "results": [
       {
         "__metadata": {
-          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/EscrowSubsets(id=3)",
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/EscrowSubsets(id=3)",
           "type": "Entity.EscrowSubset"
         },
         "id": 3,
@@ -1150,7 +1150,7 @@
     "results": [
       {
         "__metadata": {
-          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedLoanSettings(id=18)",
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedLoanSettings(id=18)",
           "type": "Entity.RuleAppliedLoanSettings"
         },
         "LoanStatus": {
@@ -1226,7 +1226,7 @@
     "results": [
       {
         "__metadata": {
-          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedChargeOff(id=4)",
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedChargeOff(id=4)",
           "type": "Entity.RuleAppliedChargeOff"
         },
         "id": 4,
@@ -1261,7 +1261,7 @@
     "results": [
       {
         "__metadata": {
-          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedAPDReset(id=2)",
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedAPDReset(id=2)",
           "type": "Entity.RuleAppliedAPDReset"
         },
         "id": 2,
@@ -1286,7 +1286,7 @@
     "results": [
       {
         "__metadata": {
-          "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedChecklists(id=2)",
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedChecklists(id=2)",
           "type": "Entity.RuleAppliedChecklist"
         },
         "ChecklistItemValues": {
@@ -1305,6 +1305,80 @@
         "forcing": 0,
         "order": 3,
         "loanEnabled": 1
+      }
+    ]
+  },
+  "Autopays": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/Autopays(id=18)",
+          "type": "Entity.Autopay"
+        },
+        "PrimaryPaymentMethod": {
+          "__deferred": {
+            "uri": "Autopays(id=18)/PrimaryPaymentMethod"
+          }
+        },
+        "SecondaryPaymentMethod": {
+          "__deferred": {
+            "uri": "Autopays(id=18)/SecondaryPaymentMethod"
+          }
+        },
+        "AdditionalPaymentMethod": {
+          "__deferred": {
+            "uri": "Autopays(id=18)/AdditionalPaymentMethod"
+          }
+        },
+        "Loan": {
+          "__deferred": {
+            "uri": "Autopays(id=18)/Loan"
+          }
+        },
+        "PaymentType": {
+          "__deferred": {
+            "uri": "Autopays(id=18)/PaymentType"
+          }
+        },
+        "id": 18,
+        "loanId": 86,
+        "name": "Sample",
+        "type": "autopay.type.recurring",
+        "applyDate": "/Date(1466035200)/",
+        "processDateTime": "/Date(1466028000)/",
+        "originalProcessDateTime": "/Date(1463004000)/",
+        "amountType": "autopay.amountType.static",
+        "amount": 100,
+        "processCurrent": 1,
+        "chargeServiceFee": 0,
+        "retryDays": 2,
+        "retryCount": 2,
+        "postPaymentUpdate": 1,
+        "recurringFrequency": "autopay.recurringFrequency.monthly",
+        "recurringPeriods": 9,
+        "recurringDateOption": "autopay.recurringDate.applyDate",
+        "schedulingType": "autopay.schedulingType.calendarDay",
+        "paymentExtraTowards": "payment.extra.tx.principal",
+        "daysInPeriod": null,
+        "lastDayOfMonthEnabled": 0,
+        "paymentFee": 0,
+        "paymentMethodAuthType": "payment.echeckauth.PPD",
+        "payoffAdjustment": 0,
+        "chargeOffRecovery": 0,
+        "mcProcessor": {
+          "bankAccount": {
+            "id": "nacha",
+            "name": "NACHA Processor",
+            "default": "1"
+          }
+        },
+        "ccProcessor": 0,
+        "baProcessor": 0,
+        "processZeroOrNegativeBalance": 0,
+        "status": "autopay.status.failed",
+        "active": 1,
+        "created": "/Date(1462909491)/",
+        "lastPaymentExtraTowards": null
       }
     ]
   }

@@ -18,6 +18,7 @@ class LOAN{
     const ADVANCEMENTS              = 'Advancements';
     const APD_ADJUSTMENTS           = 'APDAdjustments';
     const ARCHIVED                  = 'archived';
+    const AUTOPAY                   = 'Autopays';
     const CHARGES                   = 'Charges';
     const CHECKLIST_VALUES          = 'ChecklistItemValues';
     const COLLATERAL                = 'Collateral';
@@ -65,6 +66,8 @@ class LOAN{
     const RULES_APPLIED_CHARGEOFF   = 'RuleAppliedChargeOff';
     const RULES_APPLIED_APD_RESET   = 'RuleAppliedAPDReset';
     const RULES_APPLIED_CHECKLIST   = 'RuleAppliedChecklists';
+    const RULES_APPLIED_CHANGE_DUE_DATES = 'RuleAppliedChangeDueDates';
+    const RULES_APPLIED_STOP_INTEREST = 'RuleAppliedStopInterest';
     const SCHEDULE_ROLLS            = 'ScheduleRolls';
     const SETTINGS_ID               = 'settingsId';
     const SETUP_ID                  = 'setupId';
