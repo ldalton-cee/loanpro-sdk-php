@@ -223,8 +223,13 @@ class FieldValidator{
     public static function IsValidCollectionVal($val, $collection){
         $refClass = '\Simnang\LoanPro\Constants\\'.$collection;
         $rclass = new \ReflectionClass($refClass);
-        $consts = array_flip($rclass->getConstants());
-        return isset($consts[$val]);
+        $constNames = $rclass->getConstants();
+        $consts = array_flip($constNames);
+        if(isset($consts[$val]))
+            return true;
+        if(static::IsValidBool(($val)) && isset($constNames['YES']) && isset($constNames['NO']))
+            return true;
+        return false;;
     }
 
     /**
@@ -326,8 +331,18 @@ class FieldValidator{
      * @return null
      */
     public static function GetCollectionVal($val, $collection){
-        if(FieldValidator::IsValidCollectionVal($val, $collection))
-            return $val;
+        if(FieldValidator::IsValidCollectionVal($val, $collection)) {
+            if(!static::IsValidBool($val))
+                return $val;
+
+            $refClass = '\Simnang\LoanPro\Constants\\'.$collection;
+            $rclass = new \ReflectionClass($refClass);
+            $constNames = $rclass->getConstants();
+            $b = static::GetBool($val);
+            if($b)
+                return $constNames['YES'];
+            return $constNames['NO'];
+        }
         return null;
     }
 

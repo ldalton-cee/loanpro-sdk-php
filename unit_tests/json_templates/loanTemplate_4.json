@@ -60,7 +60,7 @@
       "results": [
         {
           "__metadata": {
-            "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/CustomFieldValues(id=7750)",
+            "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/CustomFieldValues(id=7750)",
             "type": "Entity.CustomFieldValue"
           },
           "CustomField": {

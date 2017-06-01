@@ -8,12 +8,16 @@
 
 namespace Simnang\LoanPro;
 
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
 use Simnang\LoanPro\Utils\ArrayUtils;
 use Simnang\LoanPro\Validator\FieldValidator;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
 
 abstract class BaseEntity{
+    private static $strictMode = true;
+
+    public static function SetStrictMode($mode = true){
+        BaseEntity::$strictMode = $mode;
+    }
 
     /**
      * This constructs a new entity and ensures that the constant list is properly setup. It grabs the name of the calling class at runtime, so it properly instantiates the entity as long as $constCollectionPrefix is correctly set.
@@ -100,7 +104,7 @@ abstract class BaseEntity{
             }
         }
         else if(!sizeof($args))
-            throw new \InvalidArgumentException("Expected two parameters, only got one");
+            throw new \InvalidArgumentException("Expected two parameters, only got one for class ".get_class($this));
         else if(sizeof($args)){
             $args = ArrayUtils::ConvertToKeyedArray(array_merge([$arg1], $args));
         }
@@ -108,7 +112,7 @@ abstract class BaseEntity{
         if(sizeof($args)){
             foreach($args as $key => $val){
                 if(is_null($val)){
-                    throw new \InvalidArgumentException("Value for '$key' is null. The 'set' function cannot unset items, please us 'del' instead.");
+                    throw new \InvalidArgumentException("Value for '$key' is null. The 'set' function cannot unset items, please us 'del' instead. for class ".get_class($this));
                 }
                 else if($obj->IsValidField($key, $val)) {
                     $obj->properties[$key] = $obj->GetValidField($key, $val);
@@ -119,11 +123,18 @@ abstract class BaseEntity{
                     $obj->id = FieldValidator::GetInt($val);
                 }
                 else if(!$obj->IsField($key) && $key !== "id") {
-                    throw new \InvalidArgumentException("Invalid property '$key'");
+                    if(BaseEntity::$strictMode)
+                        throw new \InvalidArgumentException("Invalid property '$key' for class ".get_class($this)." (Ref val: '$val')");
+                    else
+                        $obj->properties[$key] = $val;
                 }
                 else {
-                    $val = json_encode($val);
-                    throw new \InvalidArgumentException("Invalid value '$val' for property $key");
+                    if(BaseEntity::$strictMode) {
+                        $val = json_encode($val);
+                        throw new \InvalidArgumentException("Invalid value '$val' for property $key for class " . get_class($this));
+                    }
+                    else
+                        $obj->properties[$key] = $val;
                 }
             }
         }
@@ -156,7 +167,7 @@ abstract class BaseEntity{
             $argFinal = [];
             foreach($args as $key => $val){
                 if(!is_string($key)){
-                    throw new \InvalidArgumentException("Array parameters need to have property names as the key");
+                    throw new \InvalidArgumentException("Array parameters need to have property names as the key for class ".get_class($this));
                 }
                 if(is_array($val))
                     $argFinal[$key] = $val;
@@ -166,26 +177,26 @@ abstract class BaseEntity{
             $args = $argFinal;
         }
         else if(!sizeof($args))
-            throw new \InvalidArgumentException("Expected two parameters, only got one");
+            throw new \InvalidArgumentException("Expected two parameters, only got one for class ".get_class($this));
         else if(sizeof($args)){
             $curKey = $arg1;
             $curArr = [];
             if(!is_string($curKey))
-                throw new \InvalidArgumentException("Invalid field name '$curKey'");
-            if(!$obj->IsField($curKey))
-                throw new \InvalidArgumentException("Invalid field '$curKey'");
+                throw new \InvalidArgumentException("Invalid field name '$curKey' for class ".get_class($this));
+            if(!$obj->IsField($curKey) && BaseEntity::$strictMode)
+                throw new \InvalidArgumentException("Invalid field '$curKey' for class ".get_class($this));
             if(static::$fields[$curKey] != FieldValidator::OBJECT_LIST)
-                throw new \InvalidArgumentException("Property '$curKey' is not an object list, can only append to object lists!");
+                throw new \InvalidArgumentException("Property '$curKey' is not an object list, can only append to object lists! for class ".get_class($this));
             $argFinal = [];
 
             foreach($args as $arg){
                 if(is_string($arg)){
                     if(!$obj->IsField($arg))
-                        throw new \InvalidArgumentException("Invalid field '$curKey'");
+                        throw new \InvalidArgumentException("Invalid field '$curKey' for class ".get_class($this));
                     if(static::$fields[$arg] != FieldValidator::OBJECT_LIST)
-                        throw new \InvalidArgumentException("Property '$arg' is not an object list, can only append to object lists!");
+                        throw new \InvalidArgumentException("Property '$arg' is not an object list, can only append to object lists! for class ".get_class($this));
                     if(count($curArr) == 0)
-                        throw new \InvalidArgumentException("Missing fields for '$curKey'");
+                        throw new \InvalidArgumentException("Missing fields for '$curKey' for class ".get_class($this));
                     if(isset($argFinal[$curKey]))
                         $argFinal[$curKey] = array_merge($argFinal[$curKey], $curArr);
                     else
@@ -201,15 +212,15 @@ abstract class BaseEntity{
                         if(is_object($a))
                             $curArr[] = $a;
                         else
-                            throw new \InvalidArgumentException("Invalid value '$a' in array for key '$curKey'");
+                            throw new \InvalidArgumentException("Invalid value '$a' in array for key '$curKey' for class ".get_class($this));
                     }
                 }
                 else{
-                    throw new \InvalidArgumentException("Invalid value '$arg' for key '$curKey'");
+                    throw new \InvalidArgumentException("Invalid value '$arg' for key '$curKey' for class ".get_class($this));
                 }
             }
             if(count($curArr) == 0)
-                throw new \InvalidArgumentException("Missing fields for '$curKey'");
+                throw new \InvalidArgumentException("Missing fields for '$curKey' for class ".get_class($this));
             if(isset($argFinal[$curKey]))
                 $argFinal[$curKey] = array_merge($argFinal[$curKey], $curArr);
             else
@@ -233,10 +244,20 @@ abstract class BaseEntity{
                     $obj->id = FieldValidator::GetInt($val);
                 }
                 else if(!$obj->IsField($key) && $key !== "id") {
-                    throw new \InvalidArgumentException("Invalid property '$key'");
+                    if(BaseEntity::$strictMode)
+                        throw new \InvalidArgumentException("Invalid property '$key' for class ".get_class($this)." (Ref val: '$val')");
+                    else
+                        $obj->properties[$key] = $val;
                 }
-                else
-                    throw new \InvalidArgumentException("Invalid value '$val' for property $key");
+                else{
+                    if(BaseEntity::$strictMode) {
+                        $val = json_encode($val);
+                        throw new \InvalidArgumentException("Invalid value '$val' for property $key for class " . get_class($this));
+                    }
+                    else
+                        $obj->properties[$key] = $val;
+                }
+
             }
         }
 
@@ -264,8 +285,8 @@ abstract class BaseEntity{
 
         $obj = clone $this;
         foreach($args as $key){
-            if(!$this->IsField($key)){
-                throw new \InvalidArgumentException("Invalid property '$key'");
+            if(!$this->IsField($key) && BaseEntity::$strictMode){
+                throw new \InvalidArgumentException("Invalid property '$key' for class ".get_class($this));
             }
             else if(in_array($key, static::$required, true)){
                 throw new \InvalidArgumentException("Cannot delete '$key', field is required.");
@@ -309,8 +330,8 @@ abstract class BaseEntity{
                 else if($key === BASE_ENTITY::ID){
                     $result[$key] = $this->id;
                 }
-                else if(!$this->IsField($key))
-                    throw new \InvalidArgumentException("Invalid property '$key'");
+                else if(!$this->IsField($key) && BaseEntity::$strictMode)
+                    throw new \InvalidArgumentException("Invalid property '$key' for class ".get_class($this));
                 else
                     $result[$key] = null;
             }
@@ -322,10 +343,10 @@ abstract class BaseEntity{
         else if($arg1 === BASE_ENTITY::ID){
             return $this->id;
         }
-        else if($this->IsField($arg1))
+        else if($this->IsField($arg1) || !BaseEntity::$strictMode)
             return null;
         else
-            throw new \InvalidArgumentException("Invalid property '$arg1'");
+            throw new \InvalidArgumentException("Invalid property '$arg1' for class ".get_class($this));
     }
 
     /**
@@ -405,13 +426,13 @@ abstract class BaseEntity{
             $dest = array_flip($consts);
             foreach($consts as $key => $field){
                 if(!isset($fields[$field])){
-                    throw new \ReflectionException("Cannot find type for field '$field'' for '$className' (constant is $key)");
+                    throw new \ReflectionException("Cannot find type for field '$field'' for '$refClass' (constant is $key)");
                 }
                 else if(substr($key, -3) == "__C"){
                     if($fields[$field] == FieldValidator::COLLECTION) {
                         $listName = '\Simnang\LoanPro\Constants\\'.static::$constCollectionPrefix.'\\'.static::$constCollectionPrefix . '_' . $key;
                         if (!class_exists($listName)) {
-                            throw new \ReflectionException("Cannot find Collection List '$listName' for constant '$key', value '$field' for '$className'");
+                            throw new \ReflectionException("Cannot find Collection List '$listName' for constant '$key', value '$field' for '$refClass'");
                         }
                     }
                     else{

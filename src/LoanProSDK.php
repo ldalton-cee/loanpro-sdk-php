@@ -87,10 +87,12 @@ class LoanProSDK
      * @param string $json
      * @return BaseEntity
      */
-    public static function CreateLoanFromJSON(string $json){
-        if(!is_string($json))
-            throw new \InvalidArgumentException("Expected a JSON string");
-        $json = static::CleanJSON(json_decode($json, true));
+    public static function CreateLoanFromJSON($json){
+        if(!is_string($json) && !is_array($json))
+            throw new \InvalidArgumentException("Expected a JSON string or array");
+        if(is_string($json))
+            $json = json_decode($json, true);
+        $json = static::CleanJSON($json);
         if(!isset($json[LOAN::DISP_ID]))
             throw new \InvalidArgumentException("Missing display ID");
 
@@ -524,7 +526,7 @@ class LoanProSDK
             $params = [];
             foreach($reqFields as $r){
                 if(!isset($j[$r]))
-                    throw new \InvalidArgumentException("Missing '$r'!");
+                    throw new \InvalidArgumentException("Missing '$r' for class '$class'!");
                 $params[] = $j[$r];
             }
             $list[] = (new $class(...$params))->set($j);
@@ -540,13 +542,13 @@ class LoanProSDK
      */
     private static function CreateGenericJSONClass(string $class, array $json){
         if(!is_array($json))
-            throw new \InvalidArgumentException("Expected a parsed JSON array");
+            throw new \InvalidArgumentException("Expected a parsed JSON array for class '$class'");
 
         $reqFields = $class::getReqFields();
         $params = [];
         foreach($reqFields as $r){
             if(!isset($json[$r]))
-                throw new \InvalidArgumentException("Missing '$r'!");
+                throw new \InvalidArgumentException("Missing '$r' for class '$class'!");
             $params[] = $json[$r];
         }
 

@@ -80,7 +80,7 @@
     "isStoplightManuallySet": "0",
     "SrcCompany": {
       "__metadata": {
-        "uri": "https://beta-loanpro.simnang.com/api/public/api/1/odata.svc/SourceCompanies(id=4)",
+        "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/SourceCompanies(id=4)",
         "type": "Entity.SourceCompany"
       },
       "Address": {
