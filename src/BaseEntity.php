@@ -1,9 +1,19 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: mtolman
- * Date: 5/19/17
- * Time: 3:26 PM
+ *
+ * Copyright 2017 Simnang, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *
  */
 
 namespace Simnang\LoanPro;
@@ -25,7 +35,7 @@ abstract class BaseEntity{
     private static $strictMode = false;
 
     /**
-     * Set wether or not strict mode is enabled
+     * Set whether or not strict mode is enabled
      * @param bool|true $mode
      */
     public static function SetStrictMode($mode = true){
@@ -74,6 +84,11 @@ abstract class BaseEntity{
      */
     protected $id = null;
     /**
+     * Whether or not the entity has been marked for deletion
+     * @var bool
+     */
+    protected $del = false;
+    /**
      * This holds the constants list. Constants are defined in a class in the \Simnang\LoanPro\Constants namespace. A specific class in that namespace is reserved per entity and other classes are for the collections for the entity
      * @var array
      */
@@ -100,7 +115,25 @@ abstract class BaseEntity{
     protected static $constCollectionPrefix = "";
 
     /**
-     * This returns a copy of the object with the changes to the specified fields. Cannot be used to unset values or to set values to null (see del)
+     * Returns a copy of the entity that's been marked for deletion
+     * @return BaseEntity
+     */
+    public function del(){
+        $obj = clone $this;
+        $obj->del = true;
+        return $obj;
+    }
+
+    /**
+     * Returns whether or not this entity is marked for deletion
+     * @return bool
+     */
+    public function markedForDel(){
+        return $this->del;
+    }
+
+    /**
+     * This returns a copy of the object with the changes to the specified fields. Cannot be used to unset values or to set values to null (see unload)
      *
      * It accepts a list of alternating fields and values (eg. field1, val1, field2, val2, ...), or an array where the field is the key (eg. [field1=>val1, field2=>val2])
      *
@@ -125,7 +158,7 @@ abstract class BaseEntity{
         if(sizeof($args)){
             foreach($args as $key => $val){
                 if(is_null($val)){
-                    throw new \InvalidArgumentException("Value for '$key' is null. The 'set' function cannot unset items, please us 'del' instead. for class ".get_class($this));
+                    throw new \InvalidArgumentException("Value for '$key' is null. The 'set' function cannot unset items, please use 'unload' instead. for class ".get_class($this));
                 }
                 else if($obj->IsValidField($key, $val)) {
                     $obj->properties[$key] = $obj->GetValidField($key, $val);
@@ -164,7 +197,7 @@ abstract class BaseEntity{
     }
 
     /**
-     * This returns a copy of the object with the changes to the specified object lists. Cannot be used to unset values or to set values to null (see del). Cannot be used to modify fields that aren't object lists.
+     * This returns a copy of the object with the changes to the specified object lists. Cannot be used to unset values or to set values to null (see unload). Cannot be used to modify fields that aren't object lists.
      *
      * It accepts a list of alternating fields and values (eg. field1, val1, field2, val2, ...), an array where the field is the key (eg. [field1=>val1, field2=>val2]), a list of fields and followed by several values (eg. field1, val1_1, val1_2, ..., field2, val2_1, val2_2, ...), or an array where the field is the key and an array of values (eg. [field1=>[val1_1, val1_2], field2=>[val2_1, val2_1]]),
      *
@@ -278,15 +311,16 @@ abstract class BaseEntity{
     }
 
     /**
-     * This returns a copy of the entity with the specified field(s) deleted. It can take a single field, a list of fields, or an array of fields.
+     * This returns a copy of the entity without the specified field(s). It can take a single field, a list of fields, or an array of fields. It effectively unloads a field from memory
      *
-     * If trying to delete field marked as "required" (ie. it is required to be set in the constructor) then this function will through an InvalidArgumentException
+     * If trying to delete field marked as "required" (ie. it is required to be set in the constructor) then this function will through an InvalidArgumentException.
+     * This is since fields marked as "required" are required for creation in LoanPro, and every local entity is considered a prototype of for creating an entity in LoanPro
      *
      * @param $arg1
      * @param ...$args
      * @return BaseEntity
      */
-    public function del($arg1, ...$args){
+    public function unload($arg1, ...$args){
         if(is_array($arg1)){
             $args = $arg1;
         }
@@ -369,7 +403,8 @@ abstract class BaseEntity{
      *
      * @param $fieldName - Name of the field to use
      * @param $val - Initial value of the field (will be converted to proper format if possible)
-     * @return mixed - Returns the formatted value of the field
+     * @return array|float|int|null|string - Returns the formatted value of the field
+     * @throws InvalidArgumentException
      */
     protected function GetValidField($fieldName, $val){
         if(isset(static::$validConstsByVal[$fieldName])){

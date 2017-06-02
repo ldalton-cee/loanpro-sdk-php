@@ -1,9 +1,19 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: Matt T.
- * Date: 5/17/17
- * Time: 3:12 PM
+ *
+ * Copyright 2017 Simnang, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *
  */
 
 require(__DIR__."/../vendor/autoload.php");
@@ -75,7 +85,7 @@ class PromisesTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.PROMISES::SUBJECT.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
+        $this->expectExceptionMessage('Value for \''.PROMISES::SUBJECT.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
         LPSDK::CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0)
             /* should throw exception when setting LOAN_AMT to null */ ->set(PROMISES::SUBJECT, null);
     }
@@ -102,7 +112,7 @@ class PromisesTest extends TestCase
         $promise = LPSDK::CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0)->set([PROMISES::LOGGED_BY=> 'Bob']);
         $this->assertEquals('Bob', $promise->get(PROMISES::LOGGED_BY));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($promise->del(PROMISES::LOGGED_BY)->get(PROMISES::LOGGED_BY));
+        $this->assertNull($promise->unload(PROMISES::LOGGED_BY)->get(PROMISES::LOGGED_BY));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals('Bob', $promise->get(PROMISES::LOGGED_BY));
     }
@@ -117,7 +127,7 @@ class PromisesTest extends TestCase
         $promise = LPSDK::CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
 
         // should throw exception
-        $promise->del(PROMISES::SUBJECT);
+        $promise->unload(PROMISES::SUBJECT);
     }
 
     /**
@@ -130,7 +140,7 @@ class PromisesTest extends TestCase
         $promise = LPSDK::CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
 
         // should throw exception
-        $promise->del(PROMISES::NOTE);
+        $promise->unload(PROMISES::NOTE);
     }
 
     /**
@@ -143,7 +153,7 @@ class PromisesTest extends TestCase
         $promise = LPSDK::CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
 
         // should throw exception
-        $promise->del(PROMISES::AMOUNT);
+        $promise->unload(PROMISES::AMOUNT);
     }
 
     /**
@@ -156,7 +166,7 @@ class PromisesTest extends TestCase
         $promise = LPSDK::CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
 
         // should throw exception
-        $promise->del(PROMISES::FULFILLED);
+        $promise->unload(PROMISES::FULFILLED);
     }
 
 
@@ -170,7 +180,7 @@ class PromisesTest extends TestCase
         $promise = LPSDK::CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
 
         // should throw exception
-        $promise->del(PROMISES::DUE_DATE);
+        $promise->unload(PROMISES::DUE_DATE);
     }
 
 
@@ -201,23 +211,23 @@ class PromisesTest extends TestCase
         $this->assertEquals([$promise, $promise2], $loan->get(LOAN::PROMISES));
 
         // test list append
-        $loan = $loan->del(LOAN::PROMISES)->append(LOAN::PROMISES, $promise2, $promise3, $promise);
+        $loan = $loan->unload(LOAN::PROMISES)->append(LOAN::PROMISES, $promise2, $promise3, $promise);
         $this->assertEquals([$promise2, $promise3, $promise], $loan->get(LOAN::PROMISES));
 
         // test list append with multiple keys
-        $loan = $loan->del(LOAN::PROMISES)->append(LOAN::PROMISES, $promise2, $promise, LOAN::PROMISES, $promise);
+        $loan = $loan->unload(LOAN::PROMISES)->append(LOAN::PROMISES, $promise2, $promise, LOAN::PROMISES, $promise);
         $this->assertEquals([$promise2, $promise, $promise], $loan->get(LOAN::PROMISES));
 
         // test array notation 1
-        $loan = $loan->del(LOAN::PROMISES)->append(LOAN::PROMISES, [$promise3, $promise2, $promise]);
+        $loan = $loan->unload(LOAN::PROMISES)->append(LOAN::PROMISES, [$promise3, $promise2, $promise]);
         $this->assertEquals([$promise3, $promise2, $promise], $loan->get(LOAN::PROMISES));
 
         // test array notation 2
-        $loan = $loan->del(LOAN::PROMISES)->append([LOAN::PROMISES => [$promise, $promise3, $promise2]]);
+        $loan = $loan->unload(LOAN::PROMISES)->append([LOAN::PROMISES => [$promise, $promise3, $promise2]]);
         $this->assertEquals([$promise, $promise3, $promise2], $loan->get(LOAN::PROMISES));
 
         // test array notation 3
-        $loan = $loan->del(LOAN::PROMISES)->append([LOAN::PROMISES => $promise2]);
+        $loan = $loan->unload(LOAN::PROMISES)->append([LOAN::PROMISES => $promise2]);
         $this->assertEquals([$promise2], $loan->get(LOAN::PROMISES));
     }
 

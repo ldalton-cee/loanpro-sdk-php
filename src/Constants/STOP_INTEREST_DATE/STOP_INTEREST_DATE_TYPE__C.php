@@ -1,6 +1,8 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
+ *
+ * (c) Copyright Simnang LLC.
+ * Licensed under Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
  * User: mtolman
  * Date: 5/30/17
  * Time: 1:53 PM

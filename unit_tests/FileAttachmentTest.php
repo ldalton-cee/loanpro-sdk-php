@@ -1,9 +1,19 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: Matt T.
- * Date: 5/17/17
- * Time: 3:12 PM
+ *
+ * Copyright 2017 Simnang, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *
  */
 
 require(__DIR__."/../vendor/autoload.php");
@@ -50,7 +60,7 @@ class FileAttachmentTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.FILE_ATTACHMENT::FILE_MIME.'\' is null. The \'set\' function cannot unset items, please use \'del\' instead.');
+        $this->expectExceptionMessage('Value for \''.FILE_ATTACHMENT::FILE_MIME.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
         (new \Simnang\LoanPro\Loans\FileAttachmentEntity())
             /* should throw exception when setting LOAN_AMT to null */ ->set(FILE_ATTACHMENT::FILE_MIME, null);
     }
@@ -77,7 +87,7 @@ class FileAttachmentTest extends TestCase
         $doc = (new \Simnang\LoanPro\Loans\FileAttachmentEntity())->set([FILE_ATTACHMENT::FILE_MIME=> 1]);
         $this->assertEquals(1, $doc->get(FILE_ATTACHMENT::FILE_MIME));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($doc->del(FILE_ATTACHMENT::FILE_MIME)->get(FILE_ATTACHMENT::FILE_MIME));
+        $this->assertNull($doc->unload(FILE_ATTACHMENT::FILE_MIME)->get(FILE_ATTACHMENT::FILE_MIME));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(1, $doc->get(FILE_ATTACHMENT::FILE_MIME));
     }

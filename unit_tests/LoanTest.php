@@ -1,9 +1,19 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: Matt T.
- * Date: 5/17/17
- * Time: 3:12 PM
+ *
+ * Copyright 2017 Simnang, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *
  */
 
 require(__DIR__."/../vendor/autoload.php");
@@ -119,7 +129,7 @@ class LoanTest extends TestCase
         $loan = LPSDK::CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, "This is an alert");
 
         /* should throw error */
-        $loan->del(LSETUP::LOAN_AMT);
+        $loan->unload(LSETUP::LOAN_AMT);
     }
 
     /**
@@ -131,7 +141,7 @@ class LoanTest extends TestCase
 
         $this->assertEquals("This is an alert", $loan->get(LOAN::LOAN_ALERT));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($loan->del(LOAN::LOAN_ALERT)->get(LOAN::LOAN_ALERT));
+        $this->assertNull($loan->unload(LOAN::LOAN_ALERT)->get(LOAN::LOAN_ALERT));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals("This is an alert", $loan->get(LOAN::LOAN_ALERT));
     }
@@ -142,7 +152,7 @@ class LoanTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.LOAN::LOAN_ALERT.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
+        $this->expectExceptionMessage('Value for \''.LOAN::LOAN_ALERT.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
         LPSDK::CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, null);
     }
 
@@ -156,7 +166,7 @@ class LoanTest extends TestCase
         $loan = LPSDK::CreateLoan("DISP ID");
 
         // Should throw exception
-        $loan->del(LOAN::DISP_ID);
+        $loan->unload(LOAN::DISP_ID);
     }
 
     /**
@@ -636,9 +646,9 @@ class LoanTest extends TestCase
             '"gpsCode": "132s4f56","licensePlate": "111 222","gap": 554.32,"warranty": 123.45}', true))->set(
             COLLATERAL::LOAN, "2", COLLATERAL::CUSTOM_FIELD_VALUES, LPSDK::CreateCustomField(312, ENTITY_TYPES::COLLATERAL)->set(
             BASE_ENTITY::ID, 7357, CUSTOM_FIELD_VALUES::CUSTOM_FIELD_ID, 276, CUSTOM_FIELD_VALUES::CUSTOM_FIELD_VALUE, 0
-        ))->del(COLLATERAL::LOAN);
+        ))->unload(COLLATERAL::LOAN);
 
-        $this->assertEquals(json_encode($collateral), json_encode($loan->get(LOAN::COLLATERAL)->del(COLLATERAL::LOAN)));
+        $this->assertEquals(json_encode($collateral), json_encode($loan->get(LOAN::COLLATERAL)->unload(COLLATERAL::LOAN)));
 
         $doc1vars = [
             BASE_ENTITY::ID, 33, DOCUMENTS::LOAN_ID, 69, DOCUMENTS::USER_ID, 7, DOCUMENTS::SECTION_ID, 12, DOCUMENTS::FILE_ATTACHMENT_ID, 47, DOCUMENTS::USER_NAME, "Joey", DOCUMENTS::REMOTE_ADDR, '387.301.330.352', DOCUMENTS::FILE_NAME, 'dummy_pdf.pdf',

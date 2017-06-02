@@ -1,9 +1,19 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: Matt T.
- * Date: 5/17/17
- * Time: 3:12 PM
+ *
+ * Copyright 2017 Simnang, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *
  */
 
 require(__DIR__."/../vendor/autoload.php");
@@ -75,7 +85,7 @@ class PayNearMeOrderTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.PAY_NEAR_ME_ORDERS::PHONE.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
+        $this->expectExceptionMessage('Value for \''.PAY_NEAR_ME_ORDERS::PHONE.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345')
             /* should throw exception when setting LOAN_AMT to null */ ->set(PAY_NEAR_ME_ORDERS::PHONE, null);
     }
@@ -102,7 +112,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345')->set([PAY_NEAR_ME_ORDERS::CARD_NUMBER=> "123456789"]);
         $this->assertEquals("123456789", $charge->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($charge->del(PAY_NEAR_ME_ORDERS::CARD_NUMBER)->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
+        $this->assertNull($charge->unload(PAY_NEAR_ME_ORDERS::CARD_NUMBER)->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals("123456789", $charge->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
     }
@@ -117,7 +127,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::CUSTOMER_ID);
+        $charge->unload(PAY_NEAR_ME_ORDERS::CUSTOMER_ID);
     }
 
     /**
@@ -130,7 +140,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::CUSTOMER_NAME);
+        $charge->unload(PAY_NEAR_ME_ORDERS::CUSTOMER_NAME);
     }
 
     /**
@@ -143,7 +153,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::EMAIL);
+        $charge->unload(PAY_NEAR_ME_ORDERS::EMAIL);
     }
 
     /**
@@ -156,7 +166,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::PHONE);
+        $charge->unload(PAY_NEAR_ME_ORDERS::PHONE);
     }
 
     /**
@@ -169,7 +179,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::ADDRESS_1);
+        $charge->unload(PAY_NEAR_ME_ORDERS::ADDRESS_1);
     }
 
     /**
@@ -182,7 +192,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::CITY);
+        $charge->unload(PAY_NEAR_ME_ORDERS::CITY);
     }
 
     /**
@@ -195,7 +205,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::STATE__C);
+        $charge->unload(PAY_NEAR_ME_ORDERS::STATE__C);
     }
 
     /**
@@ -208,7 +218,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->del(PAY_NEAR_ME_ORDERS::ZIP_CODE);
+        $charge->unload(PAY_NEAR_ME_ORDERS::ZIP_CODE);
     }
 
     /**
@@ -238,23 +248,23 @@ class PayNearMeOrderTest extends TestCase
         $this->assertEquals([$charge, $charge2], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
 
         // test list append
-        $loan = $loan->del(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2, $charge3, $charge);
+        $loan = $loan->unload(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2, $charge3, $charge);
         $this->assertEquals([$charge2, $charge3, $charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
 
         // test list append with multiple keys
-        $loan = $loan->del(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2, $charge, LOAN::PAY_NEAR_ME_ORDERS, $charge);
+        $loan = $loan->unload(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2, $charge, LOAN::PAY_NEAR_ME_ORDERS, $charge);
         $this->assertEquals([$charge2, $charge, $charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
 
         // test array notation 1
-        $loan = $loan->del(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, [$charge3, $charge2, $charge]);
+        $loan = $loan->unload(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, [$charge3, $charge2, $charge]);
         $this->assertEquals([$charge3, $charge2, $charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
 
         // test array notation 2
-        $loan = $loan->del(LOAN::PAY_NEAR_ME_ORDERS)->append([LOAN::PAY_NEAR_ME_ORDERS => [$charge, $charge3, $charge2]]);
+        $loan = $loan->unload(LOAN::PAY_NEAR_ME_ORDERS)->append([LOAN::PAY_NEAR_ME_ORDERS => [$charge, $charge3, $charge2]]);
         $this->assertEquals([$charge, $charge3, $charge2], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
 
         // test array notation 3
-        $loan = $loan->del(LOAN::PAY_NEAR_ME_ORDERS)->append([LOAN::PAY_NEAR_ME_ORDERS => $charge2]);
+        $loan = $loan->unload(LOAN::PAY_NEAR_ME_ORDERS)->append([LOAN::PAY_NEAR_ME_ORDERS => $charge2]);
         $this->assertEquals([$charge2], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
     }
 

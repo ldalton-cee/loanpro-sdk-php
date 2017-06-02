@@ -1,9 +1,19 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: Matt T.
- * Date: 5/17/17
- * Time: 3:12 PM
+ *
+ * Copyright 2017 Simnang, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *
  */
 
 require(__DIR__."/../vendor/autoload.php");
@@ -75,7 +85,7 @@ class PaymentTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.PAYMENTS::INFO.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
+        $this->expectExceptionMessage('Value for \''.PAYMENTS::INFO.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
         LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)
             /* should throw exception when setting LOAN_AMT to null */ ->set(PAYMENTS::INFO, null);
     }
@@ -102,7 +112,7 @@ class PaymentTest extends TestCase
         $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)->set([PAYMENTS::ACTIVE=> 1]);
         $this->assertEquals(1, $payment->get(PAYMENTS::ACTIVE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($payment->del(PAYMENTS::ACTIVE)->get(PAYMENTS::ACTIVE));
+        $this->assertNull($payment->unload(PAYMENTS::ACTIVE)->get(PAYMENTS::ACTIVE));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(1, $payment->get(PAYMENTS::ACTIVE));
     }
@@ -117,7 +127,7 @@ class PaymentTest extends TestCase
         $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
         // should throw exception
-        $payment->del(PAYMENTS::AMOUNT);
+        $payment->unload(PAYMENTS::AMOUNT);
     }
 
     /**
@@ -130,7 +140,7 @@ class PaymentTest extends TestCase
         $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
         // should throw exception
-        $payment->del(PAYMENTS::DATE);
+        $payment->unload(PAYMENTS::DATE);
     }
 
     /**
@@ -143,7 +153,7 @@ class PaymentTest extends TestCase
         $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
         // should throw exception
-        $payment->del(PAYMENTS::INFO);
+        $payment->unload(PAYMENTS::INFO);
     }
 
     /**
@@ -156,7 +166,7 @@ class PaymentTest extends TestCase
         $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
         // should throw exception
-        $payment->del(PAYMENTS::PAYMENT_METHOD_ID);
+        $payment->unload(PAYMENTS::PAYMENT_METHOD_ID);
     }
 
     /**
@@ -169,7 +179,7 @@ class PaymentTest extends TestCase
         $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
         // should throw exception
-        $payment->del(PAYMENTS::PAYMENT_TYPE_ID);
+        $payment->unload(PAYMENTS::PAYMENT_TYPE_ID);
     }
 
     /**
@@ -199,23 +209,23 @@ class PaymentTest extends TestCase
         $this->assertEquals([$payment, $payment2], $loan->get(LOAN::PAYMENTS));
 
         // test list append
-        $loan = $loan->del(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, $payment2, $payment3, $payment);
+        $loan = $loan->unload(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, $payment2, $payment3, $payment);
         $this->assertEquals([$payment2, $payment3, $payment], $loan->get(LOAN::PAYMENTS));
 
         // test list append with multiple keys
-        $loan = $loan->del(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, $payment2, $payment, LOAN::PAYMENTS, $payment);
+        $loan = $loan->unload(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, $payment2, $payment, LOAN::PAYMENTS, $payment);
         $this->assertEquals([$payment2, $payment, $payment], $loan->get(LOAN::PAYMENTS));
 
         // test array notation 1
-        $loan = $loan->del(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, [$payment3, $payment2, $payment]);
+        $loan = $loan->unload(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, [$payment3, $payment2, $payment]);
         $this->assertEquals([$payment3, $payment2, $payment], $loan->get(LOAN::PAYMENTS));
 
         // test array notation 2
-        $loan = $loan->del(LOAN::PAYMENTS)->append([LOAN::PAYMENTS => [$payment, $payment3, $payment2]]);
+        $loan = $loan->unload(LOAN::PAYMENTS)->append([LOAN::PAYMENTS => [$payment, $payment3, $payment2]]);
         $this->assertEquals([$payment, $payment3, $payment2], $loan->get(LOAN::PAYMENTS));
 
         // test array notation 3
-        $loan = $loan->del(LOAN::PAYMENTS)->append([LOAN::PAYMENTS => $payment2]);
+        $loan = $loan->unload(LOAN::PAYMENTS)->append([LOAN::PAYMENTS => $payment2]);
         $this->assertEquals([$payment2], $loan->get(LOAN::PAYMENTS));
     }
 

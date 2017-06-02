@@ -1,9 +1,19 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: Matt T.
- * Date: 5/17/17
- * Time: 3:12 PM
+ *
+ * Copyright 2017 Simnang, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *
  */
 
 require(__DIR__."/../vendor/autoload.php");
@@ -75,7 +85,7 @@ class DocumentTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.DOCUMENTS::ACTIVE.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
+        $this->expectExceptionMessage('Value for \''.DOCUMENTS::ACTIVE.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
         (new \Simnang\LoanPro\Loans\DocumentEntity())
             /* should throw exception when setting LOAN_AMT to null */ ->set(DOCUMENTS::ACTIVE, null);
     }
@@ -102,7 +112,7 @@ class DocumentTest extends TestCase
         $doc = (new \Simnang\LoanPro\Loans\DocumentEntity())->set([DOCUMENTS::ACTIVE=> 1]);
         $this->assertEquals(1, $doc->get(DOCUMENTS::ACTIVE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($doc->del(DOCUMENTS::ACTIVE)->get(DOCUMENTS::ACTIVE));
+        $this->assertNull($doc->unload(DOCUMENTS::ACTIVE)->get(DOCUMENTS::ACTIVE));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(1, $doc->get(DOCUMENTS::ACTIVE));
     }
@@ -134,23 +144,23 @@ class DocumentTest extends TestCase
         $this->assertEquals([$doc, $doc2], $loan->get(LOAN::DOCUMENTS));
 
         // test list append
-        $loan = $loan->del(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, $doc2, $doc3, $doc);
+        $loan = $loan->unload(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, $doc2, $doc3, $doc);
         $this->assertEquals([$doc2, $doc3, $doc], $loan->get(LOAN::DOCUMENTS));
 
         // test list append with multiple keys
-        $loan = $loan->del(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, $doc2, $doc, LOAN::DOCUMENTS, $doc);
+        $loan = $loan->unload(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, $doc2, $doc, LOAN::DOCUMENTS, $doc);
         $this->assertEquals([$doc2, $doc, $doc], $loan->get(LOAN::DOCUMENTS));
 
         // test array notation 1
-        $loan = $loan->del(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, [$doc3, $doc2, $doc]);
+        $loan = $loan->unload(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, [$doc3, $doc2, $doc]);
         $this->assertEquals([$doc3, $doc2, $doc], $loan->get(LOAN::DOCUMENTS));
 
         // test array notation 2
-        $loan = $loan->del(LOAN::DOCUMENTS)->append([LOAN::DOCUMENTS => [$doc, $doc3, $doc2]]);
+        $loan = $loan->unload(LOAN::DOCUMENTS)->append([LOAN::DOCUMENTS => [$doc, $doc3, $doc2]]);
         $this->assertEquals([$doc, $doc3, $doc2], $loan->get(LOAN::DOCUMENTS));
 
         // test array notation 3
-        $loan = $loan->del(LOAN::DOCUMENTS)->append([LOAN::DOCUMENTS => $doc2]);
+        $loan = $loan->unload(LOAN::DOCUMENTS)->append([LOAN::DOCUMENTS => $doc2]);
         $this->assertEquals([$doc2], $loan->get(LOAN::DOCUMENTS));
     }
 

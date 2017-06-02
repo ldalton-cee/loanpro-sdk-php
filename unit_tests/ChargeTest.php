@@ -1,9 +1,19 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: Matt T.
- * Date: 5/17/17
- * Time: 3:12 PM
+ *
+ * Copyright 2017 Simnang, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *
  */
 
 require(__DIR__."/../vendor/autoload.php");
@@ -75,7 +85,7 @@ class ChargeTest extends TestCase
      */
     public function testChargeCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.CHARGES::INFO.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
+        $this->expectExceptionMessage('Value for \''.CHARGES::INFO.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)
             /* should throw exception when setting LOAN_AMT to null */ ->set(CHARGES::INFO, null);
     }
@@ -102,7 +112,7 @@ class ChargeTest extends TestCase
         $charge = $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->set([CHARGES::ACTIVE=> 1]);
         $this->assertEquals(1, $charge->get(CHARGES::ACTIVE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($charge->del(CHARGES::ACTIVE)->get(CHARGES::ACTIVE));
+        $this->assertNull($charge->unload(CHARGES::ACTIVE)->get(CHARGES::ACTIVE));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(1, $charge->get(CHARGES::ACTIVE));
     }
@@ -117,7 +127,7 @@ class ChargeTest extends TestCase
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->del(CHARGES::AMOUNT);
+        $charge->unload(CHARGES::AMOUNT);
     }
 
     /**
@@ -130,7 +140,7 @@ class ChargeTest extends TestCase
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->del(CHARGES::DATE);
+        $charge->unload(CHARGES::DATE);
     }
 
     /**
@@ -143,7 +153,7 @@ class ChargeTest extends TestCase
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->del(CHARGES::INFO);
+        $charge->unload(CHARGES::INFO);
     }
 
     /**
@@ -156,7 +166,7 @@ class ChargeTest extends TestCase
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->del(CHARGES::CHARGE_TYPE_ID);
+        $charge->unload(CHARGES::CHARGE_TYPE_ID);
     }
 
     /**
@@ -169,7 +179,7 @@ class ChargeTest extends TestCase
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->del(CHARGES::CHARGE_APP_TYPE__C);
+        $charge->unload(CHARGES::CHARGE_APP_TYPE__C);
     }
 
     /**
@@ -182,7 +192,7 @@ class ChargeTest extends TestCase
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->del(CHARGES::INTEREST_BEARING);
+        $charge->unload(CHARGES::INTEREST_BEARING);
     }
 
     /**
@@ -212,23 +222,23 @@ class ChargeTest extends TestCase
         $this->assertEquals([$charge, $charge2], $loan->get(LOAN::CHARGES));
 
         // test list append
-        $loan = $loan->del(LOAN::CHARGES)->append(LOAN::CHARGES, $charge2, $charge3, $charge);
+        $loan = $loan->unload(LOAN::CHARGES)->append(LOAN::CHARGES, $charge2, $charge3, $charge);
         $this->assertEquals([$charge2, $charge3, $charge], $loan->get(LOAN::CHARGES));
 
         // test list append with multiple keys
-        $loan = $loan->del(LOAN::CHARGES)->append(LOAN::CHARGES, $charge2, $charge, LOAN::CHARGES, $charge);
+        $loan = $loan->unload(LOAN::CHARGES)->append(LOAN::CHARGES, $charge2, $charge, LOAN::CHARGES, $charge);
         $this->assertEquals([$charge2, $charge, $charge], $loan->get(LOAN::CHARGES));
 
         // test array notation 1
-        $loan = $loan->del(LOAN::CHARGES)->append(LOAN::CHARGES, [$charge3, $charge2, $charge]);
+        $loan = $loan->unload(LOAN::CHARGES)->append(LOAN::CHARGES, [$charge3, $charge2, $charge]);
         $this->assertEquals([$charge3, $charge2, $charge], $loan->get(LOAN::CHARGES));
 
         // test array notation 2
-        $loan = $loan->del(LOAN::CHARGES)->append([LOAN::CHARGES => [$charge, $charge3, $charge2]]);
+        $loan = $loan->unload(LOAN::CHARGES)->append([LOAN::CHARGES => [$charge, $charge3, $charge2]]);
         $this->assertEquals([$charge, $charge3, $charge2], $loan->get(LOAN::CHARGES));
 
         // test array notation 3
-        $loan = $loan->del(LOAN::CHARGES)->append([LOAN::CHARGES => $charge2]);
+        $loan = $loan->unload(LOAN::CHARGES)->append([LOAN::CHARGES => $charge2]);
         $this->assertEquals([$charge2], $loan->get(LOAN::CHARGES));
     }
 

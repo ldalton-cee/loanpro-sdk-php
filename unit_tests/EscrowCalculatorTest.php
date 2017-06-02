@@ -1,9 +1,19 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: Matt T.
- * Date: 5/17/17
- * Time: 3:12 PM
+ *
+ * Copyright 2017 Simnang, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *
  */
 
 require(__DIR__."/../vendor/autoload.php");
@@ -102,7 +112,7 @@ class EscrowCalculatorTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.ESCROW_CALCULATORS::REGULAR_PERIOD.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
+        $this->expectExceptionMessage('Value for \''.ESCROW_CALCULATORS::REGULAR_PERIOD.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
         $escrowCalc = LPSDK::CreateEscrowCalculator(1)
         // should throw exception when setting LOAN_AMT to null
              ->set(ESCROW_CALCULATORS::REGULAR_PERIOD, null);
@@ -148,7 +158,7 @@ class EscrowCalculatorTest extends TestCase
         $this->assertEquals($vals, $escrowCalc->get(array_keys($vals)));
         unset($vals[ESCROW_CALCULATORS::REGULAR_PERIOD]);
 
-        $this->assertEquals($vals, $escrowCalc->del(ESCROW_CALCULATORS::REGULAR_PERIOD)->get(array_keys($vals)));
+        $this->assertEquals($vals, $escrowCalc->unload(ESCROW_CALCULATORS::REGULAR_PERIOD)->get(array_keys($vals)));
     }
 
     /**
@@ -161,7 +171,7 @@ class EscrowCalculatorTest extends TestCase
         $escrowCalc = LPSDK::CreateEscrowCalculator(1);
 
         // should throw exception
-        $escrowCalc->del(ESCROW_CALCULATORS::SUBSET);
+        $escrowCalc->unload(ESCROW_CALCULATORS::SUBSET);
     }
 
     /**
@@ -191,23 +201,23 @@ class EscrowCalculatorTest extends TestCase
         $this->assertEquals([$escrowCalc, $escrowCalc2], $loan->get(LOAN::ESCROW_CALCULATORS));
 
         // test list append
-        $loan = $loan->del(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2, $escrowCalc3, $escrowCalc);
+        $loan = $loan->unload(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2, $escrowCalc3, $escrowCalc);
         $this->assertEquals([$escrowCalc2, $escrowCalc3, $escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));
 
         // test list append with multiple keys
-        $loan = $loan->del(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2, $escrowCalc, LOAN::ESCROW_CALCULATORS, $escrowCalc);
+        $loan = $loan->unload(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2, $escrowCalc, LOAN::ESCROW_CALCULATORS, $escrowCalc);
         $this->assertEquals([$escrowCalc2, $escrowCalc, $escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));
 
         // test array notation 1
-        $loan = $loan->del(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, [$escrowCalc3, $escrowCalc2, $escrowCalc]);
+        $loan = $loan->unload(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, [$escrowCalc3, $escrowCalc2, $escrowCalc]);
         $this->assertEquals([$escrowCalc3, $escrowCalc2, $escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));
 
         // test array notation 2
-        $loan = $loan->del(LOAN::ESCROW_CALCULATORS)->append([LOAN::ESCROW_CALCULATORS => [$escrowCalc, $escrowCalc3, $escrowCalc2]]);
+        $loan = $loan->unload(LOAN::ESCROW_CALCULATORS)->append([LOAN::ESCROW_CALCULATORS => [$escrowCalc, $escrowCalc3, $escrowCalc2]]);
         $this->assertEquals([$escrowCalc, $escrowCalc3, $escrowCalc2], $loan->get(LOAN::ESCROW_CALCULATORS));
 
         // test array notation 3
-        $loan = $loan->del(LOAN::ESCROW_CALCULATORS)->append([LOAN::ESCROW_CALCULATORS => $escrowCalc2]);
+        $loan = $loan->unload(LOAN::ESCROW_CALCULATORS)->append([LOAN::ESCROW_CALCULATORS => $escrowCalc2]);
         $this->assertEquals([$escrowCalc2], $loan->get(LOAN::ESCROW_CALCULATORS));
     }
 }
