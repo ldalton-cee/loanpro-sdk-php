@@ -26,8 +26,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class PaymentTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testPaymentInstantiate(){
         $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
@@ -43,6 +47,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testPaymentSetCollections(){
         $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
@@ -66,6 +71,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -76,6 +82,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -89,6 +96,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPaymentDel(){
         $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)->set([PAYMENTS::ACTIVE=> 1]);
@@ -101,6 +109,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPaymentDelAmount(){
         $this->expectException(\InvalidArgumentException::class);
@@ -113,6 +122,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPaymentDelDate(){
         $this->expectException(\InvalidArgumentException::class);
@@ -125,6 +135,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPaymentDelInfo(){
         $this->expectException(\InvalidArgumentException::class);
@@ -137,6 +148,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPaymentDelPaymentMethodId(){
         $this->expectException(\InvalidArgumentException::class);
@@ -149,6 +161,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPaymentDelPaymentTypeId(){
         $this->expectException(\InvalidArgumentException::class);
@@ -161,6 +174,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group add_correctness
+     * @group offline
      */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
@@ -170,6 +184,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendToLoan(){
         // create loan and payments
@@ -206,6 +221,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFail(){
         // create loan and payments
@@ -218,6 +234,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailList(){
         // create loan and payments
@@ -231,6 +248,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailNoValues(){
         // create loan and payments
@@ -244,6 +262,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailMissingValues1(){
         // create loan and payments
@@ -257,6 +276,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailMissingValues2(){
         // create loan and payments
@@ -270,6 +290,7 @@ class PaymentTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoadReversePayment(){
         $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)->set(PAYMENTS::NACHA_RETURN_CODE__C, PAYMENTS\PAYMENTS_NACHA_RETURN_CODE__C::ADDENDA_ERROR, PAYMENTS::REVERSE_REASON__C, PAYMENTS\PAYMENTS_REVERSE_REASON__C::NACHA_ERR_CODE, PAYMENTS::COMMENTS, "NACHA returned an error");

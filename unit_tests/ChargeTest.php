@@ -26,8 +26,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class ChargeTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testChargeInstantiate(){
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
@@ -43,6 +47,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testChargeSetCollections(){
         $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
@@ -66,6 +71,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testChargeCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -76,6 +82,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testChargeCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -89,6 +96,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testChargeDel(){
         $charge = $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->set([CHARGES::ACTIVE=> 1]);
@@ -101,6 +109,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testChargeDelAmount(){
         $this->expectException(\InvalidArgumentException::class);
@@ -113,6 +122,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testChargeDelDate(){
         $this->expectException(\InvalidArgumentException::class);
@@ -125,6 +135,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testChargeDelInfo(){
         $this->expectException(\InvalidArgumentException::class);
@@ -137,6 +148,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testChargeDelChargeTypeId(){
         $this->expectException(\InvalidArgumentException::class);
@@ -149,6 +161,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testChargeDelChargeAppTypeId(){
         $this->expectException(\InvalidArgumentException::class);
@@ -161,6 +174,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testChargeDelChargeInterestBearId(){
         $this->expectException(\InvalidArgumentException::class);
@@ -173,6 +187,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group add_correctness
+     * @group offline
      */
     public function testAddToCharge(){
         $loan = LPSDK::CreateLoan("Test ID");
@@ -182,6 +197,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendToLoan(){
         // create loan and payments
@@ -218,6 +234,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFail(){
         // create loan and payments
@@ -230,6 +247,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailList(){
         // create loan and payments
@@ -243,6 +261,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testReadOnly(){
         // create loan and payments
@@ -253,6 +272,7 @@ class ChargeTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoadReverseCharge(){
         $charge = $charge = LPSDK::CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->set(CHARGES::EDIT_COMMENT, "This is a comment", CHARGES::IS_REVERSAL, 1);

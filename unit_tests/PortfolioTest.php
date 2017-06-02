@@ -27,8 +27,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class PortfolioTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testPortfolioInstantiate(){
         $portfolio = LPSDK::CreatePortfolio(5);
@@ -38,6 +42,7 @@ class PortfolioTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testPortfolioSet(){
         $arr = [
@@ -58,6 +63,7 @@ class PortfolioTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -69,6 +75,7 @@ class PortfolioTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPortfolioDelPortfolioId(){
         $this->expectException(\InvalidArgumentException::class);
@@ -81,6 +88,7 @@ class PortfolioTest extends TestCase
 
     /**
      * @group add_correctness
+     * @group offline
      */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");

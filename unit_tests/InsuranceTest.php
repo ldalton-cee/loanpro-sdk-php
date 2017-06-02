@@ -25,8 +25,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class InsuranceTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testInsuranceInstantiate(){
         $insurance = LPSDK::CreateInsurance();
@@ -42,6 +46,7 @@ class InsuranceTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testInsuranceSetCollections(){
         $insurance = LPSDK::CreateInsurance();
@@ -65,6 +70,7 @@ class InsuranceTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -75,6 +81,7 @@ class InsuranceTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -88,6 +95,7 @@ class InsuranceTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testInsuranceDel(){
         $insurance = LPSDK::CreateInsurance()->set([INSURANCE::DEDUCTIBLE=> 232.23]);

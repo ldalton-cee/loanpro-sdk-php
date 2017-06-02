@@ -26,8 +26,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class LoanSetupTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testCreateLoanSetupNoVals(){
         $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
@@ -48,6 +52,7 @@ class LoanSetupTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanSetupSetCollections(){
         $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
@@ -73,6 +78,7 @@ class LoanSetupTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanSetupCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -83,6 +89,7 @@ class LoanSetupTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testLoanSetupDel(){
         $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT)->set(LSETUP::LOAN_AMT, 1250.01);
@@ -95,6 +102,7 @@ class LoanSetupTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testLoanSetupDelClass(){
         $this->expectException(\InvalidArgumentException::class);
@@ -107,6 +115,7 @@ class LoanSetupTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testLoanSetupDelType(){
         $this->expectException(\InvalidArgumentException::class);

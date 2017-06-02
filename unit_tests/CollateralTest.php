@@ -25,8 +25,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class CollateralTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testCollateralInstantiate(){
         $collateral = LPSDK::CreateCollateral();
@@ -42,6 +46,7 @@ class CollateralTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testCollateralSetCollections(){
         $collateral = LPSDK::CreateCollateral();
@@ -65,6 +70,7 @@ class CollateralTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -75,6 +81,7 @@ class CollateralTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -88,6 +95,7 @@ class CollateralTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testCollateralDel(){
         $collateral = LPSDK::CreateCollateral()->set([COLLATERAL::DISTANCE=> 232.23]);

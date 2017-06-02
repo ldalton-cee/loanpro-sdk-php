@@ -26,8 +26,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class NotesTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testNotesInstantiate(){
         $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
@@ -43,6 +47,7 @@ class NotesTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testNotesSetCollections(){
         $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
@@ -66,6 +71,7 @@ class NotesTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -76,6 +82,7 @@ class NotesTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -89,6 +96,7 @@ class NotesTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testNotesDel(){
         $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body')->set([NOTES::AUTHOR_ID=> 1]);
@@ -101,6 +109,7 @@ class NotesTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testNotesDelCatID(){
         $this->expectException(\InvalidArgumentException::class);
@@ -113,6 +122,7 @@ class NotesTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testNotesDelSubject(){
         $this->expectException(\InvalidArgumentException::class);
@@ -125,6 +135,7 @@ class NotesTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testNotesDelBody(){
         $this->expectException(\InvalidArgumentException::class);
@@ -137,6 +148,7 @@ class NotesTest extends TestCase
 
     /**
      * @group add_correctness
+     * @group offline
      */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
@@ -146,6 +158,7 @@ class NotesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendToLoan(){
         // create loan and payments
@@ -182,6 +195,7 @@ class NotesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFail(){
         // create loan and payments
@@ -194,6 +208,7 @@ class NotesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailList(){
         // create loan and payments
@@ -207,6 +222,7 @@ class NotesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailNoValues(){
         // create loan and payments
@@ -220,6 +236,7 @@ class NotesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailMissingValues1(){
         // create loan and payments
@@ -233,6 +250,7 @@ class NotesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailMissingValues2(){
         // create loan and payments

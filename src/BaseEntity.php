@@ -22,7 +22,7 @@ abstract class BaseEntity{
      * Whether or not strict mode is enabled; in strict mode extra checks are performed and errors thrown if something doesn't match
      * @var bool
      */
-    private static $strictMode = true;
+    private static $strictMode = false;
 
     /**
      * Set wether or not strict mode is enabled

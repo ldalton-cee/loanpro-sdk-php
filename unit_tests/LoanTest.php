@@ -48,9 +48,13 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class LoanTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
 
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testLoanMinCreate(){
         $loan = LPSDK::CreateLoan("DISP ID");
@@ -71,6 +75,7 @@ class LoanTest extends TestCase
 
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testLoanMinCreateChangeId(){
         $loan = LPSDK::CreateLoan("DISP ID");
@@ -93,6 +98,7 @@ class LoanTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanSelOnlyValid(){
         $this->expectException(\InvalidArgumentException::class);
@@ -105,6 +111,7 @@ class LoanTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testLoanDelOnlyValid(){
         $this->expectException(\InvalidArgumentException::class);
@@ -117,6 +124,7 @@ class LoanTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testLoanDel(){
         $loan = LPSDK::CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, "This is an alert");
@@ -130,6 +138,7 @@ class LoanTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -139,6 +148,7 @@ class LoanTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testLoanDelDispID(){
         $this->expectException(\InvalidArgumentException::class);
@@ -151,6 +161,7 @@ class LoanTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testSetLoanSetup()
     {
@@ -194,6 +205,7 @@ class LoanTest extends TestCase
 
     /**
      * @group json_correctness
+     * @group offline
      */
     public function testLoadFromJson_Tmpl1(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_1.json"));
@@ -212,6 +224,7 @@ class LoanTest extends TestCase
 
     /**
      * @group json_correctness
+     * @group offline
      */
     public function testLoadFromJson_Tmpl2(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_2.json"));
@@ -227,6 +240,7 @@ class LoanTest extends TestCase
 
     /**
      * @group json_correctness
+     * @group offline
      */
     public function testLoadFromJson_Tmpl3(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_3.json"));
@@ -245,6 +259,7 @@ class LoanTest extends TestCase
 
     /**
      * @group json_correctness
+     * @group offline
      */
     public function testLoadFromJson_Tmpl4(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_4.json"));
@@ -306,6 +321,7 @@ class LoanTest extends TestCase
 
     /**
      * @group json_correctness
+     * @group offline
      */
     public function testLoadFromJson_Tmpl5(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_5.json"));
@@ -330,6 +346,7 @@ class LoanTest extends TestCase
 
     /**
      * @group json_correctness
+     * @group offline
      */
     public function testLoadFromJson_Tmpl6(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_6.json"));
@@ -357,6 +374,7 @@ class LoanTest extends TestCase
 
     /**
      * @group json_correctness
+     * @group offline
      */
     public function testLoadFromJson_Tmpl7(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_7.json"));
@@ -470,6 +488,7 @@ class LoanTest extends TestCase
 
     /**
      * @group json_correctness
+     * @group offline
      */
     public function testLoadFromJson_Tmpl8(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_8.json"));
@@ -494,6 +513,7 @@ class LoanTest extends TestCase
 
     /**
      * @group json_correctness
+     * @group offline
      */
     public function testLoadFromJson_Tmpl9(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_9.json"));
@@ -520,6 +540,7 @@ class LoanTest extends TestCase
 
     /**
      * @group json_correctness
+     * @group offline
      */
     public function testLoadFromJson_Tmpl10(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_10.json"));
@@ -571,6 +592,7 @@ class LoanTest extends TestCase
 
     /**
      * @group json_correctness
+     * @group offline
      */
     public function testLoadFromJson_Tmpl11(){
         $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_11.json"));

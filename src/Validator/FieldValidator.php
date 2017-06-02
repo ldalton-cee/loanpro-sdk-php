@@ -204,17 +204,19 @@ class FieldValidator{
     public static function IsValidObjectList($obj){
         if(FieldValidator::IsValidObject($obj))
             return true;
-        if(!is_array($obj))
-            return false;
-        if(isset($obj['results']))
+        if(is_array($obj) && isset($obj['results']))
             return static::IsValidObjectList($obj['results']);
-        foreach($obj as $o) {
-            if (!FieldValidator::IsValidObject($o)) {
-                var_dump($obj);
-                return false;
+        if(is_array($obj) || $obj instanceof \Traversable) {
+            foreach ($obj as $o) {
+                if (!FieldValidator::IsValidObject($o)) {
+                    var_dump($obj);
+                    return false;
+                }
             }
+            return true;
         }
-        return true;
+        else
+            return false;
     }
 
     /**
@@ -321,10 +323,10 @@ class FieldValidator{
     public static function GetObjectList($obj){
         if(!FieldValidator::IsValidObjectList($obj))
             return [];
-        if(isset($obj['results']))
-            return static::GetObjectList($obj['results']);
         if(is_object($obj))
             return [clone $obj];
+        if(is_array($obj) && isset($obj['results']))
+            return static::GetObjectList($obj['results']);
 
         $list = [];
         foreach($obj as $k => $o)
@@ -354,6 +356,9 @@ class FieldValidator{
         return null;
     }
 
+    /**
+     * Ensures that types have been properly setup for key constants
+     */
     private static function EnsureTypesSetup(){
         if(count(FieldValidator::$entityTypes) == 0){
             $rclass = new \ReflectionClass(ENTITY_TYPES::class);

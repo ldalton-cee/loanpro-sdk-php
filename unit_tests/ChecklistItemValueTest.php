@@ -26,8 +26,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class ChecklistItemValueTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testChecklistItemValueInstantiate(){
         $checklistValue = LPSDK::CreateChecklistItemValue(6, 12, 1);
@@ -37,6 +41,7 @@ class ChecklistItemValueTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testChecklistItemValueSet(){
         $checklistValue = LPSDK::CreateChecklistItemValue(6, 12, 1)->set(BASE_ENTITY::ID, 12);
@@ -45,6 +50,7 @@ class ChecklistItemValueTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -56,6 +62,7 @@ class ChecklistItemValueTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testChecklistItemValueDelChecklistId(){
         $this->expectException(\InvalidArgumentException::class);
@@ -68,6 +75,7 @@ class ChecklistItemValueTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testChecklistItemValueDelChecklistItemVal(){
         $this->expectException(\InvalidArgumentException::class);
@@ -80,6 +88,7 @@ class ChecklistItemValueTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testChecklistItemValueDelChecklistItemId(){
         $this->expectException(\InvalidArgumentException::class);
@@ -92,6 +101,7 @@ class ChecklistItemValueTest extends TestCase
 
     /**
      * @group add_correctness
+     * @group offline
      */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");

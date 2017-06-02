@@ -26,8 +26,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class PayNearMeOrderTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testPayNearMeOrderInstantiate(){
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
@@ -43,6 +47,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testPayNearMeOrderSetCollections(){
         $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
@@ -66,6 +71,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -76,6 +82,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -89,6 +96,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPayNearMeOrderDel(){
         $charge = $charge = LPSDK::CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345')->set([PAY_NEAR_ME_ORDERS::CARD_NUMBER=> "123456789"]);
@@ -101,6 +109,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPayNearMeOrderDelCustId(){
         $this->expectException(\InvalidArgumentException::class);
@@ -113,6 +122,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPayNearMeOrderDelCustName(){
         $this->expectException(\InvalidArgumentException::class);
@@ -125,6 +135,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPayNearMeOrderDelEmail(){
         $this->expectException(\InvalidArgumentException::class);
@@ -137,6 +148,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPayNearMeOrderDelPhone(){
         $this->expectException(\InvalidArgumentException::class);
@@ -149,6 +161,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPayNearMeOrderDelAddress(){
         $this->expectException(\InvalidArgumentException::class);
@@ -161,6 +174,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPayNearMeOrderDelCity(){
         $this->expectException(\InvalidArgumentException::class);
@@ -173,6 +187,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPayNearMeOrderDelState(){
         $this->expectException(\InvalidArgumentException::class);
@@ -185,6 +200,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPayNearMeOrderDelZip(){
         $this->expectException(\InvalidArgumentException::class);
@@ -197,6 +213,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group add_correctness
+     * @group offline
      */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
@@ -206,6 +223,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendToLoan(){
         // create loan and payments
@@ -242,6 +260,7 @@ class PayNearMeOrderTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFail(){
         // create loan and payments

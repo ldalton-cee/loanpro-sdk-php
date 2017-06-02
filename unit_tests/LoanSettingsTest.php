@@ -25,8 +25,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class LoanSettingsTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testLoanSettingsInstantiate(){
         $loanSettings = LPSDK::CreateLoanSettings();
@@ -42,6 +46,7 @@ class LoanSettingsTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanSettingsSetCollections(){
         $loanSettings = LPSDK::CreateLoanSettings();
@@ -65,6 +70,7 @@ class LoanSettingsTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -75,6 +81,7 @@ class LoanSettingsTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -88,6 +95,7 @@ class LoanSettingsTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testLoanSettingsDel(){
         $loanSettings = LPSDK::CreateLoanSettings()->set([LSETTINGS::AGENT=> 2, LSETTINGS::LOAN_SUB_STATUS_ID=>5, LSETTINGS::LOAN_STATUS_ID=>6, LSETTINGS::SECURED=>1]);

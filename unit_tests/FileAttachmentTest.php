@@ -24,8 +24,12 @@ use Simnang\LoanPro\Constants\FILE_ATTACHMENT as FILE_ATTACHMENT,
 
 class FileAttachmentTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testFileAttachmentInstantiate(){
         // FileAttachments aren't exposed via LoanProSDK since they are saved and operated on differently
@@ -42,16 +46,18 @@ class FileAttachmentTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.FILE_ATTACHMENT::FILE_MIME.'\' is null. The \'set\' function cannot unset items, please us \'del\' instead.');
+        $this->expectExceptionMessage('Value for \''.FILE_ATTACHMENT::FILE_MIME.'\' is null. The \'set\' function cannot unset items, please use \'del\' instead.');
         (new \Simnang\LoanPro\Loans\FileAttachmentEntity())
             /* should throw exception when setting LOAN_AMT to null */ ->set(FILE_ATTACHMENT::FILE_MIME, null);
     }
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -65,6 +71,7 @@ class FileAttachmentTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testFileAttachmentDel(){
         $doc = (new \Simnang\LoanPro\Loans\FileAttachmentEntity())->set([FILE_ATTACHMENT::FILE_MIME=> 1]);

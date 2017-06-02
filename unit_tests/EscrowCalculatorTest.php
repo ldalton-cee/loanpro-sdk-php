@@ -27,8 +27,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class EscrowCalculatorTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testEscrowCalculatorInstantiate(){
         $escrowCalc = LPSDK::CreateEscrowCalculator(1);
@@ -44,6 +48,7 @@ class EscrowCalculatorTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testEscrowCalculatorSetCollections(){
         $escrowCalc = LPSDK::CreateEscrowCalculator(2);
@@ -67,6 +72,7 @@ class EscrowCalculatorTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testEscrowCalculatorSet(){
         $vals = [
@@ -92,6 +98,7 @@ class EscrowCalculatorTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -103,6 +110,7 @@ class EscrowCalculatorTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -116,6 +124,7 @@ class EscrowCalculatorTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testEscrowCalculatorDel(){
         $vals = [
@@ -144,6 +153,7 @@ class EscrowCalculatorTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testEscrowCalculatorDelSubset(){
         $this->expectException(\InvalidArgumentException::class);
@@ -156,6 +166,7 @@ class EscrowCalculatorTest extends TestCase
 
     /**
      * @group add_correctness
+     * @group offline
      */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
@@ -165,6 +176,7 @@ class EscrowCalculatorTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendToLoan(){
         // create loan and payments

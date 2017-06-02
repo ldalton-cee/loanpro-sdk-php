@@ -27,8 +27,13 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class SubPortfolioTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
+
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testSubPortfolioInstantiate(){
         $subportfolio = LPSDK::CreateSubPortfolio(5, 1);
@@ -39,6 +44,7 @@ class SubPortfolioTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testSubPortfolioSet(){
         $arr = ArrayUtils::ConvertToKeyedArray([
@@ -55,6 +61,7 @@ class SubPortfolioTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -66,6 +73,7 @@ class SubPortfolioTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testSubPortfolioDelSubPortfolioId(){
         $this->expectException(\InvalidArgumentException::class);
@@ -78,6 +86,7 @@ class SubPortfolioTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testSubPortfolioDelSubPortfolioParent(){
         $this->expectException(\InvalidArgumentException::class);
@@ -90,6 +99,7 @@ class SubPortfolioTest extends TestCase
 
     /**
      * @group add_correctness
+     * @group offline
      */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");

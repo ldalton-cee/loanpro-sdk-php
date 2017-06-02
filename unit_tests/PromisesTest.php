@@ -26,8 +26,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class PromisesTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testPromisesInstantiate(){
         $promise = LPSDK::CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
@@ -43,6 +47,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testPromisesSetCollections(){
         $promise = LPSDK::CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
@@ -66,6 +71,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -76,6 +82,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -89,6 +96,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPromisesDel(){
         $promise = LPSDK::CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0)->set([PROMISES::LOGGED_BY=> 'Bob']);
@@ -101,6 +109,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPromisesDelCatID(){
         $this->expectException(\InvalidArgumentException::class);
@@ -113,6 +122,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPromisesDelSubject(){
         $this->expectException(\InvalidArgumentException::class);
@@ -125,6 +135,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPromisesDelBody(){
         $this->expectException(\InvalidArgumentException::class);
@@ -137,6 +148,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPromisesDelFulfilled(){
         $this->expectException(\InvalidArgumentException::class);
@@ -150,6 +162,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testPromisesDelDueDate(){
         $this->expectException(\InvalidArgumentException::class);
@@ -163,6 +176,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group add_correctness
+     * @group offline
      */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
@@ -172,6 +186,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendToLoan(){
         // create loan and payments
@@ -208,6 +223,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFail(){
         // create loan and payments
@@ -220,6 +236,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailList(){
         // create loan and payments
@@ -233,6 +250,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailNoValues(){
         // create loan and payments
@@ -246,6 +264,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailMissingValues1(){
         // create loan and payments
@@ -259,6 +278,7 @@ class PromisesTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFailMissingValues2(){
         // create loan and payments

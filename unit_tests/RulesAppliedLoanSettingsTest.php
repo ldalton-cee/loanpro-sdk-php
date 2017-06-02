@@ -26,8 +26,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class RulesAppliedLoanSettingsTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testRulesAppliedLoanSettingsInstantiate(){
         $rulesApplied = LPSDK::CreateRulesAppliedLoanSettings(5, true);
@@ -37,6 +41,7 @@ class RulesAppliedLoanSettingsTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testRulesAppliedLoanSettingsSet(){
         $rulesApplied = LPSDK::CreateRulesAppliedLoanSettings(5, true)->set(BASE_ENTITY::ID, 12)->set(LSRULES_APPLIED::ENABLED, false);
@@ -45,6 +50,7 @@ class RulesAppliedLoanSettingsTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testRulesAppliedLoanSettingsCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -56,6 +62,7 @@ class RulesAppliedLoanSettingsTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testRulesAppliedLoanSettings_DelId(){
         $this->expectException(\InvalidArgumentException::class);
@@ -68,6 +75,7 @@ class RulesAppliedLoanSettingsTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testRulesAppliedLoanSettings_DelEnabled(){
         $this->expectException(\InvalidArgumentException::class);
@@ -80,6 +88,7 @@ class RulesAppliedLoanSettingsTest extends TestCase
 
     /**
      * @group add_correctness
+     * @group offline
      */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");

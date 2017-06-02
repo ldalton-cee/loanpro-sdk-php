@@ -26,8 +26,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class DocSectionTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testDocSectionInstantiate(){
         // DocSections aren't exposed via LoanProSDK since they are saved and operated on differently
@@ -44,6 +48,7 @@ class DocSectionTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -54,6 +59,7 @@ class DocSectionTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -67,6 +73,7 @@ class DocSectionTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testDocSectionDel(){
         $doc = (new \Simnang\LoanPro\Loans\DocSectionEntity())->set([DOC_SECTION::ACTIVE=> 1]);

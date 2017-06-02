@@ -26,8 +26,12 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class DocumentTest extends TestCase
 {
+    public static function setUpBeforeClass(){
+        \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+    }
     /**
      * @group create_correctness
+     * @group offline
      */
     public function testDocumentInstantiate(){
         // Documents aren't exposed via LoanProSDK since they are saved and operated on differently
@@ -44,6 +48,7 @@ class DocumentTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testDocumentSetCollections(){
         $doc = new \Simnang\LoanPro\Loans\DocumentEntity();
@@ -66,6 +71,7 @@ class DocumentTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
@@ -76,6 +82,7 @@ class DocumentTest extends TestCase
 
     /**
      * @group set_correctness
+     * @group offline
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
@@ -89,6 +96,7 @@ class DocumentTest extends TestCase
 
     /**
      * @group del_correctness
+     * @group offline
      */
     public function testDocumentDel(){
         $doc = (new \Simnang\LoanPro\Loans\DocumentEntity())->set([DOCUMENTS::ACTIVE=> 1]);
@@ -101,6 +109,7 @@ class DocumentTest extends TestCase
 
     /**
      * @group add_correctness
+     * @group offline
      */
     public function testAddToLoan(){
         $loan = LPSDK::CreateLoan("Test ID");
@@ -110,6 +119,7 @@ class DocumentTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendToLoan(){
         // create loan and payments
@@ -146,6 +156,7 @@ class DocumentTest extends TestCase
 
     /**
      * @group append_correctness
+     * @group offline
      */
     public function testAppendFail(){
         // create loan and payments
