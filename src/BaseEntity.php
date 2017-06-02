@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: tofurama
+ * User: mtolman
  * Date: 5/19/17
  * Time: 3:26 PM
  */
@@ -12,9 +12,22 @@ use Simnang\LoanPro\Utils\ArrayUtils;
 use Simnang\LoanPro\Validator\FieldValidator;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
 
+/**
+ * Class BaseEntity
+ * This is the base entity for all LoanPro entities. it handles property validation and mapping
+ * @package Simnang\LoanPro
+ */
 abstract class BaseEntity{
+    /**
+     * Whether or not strict mode is enabled; in strict mode extra checks are performed and errors thrown if something doesn't match
+     * @var bool
+     */
     private static $strictMode = true;
 
+    /**
+     * Set wether or not strict mode is enabled
+     * @param bool|true $mode
+     */
     public static function SetStrictMode($mode = true){
         BaseEntity::$strictMode = $mode;
     }
@@ -46,7 +59,7 @@ abstract class BaseEntity{
     }
 
     /**
-     * Internal representation of current data state; keys are the values in the constants list
+     * Internal representation of current data state; keys are the values in the constants list, values are the values of the field
      * @var array
      */
     protected $properties = [];
@@ -384,7 +397,7 @@ abstract class BaseEntity{
             if(isset(static::$fields[$fieldName]))
                 return FieldValidator::ValidateByType($val, static::$fields[$fieldName], static::$constCollectionPrefix.'\\'.static::$constCollectionPrefix.'_'.static::$validConstsByVal[$fieldName]);
             else
-                throw new InvalidArgumentException("Field type not set for '$fieldName'");
+                throw new \InvalidArgumentException("Field type not set for '$fieldName'");
         }
         if($fieldName == BASE_ENTITY::ID && FieldValidator::IsValidInt($val))
             return true;

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: tofurama
+ * User: mtolman
  * Date: 5/23/17
  * Time: 12:17 PM
  */
@@ -58,6 +58,7 @@ class PaymentEntity extends BaseEntity
      */
     protected static $fields = [
         PAYMENTS::ACTIVE                => FieldValidator::BOOL,
+        PAYMENTS::CHARGE_OFF_RECOVERY   => FieldValidator::BOOL,
         PAYMENTS::EARLY                 => FieldValidator::BOOL,
         PAYMENTS::IS_ONE_TIME_ONLY      => FieldValidator::BOOL,
         PAYMENTS::IS_SPLIT              => FieldValidator::BOOL,
@@ -73,15 +74,35 @@ class PaymentEntity extends BaseEntity
         PAYMENTS::CARD_FEE_TYPE__C      => FieldValidator::COLLECTION,
         PAYMENTS::NACHA_RETURN_CODE__C  => FieldValidator::COLLECTION,
         PAYMENTS::REVERSE_REASON__C     => FieldValidator::COLLECTION,
+        PAYMENTS::STATUS__C             => FieldValidator::COLLECTION,
 
+        PAYMENTS::AFTER_NEXT_DUE_DATE   => FieldValidator::DATE,
+        PAYMENTS::BEFORE_NEXT_DUE_DATE  => FieldValidator::DATE,
+        PAYMENTS::CREATED               => FieldValidator::DATE,
         PAYMENTS::DATE                  => FieldValidator::DATE,
 
+        PAYMENTS::ENTITY_TYPE           => FieldValidator::ENTITY_TYPE,
+
+        PAYMENTS::AFTER_DAYS_PAST_DUE   => FieldValidator::INT,
+        PAYMENTS::BEFORE_DAYS_PAST_DUE  => FieldValidator::INT,
         PAYMENTS::CASH_DRAWER_ID        => FieldValidator::INT,
+        PAYMENTS::DISPLAY_ID            => FieldValidator::INT,
+        PAYMENTS::ENTITY_ID             => FieldValidator::INT,
+        PAYMENTS::LOAN_STATUS_ID        => FieldValidator::INT,
+        PAYMENTS::LOAN_SUB_STATUS_ID    => FieldValidator::INT,
         PAYMENTS::PAYMENT_ACCT_ID       => FieldValidator::INT,
         PAYMENTS::PAYMENT_METHOD_ID     => FieldValidator::INT,
         PAYMENTS::PAYMENT_TYPE_ID       => FieldValidator::INT,
 
         PAYMENTS::AMOUNT                => FieldValidator::NUMBER,
+        PAYMENTS::AFTER_AMT_PAST_DUE    => FieldValidator::NUMBER,
+        PAYMENTS::AFTER_NEXT_DUE_AMT    => FieldValidator::NUMBER,
+        PAYMENTS::AFTER_PRINC_BALANCE   => FieldValidator::NUMBER,
+        PAYMENTS::AFTER_PAYOFF          => FieldValidator::NUMBER,
+        PAYMENTS::BEFORE_AMT_PAST_DUE   => FieldValidator::NUMBER,
+        PAYMENTS::BEFORE_NEXT_DUE_AMT   => FieldValidator::NUMBER,
+        PAYMENTS::BEFORE_PRINC_BALANCE  => FieldValidator::NUMBER,
+        PAYMENTS::BEFORE_PAYOFF         => FieldValidator::NUMBER,
         PAYMENTS::CARD_FEE_AMOUNT       => FieldValidator::NUMBER,
         PAYMENTS::CARD_FEE_PERCENT      => FieldValidator::NUMBER,
 

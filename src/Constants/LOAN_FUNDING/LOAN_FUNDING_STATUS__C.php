@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: tofurama
+ * User: mtolman
  * Date: 5/29/17
  * Time: 9:11 AM
  */
@@ -13,9 +13,9 @@ namespace Simnang\LoanPro\Constants\LOAN_FUNDING;
  * @package Simnang\LoanPro\Constants\LOAN_FUNDING
  */
 class LOAN_FUNDING_STATUS__C{
-    const FAILED    = 'loan.funding.method.failed';
-    const NONE      = 'loan.funding.method.none';
-    const PENDING   = 'loan.funding.method.pending';
-    const REVERSED  = 'loan.funding.method.reversed';
+    const FAILED    = 'loan.funding.status.failed';
+    const NONE      = 'loan.funding.status.none';
+    const PENDING   = 'loan.funding.status.pending';
+    const REVERSED  = 'loan.funding.status.reversed';
     const SUCCESS   = 'loan.funding.status.success';
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: tofurama
+ * User: mtolman
  * Date: 5/22/17
  * Time: 8:58 AM
  */
@@ -173,7 +173,7 @@ class FieldValidator{
      */
     public static function IsValidDate($date){
         $d = \DateTime::createFromFormat('Y-m-d', $date);
-        return ($d && $d->format('Y-m-d') === $date) || preg_match(FieldValidator::$dateRegEx, $date) || is_int($date);
+        return ($d && $d->format('Y-m-d') === $date) || preg_match(FieldValidator::$dateRegEx, $date) || is_int($date) || $date === '0000-00-00';
     }
 
     /**
@@ -206,9 +206,14 @@ class FieldValidator{
             return true;
         if(!is_array($obj))
             return false;
-        foreach($obj as $o)
-            if(!FieldValidator::IsValidObject($o))
+        if(isset($obj['results']))
+            return static::IsValidObjectList($obj['results']);
+        foreach($obj as $o) {
+            if (!FieldValidator::IsValidObject($o)) {
+                var_dump($obj);
                 return false;
+            }
+        }
         return true;
     }
 
@@ -269,6 +274,7 @@ class FieldValidator{
     public static function GetDate($date){
         if(is_int($date))
             return $date;
+        if($date === '0000-00-00') return 0;
         if(preg_match(FieldValidator::$dateRegEx, $date)){
             return FieldValidator::GetInt(preg_replace(FieldValidator::$dateRegEx, "$1", $date));
         }
@@ -315,6 +321,8 @@ class FieldValidator{
     public static function GetObjectList($obj){
         if(!FieldValidator::IsValidObjectList($obj))
             return [];
+        if(isset($obj['results']))
+            return static::GetObjectList($obj['results']);
         if(is_object($obj))
             return [clone $obj];
 

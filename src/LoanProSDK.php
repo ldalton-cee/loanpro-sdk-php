@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: tofurama
+ * User: mtolman
  * Date: 5/19/17
  * Time: 12:37 PM
  */
@@ -117,6 +117,11 @@ class LoanProSDK
         return new LoanSetupEntity($class, $type);
     }
 
+    /**
+     * Creates a new escrow calculator for a loan
+     * @param int $subset - ID of escrow subset to use
+     * @return EscrowCalculatorEntity
+     */
     public static function CreateEscrowCalculator(int $subset){
         return new EscrowCalculatorEntity($subset);
     }
@@ -326,6 +331,16 @@ class LoanProSDK
         return new APDAdjustmentEntity($date,$amount,$type);
     }
 
+    /**
+     * Creates a recurring charge (aka. recurrent charge) to use with loans
+     * @param $isEnabled - whether or not the charge is enabled
+     * @param $applyInNewLoan - whether or not the charge is applied to new loans
+     * @param $title - title of the charge
+     * @param $info - charge info
+     * @param $calculation - charge calculation method
+     * @param $triggerType - charge trigger type
+     * @return RecurrentChargesEntity
+     */
     public static function CreateRecurringCharge($isEnabled, $applyInNewLoan, $title, $info, $calculation, $triggerType){
         return new RecurrentChargesEntity($isEnabled, $applyInNewLoan, $title, $info, $calculation, $triggerType);
     }
@@ -408,7 +423,7 @@ class LoanProSDK
         foreach($json as $key => $val) {
             $val = LoanProSDK::GetObjectForm($key, LoanProSDK::CleanJSON($val));
             if(!is_null($val))
-            $finalJson[$key] = $val;
+                $finalJson[$key] = $val;
         }
         return $finalJson;
     }
@@ -515,6 +530,8 @@ class LoanProSDK
     private static function CreateObjectListFromJSONClass(string $class, array $json){
         if(isset($json['results']))
             $json = $json['results'];
+        if(count($json) == 0)
+            return null;
         $list = [];
         $reqFields = $class::getReqFields();
 

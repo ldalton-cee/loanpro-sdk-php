@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: tofurama
+ * User: mtolman
  * Date: 5/19/17
  * Time: 12:38 PM
  */
@@ -10,6 +10,7 @@ namespace Simnang\LoanPro\Loans;
 
 use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\LSETTINGS;
+use Simnang\LoanPro\Constants\LSETUP;
 use Simnang\LoanPro\Validator\FieldValidator;
 
 class LoanSettingsEntity extends BaseEntity
@@ -67,6 +68,7 @@ class LoanSettingsEntity extends BaseEntity
         LSETTINGS::REPO_DATE                => FieldValidator::DATE,
 
         LSETTINGS::AGENT                    => FieldValidator::INT,
+        LSETTINGS::LOAN_ID                  => FieldValidator::INT,
         LSETTINGS::LOAN_STATUS_ID           => FieldValidator::INT,
         LSETTINGS::LOAN_SUB_STATUS_ID       => FieldValidator::INT,
         LSETTINGS::SOURCE_COMPANY_ID        => FieldValidator::INT,

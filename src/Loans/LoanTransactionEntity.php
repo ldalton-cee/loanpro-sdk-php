@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: tofurama
+ * User: mtolman
  * Date: 5/19/17
  * Time: 12:38 PM
  */
@@ -53,7 +53,6 @@ class LoanTransactionEntity extends BaseEntity
     protected static $fields = [
         LTRANSACTIONS::ADVANCEMENT              => FieldValidator::BOOL,
         LTRANSACTIONS::CHARGE_OFF               => FieldValidator::BOOL,
-        LTRANSACTIONS::DISPLAY_ORDER            => FieldValidator::BOOL,
         LTRANSACTIONS::FUTURE                   => FieldValidator::BOOL,
         LTRANSACTIONS::INFO_ONLY                => FieldValidator::BOOL,
         LTRANSACTIONS::PAYMENT_TYPE             => FieldValidator::BOOL,
@@ -61,6 +60,7 @@ class LoanTransactionEntity extends BaseEntity
         LTRANSACTIONS::PRINCIPAL_ONLY           => FieldValidator::BOOL,
 
         LTRANSACTIONS::ADB_DAYS                 => FieldValidator::INT,
+        LTRANSACTIONS::DISPLAY_ORDER            => FieldValidator::INT,
         LTRANSACTIONS::ENTITY_ID                => FieldValidator::INT,
         LTRANSACTIONS::MOD_ID                   => FieldValidator::INT,
         LTRANSACTIONS::PAYMENT_ID               => FieldValidator::INT,

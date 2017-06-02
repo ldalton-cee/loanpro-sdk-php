@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: tofurama
+ * User: mtolman
  * Date: 5/23/17
  * Time: 8:29 AM
  */
@@ -33,4 +33,5 @@ class LSETTINGS{
     const CUSTOM_FIELD_VALUES    = 'CustomFieldValues';
     const SOURCE_COMPANY         = 'SrcCompany';
     const LOAN                   = 'Loan';
+    const LOAN_ID                = 'loanId';
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: tofurama
+ * User: mtolman
  * Date: 6/1/17
  * Time: 11:08 AM
  */
@@ -72,7 +72,6 @@ class JsonBody implements StreamInterface
      */
     public function getSize()
     {
-        // TODO: Implement getSize() method.
         return strlen($this->json);
     }
 
