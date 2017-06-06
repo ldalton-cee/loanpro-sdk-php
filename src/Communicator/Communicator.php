@@ -36,7 +36,7 @@ use Simnang\LoanPro\Loans\LoanEntity;
  * For example, in Async mode getLoan will return a promise whose result is either the resulting loan or the error message from the server.
  *  In Sync mode, getLoan will either return the resulting loan or the error message from the server.
  *
- * Error messages from the server are returned as \Psr\Http\Message\ResponseInterface objects.
+ * Error messages from the server are thrown as an ApiException.
  *
  * Furthermore, there are multiple environments that can be communicated with. These environments are set at creation of an object. They are:
  *  * PRODUCTION - This is the LoanPro production site

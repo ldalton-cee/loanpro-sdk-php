@@ -80,8 +80,9 @@ class LoanEntity extends BaseEntity
 
     /**
      * This saves the loan to the server. If there is no ID present, it creates a new loan, otherwise it updates the current loan
-     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @return LoanEntity
      * @throws InvalidStateException
+     * @throws ApiException
      */
     public function save(){
         return LoanProSDK::GetInstance()->GetApiComm()->saveLoan($this);

@@ -49,7 +49,7 @@ class ApiClientTest extends TestCase
      */
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
-        ApiClient::SetAuthorization(5200243, 'cc0199330033f963007b07e75f1b7fb6b7025887');
+        \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm();
         ApiClientTest::$comm = \Simnang\LoanPro\Communicator\Communicator::GetCommunicator(ApiClient::TYPE_ASYNC);
     }
 

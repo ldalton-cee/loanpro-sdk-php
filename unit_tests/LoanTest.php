@@ -1043,9 +1043,10 @@ class LoanTest extends TestCase
         $this->assertEquals($newId, $loan->get(LOAN::DISP_ID));
 
         $resLoan = $loan->save();
-        if($resLoan instanceof \Psr\Http\Message\ResponseInterface)
-            var_dump(json_decode($resLoan->getBody()));
         $this->assertEquals($loan->get(LOAN::DISP_ID), $resLoan->get(LOAN::DISP_ID));
+        $delRes = $resLoan->delete(true);
+        $this->assertEquals($loan->get(LOAN::DISP_ID), $delRes->get(LOAN::DISP_ID));
+        $this->assertEquals(1, $delRes->get(LOAN::DELETED));
     }
 
     /**
@@ -1053,7 +1054,6 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testCreationAssert(){
-        return;
         $this->expectException(\Simnang\LoanPro\Exceptions\InvalidStateException::class);
         $this->expectExceptionMessage("Cannot create new loan on server without loan setup!");
         $loan = static::$sdk->CreateLoan("DISP ID");
@@ -1077,10 +1077,6 @@ class LoanTest extends TestCase
         $this->assertEquals($newId, $loan->get(LOAN::DISP_ID));
 
         $resLoan = $loan->save();
-        if($resLoan instanceof \Psr\Http\Message\ResponseInterface) {
-            var_dump($resLoan);
-            var_dump(json_decode($resLoan->getBody(), true));
-        }
         $this->assertEquals($loan->get(LOAN::DISP_ID), $resLoan->get(LOAN::DISP_ID));
     }
 
@@ -1094,8 +1090,6 @@ class LoanTest extends TestCase
         $this->assertEquals(true, $loan->inactivate() instanceof \Simnang\LoanPro\Loans\LoanEntity);
 
         $res = $loan->activate();
-        if($res instanceof \Psr\Http\Message\ResponseInterface)
-            var_dump(json_decode($res->getBody()), true);
         $this->assertEquals(true, $loan->activate() instanceof \Simnang\LoanPro\Loans\LoanEntity);
     }
 }
