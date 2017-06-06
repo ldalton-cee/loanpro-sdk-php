@@ -385,7 +385,7 @@ abstract class BaseEntity implements \JsonSerializable{
      *
      * @param $arg1
      * @param ...$args
-     * @return array|null
+     * @return array|null|mixed
      */
     public function get($arg1, ...$args){
         if(is_array($arg1)){

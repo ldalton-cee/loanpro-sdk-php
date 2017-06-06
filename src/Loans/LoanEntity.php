@@ -78,14 +78,101 @@ class LoanEntity extends BaseEntity
 
     }
 
-    public function save($forceSync = false){
-        return LoanProSDK::GetInstance()->GetApiComm()->saveLoan($this, $forceSync);
+    /**
+     * This saves the loan to the server. If there is no ID present, it creates a new loan, otherwise it updates the current loan
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @throws InvalidStateException
+     */
+    public function save(){
+        return LoanProSDK::GetInstance()->GetApiComm()->saveLoan($this);
     }
 
-    public function cancelModification($forceSynce = false){
+    /**
+     * This cancels the latest modification on a loan and returns if it was successful
+     * @return bool
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function cancelModification(){
         if(is_null($this->get(BASE_ENTITY::ID)))
             throw new InvalidStateException("Loan ID is not set, cannot modify loan");
-        return LoanProSDK::GetInstance()->GetApiComm()->cancelLatestModification($this->get(BASE_ENTITY::ID), $forceSynce);
+        return LoanProSDK::GetInstance()->GetApiComm()->cancelLatestModification($this->get(BASE_ENTITY::ID));
+    }
+
+    /**
+     * Activates the loan and returns resulting loan
+     * @return LoanEntity
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function activate(){
+        $this->insureHasID();
+        return $this->set(LOAN::ACTIVE, 1)->save();
+    }
+
+    /**
+     * Inactivates the loan and returns the result
+     * @return LoanEntity
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function inactivate(){
+        $this->insureHasID();
+        return $this->set(LOAN::ACTIVE, 0)->save();
+    }
+
+    /**
+     * Archives the loan and returns the result
+     * @return LoanEntity
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function archive(){
+        $this->insureHasID();
+        return $this->set(LOAN::ARCHIVED, 1)->save();
+    }
+
+    /**
+     * Resurrects the loan and returns the resulting loan
+     * @return LoanEntity
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function resurrect(){
+        $this->insureHasID();
+        return $this->set(LOAN::ARCHIVED, 0)->save();
+    }
+
+    /**
+     * Resurrects the loan and returns the resulting loan
+     * @return LoanEntity
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function unarchive(){
+        return $this->resurrect();
+    }
+
+    /**
+     * Deletes the loan
+     *  CAUTION! IF YOU USE THIS YOU WILL **NOT** BE ABLE TO SEE THE LOAN THROUGH THE API!
+     * @param bool|false $areYouSure - Must be set to true in order to delete a loan
+     * @return LoanEntity
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function delete($areYouSure = false){
+        return (LoanProSDK::GetInstance()->GetApiComm()->deleteLoan($this, $areYouSure))? $this->set(LOAN::DELETED, 1) : $this;
+    }
+
+    /**
+     * Restores a deleted loan (you cannot see the loan through the API, so it assumes you have the needed info elsewhere)
+     * @return LoanEntity
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function restore(){
+        return (LoanProSDK::GetInstance()->GetApiComm()->restoreLoan($this)) ? $this->set(LOAN::DELETED, 0) : $this;
     }
 
     /**
@@ -189,4 +276,9 @@ class LoanEntity extends BaseEntity
         LOAN::RULES_APPLIED_CHANGE_DUE_DATES    => FieldValidator::READ_ONLY,
         LOAN::RULES_APPLIED_STOP_INTEREST   => FieldValidator::READ_ONLY,
     ];
+
+    private function insureHasID(){
+        if(is_null($this->get(BASE_ENTITY::ID)))
+            throw new InvalidStateException("Cannot inactivate a loan without an ID");
+    }
 }

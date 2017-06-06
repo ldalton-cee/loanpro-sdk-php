@@ -126,7 +126,7 @@ class ApiClient
      * Performs a GET request
      * @param $uri - URI for a GET request
      * @param array $headers - Headers for request
-     * @return FulfilledPromise|\Http\Promise\Promise
+     * @return mixed|\Psr\Http\Message\ResponseInterface
      */
     public function GET($uri, $headers = []){
         return $this->SendRequest($uri, 'get', null, $headers);
@@ -137,7 +137,7 @@ class ApiClient
      * @param $uri - URI for a POST request
      * @param null|mixed $data - Data for a POST request
      * @param array $headers - Headers for the POST request
-     * @return FulfilledPromise|\Http\Promise\Promise
+     * @return mixed|\Psr\Http\Message\ResponseInterface
      */
     public function POST($uri, $data = null, $headers = []){
         return $this->SendRequest($uri, 'post', $data, $headers);
@@ -148,7 +148,7 @@ class ApiClient
      * @param $uri - URI for a PUT request
      * @param null|mixed $data - Data for a POST request
      * @param array $headers - Headers for the POST requet
-     * @return FulfilledPromise|\Http\Promise\Promise
+     * @return mixed|\Psr\Http\Message\ResponseInterface
      */
     public function PUT($uri, $data = null, $headers = []){
         return $this->SendRequest($uri, 'put', $data, $headers);
@@ -159,7 +159,7 @@ class ApiClient
      * @param $uri - URI for a DELETE request
      * @param null|mixed $data - Data for a POST request
      * @param array $headers - Headers for the POST requet
-     * @return FulfilledPromise|\Http\Promise\Promise
+     * @return mixed|\Psr\Http\Message\ResponseInterface
      */
     public function DELETE($uri, $data = null, $headers = []){
         return $this->SendRequest($uri, 'delete', $data, $headers);
@@ -171,7 +171,7 @@ class ApiClient
      * @param string $method - HTTP method
      * @param null|mixed $data - Data to send (if application type is JSON, will serialize JSON)
      * @param array $headers - Headers to send
-     * @return FulfilledPromise|\Http\Promise\Promise
+     * @return mixed|\Psr\Http\Message\ResponseInterface
      */
     private function SendRequest($uri= '', $method = 'get', $data = null, $headers = []){
         $url = $this->uriFactory->createUri($uri);

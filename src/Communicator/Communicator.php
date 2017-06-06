@@ -22,8 +22,10 @@ namespace Simnang\LoanPro\Communicator;
 use Psr\Http\Message\ResponseInterface;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\LOAN;
+use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\LoanProSDK;
+use Simnang\LoanPro\Loans\LoanEntity;
 
 /**
  * Class Communicator
@@ -105,19 +107,18 @@ class Communicator
      * Gets a loan from the LoanPro servers.
      *  If in asynchronous mode, then a promise is returned that will return either the loan or the error message from the server
      *  If in synchronous mode, then the parsed loan or the error message from the server will be returned.
-     * @param $loanId
-     * @param array $expandProps
-     * @return \Psr\Http\Message\ResponseInterface|\Http\Promise\FulfilledPromise|\Http\Promise\Promise|\Http\Promise\RejectedPromise|mixed|void
+     * @param int $loanId - ID of loan to pull
+     * @param array $expandProps - array of properties to expand
+     * @return LoanEntity
+     * @throws ApiException
      */
-    public function getLoan($loanId, $expandProps = [], $forceSync = false){
+    public function getLoan($loanId, $expandProps = []){
         if(count($expandProps))
             $expandProps = '?$expand='.implode(',',$expandProps);
         else
             $expandProps = "";
 
         $client = $this->client;
-        if($forceSync)
-            $client = ApiClient::GetAPIClientSync();
 
         $url = "$this->baseUrl/odata.svc/Loans($loanId)$expandProps";
         $response = $client->GET($url);
@@ -126,21 +127,19 @@ class Communicator
             if(isset($body['d']))
                 return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($response->getBody(), true)['d']);
             else
-                return $response->withStatus(400, "Bad Request");
+                throw new ApiException($response);
         }
-        return $response;
+        throw new ApiException($response);
     }
 
     /**
      * Creates a modification for a loan
-     * @param            $loanId - ID of loan to make a modification for
-     * @param bool|false $forceSync - Whether or not to force sync (if true, will return whether or not it worked/response on error, otherwise returns a promise that returns it if set to async mode)
-     * @return $this|\Http\Promise\FulfilledPromise|\Http\Promise\Promise|\Http\Promise\RejectedPromise|mixed|void
+     * @param int        $loanId - ID of loan to make a modification for
+     * @return bool
+     * @throws ApiException
      */
-    public function modifyLoan($loanId, $forceSync = false){
+    public function modifyLoan($loanId){
         $client = $this->client;
-        if($forceSync)
-            $client = ApiClient::GetAPIClientSync();
         $res = $client->POST("$this->baseUrl/Loans($loanId)/Autopal.CreateModification()");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
@@ -148,19 +147,17 @@ class Communicator
                 return $body['d']['success'];
             }
         }
-        return $res;
+        throw new ApiException($res);
     }
 
     /**
-     *
-     * @param            $loanId
-     * @param bool|false $forceSync
-     * @return $this|\Http\Promise\FulfilledPromise|\Http\Promise\Promise|\Http\Promise\RejectedPromise|mixed|void
+     * Cancels the latest modification for a loan and returns if successful
+     * @param int        $loanId
+     * @return bool
+     * @throws ApiException
      */
-    public function cancelLatestModification($loanId, $forceSync = false){
+    public function cancelLatestModification($loanId){
         $client = $this->client;
-        if($forceSync)
-            $client = ApiClient::GetAPIClientSync();
         $response = $client->POST("$this->baseUrl/Loans($loanId)/Autopal.CancelModification()");
 
         if($response->getStatusCode() == 200) {
@@ -168,22 +165,21 @@ class Communicator
             if(isset($body['d']) && isset($body['d']['success']))
                 return $body['d']['success'];
             else
-                return $response;
+                throw new ApiException($response);
         }
-        return $response;
+        throw new ApiException($response);
     }
 
     /**
      * Saves the loan to the server via a PUT request (or a POST request if there is no ID)
      * Either returns the resulting loan/response if there's an error (if synchronous), or a promise that returns the resulting loan/response
      * @param            $loan
-     * @param bool|false $forceSync
-     * @return $this|\Http\Promise\FulfilledPromise|\Http\Promise\Promise|\Http\Promise\RejectedPromise|mixed|void
+     * @return LoanEntity
+     * @throws InvalidStateException
+     * @throws ApiException
      */
-    public function saveLoan($loan, $forceSync = false){
+    public function saveLoan($loan){
         $client = $this->client;
-        if($forceSync)
-            $client = ApiClient::GetAPIClientSync();
         $id = $loan->get(BASE_ENTITY::ID);
         if(is_null($id)) {
             if(is_null($loan->get(LOAN::LSETUP)))
@@ -198,9 +194,53 @@ class Communicator
                 return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($response->getBody(), true)['d']);
             }
             else
-                return $response;
+                throw new ApiException($response);;
         }
-        return $response;
+        throw new ApiException($response);;
+    }
+
+    /**
+     * Deletes a loan and returns true if successul
+     * @param LoanEntity $loan - loan to delete
+     * @param bool|false $areYouSure - must be set to true to delete
+     * @return bool
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function deleteLoan(LoanEntity $loan, $areYouSure = false){
+        if(!$areYouSure)
+            throw new \Exception("Unsure deletion, either state that you are sure or don't delete the loan");
+        $id = $loan->get(BASE_ENTITY::ID);
+        if(is_null($id)) {
+            throw new InvalidStateException("Cannot activate a loan without a loan ID!");
+        }
+
+        $response = $this->client->DELETE("$this->baseUrl/odata.svc/Loans($id)");
+
+        if($response->getStatusCode() == 200) {
+            return true;
+        }
+        throw new ApiException($response);;
+    }
+
+    /**
+     * @param LoanEntity $loan - Loan to restore
+     * @return bool
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function restoreLoan(LoanEntity $loan){
+        $id = $loan->get(BASE_ENTITY::ID);
+        if(is_null($id)) {
+            throw new InvalidStateException("Cannot activate a loan without a loan ID!");
+        }
+
+        $response = $this->client->DELETE("$this->baseUrl/Loans($id)/AutoPal.Restore()");
+
+        if($response->getStatusCode() == 200) {
+            return true;
+        }
+        throw new ApiException($response);
     }
 
     /// @cond false

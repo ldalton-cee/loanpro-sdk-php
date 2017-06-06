@@ -108,13 +108,14 @@ class ApiClientTest extends TestCase
             $this->assertEquals(55, $loan->get(LOAN::LSETUP)->get(\Simnang\LoanPro\Constants\LSETUP::LOAN_ID));
         };
 
-        $responses[] = ApiClientTest::$comm->getLoan(-1);
-        $funcs[] =
-            function(\Psr\Http\Message\ResponseInterface $errorResponse){
-                $this->assertEquals(400, $errorResponse->getStatusCode());
-                $this->assertEquals('Bad Request', $errorResponse->getReasonPhrase());
-                $this->assertEquals("{\"error\":{\"message\":{\"lang\":\"en-US\",\"value\":\"Resource not found for the segment 'Loans'\"}}}", (string)$errorResponse->getBody());
-            };
+        try {
+            ApiClientTest::$comm->getLoan(-1);
+            // should never reach this line
+            $this->assertFalse(true);
+        }catch(\Simnang\LoanPro\Exceptions\ApiException $e){
+            $this->assertEquals(200, $e->getCode());
+            $this->assertEquals("Simnang\LoanPro\Exceptions\ApiException: [200]: API EXCEPTION! An error occurred, please check your request.Resource not found for the segment 'Loans'\n", (string)$e);
+        }
 
         $expansion = [];
         $loanFieldsProp = (new ReflectionClass('\Simnang\LoanPro\Loans\LoanEntity'))->getProperty('fields');
