@@ -37,8 +37,10 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class SubPortfolioTest extends TestCase
 {
+    private static $sdk;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+        static::$sdk = LPSDK::GetInstance();
     }
 
     /**
@@ -46,7 +48,7 @@ class SubPortfolioTest extends TestCase
      * @group offline
      */
     public function testSubPortfolioInstantiate(){
-        $subportfolio = LPSDK::CreateSubPortfolio(5, 1);
+        $subportfolio = static::$sdk->CreateSubPortfolio(5, 1);
 
         $this->assertEquals(5, $subportfolio->get(BASE_ENTITY::ID));
         $this->assertEquals(1, $subportfolio->get(SUB_PORTFOLIO::PARENT));
@@ -63,7 +65,7 @@ class SubPortfolioTest extends TestCase
             SUB_PORTFOLIO::ACTIVE, 1,
         ]);
 
-        $subportfolio = LPSDK::CreateSubPortfolio(5, 2)->set(BASE_ENTITY::ID, 12, SUB_PORTFOLIO::PARENT, 9)->set( $arr );
+        $subportfolio = static::$sdk->CreateSubPortfolio(5, 2)->set(BASE_ENTITY::ID, 12, SUB_PORTFOLIO::PARENT, 9)->set( $arr );
         $this->assertEquals(12, $subportfolio->get(BASE_ENTITY::ID));
         $this->assertEquals(9, $subportfolio->get(SUB_PORTFOLIO::PARENT));
         $this->assertEquals($arr, $subportfolio->get(array_keys($arr)));
@@ -75,10 +77,10 @@ class SubPortfolioTest extends TestCase
      */
     public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
+        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
 
         /* should throw exception when setting LOAN_AMT to null */
-        LPSDK::CreateSubPortfolio(5, 12)->set(BASE_ENTITY::ID, null);
+        static::$sdk->CreateSubPortfolio(5, 12)->set(BASE_ENTITY::ID, null);
     }
 
     /**
@@ -88,10 +90,10 @@ class SubPortfolioTest extends TestCase
     public function testSubPortfolioDelSubPortfolioId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.BASE_ENTITY::ID.'\', field is required.');
-        $subportfolio = LPSDK::CreateSubPortfolio(5, 12);
+        $subportfolio = static::$sdk->CreateSubPortfolio(5, 12);
 
         // should throw exception
-        $subportfolio->unload(BASE_ENTITY::ID);
+        $subportfolio->rem(BASE_ENTITY::ID);
     }
 
     /**
@@ -101,10 +103,10 @@ class SubPortfolioTest extends TestCase
     public function testSubPortfolioDelSubPortfolioParent(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.SUB_PORTFOLIO::PARENT.'\', field is required.');
-        $subportfolio = LPSDK::CreateSubPortfolio(5, 12);
+        $subportfolio = static::$sdk->CreateSubPortfolio(5, 12);
 
         // should throw exception
-        $subportfolio->unload(SUB_PORTFOLIO::PARENT);
+        $subportfolio->rem(SUB_PORTFOLIO::PARENT);
     }
 
     /**
@@ -112,8 +114,8 @@ class SubPortfolioTest extends TestCase
      * @group offline
      */
     public function testAddToLoan(){
-        $loan = LPSDK::CreateLoan("Test ID");
-        $subportfolio = LPSDK::CreateSubPortfolio(5, 12);
+        $loan = static::$sdk->CreateLoan("Test ID");
+        $subportfolio = static::$sdk->CreateSubPortfolio(5, 12);
         $this->assertEquals([$subportfolio], $loan->set(LOAN::SUB_PORTFOLIOS, $subportfolio)->get(LOAN::SUB_PORTFOLIOS));
     }
 }

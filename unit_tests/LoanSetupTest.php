@@ -36,15 +36,17 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class LoanSetupTest extends TestCase
 {
+    private static $sdk;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+        static::$sdk = LPSDK::GetInstance();
     }
     /**
      * @group create_correctness
      * @group offline
      */
     public function testCreateLoanSetupNoVals(){
-        $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
+        $loanSetup = static::$sdk->CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
         $this->assertEquals(LSETUP_LCLASS::CONSUMER, $loanSetup->get(LSETUP::LCLASS__C));
         $this->assertEquals(LSETUP_LTYPE::INSTALLMENT, $loanSetup->get(LSETUP::LTYPE__C));
 
@@ -65,7 +67,7 @@ class LoanSetupTest extends TestCase
      * @group offline
      */
     public function testLoanSetupSetCollections(){
-        $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
+        $loanSetup = static::$sdk->CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
         $this->assertEquals(LSETUP_LCLASS::CONSUMER, $loanSetup->get(LSETUP::LCLASS__C));
         $this->assertEquals(LSETUP_LTYPE::INSTALLMENT, $loanSetup->get(LSETUP::LTYPE__C));
 
@@ -92,8 +94,8 @@ class LoanSetupTest extends TestCase
      */
     public function testLoanSetupCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.LSETUP::LOAN_AMT.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
-        LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT)
+        $this->expectExceptionMessage('Value for \''.LSETUP::LOAN_AMT.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        static::$sdk->CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT)
             /* should throw exception when setting LOAN_AMT to null */ ->set(LSETUP::LOAN_AMT, null);
     }
 
@@ -102,10 +104,10 @@ class LoanSetupTest extends TestCase
      * @group offline
      */
     public function testLoanSetupDel(){
-        $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT)->set(LSETUP::LOAN_AMT, 1250.01);
+        $loanSetup = static::$sdk->CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT)->set(LSETUP::LOAN_AMT, 1250.01);
         $this->assertEquals(1250.01, $loanSetup->get(LSETUP::LOAN_AMT));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($loanSetup->unload(LSETUP::LOAN_AMT)->get(LSETUP::LOAN_AMT));
+        $this->assertNull($loanSetup->rem(LSETUP::LOAN_AMT)->get(LSETUP::LOAN_AMT));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(1250.01, $loanSetup->get(LSETUP::LOAN_AMT));
     }
@@ -117,10 +119,10 @@ class LoanSetupTest extends TestCase
     public function testLoanSetupDelClass(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.LSETUP::LCLASS__C.'\', field is required.');
-        $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
+        $loanSetup = static::$sdk->CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
 
         // should throw exception
-        $loanSetup->unload(LSETUP::LCLASS__C);
+        $loanSetup->rem(LSETUP::LCLASS__C);
     }
 
     /**
@@ -130,9 +132,9 @@ class LoanSetupTest extends TestCase
     public function testLoanSetupDelType(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.LSETUP::LTYPE__C.'\', field is required.');
-        $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
+        $loanSetup = static::$sdk->CreateLoanSetup(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
 
         // should throw exception
-        $loanSetup->unload(LSETUP::LTYPE__C);
+        $loanSetup->rem(LSETUP::LTYPE__C);
     }
 }

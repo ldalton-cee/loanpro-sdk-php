@@ -36,15 +36,17 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class NotesTest extends TestCase
 {
+    private static $sdk;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+        static::$sdk = LPSDK::GetInstance();
     }
     /**
      * @group create_correctness
      * @group offline
      */
     public function testNotesInstantiate(){
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\NOTES');
         $consts = $rclass->getConstants();
@@ -60,7 +62,7 @@ class NotesTest extends TestCase
      * @group offline
      */
     public function testNotesSetCollections(){
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
 
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\NOTES');
@@ -85,8 +87,8 @@ class NotesTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.NOTES::SUBJECT.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
-        LPSDK::CreateNotes(3, 'Subject', 'Note Body')
+        $this->expectExceptionMessage('Value for \''.NOTES::SUBJECT.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        static::$sdk->CreateNotes(3, 'Subject', 'Note Body')
             /* should throw exception when setting LOAN_AMT to null */ ->set(NOTES::SUBJECT, null);
     }
 
@@ -97,7 +99,7 @@ class NotesTest extends TestCase
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
-        $ls = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
+        $ls = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
         $ls->set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
@@ -109,10 +111,10 @@ class NotesTest extends TestCase
      * @group offline
      */
     public function testNotesDel(){
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body')->set([NOTES::AUTHOR_ID=> 1]);
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body')->set([NOTES::AUTHOR_ID=> 1]);
         $this->assertEquals(1, $note->get(NOTES::AUTHOR_ID));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($note->unload(NOTES::AUTHOR_ID)->get(NOTES::AUTHOR_ID));
+        $this->assertNull($note->rem(NOTES::AUTHOR_ID)->get(NOTES::AUTHOR_ID));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(1, $note->get(NOTES::AUTHOR_ID));
     }
@@ -124,10 +126,10 @@ class NotesTest extends TestCase
     public function testNotesDelCatID(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.NOTES::CATEGORY_ID.'\', field is required.');
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
 
         // should throw exception
-        $note->unload(NOTES::CATEGORY_ID);
+        $note->rem(NOTES::CATEGORY_ID);
     }
 
     /**
@@ -137,10 +139,10 @@ class NotesTest extends TestCase
     public function testNotesDelSubject(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.NOTES::SUBJECT.'\', field is required.');
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
 
         // should throw exception
-        $note->unload(NOTES::SUBJECT);
+        $note->rem(NOTES::SUBJECT);
     }
 
     /**
@@ -150,10 +152,10 @@ class NotesTest extends TestCase
     public function testNotesDelBody(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.NOTES::BODY.'\', field is required.');
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
 
         // should throw exception
-        $note->unload(NOTES::BODY);
+        $note->rem(NOTES::BODY);
     }
 
     /**
@@ -161,8 +163,8 @@ class NotesTest extends TestCase
      * @group offline
      */
     public function testAddToLoan(){
-        $loan = LPSDK::CreateLoan("Test ID");
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
+        $loan = static::$sdk->CreateLoan("Test ID");
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
         $this->assertEquals([$note], $loan->set(LOAN::NOTES, $note)->get(LOAN::NOTES));
     }
 
@@ -172,10 +174,10 @@ class NotesTest extends TestCase
      */
     public function testAppendToLoan(){
         // create loan and payments
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
-        $note2 = LPSDK::CreateNotes(4, 'Subject 2', 'Note Body 2');
-        $note3 = LPSDK::CreateNotes(5, 'Subject 3', 'Note Body 3');
-        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::NOTES, $note);
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
+        $note2 = static::$sdk->CreateNotes(4, 'Subject 2', 'Note Body 2');
+        $note3 = static::$sdk->CreateNotes(5, 'Subject 3', 'Note Body 3');
+        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::NOTES, $note);
 
         // test append
         $this->assertEquals([$note], $loan->get(LOAN::NOTES));
@@ -183,23 +185,23 @@ class NotesTest extends TestCase
         $this->assertEquals([$note, $note2], $loan->get(LOAN::NOTES));
 
         // test list append
-        $loan = $loan->unload(LOAN::NOTES)->append(LOAN::NOTES, $note2, $note3, $note);
+        $loan = $loan->rem(LOAN::NOTES)->append(LOAN::NOTES, $note2, $note3, $note);
         $this->assertEquals([$note2, $note3, $note], $loan->get(LOAN::NOTES));
 
         // test list append with multiple keys
-        $loan = $loan->unload(LOAN::NOTES)->append(LOAN::NOTES, $note2, $note, LOAN::NOTES, $note);
+        $loan = $loan->rem(LOAN::NOTES)->append(LOAN::NOTES, $note2, $note, LOAN::NOTES, $note);
         $this->assertEquals([$note2, $note, $note], $loan->get(LOAN::NOTES));
 
         // test array notation 1
-        $loan = $loan->unload(LOAN::NOTES)->append(LOAN::NOTES, [$note3, $note2, $note]);
+        $loan = $loan->rem(LOAN::NOTES)->append(LOAN::NOTES, [$note3, $note2, $note]);
         $this->assertEquals([$note3, $note2, $note], $loan->get(LOAN::NOTES));
 
         // test array notation 2
-        $loan = $loan->unload(LOAN::NOTES)->append([LOAN::NOTES => [$note, $note3, $note2]]);
+        $loan = $loan->rem(LOAN::NOTES)->append([LOAN::NOTES => [$note, $note3, $note2]]);
         $this->assertEquals([$note, $note3, $note2], $loan->get(LOAN::NOTES));
 
         // test array notation 3
-        $loan = $loan->unload(LOAN::NOTES)->append([LOAN::NOTES => $note2]);
+        $loan = $loan->rem(LOAN::NOTES)->append([LOAN::NOTES => $note2]);
         $this->assertEquals([$note2], $loan->get(LOAN::NOTES));
     }
 
@@ -211,7 +213,7 @@ class NotesTest extends TestCase
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Property \''.NOTES::BODY.'\' is not an object list, can only append to object lists!');
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
 
         $note->append(NOTES::BODY, "1");
     }
@@ -224,10 +226,10 @@ class NotesTest extends TestCase
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Property \''.LOAN::INSURANCE.'\' is not an object list, can only append to object lists!');
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
-        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::NOTES, $note);
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
+        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::NOTES, $note);
 
-        $loan->append(LOAN::NOTES, $note, LOAN::INSURANCE, LPSDK::CreateInsurance());
+        $loan->append(LOAN::NOTES, $note, LOAN::INSURANCE, static::$sdk->CreateInsurance());
     }
 
     /**
@@ -238,8 +240,8 @@ class NotesTest extends TestCase
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected two parameters, only got one');
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
-        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::NOTES, $note);
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
+        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::NOTES, $note);
 
         $loan->append(LOAN::NOTES);
     }
@@ -252,8 +254,8 @@ class NotesTest extends TestCase
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing fields for \''.LOAN::NOTES.'\'');
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
-        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::NOTES, $note);
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
+        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::NOTES, $note);
 
         $loan->append(LOAN::NOTES,LOAN::NOTES,$note);
     }
@@ -266,8 +268,8 @@ class NotesTest extends TestCase
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing fields for \''.LOAN::NOTES.'\'');
-        $note = LPSDK::CreateNotes(3, 'Subject', 'Note Body');
-        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::NOTES, $note);
+        $note = static::$sdk->CreateNotes(3, 'Subject', 'Note Body');
+        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::NOTES, $note);
 
         $loan->append(LOAN::NOTES,$note,LOAN::NOTES,LOAN::NOTES,$note);
     }

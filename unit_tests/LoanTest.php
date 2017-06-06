@@ -58,8 +58,10 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class LoanTest extends TestCase
 {
+    private static $sdk;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+        static::$sdk = LPSDK::GetInstance();
     }
 
     /**
@@ -67,7 +69,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoanMinCreate(){
-        $loan = LPSDK::CreateLoan("DISP ID");
+        $loan = static::$sdk->CreateLoan("DISP ID");
 
         // Should throw exception
         $this->assertEquals("DISP ID", $loan->get(LOAN::DISP_ID));
@@ -88,7 +90,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoanMinCreateChangeId(){
-        $loan = LPSDK::CreateLoan("DISP ID");
+        $loan = static::$sdk->CreateLoan("DISP ID");
 
         // Should throw exception
         $this->assertEquals("DISP ID", $loan->get(LOAN::DISP_ID));
@@ -113,7 +115,7 @@ class LoanTest extends TestCase
     public function testLoanSelOnlyValid(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.LSETUP::LOAN_AMT.'\'');
-        $loan = LPSDK::CreateLoan("Display Id");
+        $loan = static::$sdk->CreateLoan("Display Id");
 
         /* should throw error */
         $loan->set(LSETUP::LOAN_AMT, 12500);
@@ -126,10 +128,10 @@ class LoanTest extends TestCase
     public function testLoanDelOnlyValid(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.LSETUP::LOAN_AMT.'\'');
-        $loan = LPSDK::CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, "This is an alert");
+        $loan = static::$sdk->CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, "This is an alert");
 
         /* should throw error */
-        $loan->unload(LSETUP::LOAN_AMT);
+        $loan->rem(LSETUP::LOAN_AMT);
     }
 
     /**
@@ -137,11 +139,11 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoanDel(){
-        $loan = LPSDK::CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, "This is an alert");
+        $loan = static::$sdk->CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, "This is an alert");
 
         $this->assertEquals("This is an alert", $loan->get(LOAN::LOAN_ALERT));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($loan->unload(LOAN::LOAN_ALERT)->get(LOAN::LOAN_ALERT));
+        $this->assertNull($loan->rem(LOAN::LOAN_ALERT)->get(LOAN::LOAN_ALERT));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals("This is an alert", $loan->get(LOAN::LOAN_ALERT));
     }
@@ -152,8 +154,8 @@ class LoanTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.LOAN::LOAN_ALERT.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
-        LPSDK::CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, null);
+        $this->expectExceptionMessage('Value for \''.LOAN::LOAN_ALERT.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        static::$sdk->CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, null);
     }
 
     /**
@@ -163,10 +165,10 @@ class LoanTest extends TestCase
     public function testLoanDelDispID(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.LOAN::DISP_ID.'\', field is required.');
-        $loan = LPSDK::CreateLoan("DISP ID");
+        $loan = static::$sdk->CreateLoan("DISP ID");
 
         // Should throw exception
-        $loan->unload(LOAN::DISP_ID);
+        $loan->rem(LOAN::DISP_ID);
     }
 
     /**
@@ -178,9 +180,9 @@ class LoanTest extends TestCase
         // properties and collection values will be set as constants in a namespace or class; here it assumes its for a class
 
         // Create functions will take the minimal parameters that can be used to create the object via the API
-        $loan = LPSDK::CreateLoan("DISP_ID_001");
-        $loanSetup = LPSDK::CreateLoanSetup(LSETUP_LCLASS::CAR, LSETUP_LTYPE::INSTALLMENT);
-        LPSDK::CreateLoanSetup(LSETUP_LCLASS::MORTGAGE, LSETUP_LTYPE::CRED_LIMIT);
+        $loan = static::$sdk->CreateLoan("DISP_ID_001");
+        $loanSetup = static::$sdk->CreateLoanSetup(LSETUP_LCLASS::CAR, LSETUP_LTYPE::INSTALLMENT);
+        static::$sdk->CreateLoanSetup(LSETUP_LCLASS::MORTGAGE, LSETUP_LTYPE::CRED_LIMIT);
 
         $this->assertEquals("DISP_ID_001", $loan->get(LOAN::DISP_ID));
 
@@ -218,7 +220,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoadFromJson_Tmpl1(){
-        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_1.json"));
+        $loan = static::$sdk->CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_1.json"));
         $this->assertEquals("L150342", $loan->get(LOAN::DISP_ID));
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LOAN');
@@ -237,7 +239,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoadFromJson_Tmpl2(){
-        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_2.json"));
+        $loan = static::$sdk->CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_2.json"));
         $this->assertEquals("L150342", $loan->get(LOAN::DISP_ID));
         $this->assertEquals("Loan Title", $loan->get(LOAN::TITLE));
         $this->assertEquals(3, $loan->get(LOAN::MOD_TOTAL));
@@ -253,7 +255,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoadFromJson_Tmpl3(){
-        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_3.json"));
+        $loan = static::$sdk->CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_3.json"));
         $this->assertNull($loan->get(ENTITY::ID));
         $this->assertEquals("L150342", $loan->get(LOAN::DISP_ID));
         $this->assertEquals("Loan Title", $loan->get(LOAN::TITLE));
@@ -272,7 +274,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoadFromJson_Tmpl4(){
-        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_4.json"));
+        $loan = static::$sdk->CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_4.json"));
         $this->assertEquals("L150342", $loan->get(LOAN::DISP_ID));
         $this->assertEquals("Loan Title", $loan->get(LOAN::TITLE));
         $this->assertEquals(3, $loan->get(LOAN::MOD_TOTAL));
@@ -334,7 +336,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoadFromJson_Tmpl5(){
-        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_5.json"));
+        $loan = static::$sdk->CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_5.json"));
         $this->assertEquals(20, $loan->get(ENTITY::ID));
         $this->assertEquals("My Loan", $loan->get(LOAN::DISP_ID));
         $this->assertNull($loan->get(LOAN::TITLE));
@@ -359,7 +361,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoadFromJson_Tmpl6(){
-        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_6.json"));
+        $loan = static::$sdk->CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_6.json"));
         $this->assertEquals(24, $loan->get(ENTITY::ID));
         $this->assertEquals("My Loan", $loan->get(LOAN::DISP_ID));
         $this->assertNull($loan->get(LOAN::TITLE));
@@ -387,7 +389,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoadFromJson_Tmpl7(){
-        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_7.json"));
+        $loan = static::$sdk->CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_7.json"));
         $this->assertEquals(24, $loan->get(ENTITY::ID));
         $this->assertEquals("My Loan", $loan->get(LOAN::DISP_ID));
         $this->assertNull($loan->get(LOAN::TITLE));
@@ -501,7 +503,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoadFromJson_Tmpl8(){
-        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_8.json"));
+        $loan = static::$sdk->CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_8.json"));
         $this->assertEquals(20, $loan->get(ENTITY::ID));
         $this->assertEquals("My Loan", $loan->get(LOAN::DISP_ID));
         $this->assertNull($loan->get(LOAN::TITLE));
@@ -526,7 +528,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoadFromJson_Tmpl9(){
-        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_9.json"));
+        $loan = static::$sdk->CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_9.json"));
         $this->assertEquals(20, $loan->get(ENTITY::ID));
         $this->assertEquals("My Loan", $loan->get(LOAN::DISP_ID));
         $this->assertNull($loan->get(LOAN::TITLE));
@@ -553,7 +555,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoadFromJson_Tmpl10(){
-        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_10.json"));
+        $loan = static::$sdk->CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_10.json"));
         $this->assertEquals(20, $loan->get(ENTITY::ID));
         $this->assertEquals("My Loan", $loan->get(LOAN::DISP_ID));
         $this->assertNull($loan->get(LOAN::TITLE));
@@ -564,7 +566,7 @@ class LoanTest extends TestCase
         $this->assertEquals(0, $loan->get(LOAN::DELETED));
         $this->assertNotNull($loan->get(LOAN::PAYMENTS));
 
-        $payment1 = LPSDK::CreatePayment(289.38, '2015-11-16', 'Demo Payment', 19, 1)->set(
+        $payment1 = static::$sdk->CreatePayment(289.38, '2015-11-16', 'Demo Payment', 19, 1)->set(
             PAYMENTS::EARLY, 0,
             PAYMENTS::CASH_DRAWER_ID, 2,
             PAYMENTS::ACTIVE, 1,
@@ -578,7 +580,7 @@ class LoanTest extends TestCase
             PAYMENTS::LOG_ONLY, 1,
             PAYMENTS::PAYOFF_FLAG, 0
         );
-        $payment2 = LPSDK::CreatePayment(50, '2017-05-23', '05/23/2017 Bank Account', 4, 1)->set(
+        $payment2 = static::$sdk->CreatePayment(50, '2017-05-23', '05/23/2017 Bank Account', 4, 1)->set(
             PAYMENTS::SELECTED_PROCESSOR, 0,
             PAYMENTS::EARLY, 0,
             PAYMENTS::ECHECK_AUTH_TYPE__C, PAYMENTS\PAYMENTS_ECHECK_AUTH_TYPE__C::WEB,
@@ -605,7 +607,7 @@ class LoanTest extends TestCase
      * @group offline
      */
     public function testLoadFromJson_Tmpl11(){
-        $loan = LPSDK::CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_11.json"));
+        $loan = static::$sdk->CreateLoanFromJSON(file_get_contents(__DIR__."/json_templates/loanTemplate_11.json"));
         $this->assertEquals(20, $loan->get(ENTITY::ID));
         $this->assertEquals("My Loan", $loan->get(LOAN::DISP_ID));
         $this->assertNull($loan->get(LOAN::TITLE));
@@ -616,24 +618,24 @@ class LoanTest extends TestCase
         $this->assertEquals(0, $loan->get(LOAN::DELETED));
         $this->assertNotNull($loan->get(LOAN::CHECKLIST_VALUES));
 
-        $checklistItem = LPSDK::CreateChecklistItemValue(1, 8, 1);
+        $checklistItem = static::$sdk->CreateChecklistItemValue(1, 8, 1);
 
         $this->assertEquals([$checklistItem], $loan->get(LOAN::CHECKLIST_VALUES));
 
-        $charge = LPSDK::CreateCharge(1250.00, '2017-05-29', 'Late Fee 05/29/2017', 1, CHARGES_CHARGE_APP_TYPE__C::STANDARD, 1)->set(
+        $charge = static::$sdk->CreateCharge(1250.00, '2017-05-29', 'Late Fee 05/29/2017', 1, CHARGES_CHARGE_APP_TYPE__C::STANDARD, 1)->set(
             CHARGES::DISPLAY_ID, 3651, CHARGES::PRIOR_CUTOFF, 0, CHARGES::PAID_AMT, 60.00, CHARGES::PAID_PERCENT, 4.80, ENTITY::ID, 1840, CHARGES::ACTIVE, 1, CHARGES::NOT_EDITABLE, 0, CHARGES::PARENT_CHARGE, [], CHARGES::CHILD_CHARGE, [], CHARGES::ORDER, 0, CHARGES::EDIT_COMMENT, "Test",
             CHARGES::EXPANSION, json_decode('{"1": {"create": [{"label": "Date/Time","value": "05/24/2017 10:28:13 am PDT","type": "date"},{"label": "IP Address","value": "73.98.150.163","type": "number"},{"label": "User","value": "Ronald","type": "string"}],"update": []}}', true)
         );
 
         $this->assertEquals([$charge], $loan->get(LOAN::CHARGES));
 
-        $pnm_order = LPSDK::CreatePayNearMeOrder(5, 'Bob', 'none@none.com', '5551231234', '123 Oak Lane', 'Baltimore', STATES::CALIFORNIA, '12345')->set(
+        $pnm_order = static::$sdk->CreatePayNearMeOrder(5, 'Bob', 'none@none.com', '5551231234', '123 Oak Lane', 'Baltimore', STATES::CALIFORNIA, '12345')->set(
             PAY_NEAR_ME_ORDERS::SEND_SMS, 0,PAY_NEAR_ME_ORDERS::STATUS, 'open', PAY_NEAR_ME_ORDERS::CARD_NUMBER, '1234567890'
         );
 
         $this->assertEquals([$pnm_order], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
 
-        $escrow_cal = LPSDK::CreateEscrowCalculator(3)->set(ESCROW_CALCULATORS::ENTITY_TYPE, ENTITY_TYPES::LOAN, ESCROW_CALCULATORS::ENTITY_ID, 3,
+        $escrow_cal = static::$sdk->CreateEscrowCalculator(3)->set(ESCROW_CALCULATORS::ENTITY_TYPE, ENTITY_TYPES::LOAN, ESCROW_CALCULATORS::ENTITY_ID, 3,
             ESCROW_CALCULATORS::MOD_ID, 0, ESCROW_CALCULATORS::TERM, 360, ESCROW_CALCULATORS::TOTAL, 0.00, ESCROW_CALCULATORS::PERCENT, 0.00,
             ESCROW_CALCULATORS::FIRST_PERIOD, 0.00, ESCROW_CALCULATORS::REGULAR_PERIOD, 0.00, ESCROW_CALCULATORS::PERCENT_BASE__C, ESCROW_CALCULATORS\ESCROW_CALCULATORS_PERCENT_BASE__C::LOAN_AMT,
             ESCROW_CALCULATORS::PRO_RATE_1ST__C, ESCROW_CALCULATORS\ESCROW_CALCULATORS_PRO_RATE_1ST__C::NONE, ESCROW_CALCULATORS::EXTEND_FINAL, 0, BASE_ENTITY::ID, 12
@@ -641,14 +643,14 @@ class LoanTest extends TestCase
 
         $this->assertEquals([$escrow_cal], $loan->get(LOAN::ESCROW_CALCULATORS));
 
-        $collateral = LPSDK::CreateCollateral()->set(json_decode('{"id": 312,"loanId": 69,"a": "a","b": "b","c": "c","d": "d","additional": "additional",'.
+        $collateral = static::$sdk->CreateCollateral()->set(json_decode('{"id": 312,"loanId": 69,"a": "a","b": "b","c": "c","d": "d","additional": "additional",'.
             '"collateralType": "collateral.type.other","vin": "123456789123456","distance": 134.23,"bookValue": 13000,"color": "blue","gpsStatus": "collateral.gpsstatus.installed",'.
             '"gpsCode": "132s4f56","licensePlate": "111 222","gap": 554.32,"warranty": 123.45}', true))->set(
-            COLLATERAL::LOAN, "2", COLLATERAL::CUSTOM_FIELD_VALUES, LPSDK::CreateCustomField(312, ENTITY_TYPES::COLLATERAL)->set(
+            COLLATERAL::LOAN, "2", COLLATERAL::CUSTOM_FIELD_VALUES, static::$sdk->CreateCustomField(312, ENTITY_TYPES::COLLATERAL)->set(
             BASE_ENTITY::ID, 7357, CUSTOM_FIELD_VALUES::CUSTOM_FIELD_ID, 276, CUSTOM_FIELD_VALUES::CUSTOM_FIELD_VALUE, 0
-        ))->unload(COLLATERAL::LOAN);
+        ))->rem(COLLATERAL::LOAN);
 
-        $this->assertEquals(json_encode($collateral), json_encode($loan->get(LOAN::COLLATERAL)->unload(COLLATERAL::LOAN)));
+        $this->assertEquals(json_decode(json_encode($collateral),true), json_decode(json_encode($loan->get(LOAN::COLLATERAL)->rem(COLLATERAL::LOAN)),true));
 
         $doc1vars = [
             BASE_ENTITY::ID, 33, DOCUMENTS::LOAN_ID, 69, DOCUMENTS::USER_ID, 7, DOCUMENTS::SECTION_ID, 12, DOCUMENTS::FILE_ATTACHMENT_ID, 47, DOCUMENTS::USER_NAME, "Joey", DOCUMENTS::REMOTE_ADDR, '387.301.330.352', DOCUMENTS::FILE_NAME, 'dummy_pdf.pdf',
@@ -665,13 +667,13 @@ class LoanTest extends TestCase
 
         $this->assertEquals([$doc1, $doc2], $loan->get(LOAN::DOCUMENTS));
 
-        $note = LPSDK::CreateNotes(3, 'Test Queue 2', '<p>test note</p>')->set(
+        $note = static::$sdk->CreateNotes(3, 'Test Queue 2', '<p>test note</p>')->set(
             BASE_ENTITY::ID, 595, NOTES::PARENT_ID, 3, NOTES::PARENT_TYPE, ENTITY_TYPES::LOAN, NOTES::CATEGORY_ID, 3, NOTES::AUTHOR_ID, 10, NOTES::AUTHOR_NAME, "George", NOTES::REMOTE_ADDR,'127.0.0.1', NOTES::CREATED, 1494525662
         );
 
         $this->assertEquals([$note], $loan->get(LOAN::NOTES));
 
-        $funding = LPSDK::CreateLoanFunding(1500.00, 1464048000, ENTITY_TYPES::CUSTOMER, CONSTS\LOAN_FUNDING\LOAN_FUNDING_METHOD__C::CASH_DRAWER, 36)->set(
+        $funding = static::$sdk->CreateLoanFunding(1500.00, 1464048000, ENTITY_TYPES::CUSTOMER, CONSTS\LOAN_FUNDING\LOAN_FUNDING_METHOD__C::CASH_DRAWER, 36)->set(
             BASE_ENTITY::ID, 1,
             CONSTS\LOAN_FUNDING::LOAN_ID, 109,
             CONSTS\LOAN_FUNDING::CASH_DRAWER_ID, 1,
@@ -688,7 +690,7 @@ class LoanTest extends TestCase
         $this->assertEquals([$funding], $loan->get(LOAN::LOAN_FUNDING));
 
 
-        $advancement = LPSDK::CreateAdvancement("Test Advancement", 1494374400, 120.00, 4)->set(
+        $advancement = static::$sdk->CreateAdvancement("Test Advancement", 1494374400, 120.00, 4)->set(
             BASE_ENTITY::ID, 36,
             CONSTS\ADVANCEMENTS::ENTITY_TYPE, ENTITY_TYPES::LOAN,
             CONSTS\ADVANCEMENTS::ENTITY_ID, 3
@@ -697,7 +699,7 @@ class LoanTest extends TestCase
         $this->assertEquals([$advancement], $loan->get(LOAN::ADVANCEMENTS));
 
 
-        $ddChange = LPSDK::CreateDueDateChange(1451088000, 1452038400)->set(
+        $ddChange = static::$sdk->CreateDueDateChange(1451088000, 1452038400)->set(
             BASE_ENTITY::ID, 161,
             CONSTS\DUE_DATE_CHANGES::ENTITY_TYPE, ENTITY_TYPES::LOAN,
             CONSTS\DUE_DATE_CHANGES::ENTITY_ID, 84,
@@ -866,7 +868,7 @@ class LoanTest extends TestCase
         $this->assertEquals([$stpIntDate1, $stpIntDate2], $loan->get(LOAN::STOP_INTEREST_DATES));
 
 
-        $dpdAdjustmentEntity = LPSDK::CreateDPDAdjustment(1494460800)->set(
+        $dpdAdjustmentEntity = static::$sdk->CreateDPDAdjustment(1494460800)->set(
             BASE_ENTITY::ID, 40,
             CONSTS\DPD_ADJUSTMENTS::ENTITY_TYPE, ENTITY_TYPES::LOAN,
             CONSTS\DPD_ADJUSTMENTS::ENTITY_ID, 3
@@ -875,7 +877,7 @@ class LoanTest extends TestCase
         $this->assertEquals([$dpdAdjustmentEntity], $loan->get(LOAN::DPD_ADJUSTMENTS));
 
 
-        $apdAdjustmentEntity = LPSDK::CreateAPDAdjustment(1494288000, 500.00, CONSTS\APD_ADJUSTMENTS\APD_ADJUSTMENTS_TYPE__C::FIXED)->set(
+        $apdAdjustmentEntity = static::$sdk->CreateAPDAdjustment(1494288000, 500.00, CONSTS\APD_ADJUSTMENTS\APD_ADJUSTMENTS_TYPE__C::FIXED)->set(
             BASE_ENTITY::ID, 34,
             CONSTS\DPD_ADJUSTMENTS::ENTITY_TYPE, ENTITY_TYPES::LOAN,
             CONSTS\DPD_ADJUSTMENTS::ENTITY_ID, 3
@@ -884,7 +886,7 @@ class LoanTest extends TestCase
         $this->assertEquals([$apdAdjustmentEntity], $loan->get(LOAN::APD_ADJUSTMENTS));
 
 
-        $escrowTrans = LPSDK::CreateEscrowTransactions(2, 1, 1496102400, CONSTS\ESCROW_TRANSACTIONS\ESCROW_TRANSACTIONS_TYPE__C::WITHDRAWAL, 50.00)->set(
+        $escrowTrans = static::$sdk->CreateEscrowTransactions(2, 1, 1496102400, CONSTS\ESCROW_TRANSACTIONS\ESCROW_TRANSACTIONS_TYPE__C::WITHDRAWAL, 50.00)->set(
             BASE_ENTITY::ID, 80,
             CONSTS\ESCROW_TRANSACTIONS::LOAN_ID, 3,
             CONSTS\ESCROW_TRANSACTIONS::VENDOR_ID, 1,
@@ -903,7 +905,7 @@ class LoanTest extends TestCase
 
         $this->assertEquals([$loanMod], $loan->get(LOAN::LOAN_MODIFICATIONS));
 
-        $escrowSubOpt = LPSDK::CreateEscrowSubsetOption(3,1,0.00,0.000,0, 0, 1, 0.00, 0.000, 2, 1, 1, 1, -62169984000, -62169984000, 0, 1, 1, 0.00, 0.000, 1, 1, 0, 1, 1, 0.00, 0)->set(
+        $escrowSubOpt = static::$sdk->CreateEscrowSubsetOption(3,1,0.00,0.000,0, 0, 1, 0.00, 0.000, 2, 1, 1, 1, -62169984000, -62169984000, 0, 1, 1, 0.00, 0.000, 1, 1, 0, 1, 1, 0.00, 0)->set(
             [
                 BASE_ENTITY::ID => 19,
                 CONSTS\ESCROW_SUBSET_OPTIONS::APR_INCLUDE=>0,
@@ -920,7 +922,7 @@ class LoanTest extends TestCase
 
         $this->assertEquals([$escrowSubOpt], $loan->get(LOAN::ESCROW_SUBSET_OPTIONS));
 
-        $recChrg = LPSDK::CreateRecurringCharge(1, 1, 'NSF Charge RType', 'NSF Charge aR', CONSTS\RECURRENT_CHARGES\RECURRENT_CHARGES_CALCULATION__C::FIXED, CONSTS\RECURRENT_CHARGES\RECURRENT_CHARGES_TRIGGER_TYPE__C::EVENT)
+        $recChrg = static::$sdk->CreateRecurringCharge(1, 1, 'NSF Charge RType', 'NSF Charge aR', CONSTS\RECURRENT_CHARGES\RECURRENT_CHARGES_CALCULATION__C::FIXED, CONSTS\RECURRENT_CHARGES\RECURRENT_CHARGES_TRIGGER_TYPE__C::EVENT)
         ->set(
             [
                 BASE_ENTITY::ID => 16,
@@ -1001,6 +1003,36 @@ class LoanTest extends TestCase
         );
 
         $this->assertEquals([$ruleAppliedChargeoff], $loan->get(LOAN::RULES_APPLIED_CHARGEOFF));
+    }
+
+    private function CheckLoan($loan){
+        $loanModified = $loan->createModification($loan->get(LOAN::LSETUP)->set(LSETUP::LOAN_AMT, 9000.50));
+        $this->assertEquals(true, $loanModified instanceof \Simnang\LoanPro\Loans\LoanEntity);
+
+        $loanModified = $loan->cancelModification();
+        if($loanModified instanceof \Http\Promise\Promise)
+            $loanModified->then(function($res){
+                $this->assertEquals(true, $res);})->wait(true);
+        else
+            $this->assertEquals(true, $loanModified);
+    }
+
+    /**
+     * @group online
+     */
+    public function testModification(){
+        static::$sdk->GetApiComm()->getLoan(55, [LOAN::LSETUP])->then(
+            function($loan){
+                if($loan instanceof \Http\Promise\Promise){
+                    $loan->then(function(\Simnang\LoanPro\Loans\LoanEntity $loan){
+                        $this->CheckLoan($loan);
+                    });
+                    $loan->wait(true);
+                }else{
+                    $this->CheckLoan($loan);
+                }
+            }
+        )->wait(true);
     }
 }
 

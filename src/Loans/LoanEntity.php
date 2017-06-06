@@ -19,7 +19,13 @@
 namespace Simnang\LoanPro\Loans;
 
 use Simnang\LoanPro\BaseEntity;
+use Simnang\LoanPro\Communicator\ApiClient;
+use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\LOAN;
+use Simnang\LoanPro\Constants\LSETUP;
+use Simnang\LoanPro\Exceptions\ApiException;
+use Simnang\LoanPro\Exceptions\InvalidStateException;
+use Simnang\LoanPro\LoanProSDK;
 use Simnang\LoanPro\Validator\FieldValidator;
 
 class LoanEntity extends BaseEntity
@@ -31,6 +37,55 @@ class LoanEntity extends BaseEntity
      */
     public function __construct($dispId){
         parent::__construct($dispId);
+    }
+
+    /**
+     * Creates a modification for the loan
+     * Warning: This process takes a lot of time and is synchronous (regardless of the client your using)
+     *  The synchronicity ensures that the operations are done in the correct order and that the final result is returned
+     * @param $newLoanSetup - optional parameter, if set then this will save the loan setup template as the new loan setup
+     * @return LoanEntity - Returns a loan entity with the latest changes (just the loan and new loan setup)
+     * @throws InvalidStateException - Thrown if the loan ID isn't set
+     */
+    public function createModification($newLoanSetup = null){
+        $sdk = (LoanProSDK::GetInstance());
+        $comm = $sdk->GetApiComm();
+        if(is_null($this->get(BASE_ENTITY::ID)))
+            throw new InvalidStateException("Loan ID is not set, cannot modify loan");
+
+
+        $res = $comm->modifyLoan($this->get(BASE_ENTITY::ID), true);
+
+        if($res === true)
+        {
+            if($newLoanSetup instanceof LoanSetupEntity){
+                $updatedLoan = $comm->getLoan(($this->get(BASE_ENTITY::ID)), [LOAN::LSETUP], true);
+                $newLoanSetup = $newLoanSetup->set(
+                    LSETUP::MOD_ID, $updatedLoan->get(LSETUP::MOD_ID),
+                    LSETUP::ACTIVE, 0,
+                    BASE_ENTITY::ID, $updatedLoan->get(LOAN::LSETUP)->get(BASE_ENTITY::ID));
+
+                $latestLoan = $this->set(LOAN::LSETUP, $newLoanSetup);
+                $latestLoan->save(true);
+                return $latestLoan;
+            }
+            else {
+                return $comm->getLoan(($this->get(BASE_ENTITY::ID)), [LOAN::LSETUP], true);
+            }
+        }
+        else
+            throw new ApiException($res);
+
+    }
+
+    public function save($forceSync = false){
+        return LoanProSDK::GetInstance()->GetApiComm()->saveLoan($this, $forceSync);
+    }
+
+    public function cancelModification($forceSynce = false){
+        if(is_null($this->get(BASE_ENTITY::ID)))
+            throw new InvalidStateException("Loan ID is not set, cannot modify loan");
+        return LoanProSDK::GetInstance()->GetApiComm()->cancelLatestModification($this->get(BASE_ENTITY::ID), $forceSynce);
     }
 
     /**

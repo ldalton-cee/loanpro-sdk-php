@@ -36,15 +36,17 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class ChecklistItemValueTest extends TestCase
 {
+    private static $sdk;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+        static::$sdk = LPSDK::GetInstance();
     }
     /**
      * @group create_correctness
      * @group offline
      */
     public function testChecklistItemValueInstantiate(){
-        $checklistValue = LPSDK::CreateChecklistItemValue(6, 12, 1);
+        $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1);
 
         $this->assertEquals([CHECKLIST_VALUES::CHECKLIST_ID=>6, CHECKLIST_VALUES::CHECKLIST_ITEM_ID=>12, CHECKLIST_VALUES::CHECKLIST_ITEM_VAL=>1], $checklistValue->get(CHECKLIST_VALUES::CHECKLIST_ID, CHECKLIST_VALUES::CHECKLIST_ITEM_ID, CHECKLIST_VALUES::CHECKLIST_ITEM_VAL));
     }
@@ -54,7 +56,7 @@ class ChecklistItemValueTest extends TestCase
      * @group offline
      */
     public function testChecklistItemValueSet(){
-        $checklistValue = LPSDK::CreateChecklistItemValue(6, 12, 1)->set(BASE_ENTITY::ID, 12);
+        $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1)->set(BASE_ENTITY::ID, 12);
         $this->assertEquals(12, $checklistValue->get(BASE_ENTITY::ID));
     }
 
@@ -64,10 +66,10 @@ class ChecklistItemValueTest extends TestCase
      */
     public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
+        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
 
         /* should throw exception when setting LOAN_AMT to null */
-        LPSDK::CreateChecklistItemValue(6, 12, 1)->set(BASE_ENTITY::ID, null);
+        static::$sdk->CreateChecklistItemValue(6, 12, 1)->set(BASE_ENTITY::ID, null);
     }
 
     /**
@@ -77,10 +79,10 @@ class ChecklistItemValueTest extends TestCase
     public function testChecklistItemValueDelChecklistId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHECKLIST_VALUES::CHECKLIST_ID.'\', field is required.');
-        $checklistValue = LPSDK::CreateChecklistItemValue(6, 12, 1);
+        $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1);
 
         // should throw exception
-        $checklistValue->unload(CHECKLIST_VALUES::CHECKLIST_ID);
+        $checklistValue->rem(CHECKLIST_VALUES::CHECKLIST_ID);
     }
 
     /**
@@ -90,10 +92,10 @@ class ChecklistItemValueTest extends TestCase
     public function testChecklistItemValueDelChecklistItemVal(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHECKLIST_VALUES::CHECKLIST_ITEM_VAL.'\', field is required.');
-        $checklistValue = LPSDK::CreateChecklistItemValue(6, 12, 1);
+        $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1);
 
         // should throw exception
-        $checklistValue->unload(CHECKLIST_VALUES::CHECKLIST_ITEM_VAL);
+        $checklistValue->rem(CHECKLIST_VALUES::CHECKLIST_ITEM_VAL);
     }
 
     /**
@@ -103,10 +105,10 @@ class ChecklistItemValueTest extends TestCase
     public function testChecklistItemValueDelChecklistItemId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.CHECKLIST_VALUES::CHECKLIST_ITEM_ID.'\', field is required.');
-        $checklistValue = LPSDK::CreateChecklistItemValue(6, 12, 1);
+        $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1);
 
         // should throw exception
-        $checklistValue->unload(CHECKLIST_VALUES::CHECKLIST_ITEM_ID);
+        $checklistValue->rem(CHECKLIST_VALUES::CHECKLIST_ITEM_ID);
     }
 
     /**
@@ -114,8 +116,8 @@ class ChecklistItemValueTest extends TestCase
      * @group offline
      */
     public function testAddToLoan(){
-        $loan = LPSDK::CreateLoan("Test ID");
-        $checklistValue = LPSDK::CreateChecklistItemValue(6, 12, 1);
+        $loan = static::$sdk->CreateLoan("Test ID");
+        $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1);
         $this->assertEquals([$checklistValue], $loan->set(LOAN::CHECKLIST_VALUES, $checklistValue)->get(LOAN::CHECKLIST_VALUES));
     }
 }

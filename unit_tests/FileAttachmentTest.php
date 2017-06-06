@@ -60,7 +60,7 @@ class FileAttachmentTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.FILE_ATTACHMENT::FILE_MIME.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
+        $this->expectExceptionMessage('Value for \''.FILE_ATTACHMENT::FILE_MIME.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
         (new \Simnang\LoanPro\Loans\FileAttachmentEntity())
             /* should throw exception when setting LOAN_AMT to null */ ->set(FILE_ATTACHMENT::FILE_MIME, null);
     }
@@ -87,7 +87,7 @@ class FileAttachmentTest extends TestCase
         $doc = (new \Simnang\LoanPro\Loans\FileAttachmentEntity())->set([FILE_ATTACHMENT::FILE_MIME=> 1]);
         $this->assertEquals(1, $doc->get(FILE_ATTACHMENT::FILE_MIME));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($doc->unload(FILE_ATTACHMENT::FILE_MIME)->get(FILE_ATTACHMENT::FILE_MIME));
+        $this->assertNull($doc->rem(FILE_ATTACHMENT::FILE_MIME)->get(FILE_ATTACHMENT::FILE_MIME));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(1, $doc->get(FILE_ATTACHMENT::FILE_MIME));
     }

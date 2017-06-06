@@ -85,7 +85,7 @@ class DocumentTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.DOCUMENTS::ACTIVE.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
+        $this->expectExceptionMessage('Value for \''.DOCUMENTS::ACTIVE.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
         (new \Simnang\LoanPro\Loans\DocumentEntity())
             /* should throw exception when setting LOAN_AMT to null */ ->set(DOCUMENTS::ACTIVE, null);
     }
@@ -112,7 +112,7 @@ class DocumentTest extends TestCase
         $doc = (new \Simnang\LoanPro\Loans\DocumentEntity())->set([DOCUMENTS::ACTIVE=> 1]);
         $this->assertEquals(1, $doc->get(DOCUMENTS::ACTIVE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($doc->unload(DOCUMENTS::ACTIVE)->get(DOCUMENTS::ACTIVE));
+        $this->assertNull($doc->rem(DOCUMENTS::ACTIVE)->get(DOCUMENTS::ACTIVE));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(1, $doc->get(DOCUMENTS::ACTIVE));
     }
@@ -144,23 +144,23 @@ class DocumentTest extends TestCase
         $this->assertEquals([$doc, $doc2], $loan->get(LOAN::DOCUMENTS));
 
         // test list append
-        $loan = $loan->unload(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, $doc2, $doc3, $doc);
+        $loan = $loan->rem(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, $doc2, $doc3, $doc);
         $this->assertEquals([$doc2, $doc3, $doc], $loan->get(LOAN::DOCUMENTS));
 
         // test list append with multiple keys
-        $loan = $loan->unload(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, $doc2, $doc, LOAN::DOCUMENTS, $doc);
+        $loan = $loan->rem(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, $doc2, $doc, LOAN::DOCUMENTS, $doc);
         $this->assertEquals([$doc2, $doc, $doc], $loan->get(LOAN::DOCUMENTS));
 
         // test array notation 1
-        $loan = $loan->unload(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, [$doc3, $doc2, $doc]);
+        $loan = $loan->rem(LOAN::DOCUMENTS)->append(LOAN::DOCUMENTS, [$doc3, $doc2, $doc]);
         $this->assertEquals([$doc3, $doc2, $doc], $loan->get(LOAN::DOCUMENTS));
 
         // test array notation 2
-        $loan = $loan->unload(LOAN::DOCUMENTS)->append([LOAN::DOCUMENTS => [$doc, $doc3, $doc2]]);
+        $loan = $loan->rem(LOAN::DOCUMENTS)->append([LOAN::DOCUMENTS => [$doc, $doc3, $doc2]]);
         $this->assertEquals([$doc, $doc3, $doc2], $loan->get(LOAN::DOCUMENTS));
 
         // test array notation 3
-        $loan = $loan->unload(LOAN::DOCUMENTS)->append([LOAN::DOCUMENTS => $doc2]);
+        $loan = $loan->rem(LOAN::DOCUMENTS)->append([LOAN::DOCUMENTS => $doc2]);
         $this->assertEquals([$doc2], $loan->get(LOAN::DOCUMENTS));
     }
 

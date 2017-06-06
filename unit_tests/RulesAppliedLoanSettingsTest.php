@@ -36,15 +36,17 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class RulesAppliedLoanSettingsTest extends TestCase
 {
+    private static $sdk;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+        static::$sdk = LPSDK::GetInstance();
     }
     /**
      * @group create_correctness
      * @group offline
      */
     public function testRulesAppliedLoanSettingsInstantiate(){
-        $rulesApplied = LPSDK::CreateRulesAppliedLoanSettings(5, true);
+        $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true);
 
         $this->assertEquals(5, $rulesApplied->get(BASE_ENTITY::ID));
     }
@@ -54,7 +56,7 @@ class RulesAppliedLoanSettingsTest extends TestCase
      * @group offline
      */
     public function testRulesAppliedLoanSettingsSet(){
-        $rulesApplied = LPSDK::CreateRulesAppliedLoanSettings(5, true)->set(BASE_ENTITY::ID, 12)->set(LSRULES_APPLIED::ENABLED, false);
+        $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true)->set(BASE_ENTITY::ID, 12)->set(LSRULES_APPLIED::ENABLED, false);
         $this->assertEquals(12, $rulesApplied->get(BASE_ENTITY::ID));
     }
 
@@ -64,10 +66,10 @@ class RulesAppliedLoanSettingsTest extends TestCase
      */
     public function testRulesAppliedLoanSettingsCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
+        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
 
         /* should throw exception when setting LOAN_AMT to null */
-        LPSDK::CreateRulesAppliedLoanSettings(5, true)->set(BASE_ENTITY::ID, null);
+        static::$sdk->CreateRulesAppliedLoanSettings(5, true)->set(BASE_ENTITY::ID, null);
     }
 
     /**
@@ -77,10 +79,10 @@ class RulesAppliedLoanSettingsTest extends TestCase
     public function testRulesAppliedLoanSettings_DelId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.BASE_ENTITY::ID.'\', field is required.');
-        $rulesApplied = LPSDK::CreateRulesAppliedLoanSettings(5, true);
+        $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true);
 
         // should throw exception
-        $rulesApplied->unload(BASE_ENTITY::ID);
+        $rulesApplied->rem(BASE_ENTITY::ID);
     }
 
     /**
@@ -90,10 +92,10 @@ class RulesAppliedLoanSettingsTest extends TestCase
     public function testRulesAppliedLoanSettings_DelEnabled(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.LSRULES_APPLIED::ENABLED.'\', field is required.');
-        $rulesApplied = LPSDK::CreateRulesAppliedLoanSettings(5, true);
+        $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true);
 
         // should throw exception
-        $rulesApplied->unload(LSRULES_APPLIED::ENABLED);
+        $rulesApplied->rem(LSRULES_APPLIED::ENABLED);
     }
 
     /**
@@ -101,8 +103,8 @@ class RulesAppliedLoanSettingsTest extends TestCase
      * @group offline
      */
     public function testAddToLoan(){
-        $loan = LPSDK::CreateLoan("Test ID");
-        $rulesApplied = LPSDK::CreateRulesAppliedLoanSettings(5, true);
+        $loan = static::$sdk->CreateLoan("Test ID");
+        $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true);
         $this->assertEquals([$rulesApplied], $loan->set(LOAN::LSRULES_APPLIED, $rulesApplied)->get(LOAN::LSRULES_APPLIED));
     }
 }

@@ -36,15 +36,17 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class PaymentTest extends TestCase
 {
+    private static $sdk;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+        static::$sdk = LPSDK::GetInstance();
     }
     /**
      * @group create_correctness
      * @group offline
      */
     public function testPaymentInstantiate(){
-        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
+        $payment = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\PAYMENTS');
         $consts = $rclass->getConstants();
@@ -60,7 +62,7 @@ class PaymentTest extends TestCase
      * @group offline
      */
     public function testPaymentSetCollections(){
-        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
+        $payment = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\PAYMENTS');
@@ -85,8 +87,8 @@ class PaymentTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.PAYMENTS::INFO.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
-        LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)
+        $this->expectExceptionMessage('Value for \''.PAYMENTS::INFO.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)
             /* should throw exception when setting LOAN_AMT to null */ ->set(PAYMENTS::INFO, null);
     }
 
@@ -97,7 +99,7 @@ class PaymentTest extends TestCase
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
-        $ls = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
+        $ls = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
         $ls->set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
@@ -109,10 +111,10 @@ class PaymentTest extends TestCase
      * @group offline
      */
     public function testPaymentDel(){
-        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)->set([PAYMENTS::ACTIVE=> 1]);
+        $payment = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)->set([PAYMENTS::ACTIVE=> 1]);
         $this->assertEquals(1, $payment->get(PAYMENTS::ACTIVE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($payment->unload(PAYMENTS::ACTIVE)->get(PAYMENTS::ACTIVE));
+        $this->assertNull($payment->rem(PAYMENTS::ACTIVE)->get(PAYMENTS::ACTIVE));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(1, $payment->get(PAYMENTS::ACTIVE));
     }
@@ -124,10 +126,10 @@ class PaymentTest extends TestCase
     public function testPaymentDelAmount(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAYMENTS::AMOUNT.'\', field is required.');
-        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
+        $payment = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
         // should throw exception
-        $payment->unload(PAYMENTS::AMOUNT);
+        $payment->rem(PAYMENTS::AMOUNT);
     }
 
     /**
@@ -137,10 +139,10 @@ class PaymentTest extends TestCase
     public function testPaymentDelDate(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAYMENTS::DATE.'\', field is required.');
-        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
+        $payment = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
         // should throw exception
-        $payment->unload(PAYMENTS::DATE);
+        $payment->rem(PAYMENTS::DATE);
     }
 
     /**
@@ -150,10 +152,10 @@ class PaymentTest extends TestCase
     public function testPaymentDelInfo(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAYMENTS::INFO.'\', field is required.');
-        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
+        $payment = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
         // should throw exception
-        $payment->unload(PAYMENTS::INFO);
+        $payment->rem(PAYMENTS::INFO);
     }
 
     /**
@@ -163,10 +165,10 @@ class PaymentTest extends TestCase
     public function testPaymentDelPaymentMethodId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAYMENTS::PAYMENT_METHOD_ID.'\', field is required.');
-        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
+        $payment = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
         // should throw exception
-        $payment->unload(PAYMENTS::PAYMENT_METHOD_ID);
+        $payment->rem(PAYMENTS::PAYMENT_METHOD_ID);
     }
 
     /**
@@ -176,10 +178,10 @@ class PaymentTest extends TestCase
     public function testPaymentDelPaymentTypeId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.PAYMENTS::PAYMENT_TYPE_ID.'\', field is required.');
-        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
+        $payment = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
 
         // should throw exception
-        $payment->unload(PAYMENTS::PAYMENT_TYPE_ID);
+        $payment->rem(PAYMENTS::PAYMENT_TYPE_ID);
     }
 
     /**
@@ -187,8 +189,8 @@ class PaymentTest extends TestCase
      * @group offline
      */
     public function testAddToLoan(){
-        $loan = LPSDK::CreateLoan("Test ID");
-        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
+        $loan = static::$sdk->CreateLoan("Test ID");
+        $payment = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
         $this->assertEquals([$payment], $loan->set(LOAN::PAYMENTS, $payment)->get(LOAN::PAYMENTS));
     }
 
@@ -198,10 +200,10 @@ class PaymentTest extends TestCase
      */
     public function testAppendToLoan(){
         // create loan and payments
-        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
-        $payment2 = LPSDK::CreatePayment(135, "2017-08-19", "INFO 2", 2, 3);
-        $payment3 = LPSDK::CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
-        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
+        $payment = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3);
+        $payment2 = static::$sdk->CreatePayment(135, "2017-08-19", "INFO 2", 2, 3);
+        $payment3 = static::$sdk->CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
+        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
 
         // test append
         $this->assertEquals([$payment], $loan->get(LOAN::PAYMENTS));
@@ -209,23 +211,23 @@ class PaymentTest extends TestCase
         $this->assertEquals([$payment, $payment2], $loan->get(LOAN::PAYMENTS));
 
         // test list append
-        $loan = $loan->unload(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, $payment2, $payment3, $payment);
+        $loan = $loan->rem(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, $payment2, $payment3, $payment);
         $this->assertEquals([$payment2, $payment3, $payment], $loan->get(LOAN::PAYMENTS));
 
         // test list append with multiple keys
-        $loan = $loan->unload(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, $payment2, $payment, LOAN::PAYMENTS, $payment);
+        $loan = $loan->rem(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, $payment2, $payment, LOAN::PAYMENTS, $payment);
         $this->assertEquals([$payment2, $payment, $payment], $loan->get(LOAN::PAYMENTS));
 
         // test array notation 1
-        $loan = $loan->unload(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, [$payment3, $payment2, $payment]);
+        $loan = $loan->rem(LOAN::PAYMENTS)->append(LOAN::PAYMENTS, [$payment3, $payment2, $payment]);
         $this->assertEquals([$payment3, $payment2, $payment], $loan->get(LOAN::PAYMENTS));
 
         // test array notation 2
-        $loan = $loan->unload(LOAN::PAYMENTS)->append([LOAN::PAYMENTS => [$payment, $payment3, $payment2]]);
+        $loan = $loan->rem(LOAN::PAYMENTS)->append([LOAN::PAYMENTS => [$payment, $payment3, $payment2]]);
         $this->assertEquals([$payment, $payment3, $payment2], $loan->get(LOAN::PAYMENTS));
 
         // test array notation 3
-        $loan = $loan->unload(LOAN::PAYMENTS)->append([LOAN::PAYMENTS => $payment2]);
+        $loan = $loan->rem(LOAN::PAYMENTS)->append([LOAN::PAYMENTS => $payment2]);
         $this->assertEquals([$payment2], $loan->get(LOAN::PAYMENTS));
     }
 
@@ -237,7 +239,7 @@ class PaymentTest extends TestCase
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Property \''.PAYMENTS::PAYMENT_TYPE_ID.'\' is not an object list, can only append to object lists!');
-        $payment = LPSDK::CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
+        $payment = static::$sdk->CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
 
         $payment->append(PAYMENTS::PAYMENT_TYPE_ID, "1");
     }
@@ -250,10 +252,10 @@ class PaymentTest extends TestCase
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Property \''.LOAN::INSURANCE.'\' is not an object list, can only append to object lists!');
-        $payment = LPSDK::CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
-        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
+        $payment = static::$sdk->CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
+        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
 
-        $loan->append(LOAN::PAYMENTS, $payment, LOAN::INSURANCE, LPSDK::CreateInsurance());
+        $loan->append(LOAN::PAYMENTS, $payment, LOAN::INSURANCE, static::$sdk->CreateInsurance());
     }
 
     /**
@@ -264,8 +266,8 @@ class PaymentTest extends TestCase
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected two parameters, only got one');
-        $payment = LPSDK::CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
-        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
+        $payment = static::$sdk->CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
+        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
 
         $loan->append(LOAN::PAYMENTS);
     }
@@ -278,8 +280,8 @@ class PaymentTest extends TestCase
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing fields for \''.LOAN::PAYMENTS.'\'');
-        $payment = LPSDK::CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
-        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
+        $payment = static::$sdk->CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
+        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
 
         $loan->append(LOAN::PAYMENTS,LOAN::PAYMENTS,$payment);
     }
@@ -292,8 +294,8 @@ class PaymentTest extends TestCase
         // create loan and payments
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing fields for \''.LOAN::PAYMENTS.'\'');
-        $payment = LPSDK::CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
-        $loan = LPSDK::CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
+        $payment = static::$sdk->CreatePayment(435, "2017-08-29", "INFO 3", 2, 3);
+        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::PAYMENTS, $payment);
 
         $loan->append(LOAN::PAYMENTS,$payment,LOAN::PAYMENTS,LOAN::PAYMENTS,$payment);
     }
@@ -303,7 +305,7 @@ class PaymentTest extends TestCase
      * @group offline
      */
     public function testLoadReversePayment(){
-        $payment = LPSDK::CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)->set(PAYMENTS::NACHA_RETURN_CODE__C, PAYMENTS\PAYMENTS_NACHA_RETURN_CODE__C::ADDENDA_ERROR, PAYMENTS::REVERSE_REASON__C, PAYMENTS\PAYMENTS_REVERSE_REASON__C::NACHA_ERR_CODE, PAYMENTS::COMMENTS, "NACHA returned an error");
+        $payment = static::$sdk->CreatePayment(12.5, "2017-07-29", "INFO", 2, 3)->set(PAYMENTS::NACHA_RETURN_CODE__C, PAYMENTS\PAYMENTS_NACHA_RETURN_CODE__C::ADDENDA_ERROR, PAYMENTS::REVERSE_REASON__C, PAYMENTS\PAYMENTS_REVERSE_REASON__C::NACHA_ERR_CODE, PAYMENTS::COMMENTS, "NACHA returned an error");
         $arr = \Simnang\LoanPro\Utils\ArrayUtils::ConvertToKeyedArray([PAYMENTS::NACHA_RETURN_CODE__C, PAYMENTS\PAYMENTS_NACHA_RETURN_CODE__C::ADDENDA_ERROR, PAYMENTS::REVERSE_REASON__C, PAYMENTS\PAYMENTS_REVERSE_REASON__C::NACHA_ERR_CODE, PAYMENTS::COMMENTS, "NACHA returned an error"]);
         $this->assertEquals($arr,$payment->get(array_keys($arr)));
     }

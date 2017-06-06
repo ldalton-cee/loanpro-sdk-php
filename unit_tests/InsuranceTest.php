@@ -35,15 +35,17 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class InsuranceTest extends TestCase
 {
+    private static $sdk;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+        static::$sdk = LPSDK::GetInstance();
     }
     /**
      * @group create_correctness
      * @group offline
      */
     public function testInsuranceInstantiate(){
-        $insurance = LPSDK::CreateInsurance();
+        $insurance = static::$sdk->CreateInsurance();
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\INSURANCE');
         $consts = $rclass->getConstants();
@@ -59,7 +61,7 @@ class InsuranceTest extends TestCase
      * @group offline
      */
     public function testInsuranceSetCollections(){
-        $insurance = LPSDK::CreateInsurance();
+        $insurance = static::$sdk->CreateInsurance();
 
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\INSURANCE');
@@ -84,8 +86,8 @@ class InsuranceTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.INSURANCE::AGENT_NAME.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
-        LPSDK::CreateInsurance()
+        $this->expectExceptionMessage('Value for \''.INSURANCE::AGENT_NAME.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        static::$sdk->CreateInsurance()
             /* should throw exception when setting LOAN_AMT to null */ ->set(INSURANCE::AGENT_NAME, null);
     }
 
@@ -96,7 +98,7 @@ class InsuranceTest extends TestCase
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
-        $ls = LPSDK::CreateInsurance();
+        $ls = static::$sdk->CreateInsurance();
         $ls->set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
@@ -108,10 +110,10 @@ class InsuranceTest extends TestCase
      * @group offline
      */
     public function testInsuranceDel(){
-        $insurance = LPSDK::CreateInsurance()->set([INSURANCE::DEDUCTIBLE=> 232.23]);
+        $insurance = static::$sdk->CreateInsurance()->set([INSURANCE::DEDUCTIBLE=> 232.23]);
         $this->assertEquals(232.23, $insurance->get(INSURANCE::DEDUCTIBLE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($insurance->unload(INSURANCE::DEDUCTIBLE)->get(INSURANCE::DEDUCTIBLE));
+        $this->assertNull($insurance->rem(INSURANCE::DEDUCTIBLE)->get(INSURANCE::DEDUCTIBLE));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(232.23, $insurance->get(INSURANCE::DEDUCTIBLE));
     }

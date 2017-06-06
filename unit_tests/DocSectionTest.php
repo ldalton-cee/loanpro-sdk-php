@@ -62,7 +62,7 @@ class DocSectionTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.DOC_SECTION::ACTIVE.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
+        $this->expectExceptionMessage('Value for \''.DOC_SECTION::ACTIVE.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
         (new \Simnang\LoanPro\Loans\DocSectionEntity())
             /* should throw exception when setting LOAN_AMT to null */ ->set(DOC_SECTION::ACTIVE, null);
     }
@@ -89,7 +89,7 @@ class DocSectionTest extends TestCase
         $doc = (new \Simnang\LoanPro\Loans\DocSectionEntity())->set([DOC_SECTION::ACTIVE=> 1]);
         $this->assertEquals(1, $doc->get(DOC_SECTION::ACTIVE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($doc->unload(DOC_SECTION::ACTIVE)->get(DOC_SECTION::ACTIVE));
+        $this->assertNull($doc->rem(DOC_SECTION::ACTIVE)->get(DOC_SECTION::ACTIVE));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(1, $doc->get(DOC_SECTION::ACTIVE));
     }

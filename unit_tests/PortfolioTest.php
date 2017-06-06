@@ -37,15 +37,17 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class PortfolioTest extends TestCase
 {
+    private static $sdk;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+        static::$sdk = LPSDK::GetInstance();
     }
     /**
      * @group create_correctness
      * @group offline
      */
     public function testPortfolioInstantiate(){
-        $portfolio = LPSDK::CreatePortfolio(5);
+        $portfolio = static::$sdk->CreatePortfolio(5);
 
         $this->assertEquals(5, $portfolio->get(BASE_ENTITY::ID));
     }
@@ -66,7 +68,7 @@ class PortfolioTest extends TestCase
             PORTFOLIO::SUB_PORTFOLIO, "SUBPORT"
         ];
 
-        $portfolio = LPSDK::CreatePortfolio(5)->set(BASE_ENTITY::ID, 12)->set( $arr );
+        $portfolio = static::$sdk->CreatePortfolio(5)->set(BASE_ENTITY::ID, 12)->set( $arr );
         $this->assertEquals(12, $portfolio->get(BASE_ENTITY::ID));
         $this->assertEquals(ArrayUtils::ConvertToKeyedArray($arr), $portfolio->get(array_keys(ArrayUtils::ConvertToKeyedArray($arr))));
     }
@@ -77,10 +79,10 @@ class PortfolioTest extends TestCase
      */
     public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
+        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
 
         /* should throw exception when setting LOAN_AMT to null */
-        LPSDK::CreatePortfolio(5)->set(BASE_ENTITY::ID, null);
+        static::$sdk->CreatePortfolio(5)->set(BASE_ENTITY::ID, null);
     }
 
     /**
@@ -90,10 +92,10 @@ class PortfolioTest extends TestCase
     public function testPortfolioDelPortfolioId(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot delete \''.BASE_ENTITY::ID.'\', field is required.');
-        $portfolio = LPSDK::CreatePortfolio(5);
+        $portfolio = static::$sdk->CreatePortfolio(5);
 
         // should throw exception
-        $portfolio->unload(BASE_ENTITY::ID);
+        $portfolio->rem(BASE_ENTITY::ID);
     }
 
     /**
@@ -101,8 +103,8 @@ class PortfolioTest extends TestCase
      * @group offline
      */
     public function testAddToLoan(){
-        $loan = LPSDK::CreateLoan("Test ID");
-        $portfolio = LPSDK::CreatePortfolio(5);
+        $loan = static::$sdk->CreateLoan("Test ID");
+        $portfolio = static::$sdk->CreatePortfolio(5);
         $this->assertEquals([$portfolio], $loan->set(LOAN::PORTFOLIOS, $portfolio)->get(LOAN::PORTFOLIOS));
     }
 }

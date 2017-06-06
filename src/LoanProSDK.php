@@ -19,6 +19,8 @@
 namespace Simnang\LoanPro;
 
 
+use Simnang\LoanPro\Communicator\ApiClient;
+use Simnang\LoanPro\Communicator\Communicator;
 use Simnang\LoanPro\Constants\APD_ADJUSTMENTS;
 use Simnang\LoanPro\Constants\AUTOPAYS;
 use Simnang\LoanPro\Constants\DOCUMENTS;
@@ -29,6 +31,7 @@ use Simnang\LoanPro\Constants\LSETUP;
 use Simnang\LoanPro\Constants\LSTATUS_ARCHIVE;
 use Simnang\LoanPro\Constants\MC_PROCESSOR;
 use Simnang\LoanPro\Constants\PAYMENTS;
+use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Loans\AdvancementsEntity;
 use Simnang\LoanPro\Loans\APDAdjustmentEntity;
 use Simnang\LoanPro\Loans\AutopayEntity;
@@ -83,12 +86,73 @@ use Simnang\LoanPro\Loans\SubPortfolioEntity;
  */
 class LoanProSDK
 {
+    private static $inst;
+    private static $clientType = ApiClient::TYPE_ASYNC;
+    private $apiComm;
+
+    /**
+     * @return LoanProSDK
+     * @throws InvalidStateException
+     */
+    public static function GetInstance(){
+        if(static::$inst == null){
+            if(!ApiClient::AreTokensSet()){
+                $config = parse_ini_file(__DIR__."/config.ini", true);
+                $confFile = __DIR__."/config.ini";
+                // Load config from another source
+                if(isset($config['config']) && isset($config['config']['file']) && file_exists($config['config']['file'])){
+                    $confFile = $config['config']['file'];
+                    $type = (isset($config['config']['type']))? $config['config']['type'] : 'ini';
+                    switch($type){
+                        case 'json':
+                            $config = json_decode(file_get_contents($config['config']['file']));
+                            break;
+                        case 'ini':
+                            $config = parse_ini_file($config['config']['file'], true);
+                            break;
+                        case 'xml':
+                            $xml = simplexml_load_string(file_get_contents($config['config']['file']));
+                            $config = json_decode(json_encode($xml), true);
+                            break;
+                        default:
+                            throw new \InvalidArgumentException("Unknown config file type '$type', expected json, ini, or xml");
+                    }
+                }
+                if(isset($config['api']) && isset($config['api']['tenant']) && isset($config['api']['token'])){
+                    ApiClient::SetAuthorization($config['api']['tenant'], $config['api']['token']);
+                }
+                else{
+                    throw new InvalidStateException('Configuration does not have api credentials! Loading from '.$confFile);
+            }
+                $clientType = (isset($config['communicator']) && isset($config['communicator']['type'])) ? $config['communicator']['type'] : 'async';
+
+                switch($clientType){
+                    case 'async':
+                        static::$clientType = ApiClient::TYPE_ASYNC;
+                        break;
+                    case 'sync':
+                        static::$clientType = ApiClient::TYPE_SYNC;
+                        break;
+                    default:
+                        throw new \InvalidArgumentException("Unkown client type '$clientType', expected async or sync");
+                }
+            }
+            static::$inst = new LoanProSDK();
+        }
+        assert(static::$inst instanceof LoanProSDK);
+        return static::$inst;
+    }
+
+    public function GetApiComm(){
+        return $this->apiComm;
+    }
+
     /**
      * Creates a new loan with the minimal amount of information required
      * @param string $dispId
      * @return Loans\LoanEntity
      */
-    public static function CreateLoan(string $dispId){
+    public function CreateLoan(string $dispId){
         return new Loans\LoanEntity($dispId);
     }
 
@@ -97,7 +161,7 @@ class LoanProSDK
      * @param string $json
      * @return BaseEntity
      */
-    public static function CreateLoanFromJSON($json){
+    public function CreateLoanFromJSON($json){
         if(!is_string($json) && !is_array($json))
             throw new \InvalidArgumentException("Expected a JSON string or array");
         if(is_string($json))
@@ -123,7 +187,7 @@ class LoanProSDK
      * @param string $type
      * @return LoanSetupEntity
      */
-    public static function CreateLoanSetup(string $class, string $type){
+    public function CreateLoanSetup(string $class, string $type){
         return new LoanSetupEntity($class, $type);
     }
 
@@ -132,7 +196,7 @@ class LoanProSDK
      * @param int $subset - ID of escrow subset to use
      * @return EscrowCalculatorEntity
      */
-    public static function CreateEscrowCalculator(int $subset){
+    public function CreateEscrowCalculator(int $subset){
         return new EscrowCalculatorEntity($subset);
     }
 
@@ -140,7 +204,7 @@ class LoanProSDK
      * Creates a new, empty loan settings entity
      * @return LoanSettingsEntity
      */
-    public static function CreateLoanSettings(){
+    public function CreateLoanSettings(){
         return new LoanSettingsEntity();
     }
 
@@ -148,7 +212,7 @@ class LoanProSDK
      * Creates a new, empty collateral entity
      * @return LoanSettingsEntity
      */
-    public static function CreateCollateral(){
+    public function CreateCollateral(){
         return new CollateralEntity();
     }
 
@@ -156,7 +220,7 @@ class LoanProSDK
      * Creates a new, empty insurance entity
      * @return LoanSettingsEntity
      */
-    public static function CreateInsurance(){
+    public function CreateInsurance(){
         return new InsuranceEntity();
     }
 
@@ -169,7 +233,7 @@ class LoanProSDK
      * @param $paymentTypeId - payment type id
      * @return PaymentEntity
      */
-    public static function CreatePayment($amt, $date, $info, $payMethodId, $paymentTypeId){
+    public function CreatePayment($amt, $date, $info, $payMethodId, $paymentTypeId){
         return new PaymentEntity($amt, $date, $info, $payMethodId, $paymentTypeId);
     }
 
@@ -183,7 +247,7 @@ class LoanProSDK
      * @param $interestBearing - if the charge is interest bearing
      * @return ChargeEntity
      */
-    public static function CreateCharge($amount, $date, $info, $typeId, $appType, $interestBearing){
+    public function CreateCharge($amount, $date, $info, $typeId, $appType, $interestBearing){
         return new ChargeEntity($amount, $date, $info, $typeId, $appType, $interestBearing);
     }
 
@@ -192,7 +256,7 @@ class LoanProSDK
      * @param $id - portfolio id
      * @return PortfolioEntity
      */
-    public static function CreatePortfolio($id){
+    public function CreatePortfolio($id){
         return new PortfolioEntity($id);
     }
 
@@ -201,7 +265,7 @@ class LoanProSDK
      * @param $id - portfolio id
      * @return SubPortfolioEntity
      */
-    public static function CreateSubPortfolio($id, $parent){
+    public function CreateSubPortfolio($id, $parent){
         return new SubPortfolioEntity($id, $parent);
     }
 
@@ -217,7 +281,7 @@ class LoanProSDK
      * @param $zip - customer zip
      * @return PaynearmeOrderEntity
      */
-    public static function CreatePayNearMeOrder($customerId, $customerName, $email, $phone, $address, $city, $state, $zip){
+    public function CreatePayNearMeOrder($customerId, $customerName, $email, $phone, $address, $city, $state, $zip){
         return new PaynearmeOrderEntity($customerId, $customerName, $email, $phone, $address, $city, $state, $zip);
     }
 
@@ -227,7 +291,7 @@ class LoanProSDK
      * @param $enabled - whether or not it's enabled
      * @return RulesAppliedLoanSettingsEntity
      */
-    public static function CreateRulesAppliedLoanSettings($id, $enabled){
+    public function CreateRulesAppliedLoanSettings($id, $enabled){
         return new RulesAppliedLoanSettingsEntity($id, $enabled);
     }
 
@@ -238,7 +302,7 @@ class LoanProSDK
      * @param $checklistItemValue - checklist item value
      * @return ChecklistItemValueEntity
      */
-    public static function CreateChecklistItemValue($checklistId, $checklistItemId, $checklistItemValue){
+    public function CreateChecklistItemValue($checklistId, $checklistItemId, $checklistItemValue){
         return new ChecklistItemValueEntity($checklistId, $checklistItemId, $checklistItemValue);
     }
 
@@ -248,7 +312,7 @@ class LoanProSDK
      * @param $entityType - The type of associated entity
      * @return CustomFieldValuesEntity
      */
-    public static function CreateCustomField($entityId,$entityType){
+    public function CreateCustomField($entityId,$entityType){
         return new CustomFieldValuesEntity($entityId,$entityType);
     }
 
@@ -261,7 +325,7 @@ class LoanProSDK
      * @param int $fulfilled - whether or not the promise is fulfilled
      * @return PromisesEntity
      */
-    public static function CreatePromise($subject, $note, $dueDate, $amount = 0.0, $fulfilled = 0){
+    public function CreatePromise($subject, $note, $dueDate, $amount = 0.0, $fulfilled = 0){
         return new PromisesEntity($subject, $note, $dueDate, $amount, $fulfilled);
     }
 
@@ -272,7 +336,7 @@ class LoanProSDK
      * @param $body - body text of note
      * @return NotesEntity
      */
-    public static function CreateNotes($categoryId, $subject, $body){
+    public function CreateNotes($categoryId, $subject, $body){
         return new NotesEntity($categoryId, $subject, $body);
     }
 
@@ -283,7 +347,7 @@ class LoanProSDK
      * @param $body - body text of note
      * @return NotesEntity
      */
-    public static function CreateLoanFunding($amount, $date, $whoEntityType, $method, $whoEntityId){
+    public function CreateLoanFunding($amount, $date, $whoEntityType, $method, $whoEntityId){
         return new LoanFundingEntity($amount, $date, $whoEntityType, $method, $whoEntityId);
     }
 
@@ -295,7 +359,7 @@ class LoanProSDK
      * @param $category - advancement category
      * @return AdvancementsEntity
      */
-    public static function CreateAdvancement($title, $date, $amount, $category){
+    public function CreateAdvancement($title, $date, $amount, $category){
         return new AdvancementsEntity($title, $date, $amount, $category);
     }
 
@@ -307,7 +371,7 @@ class LoanProSDK
      * @param $category - advancement category
      * @return CreditEntity
      */
-    public static function CreateCredit($title, $date, $amount, $category){
+    public function CreateCredit($title, $date, $amount, $category){
         return new CreditEntity($title, $date, $amount, $category);
     }
 
@@ -317,7 +381,7 @@ class LoanProSDK
      * @param $newDate - new due date
      * @return DueDateChangesEntity
      */
-    public static function CreateDueDateChange($origDate, $newDate){
+    public function CreateDueDateChange($origDate, $newDate){
         return new DueDateChangesEntity($origDate, $newDate);
     }
 
@@ -326,7 +390,7 @@ class LoanProSDK
      * @param $date - date to used to reset days past due
      * @return DPDAdjustmentEntity
      */
-    public static function CreateDPDAdjustment($date){
+    public function CreateDPDAdjustment($date){
         return new DPDAdjustmentEntity($date);
     }
 
@@ -337,7 +401,7 @@ class LoanProSDK
      * @param $type - type collection
      * @return APDAdjustmentEntity
      */
-    public static function CreateAPDAdjustment($date, $amount, $type){
+    public function CreateAPDAdjustment($date, $amount, $type){
         return new APDAdjustmentEntity($date,$amount,$type);
     }
 
@@ -351,7 +415,7 @@ class LoanProSDK
      * @param $triggerType - charge trigger type
      * @return RecurrentChargesEntity
      */
-    public static function CreateRecurringCharge($isEnabled, $applyInNewLoan, $title, $info, $calculation, $triggerType){
+    public function CreateRecurringCharge($isEnabled, $applyInNewLoan, $title, $info, $calculation, $triggerType){
         return new RecurrentChargesEntity($isEnabled, $applyInNewLoan, $title, $info, $calculation, $triggerType);
     }
 
@@ -364,7 +428,7 @@ class LoanProSDK
      * @param $optionId - option id for link
      * @return LinkedLoanValuesEntity
      */
-    public static function CreateLinkedLoanValues($loanId, $linkedLoanId, $linkedLoanDisplayId, $value, $optionId){
+    public function CreateLinkedLoanValues($loanId, $linkedLoanId, $linkedLoanDisplayId, $value, $optionId){
         return new LinkedLoanValuesEntity($loanId, $linkedLoanId, $linkedLoanDisplayId, $value, $optionId);
     }
 
@@ -377,7 +441,7 @@ class LoanProSDK
      * @param $amount - transaction amount
      * @return EscrowTransactionsEntity
      */
-    public static function CreateEscrowTransactions($subset, $category, $date, $type, $amount){
+    public function CreateEscrowTransactions($subset, $category, $date, $type, $amount){
         return new EscrowTransactionsEntity($subset, $category, $date, $type, $amount);
     }
 
@@ -412,7 +476,7 @@ class LoanProSDK
      * @param $surplusDelimDPD
      * @return EscrowSubsetOptionEntity
      */
-    public static function CreateEscrowSubsetOption($subset, $cushion, $cushionFixedAmt, $cushinPerc, $deficiencyDelimDPD, $deficiencyDaysToPay, $deficiencyDelemAmt,
+    public function CreateEscrowSubsetOption($subset, $cushion, $cushionFixedAmt, $cushinPerc, $deficiencyDelimDPD, $deficiencyDaysToPay, $deficiencyDelemAmt,
                                                     $deficiencyDelimDollar, $deficiencyDelimPerc, $deficiencyCatchupPayNum, $deficiencyActA, $deficiencyActB, $deficiencyActC, $escrowCompYrStrtDate, $nxtEscrowAnalysisDate,
                                                     $shortDaysToPay, $shortCatchupPayNum, $shortDelimAmnt, $shortDelimDollar, $shortDelimPercent, $shortActionA, $shortActionB,
                                                     $surplusDaysToRefund, $surplusActA, $surplusActB, $surplusAllowedSurplus, $surplusDelimDPD)
@@ -428,7 +492,7 @@ class LoanProSDK
      * @param array $json - JSON to prep
      * @return array
      */
-    private static function PrepArray(array $json){
+    private function PrepArray(array $json){
         $finalJson = [];
         foreach($json as $key => $val) {
             $val = LoanProSDK::GetObjectForm($key, LoanProSDK::CleanJSON($val));
@@ -506,7 +570,7 @@ class LoanProSDK
      * @param $json - JSON form
      * @return array|mixed|null
      */
-    private static function GetObjectForm($key, $json){
+    private function GetObjectForm($key, $json){
         if(is_null($json))
             return null;
         else if(!is_array($json))
@@ -537,7 +601,7 @@ class LoanProSDK
      * @param array $json - json array
      * @return array
      */
-    private static function CreateObjectListFromJSONClass(string $class, array $json){
+    private function CreateObjectListFromJSONClass(string $class, array $json){
         if(isset($json['results']))
             $json = $json['results'];
         if(count($json) == 0)
@@ -567,7 +631,7 @@ class LoanProSDK
      * @param array $json - json array
      * @return mixed
      */
-    private static function CreateGenericJSONClass(string $class, array $json){
+    private function CreateGenericJSONClass(string $class, array $json){
         if(!is_array($json))
             throw new \InvalidArgumentException("Expected a parsed JSON array for class '$class'");
 
@@ -589,7 +653,7 @@ class LoanProSDK
      * @param array $json
      * @return array
      */
-    private static function CleanJSON($json){
+    private function CleanJSON($json){
         if(!is_array($json))
             return $json;
         $clean_json = [];
@@ -597,6 +661,10 @@ class LoanProSDK
             if(!is_null($val) && $key != '__update' && $key != '__id' && $key != '__metadata')
                 $clean_json[$key]=$val;
         return $clean_json;
+    }
+
+    private function __construct(){
+        $this->apiComm = Communicator::GetCommunicator(static::$clientType);
     }
 }
 

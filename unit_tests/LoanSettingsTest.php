@@ -35,15 +35,17 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class LoanSettingsTest extends TestCase
 {
+    private static $sdk;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+        static::$sdk = LPSDK::GetInstance();
     }
     /**
      * @group create_correctness
      * @group offline
      */
     public function testLoanSettingsInstantiate(){
-        $loanSettings = LPSDK::CreateLoanSettings();
+        $loanSettings = static::$sdk->CreateLoanSettings();
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LSETTINGS');
         $consts = $rclass->getConstants();
@@ -59,7 +61,7 @@ class LoanSettingsTest extends TestCase
      * @group offline
      */
     public function testLoanSettingsSetCollections(){
-        $loanSettings = LPSDK::CreateLoanSettings();
+        $loanSettings = static::$sdk->CreateLoanSettings();
 
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LSETTINGS');
@@ -84,8 +86,8 @@ class LoanSettingsTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.LSETTINGS::AGENT.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
-        LPSDK::CreateLoanSettings()
+        $this->expectExceptionMessage('Value for \''.LSETTINGS::AGENT.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        static::$sdk->CreateLoanSettings()
             /* should throw exception when setting LOAN_AMT to null */ ->set(LSETTINGS::AGENT, null);
     }
 
@@ -96,7 +98,7 @@ class LoanSettingsTest extends TestCase
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
-        $ls = LPSDK::CreateLoanSettings();
+        $ls = static::$sdk->CreateLoanSettings();
         $ls->set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
@@ -108,10 +110,10 @@ class LoanSettingsTest extends TestCase
      * @group offline
      */
     public function testLoanSettingsDel(){
-        $loanSettings = LPSDK::CreateLoanSettings()->set([LSETTINGS::AGENT=> 2, LSETTINGS::LOAN_SUB_STATUS_ID=>5, LSETTINGS::LOAN_STATUS_ID=>6, LSETTINGS::SECURED=>1]);
+        $loanSettings = static::$sdk->CreateLoanSettings()->set([LSETTINGS::AGENT=> 2, LSETTINGS::LOAN_SUB_STATUS_ID=>5, LSETTINGS::LOAN_STATUS_ID=>6, LSETTINGS::SECURED=>1]);
         $this->assertEquals(2, $loanSettings->get(LSETTINGS::AGENT));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($loanSettings->unload(LSETTINGS::AGENT)->get(LSETTINGS::AGENT));
+        $this->assertNull($loanSettings->rem(LSETTINGS::AGENT)->get(LSETTINGS::AGENT));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(2, $loanSettings->get(LSETTINGS::AGENT));
     }

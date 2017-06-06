@@ -27,7 +27,7 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
  * This is the base entity for all LoanPro entities. it handles property validation and mapping
  * @package Simnang\LoanPro
  */
-abstract class BaseEntity{
+abstract class BaseEntity implements \JsonSerializable{
     /**
      * Whether or not strict mode is enabled; in strict mode extra checks are performed and errors thrown if something doesn't match
      * @var bool
@@ -108,11 +108,47 @@ abstract class BaseEntity{
      * @var array
      */
     protected static $required = [];
+
+    protected static $fieldsToSendInTimestamp = [];
     /**
      * This is the class prefix for finding constant collections. Usually the same name as the associated constant class
      * @var string
      */
     protected static $constCollectionPrefix = "";
+
+    /**
+     * Serializes this object's properties
+     * @return array
+     */
+    public function jsonSerialize(){
+        $arr = $this->properties;
+        if($this->del)
+            $arr['__delete'] = true;;
+        if(isset($this->properties['id']))
+        {
+            $arr['__update'] = true;
+            $arr['__id'] = $this->properties['id'];
+        }
+        foreach(static::$fields as $field => $type){
+            if($type == FieldValidator::DATE){
+                if(isset($arr[$field])){
+                    if(in_array($field, static::$fieldsToSendInTimestamp)){
+                        $arr[$field] = '/Date('.FieldValidator::GetDate($arr[$field]).')/';
+                    }else{
+                        $date = new \DateTime();
+                        $date->setTimestamp(FieldValidator::GetDate($arr[$field]));
+                        $arr[$field] = $date->format('Y-m-d');
+                    }
+                }
+            }
+            else if($type == FieldValidator::READ_ONLY){
+                if(isset($arr[$field])){
+                    unset($arr[$field]);
+                }
+            }
+        }
+        return $arr;
+    }
 
     /**
      * Returns a copy of the entity that's been marked for deletion
@@ -133,7 +169,7 @@ abstract class BaseEntity{
     }
 
     /**
-     * This returns a copy of the object with the changes to the specified fields. Cannot be used to unset values or to set values to null (see unload)
+     * This returns a copy of the object with the changes to the specified fields. Cannot be used to unset values or to set values to null (see rem)
      *
      * It accepts a list of alternating fields and values (eg. field1, val1, field2, val2, ...), or an array where the field is the key (eg. [field1=>val1, field2=>val2])
      *
@@ -158,17 +194,14 @@ abstract class BaseEntity{
         if(sizeof($args)){
             foreach($args as $key => $val){
                 if(is_null($val)){
-                    throw new \InvalidArgumentException("Value for '$key' is null. The 'set' function cannot unset items, please use 'unload' instead. for class ".get_class($this));
+                    throw new \InvalidArgumentException("Value for '$key' is null. The 'set' function cannot unset items, please use 'rem' instead. for class ".get_class($this));
                 }
-                else if($obj->IsValidField($key, $val)) {
+                else if($obj->IsValidField($key, $val) || ($key === BASE_ENTITY::ID && FieldValidator::IsValidInt($val))) {
                     $obj->properties[$key] = $obj->GetValidField($key, $val);
                     if(isset($obj->deletedProperties[$key]))
                         unset($obj->deletedProperties[$key]);
                 }
-                else if($key === BASE_ENTITY::ID && FieldValidator::IsValidInt($val) && FieldValidator::GetInt($val) > 0){
-                    $obj->id = FieldValidator::GetInt($val);
-                }
-                else if(!$obj->IsField($key) && $key !== "id") {
+                else if(!$obj->IsField($key)) {
                     if(BaseEntity::$strictMode)
                         throw new \InvalidArgumentException("Invalid property '$key' for class ".get_class($this)." (Ref val: '$val')");
                     else
@@ -197,7 +230,7 @@ abstract class BaseEntity{
     }
 
     /**
-     * This returns a copy of the object with the changes to the specified object lists. Cannot be used to unset values or to set values to null (see unload). Cannot be used to modify fields that aren't object lists.
+     * This returns a copy of the object with the changes to the specified object lists. Cannot be used to unset values or to set values to null (see rem). Cannot be used to modify fields that aren't object lists.
      *
      * It accepts a list of alternating fields and values (eg. field1, val1, field2, val2, ...), an array where the field is the key (eg. [field1=>val1, field2=>val2]), a list of fields and followed by several values (eg. field1, val1_1, val1_2, ..., field2, val2_1, val2_2, ...), or an array where the field is the key and an array of values (eg. [field1=>[val1_1, val1_2], field2=>[val2_1, val2_1]]),
      *
@@ -286,9 +319,6 @@ abstract class BaseEntity{
                     if(isset($obj->deletedProperties[$key]))
                         unset($obj->deletedProperties[$key]);
                 }
-                else if($key === BASE_ENTITY::ID && FieldValidator::IsValidInt($val) && FieldValidator::GetInt($val) > 0){
-                    $obj->id = FieldValidator::GetInt($val);
-                }
                 else if(!$obj->IsField($key) && $key !== "id") {
                     if(BaseEntity::$strictMode)
                         throw new \InvalidArgumentException("Invalid property '$key' for class ".get_class($this)." (Ref val: '$val')");
@@ -320,7 +350,7 @@ abstract class BaseEntity{
      * @param ...$args
      * @return BaseEntity
      */
-    public function unload($arg1, ...$args){
+    public function rem($arg1, ...$args){
         if(is_array($arg1)){
             $args = $arg1;
         }
@@ -337,9 +367,6 @@ abstract class BaseEntity{
             }
             else if(in_array($key, static::$required, true)){
                 throw new \InvalidArgumentException("Cannot delete '$key', field is required.");
-            }
-            else if($key === BASE_ENTITY::ID){
-                $obj->id = null;
             }
             else if (isset($obj->properties[$key])){
                 unset($obj->properties[$key]);
@@ -375,7 +402,7 @@ abstract class BaseEntity{
                     $result[$key] = $this->properties[$key];
                 }
                 else if($key === BASE_ENTITY::ID){
-                    $result[$key] = $this->id;
+                    $result[$key] = $this->properties[$key];
                 }
                 else if(!$this->IsField($key) && BaseEntity::$strictMode)
                     throw new \InvalidArgumentException("Invalid property '$key' for class ".get_class($this));
@@ -387,9 +414,6 @@ abstract class BaseEntity{
 
         if(isset($this->properties[$arg1]))
             return $this->properties[$arg1];
-        else if($arg1 === BASE_ENTITY::ID){
-            return $this->id;
-        }
         else if($this->IsField($arg1) || !BaseEntity::$strictMode)
             return null;
         else

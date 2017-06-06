@@ -35,15 +35,17 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 
 class CollateralTest extends TestCase
 {
+    private static $sdk;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
+        static::$sdk = LPSDK::GetInstance();
     }
     /**
      * @group create_correctness
      * @group offline
      */
     public function testCollateralInstantiate(){
-        $collateral = LPSDK::CreateCollateral();
+        $collateral = static::$sdk->CreateCollateral();
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\COLLATERAL');
         $consts = $rclass->getConstants();
@@ -59,7 +61,7 @@ class CollateralTest extends TestCase
      * @group offline
      */
     public function testCollateralSetCollections(){
-        $collateral = LPSDK::CreateCollateral();
+        $collateral = static::$sdk->CreateCollateral();
 
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\COLLATERAL');
@@ -84,8 +86,8 @@ class CollateralTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.COLLATERAL::ADDITIONAL.'\' is null. The \'set\' function cannot unset items, please use \'unload\' instead.');
-        LPSDK::CreateCollateral()
+        $this->expectExceptionMessage('Value for \''.COLLATERAL::ADDITIONAL.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        static::$sdk->CreateCollateral()
             /* should throw exception when setting LOAN_AMT to null */ ->set(COLLATERAL::ADDITIONAL, null);
     }
 
@@ -96,7 +98,7 @@ class CollateralTest extends TestCase
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
-        $ls = LPSDK::CreateCollateral();
+        $ls = static::$sdk->CreateCollateral();
         $ls->set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
@@ -108,10 +110,10 @@ class CollateralTest extends TestCase
      * @group offline
      */
     public function testCollateralDel(){
-        $collateral = LPSDK::CreateCollateral()->set([COLLATERAL::DISTANCE=> 232.23]);
+        $collateral = static::$sdk->CreateCollateral()->set([COLLATERAL::DISTANCE=> 232.23]);
         $this->assertEquals(232.23, $collateral->get(COLLATERAL::DISTANCE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($collateral->unload(COLLATERAL::DISTANCE)->get(COLLATERAL::DISTANCE));
+        $this->assertNull($collateral->rem(COLLATERAL::DISTANCE)->get(COLLATERAL::DISTANCE));
         /* deletions should also not affect the original object (just return a copy) */
         $this->assertEquals(232.23, $collateral->get(COLLATERAL::DISTANCE));
     }
