@@ -87,10 +87,11 @@ use Simnang\LoanPro\Loans\SubPortfolioEntity;
 class LoanProSDK
 {
     private static $inst;
-    private static $clientType = ApiClient::TYPE_ASYNC;
+    private static $clientType = ApiClient::TYPE_SYNC;
     private $apiComm;
 
     /**
+     * Returns the singleton instance of the SDK
      * @return LoanProSDK
      * @throws InvalidStateException
      */
@@ -143,6 +144,10 @@ class LoanProSDK
         return static::$inst;
     }
 
+    /**
+     * Returns the API communicator used
+     * @return Communicator
+     */
     public function GetApiComm(){
         return $this->apiComm;
     }
@@ -543,7 +548,6 @@ class LoanProSDK
         LOAN::LINKED_LOAN_VALUES        =>['class'=>LinkedLoanValuesEntity::class,          'isList'=>true ],
         LOAN::LOAN_MODIFICATIONS        =>['class'=>LoanModificationEntity::class,          'isList'=>true ],
         LOAN::LOAN_FUNDING              =>['class'=>LoanFundingEntity::class,               'isList'=>true ],
-        LOAN::LOANS                     =>['class'=>LoanEntity::class,                      'isList'=>true ],
         LOAN::LSTATUS_ARCHIVE           =>['class'=>LoanStatusArchiveEntity::class,         'isList'=>true ],
         LOAN::PAY_NEAR_ME_ORDERS        =>['class'=>PaynearmeOrderEntity::class,            'isList'=>true ],
         LOAN::PAYMENTS                  =>['class'=>PaymentEntity::class,                   'isList'=>true ],

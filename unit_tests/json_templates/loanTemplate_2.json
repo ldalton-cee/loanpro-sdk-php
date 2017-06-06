@@ -6,5 +6,10 @@
   "active": 1,
   "loanAlert": "Testing alerts",
   "deleted": 1,
-  "__temporary": true
+  "__temporary": true,
+  "LoanSetup":
+  {
+    "loanClass":"loan.class.carLoan",
+    "loanType":"loan.type.flooring"
+  }
 }

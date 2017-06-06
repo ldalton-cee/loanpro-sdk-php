@@ -1,3 +1,8 @@
 {
-  "displayId": "L150342"
+  "displayId": "L150342",
+  "LoanSetup":
+  {
+    "loanClass":"loan.class.carLoan",
+    "loanType":"loan.type.flooring"
+  }
 }

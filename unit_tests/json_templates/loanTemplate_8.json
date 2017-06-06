@@ -8,5 +8,10 @@
   "loanAlert": null,
   "deleted": 0,
   "Insurance":
-  {}
+  {},
+  "LoanSetup":
+  {
+    "loanClass":"loan.class.carLoan",
+    "loanType":"loan.type.flooring"
+  }
 }

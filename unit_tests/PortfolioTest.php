@@ -103,7 +103,7 @@ class PortfolioTest extends TestCase
      * @group offline
      */
     public function testAddToLoan(){
-        $loan = static::$sdk->CreateLoan("Test ID");
+        $loan = static::$sdk->CreateLoan("Test ID", new \Simnang\LoanPro\Loans\LoanSetupEntity(\Simnang\LoanPro\Constants\LSETUP\LSETUP_LCLASS__C::CONSUMER, \Simnang\LoanPro\Constants\LSETUP\LSETUP_LTYPE__C::INSTALLMENT));
         $portfolio = static::$sdk->CreatePortfolio(5);
         $this->assertEquals([$portfolio], $loan->set(LOAN::PORTFOLIOS, $portfolio)->get(LOAN::PORTFOLIOS));
     }

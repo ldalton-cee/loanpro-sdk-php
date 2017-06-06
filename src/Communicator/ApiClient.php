@@ -34,7 +34,7 @@ use Violet\StreamingJsonEncoder\JsonStream;
 /**
  * Class ApiClient
  * Communicator module for HTTP communication. Is a wrapper around PHP-HTTP factories and methods which gives PSR-7 compliant communication methods.
- * Resulting calls are all promises to provide a uniform API regardless of client type type.
+ * All requests are synchronized (via a wait) to allow a uniform API.
  * There are two client types:
  *  * TYPE_ASYNC    - This is for asynchronous clients
  *  * TYPE_SYNC     - This is for synchronous clients
@@ -182,10 +182,10 @@ class ApiClient
         $request = $this->requestFactory->createRequest(strtoupper($method),$url,$headers, $writeData, '1.1');
         switch($this->type){
             case ApiClient::TYPE_ASYNC:
-                return $this->httpAsyncClient->sendAsyncRequest($request);
+                return $this->httpAsyncClient->sendAsyncRequest($request)->wait(true);
                 break;
             case ApiClient::TYPE_SYNC:
-                return new FulfilledPromise($this->httpClient->sendRequest($request));
+                return $this->httpClient->sendRequest($request);
                 break;
             default:
                 throw new \InvalidArgumentException("Unknown type '$this->type''");

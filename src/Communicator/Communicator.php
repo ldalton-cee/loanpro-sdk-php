@@ -21,6 +21,7 @@ namespace Simnang\LoanPro\Communicator;
 
 use Psr\Http\Message\ResponseInterface;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
+use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\LoanProSDK;
 
@@ -72,7 +73,7 @@ class Communicator
      * @param string $environment
      * @param int $apiVersion
      */
-    private function __construct($clientType = ApiClient::TYPE_ASYNC, $environment = Communicator::PRODUCTION, $apiVersion = 1){
+    private function __construct($clientType = ApiClient::TYPE_SYNC, $environment = Communicator::PRODUCTION, $apiVersion = 1){
         $apiVersion = max(intval($apiVersion), 1);
         $environment = (in_array($environment, (new \ReflectionClass('Simnang\LoanPro\Communicator\Communicator'))->getConstants()) ? $environment : Communicator::PRODUCTION);
         $this->baseUrl = "https://$environment"."loanpro.simnang.com/api/public/api/$apiVersion";
@@ -94,7 +95,7 @@ class Communicator
      * @return Communicator
      * @throws InvalidStateException
      */
-    public static function GetCommunicator($clientType = ApiClient::TYPE_ASYNC, $environment = Communicator::PRODUCTION, $apiVersion = 1){
+    public static function GetCommunicator($clientType = ApiClient::TYPE_SYNC, $environment = Communicator::PRODUCTION, $apiVersion = 1){
         if(!ApiClient::AreTokensSet())
             throw new InvalidStateException("API tokens are not setup!");
         return new Communicator($clientType , $environment, $apiVersion);
@@ -119,87 +120,87 @@ class Communicator
             $client = ApiClient::GetAPIClientSync();
 
         $url = "$this->baseUrl/odata.svc/Loans($loanId)$expandProps";
-        $promise = $client->GET($url)->then(function(\Psr\Http\Message\ResponseInterface $response){
-            if($response->getStatusCode() == 200) {
-                $body = json_decode($response->getBody(), true);
-                if(isset($body['d']))
-                    return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($response->getBody(), true)['d']);
-                else
-                    return $response->withStatus(400, "Bad Request");
-            }
-            return $response;
-        }, function (\Exception $e) {
-            throw $e;
-        });
-        if($client->ClientType() == ApiClient::TYPE_ASYNC && !$forceSync)
-            return $promise;
-        return $promise->wait(true);
+        $response = $client->GET($url);
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d']))
+                return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($response->getBody(), true)['d']);
+            else
+                return $response->withStatus(400, "Bad Request");
+        }
+        return $response;
     }
 
+    /**
+     * Creates a modification for a loan
+     * @param            $loanId - ID of loan to make a modification for
+     * @param bool|false $forceSync - Whether or not to force sync (if true, will return whether or not it worked/response on error, otherwise returns a promise that returns it if set to async mode)
+     * @return $this|\Http\Promise\FulfilledPromise|\Http\Promise\Promise|\Http\Promise\RejectedPromise|mixed|void
+     */
     public function modifyLoan($loanId, $forceSync = false){
         $client = $this->client;
         if($forceSync)
             $client = ApiClient::GetAPIClientSync();
-        $promise = $client->POST("$this->baseUrl/Loans($loanId)/Autopal.CreateModification()")->then(
-            function($res) {
-                if ($res->getStatusCode() == 200) {
-                    $body = json_decode($res->getBody(), true);
-                    if (isset($body['d']) && isset($body['d']['success'])) {
-                        return $body['d']['success'];
-                    }
-                }
-                return $res;
+        $res = $client->POST("$this->baseUrl/Loans($loanId)/Autopal.CreateModification()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['success'])) {
+                return $body['d']['success'];
             }
-        );
-
-        if($client->ClientType() == ApiClient::TYPE_ASYNC && !$forceSync)
-            return $promise;
-        return $promise->wait(true);
+        }
+        return $res;
     }
 
+    /**
+     *
+     * @param            $loanId
+     * @param bool|false $forceSync
+     * @return $this|\Http\Promise\FulfilledPromise|\Http\Promise\Promise|\Http\Promise\RejectedPromise|mixed|void
+     */
     public function cancelLatestModification($loanId, $forceSync = false){
         $client = $this->client;
         if($forceSync)
             $client = ApiClient::GetAPIClientSync();
-        $promise = $client->POST("$this->baseUrl/Loans($loanId)/Autopal.CancelModification()")->then(function(\Psr\Http\Message\ResponseInterface $response){
-            if($response->getStatusCode() == 200) {
-                $body = json_decode($response->getBody(), true);
-                if(isset($body['d']) && isset($body['d']['success']))
-                    return $body['d']['success'];
-                else
-                    return $response;
-            }
-            return $response;
-        }, function (\Exception $e) {
-            throw $e;
-        });
+        $response = $client->POST("$this->baseUrl/Loans($loanId)/Autopal.CancelModification()");
 
-        if($client->ClientType() == ApiClient::TYPE_ASYNC && !$forceSync)
-            return $promise;
-        return $promise->wait(true);
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d']) && isset($body['d']['success']))
+                return $body['d']['success'];
+            else
+                return $response;
+        }
+        return $response;
     }
 
+    /**
+     * Saves the loan to the server via a PUT request (or a POST request if there is no ID)
+     * Either returns the resulting loan/response if there's an error (if synchronous), or a promise that returns the resulting loan/response
+     * @param            $loan
+     * @param bool|false $forceSync
+     * @return $this|\Http\Promise\FulfilledPromise|\Http\Promise\Promise|\Http\Promise\RejectedPromise|mixed|void
+     */
     public function saveLoan($loan, $forceSync = false){
         $client = $this->client;
         if($forceSync)
             $client = ApiClient::GetAPIClientSync();
         $id = $loan->get(BASE_ENTITY::ID);
-        $promise = $client->PUT("$this->baseUrl/odata.svc/Loans($id)",$loan)->then(function(\Psr\Http\Message\ResponseInterface $response){
-            if($response->getStatusCode() == 200) {
-                $body = json_decode($response->getBody(), true);
-                if(isset($body['d']))
-                    return true;
-                else
-                    return $response;
+        if(is_null($id)) {
+            if(is_null($loan->get(LOAN::LSETUP)))
+                throw new InvalidStateException("Cannot create new loan on server without loan setup!");
+            $response = $client->POST("$this->baseUrl/odata.svc/Loans", $loan);
+        }
+        else
+            $response = $client->PUT("$this->baseUrl/odata.svc/Loans($id)",$loan);
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d'])) {
+                return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($response->getBody(), true)['d']);
             }
-            return $response;
-        }, function (\Exception $e) {
-            throw $e;
-        });
-
-        if($client->ClientType() == ApiClient::TYPE_ASYNC && !$forceSync)
-            return $promise;
-        return $promise->wait(true);
+            else
+                return $response;
+        }
+        return $response;
     }
 
     /// @cond false

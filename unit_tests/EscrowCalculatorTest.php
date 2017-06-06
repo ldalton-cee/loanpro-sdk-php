@@ -195,7 +195,7 @@ class EscrowCalculatorTest extends TestCase
         $escrowCalc = static::$sdk->CreateEscrowCalculator(1);
         $escrowCalc2 = static::$sdk->CreateEscrowCalculator(2);
         $escrowCalc3 = static::$sdk->CreateEscrowCalculator(3);
-        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::ESCROW_CALCULATORS, $escrowCalc);
+        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::ESCROW_CALCULATORS, [$escrowCalc]);
 
         // test append
         $this->assertEquals([$escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));

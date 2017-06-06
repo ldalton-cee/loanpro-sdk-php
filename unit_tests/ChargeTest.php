@@ -266,7 +266,7 @@ class ChargeTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Property \''.LOAN::INSURANCE.'\' is not an object list, can only append to object lists!');
         $charge = static::$sdk->CreateCharge(435, "2017-08-29", "INFO 3", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
-        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::CHARGES, $charge);
+        $loan = static::$sdk->CreateLoan("Test ID");
 
         $loan->append(LOAN::CHARGES, $charge, LOAN::INSURANCE, static::$sdk->CreateInsurance());
     }

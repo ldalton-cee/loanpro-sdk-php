@@ -37,9 +37,11 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 class PaymentTest extends TestCase
 {
     private static $sdk;
+    private static $minSetup;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
         static::$sdk = LPSDK::GetInstance();
+        static::$minSetup = new \Simnang\LoanPro\Loans\LoanSetupEntity(\Simnang\LoanPro\Constants\LSETUP\LSETUP_LCLASS__C::CONSUMER, \Simnang\LoanPro\Constants\LSETUP\LSETUP_LTYPE__C::INSTALLMENT);
     }
     /**
      * @group create_correctness

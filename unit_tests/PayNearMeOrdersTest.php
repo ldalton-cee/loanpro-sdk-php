@@ -228,7 +228,7 @@ class PayNearMeOrderTest extends TestCase
      * @group offline
      */
     public function testAddToLoan(){
-        $loan = static::$sdk->CreateLoan("Test ID");
+        $loan = static::$sdk->CreateLoan("Test ID", new \Simnang\LoanPro\Loans\LoanSetupEntity(\Simnang\LoanPro\Constants\LSETUP\LSETUP_LCLASS__C::CONSUMER, \Simnang\LoanPro\Constants\LSETUP\LSETUP_LTYPE__C::INSTALLMENT));
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
         $this->assertEquals([$charge], $loan->set(LOAN::PAY_NEAR_ME_ORDERS, $charge)->get(LOAN::PAY_NEAR_ME_ORDERS));
     }
@@ -242,7 +242,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
         $charge2 = static::$sdk->CreatePayNearMeOrder(2, "Jane", "jane@none.com","5552231234", '1234 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
         $charge3 = static::$sdk->CreatePayNearMeOrder(3, "Jack", "jack@none.com","5551231235", '125 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::PAY_NEAR_ME_ORDERS, $charge);
+        $loan = static::$sdk->CreateLoan("Test ID", new \Simnang\LoanPro\Loans\LoanSetupEntity(\Simnang\LoanPro\Constants\LSETUP\LSETUP_LCLASS__C::CONSUMER, \Simnang\LoanPro\Constants\LSETUP\LSETUP_LTYPE__C::INSTALLMENT))->set(LOAN::PAY_NEAR_ME_ORDERS, $charge);
 
         // test append
         $this->assertEquals([$charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));

@@ -93,7 +93,7 @@ class LoanEntity extends BaseEntity
      * @var array
      */
     protected static $required = [
-        LOAN::DISP_ID,
+        LOAN::DISP_ID
     ];
 
     /**
@@ -165,7 +165,6 @@ class LoanEntity extends BaseEntity
         LOAN::LINKED_LOAN_VALUES        => FieldValidator::OBJECT_LIST,
         LOAN::LOAN_FUNDING              => FieldValidator::OBJECT_LIST,
         LOAN::LOAN_MODIFICATIONS        => FieldValidator::OBJECT_LIST,
-        LOAN::LOANS                     => FieldValidator::OBJECT_LIST,
         LOAN::LSRULES_APPLIED           => FieldValidator::OBJECT_LIST,
         LOAN::LSTATUS_ARCHIVE           => FieldValidator::OBJECT_LIST,
         LOAN::NOTES                     => FieldValidator::OBJECT_LIST,
@@ -186,6 +185,7 @@ class LoanEntity extends BaseEntity
         LOAN::ESTIMATED_DISBURSEMENTS   => FieldValidator::READ_ONLY,
         LOAN::RELATED_METADATA          => FieldValidator::READ_ONLY,
         LOAN::DYNAMIC_PROPERTIES        => FieldValidator::READ_ONLY,
+        LOAN::LOANS                     => FieldValidator::READ_ONLY,
         LOAN::RULES_APPLIED_CHANGE_DUE_DATES    => FieldValidator::READ_ONLY,
         LOAN::RULES_APPLIED_STOP_INTEREST   => FieldValidator::READ_ONLY,
     ];

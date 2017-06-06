@@ -32,6 +32,7 @@
     "scripts": {
         "test": "phpunit unit_tests/",
 	    "coverage": "phpunit --configuration phpunit.xml --coverage-html cov_html/ --coverage-clover cov_xml/clover.xml  unit_tests",
-        "connection": "phpunit --group online unit_tests/"
+        "online": "phpunit --group online unit_tests/",
+        "offline": "phpunit --group offline unit_tests/"
     }
 }

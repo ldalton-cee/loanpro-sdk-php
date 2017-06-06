@@ -52,5 +52,10 @@
         "payoffFlag": 0
       }
     ]
+  },
+  "LoanSetup":
+  {
+    "loanClass":"loan.class.carLoan",
+    "loanType":"loan.type.flooring"
   }
 }

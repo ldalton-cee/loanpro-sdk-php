@@ -59,9 +59,11 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
 class LoanTest extends TestCase
 {
     private static $sdk;
+    private static $minSetup;
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
         static::$sdk = LPSDK::GetInstance();
+        static::$minSetup = new \Simnang\LoanPro\Loans\LoanSetupEntity(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
     }
 
     /**
@@ -79,7 +81,7 @@ class LoanTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            if($key === LOAN::DISP_ID)
+            if($key === LOAN::DISP_ID || $key === LOAN::LSETUP)
                 continue;
             $this->assertNull(null,$loan->get($field));
         }
@@ -180,8 +182,8 @@ class LoanTest extends TestCase
         // properties and collection values will be set as constants in a namespace or class; here it assumes its for a class
 
         // Create functions will take the minimal parameters that can be used to create the object via the API
-        $loan = static::$sdk->CreateLoan("DISP_ID_001");
         $loanSetup = static::$sdk->CreateLoanSetup(LSETUP_LCLASS::CAR, LSETUP_LTYPE::INSTALLMENT);
+        $loan = static::$sdk->CreateLoan("DISP_ID_001", $loanSetup);
         static::$sdk->CreateLoanSetup(LSETUP_LCLASS::MORTGAGE, LSETUP_LTYPE::CRED_LIMIT);
 
         $this->assertEquals("DISP_ID_001", $loan->get(LOAN::DISP_ID));
@@ -1010,29 +1012,73 @@ class LoanTest extends TestCase
         $this->assertEquals(true, $loanModified instanceof \Simnang\LoanPro\Loans\LoanEntity);
 
         $loanModified = $loan->cancelModification();
-        if($loanModified instanceof \Http\Promise\Promise)
-            $loanModified->then(function($res){
-                $this->assertEquals(true, $res);})->wait(true);
-        else
-            $this->assertEquals(true, $loanModified);
+        $this->assertEquals(true, $loanModified);
     }
 
     /**
      * @group online
      */
     public function testModification(){
-        static::$sdk->GetApiComm()->getLoan(55, [LOAN::LSETUP])->then(
-            function($loan){
-                if($loan instanceof \Http\Promise\Promise){
-                    $loan->then(function(\Simnang\LoanPro\Loans\LoanEntity $loan){
-                        $this->CheckLoan($loan);
-                    });
-                    $loan->wait(true);
-                }else{
-                    $this->CheckLoan($loan);
-                }
-            }
-        )->wait(true);
+        $comm = \Simnang\LoanPro\Communicator\Communicator::GetCommunicator(\Simnang\LoanPro\Communicator\ApiClient::TYPE_ASYNC);
+        $loan = $comm->getLoan(55, [LOAN::LSETUP]);
+        if($loan instanceof \Http\Promise\Promise){
+            $loan->then(function(\Simnang\LoanPro\Loans\LoanEntity $loan){
+                $this->CheckLoan($loan);
+            });
+            $loan->wait(true);
+        }else{
+            $this->CheckLoan($loan);
+        }
+    }
+
+    /**
+     * @group online
+     */
+    public function testCreate(){
+        $newId = uniqid("LOAN");
+        $loan = static::$sdk->CreateLoan($newId)->set(LOAN::LSETUP, static::$minSetup);
+
+        // Should throw exception
+        $this->assertEquals($newId, $loan->get(LOAN::DISP_ID));
+
+        $resLoan = $loan->save();
+        if($resLoan instanceof \Psr\Http\Message\ResponseInterface)
+            var_dump(json_decode($resLoan->getBody()));
+        $this->assertEquals($loan->get(LOAN::DISP_ID), $resLoan->get(LOAN::DISP_ID));
+    }
+
+    /**
+     * @group online
+     * @group offline
+     */
+    public function testCreationAssert(){
+        $this->expectException(\Simnang\LoanPro\Exceptions\InvalidStateException::class);
+        $this->expectExceptionMessage("Cannot create new loan on server without loan setup!");
+        $loan = static::$sdk->CreateLoan("DISP ID");
+
+        // Should throw exception
+        $this->assertEquals("DISP ID", $loan->get(LOAN::DISP_ID));
+
+        // Will throw error before attempting a connection, so can be done offline or online
+        $loan->save();
+    }
+
+    /**
+     * @group online
+     */
+    public function testUpdate(){
+        $newId = uniqid("LOAN");
+        $loan = static::$sdk->GetApiComm()->getLoan(56)->set(LOAN::DISP_ID, $newId);
+
+        // Should throw exception
+        $this->assertEquals($newId, $loan->get(LOAN::DISP_ID));
+
+        $resLoan = $loan->save();
+        if($resLoan instanceof \Psr\Http\Message\ResponseInterface) {
+            var_dump($resLoan);
+            var_dump(json_decode($resLoan->getBody(), true));
+        }
+        $this->assertEquals($loan->get(LOAN::DISP_ID), $resLoan->get(LOAN::DISP_ID));
     }
 }
 
