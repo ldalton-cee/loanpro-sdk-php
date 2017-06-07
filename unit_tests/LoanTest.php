@@ -1007,7 +1007,13 @@ class LoanTest extends TestCase
         $this->assertEquals([$ruleAppliedChargeoff], $loan->get(LOAN::RULES_APPLIED_CHARGEOFF));
     }
 
-    private function CheckLoan($loan){
+    /**
+     * @group online
+     */
+    public function testModification(){
+        $comm = \Simnang\LoanPro\Communicator\Communicator::GetCommunicator(\Simnang\LoanPro\Communicator\ApiClient::TYPE_ASYNC);
+        $loan = $comm->getLoan(55, [LOAN::LSETUP]);
+        $loan->activate();
         $loanModified = $loan->createModification($loan->get(LOAN::LSETUP)->set(LSETUP::LOAN_AMT, 9000.50));
         $this->assertEquals(true, $loanModified instanceof \Simnang\LoanPro\Loans\LoanEntity);
 
@@ -1018,24 +1024,7 @@ class LoanTest extends TestCase
     /**
      * @group online
      */
-    public function testModification(){
-        $comm = \Simnang\LoanPro\Communicator\Communicator::GetCommunicator(\Simnang\LoanPro\Communicator\ApiClient::TYPE_ASYNC);
-        $loan = $comm->getLoan(55, [LOAN::LSETUP]);
-        if($loan instanceof \Http\Promise\Promise){
-            $loan->then(function(\Simnang\LoanPro\Loans\LoanEntity $loan){
-                $this->CheckLoan($loan);
-            });
-            $loan->wait(true);
-        }else{
-            $this->CheckLoan($loan);
-        }
-    }
-
-    /**
-     * @group online
-     */
     public function testCreate(){
-        return;
         $newId = uniqid("LOAN");
         $loan = static::$sdk->CreateLoan($newId)->set(LOAN::LSETUP, static::$minSetup);
 
@@ -1069,7 +1058,6 @@ class LoanTest extends TestCase
      * @group online
      */
     public function testUpdate(){
-        return;
         $newId = uniqid("LOAN");
         $loan = static::$sdk->GetApiComm()->getLoan(56)->set(LOAN::DISP_ID, $newId);
 
@@ -1083,13 +1071,35 @@ class LoanTest extends TestCase
     /**
      * @group online
      */
+    public function testPullAndUpdate(){
+        $expansion = [];
+        $loanFieldsProp = (new ReflectionClass('\Simnang\LoanPro\Loans\LoanEntity'))->getProperty('fields');
+        $loanFieldsProp->setAccessible(true);
+        $loanFields = $loanFieldsProp->getValue();
+
+        foreach($loanFields as $fieldKey => $fieldType){
+            if($fieldType == \Simnang\LoanPro\Validator\FieldValidator::OBJECT || $fieldType == \Simnang\LoanPro\Validator\FieldValidator::OBJECT_LIST){
+                $expansion[] = $fieldKey;
+            }
+        }
+
+        $loan = static::$sdk->GetApiComm()->getLoan(55, $expansion);
+        $loan = $loan->inactivate();
+        $this->assertEquals(0, $loan->get(LOAN::LSETUP)->get(LSETUP::ACTIVE));
+        //echo(json_encode($loan));
+        $loan->save();
+        $loan = $loan->activate();
+        $this->assertEquals(1, $loan->get(LOAN::LSETUP)->get(LSETUP::ACTIVE));
+    }
+
+    /**
+     * @group online
+     */
     public function testActivation(){
-        $newId = uniqid("LOAN");
-        $loan = static::$sdk->GetApiComm()->getLoan(55);
+        $loan = static::$sdk->GetApiComm()->getLoan(55, [LOAN::LSETUP]);
 
         $this->assertEquals(true, $loan->inactivate() instanceof \Simnang\LoanPro\Loans\LoanEntity);
 
-        $res = $loan->activate();
         $this->assertEquals(true, $loan->activate() instanceof \Simnang\LoanPro\Loans\LoanEntity);
     }
 }

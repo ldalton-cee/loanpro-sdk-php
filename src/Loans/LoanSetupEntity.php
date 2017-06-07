@@ -31,8 +31,12 @@ class LoanSetupEntity extends BaseEntity
      * @param string $type - The loan type (found in LSETUP_LTYPE)
      * @throws \ReflectionException
      */
-    public function __construct($class, $type){
+    public function __construct($class, $type, $internalOnly = false){
         parent::__construct($class, $type);
+        if($internalOnly){
+            unset($this->properties[LSETUP::LCLASS__C]);
+            unset($this->properties[LSETUP::LTYPE__C]);
+        }
     }
 
     /**

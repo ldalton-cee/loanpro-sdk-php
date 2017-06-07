@@ -180,7 +180,8 @@ class Communicator
      */
     public function saveLoan($loan){
         $client = $this->client;
-        $id = $loan->get(BASE_ENTITY::ID);
+        $id = $loan->get(BASE_ENTITY::ID)
+;
         if(is_null($id)) {
             if(is_null($loan->get(LOAN::LSETUP)))
                 throw new InvalidStateException("Cannot create new loan on server without loan setup!");
@@ -212,7 +213,7 @@ class Communicator
             throw new \Exception("Unsure deletion, either state that you are sure or don't delete the loan");
         $id = $loan->get(BASE_ENTITY::ID);
         if(is_null($id)) {
-            throw new InvalidStateException("Cannot activate a loan without a loan ID!");
+            throw new InvalidStateException("Cannot delete a loan without a loan ID!");
         }
 
         $response = $this->client->DELETE("$this->baseUrl/odata.svc/Loans($id)");
@@ -232,7 +233,7 @@ class Communicator
     public function restoreLoan(LoanEntity $loan){
         $id = $loan->get(BASE_ENTITY::ID);
         if(is_null($id)) {
-            throw new InvalidStateException("Cannot activate a loan without a loan ID!");
+            throw new InvalidStateException("Cannot restore a loan without a loan ID!");
         }
 
         $response = $this->client->DELETE("$this->baseUrl/Loans($id)/AutoPal.Restore()");
@@ -240,6 +241,19 @@ class Communicator
         if($response->getStatusCode() == 200) {
             return true;
         }
+        throw new ApiException($response);
+    }
+
+    public function activateLoan(LoanEntity $loan){
+        $id = $loan->get(BASE_ENTITY::ID);
+        if(is_null($id)) {
+            throw new InvalidStateException("Cannot activate a loan without a loan ID!");
+        }
+
+        $response = $this->client->POST(("$this->baseUrl/Loans($id)/AutoPal.Activate()"));
+
+        if($response->getStatusCode() == 200)
+            return true;
         throw new ApiException($response);
     }
 

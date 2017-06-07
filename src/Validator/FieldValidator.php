@@ -234,8 +234,6 @@ class FieldValidator
         if (is_array($obj) || $obj instanceof \Traversable) {
             foreach ($obj as $o) {
                 if (!FieldValidator::IsValidObject($o)) {
-                    var_dump($obj);
-
                     return false;
                 }
             }

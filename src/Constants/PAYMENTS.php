@@ -32,6 +32,8 @@ class PAYMENTS{
     const DATE                  = 'date';
     const INFO                  = 'info';
     const PAYMENT_TYPE_ID       = 'paymentTypeId';
+    const PARENT_ID             = 'parentId';
+    const CHILD_ID              = 'childId';
     const ACTIVE                = 'active';
     const RESET_PAST_DUE        = 'resetPastDue';
     const PAYOFF_PAYMENT        = 'payoffPayment';
@@ -60,6 +62,7 @@ class PAYMENTS{
     const STATUS__C             = 'status';
     const LOAN_STATUS_ID        = 'loanStatusId';
     const LOAN_SUB_STATUS_ID    = 'loanSubStatusId';
+    const SYSTEM_COMMENTS       = 'systemComments';
 
     const AFTER_PRINC_BALANCE   = 'afterPrincipalBalance';
     const AFTER_PAYOFF          = 'afterPayoff';

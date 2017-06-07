@@ -20,6 +20,7 @@ namespace Simnang\LoanPro\Loans;
 
 use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Communicator\ApiClient;
+use Simnang\LoanPro\Communicator\Communicator;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETUP;
@@ -108,7 +109,11 @@ class LoanEntity extends BaseEntity
      */
     public function activate(){
         $this->insureHasID();
-        return $this->set(LOAN::ACTIVE, 1)->save();
+        if(LoanProSDK::GetInstance()->GetApiComm()->activateLoan($this)) {
+            if(!is_null($this->get(LOAN::LSETUP)))
+                return $this->set(LOAN::LSETUP, $this->get(LOAN::LSETUP)->set(LSETUP::ACTIVE, 1));
+            return $this;
+        }
     }
 
     /**
@@ -119,7 +124,19 @@ class LoanEntity extends BaseEntity
      */
     public function inactivate(){
         $this->insureHasID();
-        return $this->set(LOAN::ACTIVE, 0)->save();
+        if(!is_null($this->get(LOAN::LSETUP)))
+            $lsetup = (new LoanSetupEntity(LSETUP\LSETUP_LCLASS__C::OTHER,LSETUP\LSETUP_LTYPE__C::CRED_LIMIT,true))->set(
+                BASE_ENTITY::ID, $this->get(LOAN::LSETUP)->get(BASE_ENTITY::ID),
+                LSETUP::ACTIVE, 0);
+        else
+            $lsetup = (new LoanSetupEntity(LSETUP\LSETUP_LCLASS__C::OTHER,LSETUP\LSETUP_LTYPE__C::CRED_LIMIT,true))->set(
+                BASE_ENTITY::ID, LoanProSDK::GetInstance()->GetApiComm()->getLoan($this->get(BASE_ENTITY::ID), [LOAN::LSETUP])->get(LOAN::LSETUP)->get(BASE_ENTITY::ID),
+                LSETUP::ACTIVE, 0);
+        (new LoanEntity($this->get(LOAN::DISP_ID)))->set(
+            BASE_ENTITY::ID, $this->get(BASE_ENTITY::ID),
+            LOAN::LSETUP, $lsetup
+        )->save();
+        return $this->set(LOAN::LSETUP, $lsetup);
     }
 
     /**
@@ -130,7 +147,8 @@ class LoanEntity extends BaseEntity
      */
     public function archive(){
         $this->insureHasID();
-        return $this->set(LOAN::ARCHIVED, 1)->save();
+        (new LoanEntity($this->get(LOAN::DISP_ID)))->set(BASE_ENTITY::ID, $this->get(BASE_ENTITY::ID),LOAN::ARCHIVED, 1)->save();
+        return $this->set(LOAN::ARCHIVED, 1);
     }
 
     /**
@@ -141,7 +159,8 @@ class LoanEntity extends BaseEntity
      */
     public function resurrect(){
         $this->insureHasID();
-        return $this->set(LOAN::ARCHIVED, 0)->save();
+        (new LoanEntity($this->get(LOAN::DISP_ID)))->set(BASE_ENTITY::ID, $this->get(BASE_ENTITY::ID),LOAN::ARCHIVED, 0)->save();
+        return $this->set(LOAN::ARCHIVED, 0);
     }
 
     /**
@@ -254,28 +273,28 @@ class LoanEntity extends BaseEntity
         LOAN::LOAN_FUNDING              => FieldValidator::OBJECT_LIST,
         LOAN::LOAN_MODIFICATIONS        => FieldValidator::OBJECT_LIST,
         LOAN::LSRULES_APPLIED           => FieldValidator::OBJECT_LIST,
-        LOAN::LSTATUS_ARCHIVE           => FieldValidator::OBJECT_LIST,
         LOAN::NOTES                     => FieldValidator::OBJECT_LIST,
         LOAN::PAY_NEAR_ME_ORDERS        => FieldValidator::OBJECT_LIST,
         LOAN::PAYMENTS                  => FieldValidator::OBJECT_LIST,
         LOAN::PORTFOLIOS                => FieldValidator::OBJECT_LIST,
         LOAN::PROMISES                  => FieldValidator::OBJECT_LIST,
         LOAN::RECURRENT_CHARGES         => FieldValidator::OBJECT_LIST,
-        LOAN::RULES_APPLIED_CHARGEOFF   => FieldValidator::OBJECT_LIST,
-        LOAN::RULES_APPLIED_APD_RESET   => FieldValidator::OBJECT_LIST,
-        LOAN::RULES_APPLIED_CHECKLIST   => FieldValidator::OBJECT_LIST,
 
         LOAN::SCHEDULE_ROLLS            => FieldValidator::OBJECT_LIST,
         LOAN::STOP_INTEREST_DATES       => FieldValidator::OBJECT_LIST,
         LOAN::SUB_PORTFOLIOS            => FieldValidator::OBJECT_LIST,
         LOAN::TRANSACTIONS              => FieldValidator::OBJECT_LIST,
 
-        LOAN::ESTIMATED_DISBURSEMENTS   => FieldValidator::READ_ONLY,
-        LOAN::RELATED_METADATA          => FieldValidator::READ_ONLY,
-        LOAN::DYNAMIC_PROPERTIES        => FieldValidator::READ_ONLY,
-        LOAN::LOANS                     => FieldValidator::READ_ONLY,
+        LOAN::ESTIMATED_DISBURSEMENTS           => FieldValidator::READ_ONLY,
+        LOAN::RELATED_METADATA                  => FieldValidator::READ_ONLY,
+        LOAN::DYNAMIC_PROPERTIES                => FieldValidator::READ_ONLY,
+        LOAN::LOANS                             => FieldValidator::READ_ONLY,
         LOAN::RULES_APPLIED_CHANGE_DUE_DATES    => FieldValidator::READ_ONLY,
-        LOAN::RULES_APPLIED_STOP_INTEREST   => FieldValidator::READ_ONLY,
+        LOAN::RULES_APPLIED_CHARGEOFF           => FieldValidator::READ_ONLY,
+        LOAN::RULES_APPLIED_APD_RESET           => FieldValidator::READ_ONLY,
+        LOAN::RULES_APPLIED_CHECKLIST           => FieldValidator::READ_ONLY,
+        LOAN::RULES_APPLIED_STOP_INTEREST       => FieldValidator::READ_ONLY,
+        LOAN::LSTATUS_ARCHIVE                   => FieldValidator::READ_ONLY,
     ];
 
     private function insureHasID(){

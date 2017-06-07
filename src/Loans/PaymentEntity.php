@@ -54,6 +54,12 @@ class PaymentEntity extends BaseEntity
      */
     protected static $constSetup = false;
 
+    public function jsonSerialize(){
+        if(is_null($this->get(PAYMENTS::CHILD_ID)))
+            return parent::jsonSerialize();
+        return null;
+    }
+
     /**
      * List of constant fields and their associated types
      * @var array
@@ -88,10 +94,12 @@ class PaymentEntity extends BaseEntity
         PAYMENTS::AFTER_DAYS_PAST_DUE   => FieldValidator::INT,
         PAYMENTS::BEFORE_DAYS_PAST_DUE  => FieldValidator::INT,
         PAYMENTS::CASH_DRAWER_ID        => FieldValidator::INT,
+        PAYMENTS::CHILD_ID              => FieldValidator::INT,
         PAYMENTS::DISPLAY_ID            => FieldValidator::INT,
         PAYMENTS::ENTITY_ID             => FieldValidator::INT,
         PAYMENTS::LOAN_STATUS_ID        => FieldValidator::INT,
         PAYMENTS::LOAN_SUB_STATUS_ID    => FieldValidator::INT,
+        PAYMENTS::PARENT_ID             => FieldValidator::INT,
         PAYMENTS::PAYMENT_ACCT_ID       => FieldValidator::INT,
         PAYMENTS::PAYMENT_METHOD_ID     => FieldValidator::INT,
         PAYMENTS::PAYMENT_TYPE_ID       => FieldValidator::INT,
@@ -116,5 +124,7 @@ class PaymentEntity extends BaseEntity
         PAYMENTS::SPLIT_PMT_IN_LOANS    => FieldValidator::STRING,
 
         PAYMENTS::CUSTOM_FIELD_VALUES   => FieldValidator::OBJECT_LIST,
+
+        PAYMENTS::SYSTEM_COMMENTS       => FieldValidator::READ_ONLY,
     ];
 }
