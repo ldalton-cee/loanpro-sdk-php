@@ -41,6 +41,16 @@ class LoanEntity extends BaseEntity
     }
 
     /**
+     * This saves the loan to the server. If there is no ID present, it creates a new loan, otherwise it updates the current loan
+     * @return LoanEntity
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function save(){
+        return LoanProSDK::GetInstance()->GetApiComm()->saveLoan($this);
+    }
+
+    /**
      * Creates a modification for the loan
      * Warning: This process takes a lot of time and is synchronous (regardless of the client your using)
      *  The synchronicity ensures that the operations are done in the correct order and that the final result is returned
@@ -55,7 +65,7 @@ class LoanEntity extends BaseEntity
             throw new InvalidStateException("Loan ID is not set, cannot modify loan");
 
 
-        $res = $comm->modifyLoan($this->get(BASE_ENTITY::ID), true);
+        $res = $comm->modifyLoan($this, true);
 
         if($res === true)
         {
@@ -80,16 +90,6 @@ class LoanEntity extends BaseEntity
     }
 
     /**
-     * This saves the loan to the server. If there is no ID present, it creates a new loan, otherwise it updates the current loan
-     * @return LoanEntity
-     * @throws InvalidStateException
-     * @throws ApiException
-     */
-    public function save(){
-        return LoanProSDK::GetInstance()->GetApiComm()->saveLoan($this);
-    }
-
-    /**
      * This cancels the latest modification on a loan and returns if it was successful
      * @return bool
      * @throws InvalidStateException
@@ -98,7 +98,11 @@ class LoanEntity extends BaseEntity
     public function cancelModification(){
         if(is_null($this->get(BASE_ENTITY::ID)))
             throw new InvalidStateException("Loan ID is not set, cannot modify loan");
-        return LoanProSDK::GetInstance()->GetApiComm()->cancelLatestModification($this->get(BASE_ENTITY::ID));
+        return LoanProSDK::GetInstance()->GetApiComm()->cancelLatestModification($this);
+    }
+
+    public function getPreModificationSetup(){
+        return LoanProSDK::GetInstance()->GetApiComm()->getPreModSetup($this);
     }
 
     /**
@@ -109,11 +113,10 @@ class LoanEntity extends BaseEntity
      */
     public function activate(){
         $this->insureHasID();
-        if(LoanProSDK::GetInstance()->GetApiComm()->activateLoan($this)) {
-            if(!is_null($this->get(LOAN::LSETUP)))
-                return $this->set(LOAN::LSETUP, $this->get(LOAN::LSETUP)->set(LSETUP::ACTIVE, 1));
-            return $this;
-        }
+        LoanProSDK::GetInstance()->GetApiComm()->activateLoan($this);
+        if(!is_null($this->get(LOAN::LSETUP)))
+            return $this->set(LOAN::LSETUP, $this->get(LOAN::LSETUP)->set(LSETUP::ACTIVE, 1));
+        return $this;
     }
 
     /**
@@ -214,6 +217,7 @@ class LoanEntity extends BaseEntity
      * @var array
      */
     protected static $validConstsByVal = [];
+
     /**
      * Required to keep type initialization from colliding with other types
      * @var array
@@ -297,8 +301,8 @@ class LoanEntity extends BaseEntity
         LOAN::LSTATUS_ARCHIVE                   => FieldValidator::READ_ONLY,
     ];
 
-    private function insureHasID(){
+    public function insureHasID(){
         if(is_null($this->get(BASE_ENTITY::ID)))
-            throw new InvalidStateException("Cannot inactivate a loan without an ID");
+            throw new InvalidStateException("Cannot perform operation on a loan without an ID");
     }
 }

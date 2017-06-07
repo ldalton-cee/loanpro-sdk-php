@@ -1013,9 +1013,23 @@ class LoanTest extends TestCase
     public function testModification(){
         $comm = \Simnang\LoanPro\Communicator\Communicator::GetCommunicator(\Simnang\LoanPro\Communicator\ApiClient::TYPE_ASYNC);
         $loan = $comm->getLoan(55, [LOAN::LSETUP]);
+        $oldLoanSetup = $loan->get(LOAN::LSETUP);
         $loan->activate();
         $loanModified = $loan->createModification($loan->get(LOAN::LSETUP)->set(LSETUP::LOAN_AMT, 9000.50));
         $this->assertEquals(true, $loanModified instanceof \Simnang\LoanPro\Loans\LoanEntity);
+        $this->assertEquals($oldLoanSetup->rem(
+            BASE_ENTITY::ID, LSETUP::MOD_ID,LSETUP::APR,
+            LSETUP::ORIG_FINAL_PAY_AMT,LSETUP::TIL_PAYMENT_SCHEDULE,
+            LSETUP::TIL_FINANCE_CHARGE, LSETUP::TIL_LOAN_AMOUNT,
+            LSETUP::TIL_PAYMENT_SCHEDULE, LSETUP::TIL_TOTAL_OF_PAYMENTS,
+            LSETUP::LOAN_AMT, LSETUP::IS_SETUP_VALID
+        ), $loan->getPreModificationSetup()->rem(
+            BASE_ENTITY::ID, LSETUP::MOD_ID,LSETUP::APR,
+            LSETUP::ORIG_FINAL_PAY_AMT,LSETUP::TIL_PAYMENT_SCHEDULE,
+            LSETUP::TIL_FINANCE_CHARGE, LSETUP::TIL_LOAN_AMOUNT,
+            LSETUP::TIL_PAYMENT_SCHEDULE, LSETUP::TIL_TOTAL_OF_PAYMENTS,
+            LSETUP::LOAN_AMT, LSETUP::IS_SETUP_VALID
+        ));
 
         $loanModified = $loan->cancelModification();
         $this->assertEquals(true, $loanModified);

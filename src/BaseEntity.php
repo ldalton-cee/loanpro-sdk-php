@@ -84,12 +84,6 @@ abstract class BaseEntity implements \JsonSerializable
      */
     protected $properties = [];
     /**
-     * Internal representation of data that was explicitly deleted
-     *
-     * @var array
-     */
-    protected $deletedProperties = [];
-    /**
      * The ID of the entity; zero or null means "not set"
      *
      * @var int
@@ -246,8 +240,6 @@ abstract class BaseEntity implements \JsonSerializable
                     throw new \InvalidArgumentException("Value for '$key' is null. The 'set' function cannot unset items, please use 'rem' instead. for class " . get_class($this));
                 } else if ($obj->IsValidField($key, $val) || ($key === BASE_ENTITY::ID && FieldValidator::IsValidInt($val))) {
                     $obj->properties[ $key ] = $obj->GetValidField($key, $val);
-                    if (isset($obj->deletedProperties[ $key ]))
-                        unset($obj->deletedProperties[ $key ]);
                 } else if (!$obj->IsField($key)) {
                     if (BaseEntity::$strictMode)
                         throw new \InvalidArgumentException("Invalid property '$key' for class " . get_class($this) . " (Ref val: '$val')");
@@ -360,8 +352,6 @@ abstract class BaseEntity implements \JsonSerializable
                     if (!$props)
                         $props = [];
                     $obj->properties[ $key ] = array_merge($props, $obj->GetValidField($key, $val));
-                    if (isset($obj->deletedProperties[ $key ]))
-                        unset($obj->deletedProperties[ $key ]);
                 } else if (!$obj->IsField($key) && $key !== "id") {
                     if (BaseEntity::$strictMode)
                         throw new \InvalidArgumentException("Invalid property '$key' for class " . get_class($this) . " (Ref val: '$val')");
@@ -408,7 +398,6 @@ abstract class BaseEntity implements \JsonSerializable
                 throw new \InvalidArgumentException("Cannot delete '$key', field is required.");
             } else if (isset($obj->properties[ $key ])) {
                 unset($obj->properties[ $key ]);
-                $obj->deletedProperties[ $key ] = true;
             }
         }
 

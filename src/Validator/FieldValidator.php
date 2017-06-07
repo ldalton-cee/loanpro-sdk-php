@@ -312,7 +312,7 @@ class FieldValidator
     {
         if (is_int($date))
             return $date;
-        if ($date === '0000-00-00')
+        if ($date === '0000-00-00' || $date === "")
             return -62169984000;
         if (preg_match(FieldValidator::$dateRegEx, $date)) {
             return FieldValidator::GetInt(preg_replace(FieldValidator::$dateRegEx, "$1", $date));

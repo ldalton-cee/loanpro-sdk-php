@@ -18,7 +18,13 @@
 
 namespace Simnang\LoanPro\Exceptions;
 
-class ApiException extends \RuntimeException{
+/**
+ * Class ApiException
+ * This is thrown whenever the API returns an error
+ *
+ * @package Simnang\LoanPro\Exceptions
+ */
+class ApiException extends \Exception{
 
     public function __construct(\Psr\Http\Message\ResponseInterface $response, $code = 0, \Exception $previous = null) {
         $json = json_decode($response->getBody(), true);

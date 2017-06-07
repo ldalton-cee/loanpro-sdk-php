@@ -138,7 +138,9 @@ class Communicator
      * @return bool
      * @throws ApiException
      */
-    public function modifyLoan($loanId){
+    public function modifyLoan(LoanEntity $loan){
+        $loan->insureHasID();
+        $loanId = $loan->get(BASE_ENTITY::ID);
         $client = $this->client;
         $res = $client->POST("$this->baseUrl/Loans($loanId)/Autopal.CreateModification()");
         if ($res->getStatusCode() == 200) {
@@ -156,7 +158,9 @@ class Communicator
      * @return bool
      * @throws ApiException
      */
-    public function cancelLatestModification($loanId){
+    public function cancelLatestModification(LoanEntity $loan){
+        $loan->insureHasID();
+        $loanId = $loan->get(BASE_ENTITY::ID);
         $client = $this->client;
         $response = $client->POST("$this->baseUrl/Loans($loanId)/Autopal.CancelModification()");
 
@@ -164,8 +168,20 @@ class Communicator
             $body = json_decode($response->getBody(), true);
             if(isset($body['d']) && isset($body['d']['success']))
                 return $body['d']['success'];
-            else
-                throw new ApiException($response);
+        }
+        throw new ApiException($response);
+    }
+
+    public function getPreModSetup(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $response = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetPreModSetup()");
+
+
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d']))
+                return LoanProSDK::GetInstance()->CreateLoanSetupFromJSON($body['d']);
         }
         throw new ApiException($response);
     }
@@ -181,7 +197,7 @@ class Communicator
     public function saveLoan($loan){
         $client = $this->client;
         $id = $loan->get(BASE_ENTITY::ID)
-;
+        ;
         if(is_null($id)) {
             if(is_null($loan->get(LOAN::LSETUP)))
                 throw new InvalidStateException("Cannot create new loan on server without loan setup!");
@@ -211,10 +227,8 @@ class Communicator
     public function deleteLoan(LoanEntity $loan, $areYouSure = false){
         if(!$areYouSure)
             throw new \Exception("Unsure deletion, either state that you are sure or don't delete the loan");
+        $loan->insureHasID();
         $id = $loan->get(BASE_ENTITY::ID);
-        if(is_null($id)) {
-            throw new InvalidStateException("Cannot delete a loan without a loan ID!");
-        }
 
         $response = $this->client->DELETE("$this->baseUrl/odata.svc/Loans($id)");
 
@@ -231,10 +245,8 @@ class Communicator
      * @throws ApiException
      */
     public function restoreLoan(LoanEntity $loan){
+        $loan->insureHasID();
         $id = $loan->get(BASE_ENTITY::ID);
-        if(is_null($id)) {
-            throw new InvalidStateException("Cannot restore a loan without a loan ID!");
-        }
 
         $response = $this->client->DELETE("$this->baseUrl/Loans($id)/AutoPal.Restore()");
 
@@ -244,11 +256,17 @@ class Communicator
         throw new ApiException($response);
     }
 
+    /**
+     * Activates the given loan
+     *  Returns true if successful
+     * @param LoanEntity $loan - loan to activate
+     * @return bool
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
     public function activateLoan(LoanEntity $loan){
+        $loan->insureHasID();
         $id = $loan->get(BASE_ENTITY::ID);
-        if(is_null($id)) {
-            throw new InvalidStateException("Cannot activate a loan without a loan ID!");
-        }
 
         $response = $this->client->POST(("$this->baseUrl/Loans($id)/AutoPal.Activate()"));
 

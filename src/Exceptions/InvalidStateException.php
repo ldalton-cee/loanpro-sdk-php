@@ -18,7 +18,12 @@
 
 namespace Simnang\LoanPro\Exceptions;
 
-
+/**
+ * Class InvalidStateException
+ * This is thrown whenever an operation is attempted on an entity that has an invalid internal state
+ *
+ * @package Simnang\LoanPro\Exceptions
+ */
 class InvalidStateException extends \Exception
 {
     public function __construct($message, $code = 0, \Exception $previous = null) {

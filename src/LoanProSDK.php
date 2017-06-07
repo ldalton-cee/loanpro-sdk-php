@@ -670,5 +670,30 @@ class LoanProSDK
     private function __construct(){
         $this->apiComm = Communicator::GetCommunicator(static::$clientType);
     }
+
+
+    /// @cond false
+    public function CreateLoanSetupFromJSON($json){
+        if(!is_string($json) && !is_array($json))
+            throw new \InvalidArgumentException("Expected a JSON string or array");
+        if(is_string($json))
+            $json = json_decode($json, true);
+        $json = static::CleanJSON($json);
+        if(!isset($json[LSETUP::LCLASS__C]))
+            throw new \InvalidArgumentException("Missing loan class");
+        if(!isset($json[LSETUP::LTYPE__C]))
+            throw new \InvalidArgumentException("Missing loan type");
+
+        $setVars = [];
+
+        foreach($json as $key => $val){
+            $val = LoanProSDK::GetObjectForm($key, $val);
+            if(!is_null($val))
+                $setVars[$key] = $val;
+        }
+
+        return (new Loans\LoanSetupEntity($json[LSETUP::LCLASS__C],$json[LSETUP::LTYPE__C]))->set($setVars);
+    }
+    /// @endcond
 }
 
