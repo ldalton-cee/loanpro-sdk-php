@@ -101,6 +101,12 @@ class LoanEntity extends BaseEntity
         return LoanProSDK::GetInstance()->GetApiComm()->cancelLatestModification($this);
     }
 
+    /**
+     * Returns the LoanSetup entity from before the current modification, throws an API Exception if there is no modification for the loan
+     * @return BaseEntity
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
     public function getPreModificationSetup(){
         return LoanProSDK::GetInstance()->GetApiComm()->getPreModSetup($this);
     }
@@ -177,8 +183,62 @@ class LoanEntity extends BaseEntity
     }
 
     /**
+     * Gets the JSON array for the loan status on a date
+     * @param $date
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getStatusOnDate($date){
+        if(!FieldValidator::IsValidDate($date))
+            throw new \InvalidArgumentException("Invalid date '$date'.");
+        return LoanProSDK::GetInstance()->GetApiComm()->getLoanStatusOnDate($this, $date);
+    }
+
+    /**
+     * Returns the last activity date for the loan
+     * @return int|null
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getLastActivityDate(){
+        return LoanProSDK::GetInstance()->GetApiComm()->getLastActivityDate($this);
+    }
+
+    /**
+     * Gets the interest based on tenant tier settings
+     * @return number
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getInterestBasedOnTier(){
+        return LoanProSDK::GetInstance()->GetApiComm()->getLoanIntOnTier($this);
+    }
+
+    /**
+     * Returns whether or not the server has it registered as setup
+     * @return bool
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function isSetup(){
+        return LoanProSDK::GetInstance()->GetApiComm()->isSetup($this);
+    }
+
+    /**
+     * Queries the server about whether or not the loan is a late fee candidate
+     * @return bool
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function isLateFeeCandidate(){
+        return LoanProSDK::GetInstance()->GetApiComm()->isLateFeeCandidate($this);
+    }
+
+    /**
      * Deletes the loan
      *  CAUTION! IF YOU USE THIS YOU WILL **NOT** BE ABLE TO SEE THE LOAN THROUGH THE API!
+     *  WARNING! DELETED LOANS **CANNOT** BE RESTORED THROUGH THE API
      * @param bool|false $areYouSure - Must be set to true in order to delete a loan
      * @return LoanEntity
      * @throws InvalidStateException
@@ -189,13 +249,73 @@ class LoanEntity extends BaseEntity
     }
 
     /**
-     * Restores a deleted loan (you cannot see the loan through the API, so it assumes you have the needed info elsewhere)
-     * @return LoanEntity
-     * @throws InvalidStateException
+     * Returns the JSON array for the payment summaries
+     * @return array
      * @throws ApiException
+     * @throws InvalidStateException
      */
-    public function restore(){
-        return (LoanProSDK::GetInstance()->GetApiComm()->restoreLoan($this)) ? $this->set(LOAN::DELETED, 0) : $this;
+    public function getPaymentSummary(){
+        return LoanProSDK::GetInstance()->GetApiComm()->getPaymentSummary($this);
+    }
+
+    /**
+     * Returns the JSON array for the final payment difference
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getFinalPaymentDiff(){
+        return LoanProSDK::GetInstance()->GetApiComm()->getFinalPaymentDiff($this);
+    }
+
+    /**
+     * Returns admin stats for the loan
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getAdminStats(){
+        return LoanProSDK::GetInstance()->GetApiComm()->getLoanAdminStats($this);
+    }
+
+    /**
+     * Returns paid breakdown for the loan
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+//    public function paidBreakdown(){
+//        return LoanProSDK::GetInstance()->GetApiComm()->getLoanPaidBreakdown($this);
+//    }
+
+    /**
+     * Returns interest fees history
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getInterestFeesHistory(){
+        return LoanProSDK::GetInstance()->GetApiComm()->getLoanInterestFeesHistory($this);
+    }
+
+    /**
+     * returns loan balance history
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getBalanceHistory(){
+        return LoanProSDK::GetInstance()->GetApiComm()->getLoanBalanceHistory($this);
+    }
+
+    /**
+     * returns loan flag archive report
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getFlagArchiveReport(){
+        return LoanProSDK::GetInstance()->GetApiComm()->getLoanFlagArchiveReport($this);
     }
 
     /**
@@ -301,6 +421,10 @@ class LoanEntity extends BaseEntity
         LOAN::LSTATUS_ARCHIVE                   => FieldValidator::READ_ONLY,
     ];
 
+    /**
+     * Throws an InvalidStateException if there is no valid LoanID
+     * @throws InvalidStateException
+     */
     public function insureHasID(){
         if(is_null($this->get(BASE_ENTITY::ID)))
             throw new InvalidStateException("Cannot perform operation on a loan without an ID");

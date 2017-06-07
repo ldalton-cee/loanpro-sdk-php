@@ -328,6 +328,18 @@ class FieldValidator
         return null;
     }
 
+
+    public static function GetDateString($date){
+        $date = FieldValidator::GetDate($date);
+        if ($date > -62169984000) {
+            $d = new \DateTime();
+            $d->setTimestamp($date);
+            return $d->format('Y-m-d');
+        } else {
+            return '';
+        }
+    }
+
     /**
      * Returns 1 if $b is truthy, 0 otherwise
      *

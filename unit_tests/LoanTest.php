@@ -1116,6 +1116,52 @@ class LoanTest extends TestCase
 
         $this->assertEquals(true, $loan->activate() instanceof \Simnang\LoanPro\Loans\LoanEntity);
     }
+
+    /**
+     * @group online
+     */
+    public function testArchive(){
+        $loan = static::$sdk->GetApiComm()->getLoan(55);
+        $this->assertEquals(1, $loan->archive()->get(LOAN::ARCHIVED));
+        $this->assertEquals(0, $loan->unarchive()->get(LOAN::ARCHIVED));
+    }
+
+    /**
+     * @group online
+     */
+    public function testMisc(){
+        $loan = static::$sdk->GetApiComm()->getLoan(55);
+        $this->assertEquals(true, $loan->isSetup());
+        $this->assertEquals(0, $loan->getInterestBasedOnTier());
+        $this->assertTrue(is_int($loan->getLastActivityDate()));
+        $status1 = $loan->getStatusOnDate('2017-06-05');
+        $status2 = $loan->getStatusOnDate(1496620800);
+
+        // can be off by a second due to request time
+        $status1['dateLastCurrent30'] = $status2['dateLastCurrent30'];
+        $status1['firstDelinquencyDate'] = $status2['firstDelinquencyDate'];
+
+        $this->assertTrue(is_array($status1));
+        $this->assertTrue(is_array($status2));
+        $this->assertEquals($status1, $status2);
+        $this->assertTrue(is_bool($loan->isLateFeeCandidate()));
+
+        $this->assertTrue(is_array($loan->getPaymentSummary()));
+        $this->assertTrue(is_array($loan->getFinalPaymentDiff()));
+    }
+
+    /**
+     * @group online
+     * @group new
+     */
+    public function testReports(){
+        $loan = static::$sdk->GetApiComm()->getLoan(55);
+        $this->assertTrue(is_array($loan->getAdminStats()));
+        //$this->assertTrue(is_array($loan->paidBreakdown()));
+        $this->assertTrue(is_array($loan->getInterestFeesHistory()));
+        $this->assertTrue(is_array($loan->getBalanceHistory()));
+        $this->assertTrue(is_array($loan->getFlagArchiveReport()));
+    }
 }
 
 

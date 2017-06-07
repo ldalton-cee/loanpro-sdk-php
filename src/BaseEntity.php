@@ -154,14 +154,7 @@ abstract class BaseEntity implements \JsonSerializable
                     if (in_array($field, static::$fieldsToSendInTimestamp)) {
                         $arr[ $field ] = '/Date(' . FieldValidator::GetDate($arr[ $field ]) . ')/';
                     } else {
-                        $d = FieldValidator::GetDate($arr[ $field ]);
-                        if ($d > -62169984000) {
-                            $date = new \DateTime();
-                            $date->setTimestamp($d);
-                            $arr[ $field ] = $date->format('Y-m-d');
-                        } else {
-                            $arr[ $field ] = '';
-                        }
+                        $arr[ $field ] = FieldValidator::GetDateString($arr[ $field ]);
                     }
                 }
             } else if ($type == FieldValidator::READ_ONLY) {

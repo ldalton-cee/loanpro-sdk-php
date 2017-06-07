@@ -26,6 +26,8 @@ use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\LoanProSDK;
 use Simnang\LoanPro\Loans\LoanEntity;
+use Simnang\LoanPro\Loans\LoanSetupEntity;
+use Simnang\LoanPro\Validator\FieldValidator;
 
 /**
  * Class Communicator
@@ -172,6 +174,13 @@ class Communicator
         throw new ApiException($response);
     }
 
+    /**
+     * Returns the LoanSetup from the previous modification for the loan
+     * @param LoanEntity $loan
+     * @return LoanSetupEntity
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
     public function getPreModSetup(LoanEntity $loan){
         $loan->insureHasID();
         $id = $loan->get(BASE_ENTITY::ID);
@@ -239,24 +248,6 @@ class Communicator
     }
 
     /**
-     * @param LoanEntity $loan - Loan to restore
-     * @return bool
-     * @throws InvalidStateException
-     * @throws ApiException
-     */
-    public function restoreLoan(LoanEntity $loan){
-        $loan->insureHasID();
-        $id = $loan->get(BASE_ENTITY::ID);
-
-        $response = $this->client->DELETE("$this->baseUrl/Loans($id)/AutoPal.Restore()");
-
-        if($response->getStatusCode() == 200) {
-            return true;
-        }
-        throw new ApiException($response);
-    }
-
-    /**
      * Activates the given loan
      *  Returns true if successful
      * @param LoanEntity $loan - loan to activate
@@ -273,6 +264,248 @@ class Communicator
         if($response->getStatusCode() == 200)
             return true;
         throw new ApiException($response);
+    }
+
+    /**
+     * Returns the JSON array for the loan status on a date
+     * @param LoanEntity $loan - Loan to get status for
+     * @param            $date - date to get status on
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getLoanStatusOnDate(LoanEntity $loan, $date){
+        $date = FieldValidator::GetDateString($date);
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetStatus($date)");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return $body['d'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Gets the interest based on tenant tier settings
+     * @param LoanEntity $loan
+     * @return number
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getLoanIntOnTier(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->PUT("$this->baseUrl/Loans($id)/AutoPal.GetInterestBasedOnTier()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['interest'])) {
+                return $body['d']['interest'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Returns the last activity date for the loan
+     * @param LoanEntity $loan
+     * @return int|null
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getLastActivityDate(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->GET("$this->baseUrl/Loans($id)/AutoPal.GetLastActivityDate()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['lastActivityDate'])) {
+                return FieldValidator::GetDate($body['d']['lastActivityDate']);
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Queries the server about whether or not the loan is setup and then returns the result
+     * @param LoanEntity $loan - loan to check for
+     * @return bool
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function isSetup(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.isSetup()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['setup'])) {
+                return $body['d']['setup'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Queries the server about whether or not the loan is a late fee candidate
+     * @param LoanEntity $loan - loan to check for
+     * @return bool
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function isLateFeeCandidate(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.isLateFeeCandidate()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['isCandidate'])) {
+                return $body['d']['isCandidate'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Returns the JSON array for the payment summaries for a loan
+     * @param LoanEntity $loan - loan to check for
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getPaymentSummary(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetPaymentSummary()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['results'])) {
+                return $body['d']['results'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Returns the JSON array for the final payment difference
+     * @param LoanEntity $loan - loan to check for
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getFinalPaymentDiff(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetFinalPaymentDiff()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return $body['d'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Returns admin stats for the loan
+     * @param LoanEntity $loan
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getLoanAdminStats(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetAdminStats()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return $body['d'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Returns paid breakdown for the loan
+     * @param LoanEntity $loan
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    /*public function getLoanPaidBreakdown(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.PaidBreakdown()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return $body['d'];
+            }
+        }
+        throw new ApiException($res);
+    }*/
+
+    /**
+     * Returns interest fees history
+     * @param LoanEntity $loan
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getLoanInterestFeesHistory(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetInterestFeesHistory()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return $body['d'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * returns loan balance history
+     * @param LoanEntity $loan
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getLoanBalanceHistory(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetBalanceHistory()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return $body['d'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * returns loan flag archive report
+     * @param LoanEntity $loan
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getLoanFlagArchiveReport(LoanEntity $loan){
+        $loan->insureHasID();
+        $id = $loan->get(BASE_ENTITY::ID);
+        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetFlagArchiveReport");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return $body['d'];
+            }
+        }
+        throw new ApiException($res);
     }
 
     /// @cond false
