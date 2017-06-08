@@ -36,6 +36,7 @@ class PAYMENTS{
     const CHILD_ID              = 'childId';
     const ACTIVE                = 'active';
     const RESET_PAST_DUE        = 'resetPastDue';
+    const REVERSE_DATE          = 'reverseDate';
     const PAYOFF_PAYMENT        = 'payoffPayment';
     const QUICK_PAY             = 'quickPay';
     const SAVE_PROFILE          = '_saveProfile';

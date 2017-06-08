@@ -13,6 +13,7 @@ namespace Simnang\LoanPro\Loans;
 
 use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\PAYMENTS;
+use Simnang\LoanPro\Iteration\FilterParams;
 use Simnang\LoanPro\Validator\FieldValidator;
 
 class PaymentEntity extends BaseEntity
@@ -88,6 +89,7 @@ class PaymentEntity extends BaseEntity
         PAYMENTS::BEFORE_NEXT_DUE_DATE  => FieldValidator::DATE,
         PAYMENTS::CREATED               => FieldValidator::DATE,
         PAYMENTS::DATE                  => FieldValidator::DATE,
+        PAYMENTS::REVERSE_DATE          => FieldValidator::DATE,
 
         PAYMENTS::ENTITY_TYPE           => FieldValidator::ENTITY_TYPE,
 

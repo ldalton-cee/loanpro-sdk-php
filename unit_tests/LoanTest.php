@@ -1152,7 +1152,6 @@ class LoanTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testReports(){
         $loan = static::$sdk->GetApiComm()->getLoan(55);
@@ -1161,6 +1160,52 @@ class LoanTest extends TestCase
         $this->assertTrue(is_array($loan->getInterestFeesHistory()));
         $this->assertTrue(is_array($loan->getBalanceHistory()));
         $this->assertTrue(is_array($loan->getFlagArchiveReport()));
+    }
+
+    /**
+     * @group online
+     */
+    public function testGetLoans(){
+        $loans = static::$sdk->GetLoans_RAW();
+        $this->assertTrue(is_array($loans));
+        $this->assertGreaterThan(1, count($loans));
+        foreach($loans as $loan){
+            $this->assertTrue($loan instanceof \Simnang\LoanPro\Loans\LoanEntity);
+        }
+        $paginator = new \Simnang\LoanPro\Iteration\PaginationParams(false, 0, 1);
+        $loans = static::$sdk->GetLoans_RAW([], $paginator);
+        $this->assertTrue(is_array($loans));
+        $this->assertEquals(1, count($loans));
+        foreach($loans as $loan){
+            $this->assertTrue($loan instanceof \Simnang\LoanPro\Loans\LoanEntity);
+        }
+
+        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromODataString("4 lt 5");
+        $loans = static::$sdk->GetLoans_RAW([], $paginator, $filter);
+        $this->assertTrue(is_array($loans));
+        $this->assertEquals(1, count($loans));
+        foreach($loans as $loan){
+            $this->assertTrue($loan instanceof \Simnang\LoanPro\Loans\LoanEntity);
+        }
+
+        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromODataString("4 gt 5");
+        $loans = static::$sdk->GetLoans_RAW([], $paginator, $filter);
+        $this->assertTrue(is_array($loans));
+        $this->assertEquals(0, count($loans));
+
+
+        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromLogicString("4 < 5");
+        $loans = static::$sdk->GetLoans_RAW([], $paginator, $filter);
+        $this->assertTrue(is_array($loans));
+        $this->assertEquals(1, count($loans));
+        foreach($loans as $loan){
+            $this->assertTrue($loan instanceof \Simnang\LoanPro\Loans\LoanEntity);
+        }
+
+        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromLogicString("4 > 5");
+        $loans = static::$sdk->GetLoans_RAW([], $paginator, $filter);
+        $this->assertTrue(is_array($loans));
+        $this->assertEquals(0, count($loans));
     }
 }
 

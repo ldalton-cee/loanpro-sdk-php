@@ -16,17 +16,10 @@
  *
  */
 
-namespace Simnang\LoanPro\Constants;
+namespace Simnang\LoanPro\Iterator;
 
-/**
- * Class PCI_WALLET_TOKEN
- * @package Simnang\LoanPro\Constants
- */
-class PCI_WALLET_TOKEN
+
+class LoanIterator
 {
-    const BANK_ACCT = 'bankAccount';
-    const KEY       = 'key';
-    const NAME      = 'name';
-    const DFAULT    = 'default';
-    const ID        = 'id';
+
 }

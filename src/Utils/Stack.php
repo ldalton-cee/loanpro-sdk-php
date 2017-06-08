@@ -16,17 +16,28 @@
  *
  */
 
-namespace Simnang\LoanPro\Constants;
+namespace Simnang\LoanPro\Utils;
 
-/**
- * Class PCI_WALLET_TOKEN
- * @package Simnang\LoanPro\Constants
- */
-class PCI_WALLET_TOKEN
+
+class Stack
 {
-    const BANK_ACCT = 'bankAccount';
-    const KEY       = 'key';
-    const NAME      = 'name';
-    const DFAULT    = 'default';
-    const ID        = 'id';
+    private $arr = [];
+
+    public function Push($i){
+        array_push($this->arr, $i);
+    }
+
+    public function Pop(){
+        return array_pop($this->arr);
+    }
+
+    public function Size(){
+        return count($this->arr);
+    }
+
+    public function Peek(){
+        if($this->Size())
+            return $this->arr[$this->Size()-1];
+        return null;
+    }
 }

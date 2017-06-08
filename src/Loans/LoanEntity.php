@@ -70,7 +70,7 @@ class LoanEntity extends BaseEntity
         if($res === true)
         {
             if($newLoanSetup instanceof LoanSetupEntity){
-                $updatedLoan = $comm->getLoan(($this->get(BASE_ENTITY::ID)), [LOAN::LSETUP], true);
+                $updatedLoan = $sdk->GetLoan(($this->get(BASE_ENTITY::ID)), [LOAN::LSETUP], true);
                 $newLoanSetup = $newLoanSetup->set(
                     LSETUP::MOD_ID, $updatedLoan->get(LSETUP::MOD_ID),
                     LSETUP::ACTIVE, 0,
@@ -81,7 +81,7 @@ class LoanEntity extends BaseEntity
                 return $latestLoan;
             }
             else {
-                return $comm->getLoan(($this->get(BASE_ENTITY::ID)), [LOAN::LSETUP], true);
+                return $sdk->GetLoan(($this->get(BASE_ENTITY::ID)), [LOAN::LSETUP], true);
             }
         }
         else

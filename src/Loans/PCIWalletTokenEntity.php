@@ -65,5 +65,6 @@ class PCIWalletTokenEntity extends BaseEntity
         PCI_WALLET_TOKEN::NAME => FieldValidator::STRING,
         PCI_WALLET_TOKEN::DFAULT => FieldValidator::BOOL,
         PCI_WALLET_TOKEN::KEY => FieldValidator::STRING,
+        PCI_WALLET_TOKEN::BANK_ACCT => FieldValidator::STRING,
     ];
 }

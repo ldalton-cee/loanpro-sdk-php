@@ -32,6 +32,8 @@ use Simnang\LoanPro\Constants\LSTATUS_ARCHIVE;
 use Simnang\LoanPro\Constants\MC_PROCESSOR;
 use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
+use Simnang\LoanPro\Iteration\FilterParams;
+use Simnang\LoanPro\Iteration\PaginationParams;
 use Simnang\LoanPro\Loans\AdvancementsEntity;
 use Simnang\LoanPro\Loans\APDAdjustmentEntity;
 use Simnang\LoanPro\Loans\AutopayEntity;
@@ -89,6 +91,22 @@ class LoanProSDK
     private static $inst;
     private static $clientType = ApiClient::TYPE_SYNC;
     private $apiComm;
+
+    /**
+     * Gets a loan from the LoanPro servers.
+     * @param int $id - ID of loan to pull
+     * @param array $expandProps - array of properties to expand
+     * @param bool|true $nopageProps
+     * @return LoanEntity
+     * @throws ApiException
+     */
+    public function GetLoan($id, $expandProps = [], $nopageProps = true){
+        return $this->apiComm->getLoan($id, $expandProps, $nopageProps);
+    }
+
+    public function GetLoans_RAW($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
+        return $this->apiComm->getLoans($expandProps, $paginationParams, $filter);
+    }
 
     /**
      * Returns the singleton instance of the SDK
@@ -697,3 +715,30 @@ class LoanProSDK
     /// @endcond
 }
 
+
+/*! \mainpage LoanPro PHP SDK
+ *
+ * \section intro_sec Introduction
+ *
+ * The goal of the LoanPro PHP SDK is to abstract the complexity of the LoanPro system and allow developers to create fast applications. This is accomplished by abstracting OData entities into PHP classes and providing a list of properties for each class. This list of constants allows integrating code to not have to change in the event of a property name change. This means that if all properties called "active" are renamed to "isActive", the constants list will be updated and integrating code will work once the new SDK is installed. Furthermore, the SDK does a lot of validation and input sanitization, as well as error parsing. Also, it provides several methods for credential management as well as integrating with both production and staging environments.
+ *
+ * To show how simple it is to use the SDK, below is a sample of creating a modification for a loan and doubling the lending amount:
+ *
+ * ```php
+ * use Simnang\LoanPro\Constants\LOAN, Simnang\LoanPro\Constants\LSETUP, Simnang\LoanPro\Loans\LoanSetupEntity;
+ * $loan = LoanProSDK::GetInstance()->GetLoan(55, [LOAN::LSETUP]);
+ * $lsetup = $loan->get(LOAN::LSETUP);
+ * $loan->createModification($lsetup->set(LSETUP::LOAN_AMT, $lsetup->get(LSETUP::LOAN_AMT) / 2));
+ * ```
+ *
+ * Below is an example of halving the loan amount, discount, and interest rate for another loan
+ *
+ * ```php
+ * use Simnang\LoanPro\Constants\LOAN, Simnang\LoanPro\Constants\LSETUP, Simnang\LoanPro\Loans\LoanSetupEntity;
+ * $halve = function($a){ return $a / 2; };
+ * $loan = LoanProSDK::GetInstance()->GetLoan(55, [LOAN::LSETUP]);
+ * $lsetup = $loan->get(LOAN::LSETUP);
+ * $loan->set(LOAN::LSETUP, $lsetup->set(array_map($halve,$lsetup->get(LSETUP::LOAN_AMT, LSETUP::DISCOUNT, LSETUP::LOAN_RATE))))->save();
+ * ```
+ *
+ */

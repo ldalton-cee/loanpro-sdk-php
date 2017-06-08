@@ -24,6 +24,8 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
+use Simnang\LoanPro\Iteration\FilterParams;
+use Simnang\LoanPro\Iteration\PaginationParams;
 use Simnang\LoanPro\LoanProSDK;
 use Simnang\LoanPro\Loans\LoanEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
@@ -107,18 +109,22 @@ class Communicator
 
     /**
      * Gets a loan from the LoanPro servers.
-     *  If in asynchronous mode, then a promise is returned that will return either the loan or the error message from the server
-     *  If in synchronous mode, then the parsed loan or the error message from the server will be returned.
      * @param int $loanId - ID of loan to pull
      * @param array $expandProps - array of properties to expand
+     * @param bool|true $nopageProps
      * @return LoanEntity
      * @throws ApiException
      */
-    public function getLoan($loanId, $expandProps = []){
+    public function getLoan($loanId, $expandProps = [], $nopageProps = true){
         if(count($expandProps))
             $expandProps = '?$expand='.implode(',',$expandProps);
         else
             $expandProps = "";
+
+        if($nopageProps){
+            if($expandProps == "") $expandProps = "?nopaging=true";
+            else $expandProps .= "&nopaging=true";
+        }
 
         $client = $this->client;
 
@@ -222,7 +228,7 @@ class Communicator
             else
                 throw new ApiException($response);;
         }
-        throw new ApiException($response);;
+        throw new ApiException($response);
     }
 
     /**
@@ -503,6 +509,37 @@ class Communicator
             $body = json_decode($res->getBody(), true);
             if (isset($body['d'])) {
                 return $body['d'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Returns an array of loan entities
+     * @param array             $expandProps - expand properties to expand by
+     * @param bool|true         $nopageProps - no pagination properties
+     * @param FilterParams|null $filter - filter object
+     * @return array
+     */
+    public function getLoans($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
+        $query = [];
+        $query[] = (string)$paginationParams;
+        $query[] = (string)$filter;
+        $exp = implode(',', $expandProps);
+        if($exp)
+            $query[] = "\$expand=$exp";
+        $query = '?'.implode('&',array_filter($query));
+        if($query === '?')
+            $query = '';
+        $res = $this->client->GET("$this->baseUrl/odata.svc/Loans()$query");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['results'])) {
+                $ret = [];
+                foreach($body['d']['results'] as $val){
+                    $ret[] = LoanProSDK::GetInstance()->CreateLoanFromJSON($val);
+                }
+                return $ret;
             }
         }
         throw new ApiException($res);

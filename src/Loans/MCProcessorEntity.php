@@ -33,6 +33,11 @@ class MCProcessorEntity extends BaseEntity
         parent::__construct();
     }
 
+    public function jsonSerialize(){
+        $res = parent::jsonSerialize();
+        return json_encode($res);
+    }
+
     /**
      * List of required fields
      * @var array
