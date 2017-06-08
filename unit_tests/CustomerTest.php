@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 use Simnang\LoanPro\LoanProSDK as LPSDK,
     Simnang\LoanPro\Constants\CUSTOMERS as CUSTOMERS,
+    \Simnang\LoanPro\Constants\ADDRESS\ADDRESS_STATE__C AS ADDRESS_STATE__C,
+    \Simnang\LoanPro\Constants\ADDRESS AS ADDRESS,
     Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY
     ;
 
@@ -65,5 +67,23 @@ class CustomerTest extends TestCase
         $customer = $customer->set(CUSTOMERS::EMPLOYER, $employer);
 
         $this->assertEquals("Company", $customer->get(CUSTOMERS::EMPLOYER)->get(\Simnang\LoanPro\Constants\EMPLOYERS::COMPANY_NAME));
+        return $customer;
+    }
+
+    /**
+     * @depends testEmployerCreate
+     * @group create_correctness
+     * @group offline
+     * @group new
+     */
+    public function testAddressCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
+        $address = LPSDK::GetInstance()->CreateAddress(ADDRESS_STATE__C::ALABAMA,"12345");
+        $customer = $customer->set(CUSTOMERS::PRIMARY_ADDRESS, $address, CUSTOMERS::MAIL_ADDRESS, $address->set(ADDRESS::STATE__C, ADDRESS_STATE__C::ALASKA));
+
+        $this->assertEquals("12345", $customer->get(CUSTOMERS::PRIMARY_ADDRESS)->get(ADDRESS::ZIPCODE));
+        $this->assertEquals(ADDRESS_STATE__C::ALABAMA, $customer->get(CUSTOMERS::PRIMARY_ADDRESS)->get(ADDRESS::STATE__C));
+
+        $this->assertEquals("12345", $customer->get(CUSTOMERS::MAIL_ADDRESS)->get(ADDRESS::ZIPCODE));
+        $this->assertEquals(ADDRESS_STATE__C::ALASKA, $customer->get(CUSTOMERS::MAIL_ADDRESS)->get(ADDRESS::STATE__C));
     }
 }

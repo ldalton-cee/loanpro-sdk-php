@@ -83,7 +83,7 @@ class CustomerEntity extends  BaseEntity
 
         CUSTOMERS::PRIMARY_ADDRESS => FieldValidator::OBJECT, //
         CUSTOMERS::MAIL_ADDRESS => FieldValidator::OBJECT, //
-        CUSTOMERS::EMPLOYER => FieldValidator::OBJECT, //
+        CUSTOMERS::EMPLOYER => FieldValidator::OBJECT, //=
         CUSTOMERS::CREDIT_SCORE => FieldValidator::OBJECT, //
 
         CUSTOMERS::REFERENCES => FieldValidator::OBJECT_LIST, //

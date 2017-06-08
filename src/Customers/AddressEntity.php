@@ -25,11 +25,17 @@ use Simnang\LoanPro\Validator\FieldValidator;
 
 class AddressEntity extends  BaseEntity
 {
+    public function __construct($state, $zip){
+        parent::__construct($state, $zip);
+    }
+
     /**
      * List of required fields
      * @var array
      */
     protected static $required = [
+        ADDRESS::STATE__C,
+        ADDRESS::ZIPCODE
     ];
 
     /**
@@ -57,9 +63,9 @@ class AddressEntity extends  BaseEntity
         ADDRESS::ADDRESS_1          => FieldValidator::STRING,
         ADDRESS::ADDRESS_2          => FieldValidator::STRING,
         ADDRESS::CITY               => FieldValidator::STRING,
-        ADDRESS::STATE              => FieldValidator::COLLECTION,
+        ADDRESS::STATE__C           => FieldValidator::COLLECTION,
         ADDRESS::ZIPCODE            => FieldValidator::STRING,
-        ADDRESS::COUNTRY            => FieldValidator::COLLECTION,
+        ADDRESS::COUNTRY__C         => FieldValidator::COLLECTION,
         ADDRESS::GEO_LAT            => FieldValidator::NUMBER,
         ADDRESS::GEO_LON            => FieldValidator::NUMBER,
         ADDRESS::CREATED            => FieldValidator::DATE,

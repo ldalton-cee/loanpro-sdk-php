@@ -31,6 +31,7 @@ use Simnang\LoanPro\Constants\LSETUP;
 use Simnang\LoanPro\Constants\LSTATUS_ARCHIVE;
 use Simnang\LoanPro\Constants\MC_PROCESSOR;
 use Simnang\LoanPro\Constants\PAYMENTS;
+use Simnang\LoanPro\Customers\AddressEntity;
 use Simnang\LoanPro\Customers\CustomerEntity;
 use Simnang\LoanPro\Customers\EmployerEntity;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
@@ -187,6 +188,10 @@ class LoanProSDK
 
     public function CreateEmployer(string $coName){
         return new EmployerEntity($coName);
+    }
+
+    public function CreateAddress($state, $zip){
+        return new AddressEntity($state, $zip);
     }
 
     /**

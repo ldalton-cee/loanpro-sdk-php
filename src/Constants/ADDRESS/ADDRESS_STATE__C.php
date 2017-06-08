@@ -16,23 +16,12 @@
  *
  */
 
-namespace Simnang\LoanPro\Constants;
+namespace Simnang\LoanPro\Constants\ADDRESS;
+use Simnang\LoanPro\Constants\STATE_COLLECTIONS;
 
 /**
- * Class ADDRESS
- * @package Simnang\LoanPro\Constants
+ * Class ADDRESS_STATE__C
+ * @package Simnang\LoanPro\Constants\LSETUP
  */
-class ADDRESS{
-    const ADDRESS_1         = 'address1';
-    const ADDRESS_2         = 'address2';
-    const CITY              = 'city';
-    const STATE__C          = 'state';
-    const ZIPCODE           = 'zipcode';
-    const COUNTRY__C        = 'country';
-    const GEO_LAT           = 'geoLat';
-    const GEO_LON           = 'geoLon';
-    const CREATED           = 'created';
-    const ACTIVE            = 'active';
-    const IS_VERIFIED       = 'isVerified';
-    const IS_STANDARDIZED   = 'isStandardized';
+class ADDRESS_STATE__C extends STATE_COLLECTIONS{
 }
