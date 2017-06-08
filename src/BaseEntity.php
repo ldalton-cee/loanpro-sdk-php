@@ -135,6 +135,23 @@ abstract class BaseEntity implements \JsonSerializable
     protected static $constCollectionPrefix = "";
 
     /**
+     * Whether or not to ignore transactional warnings
+     * @var bool
+     */
+    protected $ignoreWarnings = false;
+
+    /**
+     * Sets whether or not to ignore transactional warnings and returns the modified copy
+     * @param bool|true $ignore whether or not transactional warnings should be ignored
+     * @return BaseEntity
+     */
+    public function SetIgnoreWarnings($ignore = true){
+        $obj = clone $this;
+        $obj ->ignoreWarnings = $ignore;
+        return $obj;
+    }
+
+    /**
      * Serializes this object's properties
      *
      * @return array
@@ -148,6 +165,8 @@ abstract class BaseEntity implements \JsonSerializable
             $arr['__update'] = true;
             $arr['__id'] = $this->properties['id'];
         }
+        if($this->ignoreWarnings)
+            $arr['__ignoreWarnings'] = true;
         foreach (static::$fields as $field => $type) {
             if ($type == FieldValidator::DATE) {
                 if (isset($arr[ $field ])) {
