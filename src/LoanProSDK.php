@@ -31,6 +31,8 @@ use Simnang\LoanPro\Constants\LSETUP;
 use Simnang\LoanPro\Constants\LSTATUS_ARCHIVE;
 use Simnang\LoanPro\Constants\MC_PROCESSOR;
 use Simnang\LoanPro\Constants\PAYMENTS;
+use Simnang\LoanPro\Customers\CustomerEntity;
+use Simnang\LoanPro\Customers\EmployerEntity;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Iteration\FilterParams;
 use Simnang\LoanPro\Iteration\PaginationParams;
@@ -177,6 +179,14 @@ class LoanProSDK
      */
     public function CreateLoan(string $dispId){
         return new Loans\LoanEntity($dispId);
+    }
+
+    public function CreateCustomer(string $firstName, string $lastName){
+        return new CustomerEntity($firstName, $lastName);
+    }
+
+    public function CreateEmployer(string $coName){
+        return new EmployerEntity($coName);
     }
 
     /**

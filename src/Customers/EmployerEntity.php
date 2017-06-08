@@ -26,20 +26,23 @@ use Simnang\LoanPro\Validator\FieldValidator;
 
 class EmployerEntity extends  BaseEntity
 {
-
+    public function __construct($coName){
+        parent::__construct($coName);
+    }
 
     /**
      * List of required fields
      * @var array
      */
     protected static $required = [
+        EMPLOYERS::COMPANY_NAME
     ];
 
     /**
      * The name of the constant collection list
      * @var string
      */
-    protected static $constCollectionPrefix = "CUSTOMERS";
+    protected static $constCollectionPrefix = "EMPLOYERS";
 
     /**
      * Required to keep type fields from colliding with other types
@@ -63,11 +66,11 @@ class EmployerEntity extends  BaseEntity
         EMPLOYERS::TITLE    => FieldValidator::STRING,
         EMPLOYERS::PHONE    => FieldValidator::STRING,
         EMPLOYERS::INCOME   => FieldValidator::NUMBER,
-        EMPLOYERS::INCOME_FREQUENCY => FieldValidator::COLLECTION,
         EMPLOYERS::HIRE_DATE    => FieldValidator::DATE,
         EMPLOYERS::PAY_DATE => FieldValidator::DATE,
-        EMPLOYERS::PAY_DATE_FREQUENCY   => FieldValidator::COLLECTION,
         EMPLOYERS::ACTIVE   => FieldValidator::BOOL,
         EMPLOYERS::CREATED  => FieldValidator::DATE,
+        EMPLOYERS::INCOME_FREQUENCY__C => FieldValidator::COLLECTION,
+        EMPLOYERS::PAY_DATE_FREQUENCY__C   => FieldValidator::COLLECTION,
     ];
 }

@@ -47,7 +47,23 @@ class CustomerTest extends TestCase
      * @group offline
      * @group new
      */
-    public function testNotesInstantiate(){
-        $customer = new \Simnang\LoanPro\Customers\CustomerEntity("John", "Doe");
+    public function testInstantiate(){
+        $customer = LPSDK::GetInstance()->CreateCustomer("John", "Doe");
+        $this->assertEquals(['firstName'=>"John",'lastName'=>"Doe"],$customer->get(CUSTOMERS::FIRST_NAME, CUSTOMERS::LAST_NAME));
+
+        return $customer;
+    }
+
+    /**
+     * @depends testInstantiate
+     * @group create_correctness
+     * @group offline
+     * @group new
+     */
+    public function testEmployerCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
+        $employer = LPSDK::GetInstance()->CreateEmployer("Company");
+        $customer = $customer->set(CUSTOMERS::EMPLOYER, $employer);
+
+        $this->assertEquals("Company", $customer->get(CUSTOMERS::EMPLOYER)->get(\Simnang\LoanPro\Constants\EMPLOYERS::COMPANY_NAME));
     }
 }

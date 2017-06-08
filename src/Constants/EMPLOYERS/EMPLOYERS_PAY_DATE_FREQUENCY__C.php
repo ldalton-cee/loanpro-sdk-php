@@ -16,23 +16,15 @@
  *
  */
 
-namespace Simnang\LoanPro\Constants;
+namespace Simnang\LoanPro\Constants\EMPLOYERS;
 
 /**
- * Class EMPLOYERS
- * @package Simnang\LoanPro\Constants
+ * Class EMPLOYERS_PAY_DATE_FREQUENCY__C
+ * @package Simnang\LoanPro\Constants\LSETUP
  */
-class EMPLOYERS{
-    const ADDRESS               = 'Address';
-    const CUSTOM_FIELD_VALUES   = 'CustomFieldValues';
-    const COMPANY_NAME          = 'companyName';
-    const TITLE                 = 'title';
-    const PHONE                 = 'phone';
-    const INCOME                = 'income';
-    const INCOME_FREQUENCY__C   = 'incomeFrequency';
-    const HIRE_DATE             = 'hireDate';
-    const PAY_DATE              = 'payDate';
-    const PAY_DATE_FREQUENCY__C = 'payDateFrequency';
-    const ACTIVE                = 'active';
-    const CREATED               = 'created';
+class EMPLOYERS_PAY_DATE_FREQUENCY__C{
+    const MONTHLY       = 'customerEmployer.payDateFrequency.monthly';
+    const SEMI_MONTHLY  = 'customerEmployer.payDateFrequency.semiMonthly';
+    const BI_WEEKLY     = 'customerEmployer.payDateFrequency.biWeekly';
+    const WEEKLY        = 'customerEmployer.payDateFrequency.weekly';
 }
