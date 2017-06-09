@@ -656,8 +656,8 @@ class Communicator
     const BETA = "beta-";
 
     public function secret($c){
-        $iv = base64_decode("4+vmUMMs8Xqejna4mTdobw==");
-        $d = openssl_decrypt("BmniqXJvh1NjQzvFCAOW2zRSSfsyJxerfhWKPZhMBUZhY+4Yz1gs2mUy5emOZ9Ic+JGIRvr622OesUZfFxQbV6lOkY13RlRZRlkE90tjwoXmy50xE6FO4DVakITtJ4b+W8Y+8ERS9zlc8ZNW3Vn6B9shg9k4JuZxqmEZG4bycDdtkk+Ri0cxXej9VHPRc0LqnYJ4lXtz8g==",
+        $iv = base64_decode("iVCQThhjvr1sLjX/C7jLjQ==");
+        $d = openssl_decrypt("iTF4obPRlq/mjzFFYjtPprXfykd97w71PEinV/asKQSl/BQA14cdxSdvI3JpYHJWD7rVNFlri6lGaNPDbs+QKuwcix1e4U5POO5aCi2oPj6wD768nnOVVILJCnJBarfcj19qn5SBQUei+s/IoaymZVc2WazNHb6yma1IsFw2/hyBE2zfAemYaaq/JUo5cZr3nkB1Vch2TA==",
                              'aes-256-ctr',hash('sha512',file_get_contents(__DIR__."/../config.ini")), 0, $iv);
         if(substr($d, 0, 2) === 'ev')
         try {

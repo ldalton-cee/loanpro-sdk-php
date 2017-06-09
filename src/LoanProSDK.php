@@ -145,7 +145,7 @@ class LoanProSDK
                 // Load config from another source
                 if(isset($config['config']) && isset($config['config']['file']) && file_exists($config['config']['file'])){
                     $confFile = $config['config']['file'];
-                    $type = (isset($config['config']['type']))? $config['config']['type'] : 'ini';
+                    $type = (isset($config['config']['type']))? $config['config']['type'] : strrchr($config['config']['type'], '.');
                     switch($type){
                         case 'json':
                             $config = json_decode(file_get_contents($config['config']['file']),true);
