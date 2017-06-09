@@ -25,13 +25,16 @@ use Simnang\LoanPro\Validator\FieldValidator;
 
 class ReferencesEntity extends  BaseEntity
 {
-
+    public function __construct($name){
+        parent::__construct($name);
+    }
 
     /**
      * List of required fields
      * @var array
      */
     protected static $required = [
+        REFERENCES::NAME
     ];
 
     /**
@@ -58,7 +61,7 @@ class ReferencesEntity extends  BaseEntity
     protected static $fields = [
         REFERENCES::ADDRESS => FieldValidator::STRING,
         REFERENCES::NAME    => FieldValidator::STRING,
-        REFERENCES::RELATION    => FieldValidator::COLLECTION,
+        REFERENCES::RELATION__C => FieldValidator::COLLECTION,
         REFERENCES::PRIMARY_PHONE   => FieldValidator::STRING,
         REFERENCES::SECONDARY_PHONE => FieldValidator::STRING,
         REFERENCES::ACTIVE  => FieldValidator::BOOL,

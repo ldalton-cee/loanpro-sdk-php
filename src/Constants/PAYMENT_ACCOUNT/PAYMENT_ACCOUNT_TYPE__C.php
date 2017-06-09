@@ -16,28 +16,14 @@
  *
  */
 
-namespace Simnang\LoanPro\Constants;
+namespace Simnang\LoanPro\Constants\PAYMENT_ACCOUNT;
 
 /**
- * Class PHONES
+ * Class PAYMENT_ACCOUNT_TYPE__C
  * @package Simnang\LoanPro\Constants
  */
-class PHONES{
-    const ENTITY_ID                 = 'entityId';
-    const ENTITY_TYPE               = 'entityType';
-    const PHONE                     = 'phone';
-    const TYPE__C                   = 'type';
-    const IS_PRIMARY                = 'isPrimary';
-    const IS_SECONDARY              = 'isSecondary';
-    const SBT_MKT_VERIFY_PIN        = 'sbtMktVerifyPIN';
-    const SBT_MKT_VERIFY_PENDING    = 'sbtMktVerifyPending';
-    const SBT_MKT_VERIFIED          = 'sbtMktVerified';
-    const SBT_ACT_VERIRY_PIN        = 'sbtActVerifyPIN';
-    const SBT_ACT_VERIFY_PENDING    = 'sbtActVerifyPending';
-    const SBT_ACT_VERIFIED          = 'sbtActVerified';
-    const CARRIER_NAME              = 'carrierName';
-    const CARRIER_VERIFIED          = 'carrierVerified';
-    const IS_LAND_LINE              = 'isLandLine';
-    const DND_ENABLED               = 'dndEnabled';
-    const ACTIVE                    = 'active';
+class PAYMENT_ACCOUNT_TYPE__C
+{
+    const CHECKING  = 'paymentAccount.type.checking';
+    const DEBIT     = 'paymentAccount.type.credit';
 }

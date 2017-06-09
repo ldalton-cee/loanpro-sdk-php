@@ -32,8 +32,13 @@ use Simnang\LoanPro\Constants\LSTATUS_ARCHIVE;
 use Simnang\LoanPro\Constants\MC_PROCESSOR;
 use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Customers\AddressEntity;
+use Simnang\LoanPro\Customers\CreditScoreEntity;
 use Simnang\LoanPro\Customers\CustomerEntity;
 use Simnang\LoanPro\Customers\EmployerEntity;
+use Simnang\LoanPro\Customers\PaymentAccountEntity;
+use Simnang\LoanPro\Customers\PhoneEntity;
+use Simnang\LoanPro\Customers\ReferencesEntity;
+use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Iteration\FilterParams;
 use Simnang\LoanPro\Iteration\PaginationParams;
@@ -182,16 +187,69 @@ class LoanProSDK
         return new Loans\LoanEntity($dispId);
     }
 
+    /**
+     * Creates a new customer
+     * @param string $firstName - first name of customer
+     * @param string $lastName - last name of customer
+     * @return CustomerEntity
+     */
     public function CreateCustomer(string $firstName, string $lastName){
         return new CustomerEntity($firstName, $lastName);
     }
 
+    /**
+     * Creates a new employer
+     * @param string $coName - Name of employing company
+     * @return EmployerEntity
+     */
     public function CreateEmployer(string $coName){
         return new EmployerEntity($coName);
     }
 
+    /**
+     * Creates a new address
+     * @param $state - State collection
+     * @param $zip - Zipcode
+     * @return AddressEntity
+     */
     public function CreateAddress($state, $zip){
         return new AddressEntity($state, $zip);
+    }
+
+    /**
+     * Creates a new credit score entity
+     * @return CreditScoreEntity
+     */
+    public function CreateCreditScore(){
+        return new CreditScoreEntity();
+    }
+
+    /**
+     * Creates new reference entity for customers
+     * @param $name - Name of reference
+     * @return ReferencesEntity
+     */
+    public function CreateCustomerReference($name){
+        return new ReferencesEntity($name);
+    }
+
+    /**
+     * Creates a new payment account entity
+     * @param $title - title of payment account
+     * @param $type - type of payment account
+     * @return PaymentAccountEntity
+     */
+    public function CreateCustomerPaymentAccount($title, $type){
+        return new PaymentAccountEntity($title, $type);
+    }
+
+    /**
+     * Creates a new phone number
+     * @param $phoneNum
+     * @return PhoneEntity
+     */
+    public function CreatePhoneNumber($phoneNum){
+        return new PhoneEntity($phoneNum);
     }
 
     /**

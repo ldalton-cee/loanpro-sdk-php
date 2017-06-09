@@ -25,7 +25,7 @@ namespace Simnang\LoanPro\Constants;
 class REFERENCES{
     const ADDRESS           = 'Address';
     const NAME              = 'name';
-    const RELATION          = 'relation';
+    const RELATION__C       = 'relation';
     const PRIMARY_PHONE     = 'primaryPhone';
     const SECONDARY_PHONE   = 'secondaryPhone';
     const ACTIVE            = 'active';

@@ -28,6 +28,8 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
     Simnang\LoanPro\Constants\CUSTOMERS as CUSTOMERS,
     \Simnang\LoanPro\Constants\ADDRESS\ADDRESS_STATE__C AS ADDRESS_STATE__C,
     \Simnang\LoanPro\Constants\ADDRESS AS ADDRESS,
+    \Simnang\LoanPro\Constants\CREDIT_SCORE as CREDIT_SCORE,
+    Simnang\LoanPro\Constants\SOCIAL_PROFILES as SOCIAL_PROFILES,
     Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY
     ;
 
@@ -85,5 +87,98 @@ class CustomerTest extends TestCase
 
         $this->assertEquals("12345", $customer->get(CUSTOMERS::MAIL_ADDRESS)->get(ADDRESS::ZIPCODE));
         $this->assertEquals(ADDRESS_STATE__C::ALASKA, $customer->get(CUSTOMERS::MAIL_ADDRESS)->get(ADDRESS::STATE__C));
+        return $customer;
+    }
+
+    /**
+     * @depends testAddressCreate
+     * @group create_correctness
+     * @group offline
+     * @group new
+     */
+    public function testCreditScoreCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
+        $score = LPSDK::GetInstance()->CreateCreditScore()->set(
+            CREDIT_SCORE::EQUIFAX_SCORE, 123,
+            CREDIT_SCORE::EXPERIAN_SCORE, 234,
+            CREDIT_SCORE::TRANSUNION_SCORE, 345);
+        $customer = $customer->set(CUSTOMERS::CREDIT_SCORE, $score);
+
+        $this->assertEquals([123,234,345], array_values($customer->get(CUSTOMERS::CREDIT_SCORE)->get(CREDIT_SCORE::EQUIFAX_SCORE, CREDIT_SCORE::EXPERIAN_SCORE, CREDIT_SCORE::TRANSUNION_SCORE)));
+
+        return $customer;
+    }
+
+    /**
+     * @depends testCreditScoreCreate
+     * @group create_correctness
+     * @group offline
+     * @group new
+     */
+    public function testReferencesCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
+        $ref = LPSDK::GetInstance()->CreateCustomerReference("Bob");
+        $customer = $customer->set(CUSTOMERS::REFERENCES, $ref);
+
+        $this->assertEquals("Bob", $customer->get(CUSTOMERS::REFERENCES)[0]->get(\Simnang\LoanPro\Constants\REFERENCES::NAME));
+
+        return $customer;
+    }
+
+    /**
+     * @depends testReferencesCreate
+     * @group create_correctness
+     * @group offline
+     * @group new
+     */
+    public function testPaymentsAccountCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
+        $title = uniqid('CUSTOMER');
+        $ref = LPSDK::GetInstance()->CreateCustomerPaymentAccount($title, \Simnang\LoanPro\Constants\PAYMENT_ACCOUNT\PAYMENT_ACCOUNT_TYPE__C::CHECKING);
+        $customer = $customer->set(CUSTOMERS::PAYMENT_ACCOUNTS, $ref);
+
+        $this->assertEquals($title, $customer->get(CUSTOMERS::PAYMENT_ACCOUNTS)[0]->get(\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::TITLE));
+        $this->assertEquals(\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT\PAYMENT_ACCOUNT_TYPE__C::CHECKING, $customer->get(CUSTOMERS::PAYMENT_ACCOUNTS)[0]->get(\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::TYPE__C));
+
+        return $customer;
+    }
+
+    /**
+     * @depends testPaymentsAccountCreate
+     * @group create_correctness
+     * @group offline
+     * @group new
+     */
+    public function testPhoneCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
+        $phn = LPSDK::GetInstance()->CreatePhoneNumber('111-222-3333');
+        $customer = $customer->set(CUSTOMERS::PHONES, $phn);
+
+        $this->assertEquals('111-222-3333', $customer->get(CUSTOMERS::PHONES)[0]->get(\Simnang\LoanPro\Constants\PHONES::PHONE));
+
+        return $customer;
+    }
+
+    /**
+     * @depends testPhoneCreate
+     * @group create_correctness
+     * @group offline
+     * @group new
+     */
+    public function testSocialProfileEntity(\Simnang\LoanPro\Customers\CustomerEntity $customer){
+        $profile = (new \Simnang\LoanPro\Customers\SocialProfileEntity())->set(
+            SOCIAL_PROFILES::PROFILE_TYPE, 'facebook',
+            SOCIAL_PROFILES::PROFILE_URL, 'https://facebook.com',
+            SOCIAL_PROFILES::PROFILE_USERNAME, 'simnang'
+        );
+        $customer = $customer->set(CUSTOMERS::SOCIAL_PROFILES, $profile);
+
+        $this->assertEquals([
+            SOCIAL_PROFILES::PROFILE_TYPE=>'facebook',
+            SOCIAL_PROFILES::PROFILE_URL=>'https://facebook.com',
+            SOCIAL_PROFILES::PROFILE_USERNAME=>'simnang'
+        ], $customer->get(CUSTOMERS::SOCIAL_PROFILES)[0]->get(
+            SOCIAL_PROFILES::PROFILE_TYPE,
+            SOCIAL_PROFILES::PROFILE_URL,
+            SOCIAL_PROFILES::PROFILE_USERNAME
+        ));
+
+        return $customer;
     }
 }

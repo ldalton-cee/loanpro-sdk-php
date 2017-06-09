@@ -81,18 +81,18 @@ class CustomerEntity extends  BaseEntity
 
         CUSTOMERS::CREDIT_LIMIT => FieldValidator::NUMBER,
 
-        CUSTOMERS::PRIMARY_ADDRESS => FieldValidator::OBJECT, //
-        CUSTOMERS::MAIL_ADDRESS => FieldValidator::OBJECT, //
+        CUSTOMERS::PRIMARY_ADDRESS => FieldValidator::OBJECT, //=
+        CUSTOMERS::MAIL_ADDRESS => FieldValidator::OBJECT, //=
         CUSTOMERS::EMPLOYER => FieldValidator::OBJECT, //=
-        CUSTOMERS::CREDIT_SCORE => FieldValidator::OBJECT, //
+        CUSTOMERS::CREDIT_SCORE => FieldValidator::OBJECT, //=
 
-        CUSTOMERS::REFERENCES => FieldValidator::OBJECT_LIST, //
-        CUSTOMERS::PAYMENT_ACCOUNTS => FieldValidator::OBJECT_LIST, //
-        CUSTOMERS::PHONES   => FieldValidator::OBJECT_LIST, //
-        CUSTOMERS::CUSTOM_FIELD_VALUES  => FieldValidator::OBJECT_LIST, //
-        CUSTOMERS::DOCUMENTS    => FieldValidator::OBJECT_LIST, //
-        CUSTOMERS::SOCIAL_PROFILES => FieldValidator::OBJECT_LIST,
-        CUSTOMERS::NOTES    => FieldValidator::OBJECT_LIST, //
+        CUSTOMERS::REFERENCES => FieldValidator::OBJECT_LIST, //=
+        CUSTOMERS::PAYMENT_ACCOUNTS => FieldValidator::OBJECT_LIST, //=
+        CUSTOMERS::PHONES   => FieldValidator::OBJECT_LIST, //=
+        CUSTOMERS::CUSTOM_FIELD_VALUES  => FieldValidator::OBJECT_LIST, //=
+        CUSTOMERS::DOCUMENTS    => FieldValidator::OBJECT_LIST, //=
+        CUSTOMERS::SOCIAL_PROFILES => FieldValidator::OBJECT_LIST,//=
+        CUSTOMERS::NOTES    => FieldValidator::OBJECT_LIST, //=
 
         CUSTOMERS::ACCESS_PASSWORD  => FieldValidator::STRING,
         CUSTOMERS::ACCESS_USER_NAME => FieldValidator::STRING,

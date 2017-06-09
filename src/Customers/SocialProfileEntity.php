@@ -58,7 +58,7 @@ class SocialProfileEntity extends  BaseEntity
      */
     protected static $fields = [
         SOCIAL_PROFILES::CUSTOMER_ID    => FieldValidator::INT,
-        SOCIAL_PROFILES::PROFILE_TYPE   => FieldValidator::COLLECTION,
+        SOCIAL_PROFILES::PROFILE_TYPE   => FieldValidator::STRING,
         SOCIAL_PROFILES::PROFILE_ID => FieldValidator::INT,
         SOCIAL_PROFILES::PROFILE_URL    => FieldValidator::STRING,
         SOCIAL_PROFILES::PROFILE_USERNAME   => FieldValidator::STRING,

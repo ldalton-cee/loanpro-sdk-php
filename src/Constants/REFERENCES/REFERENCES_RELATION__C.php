@@ -16,28 +16,22 @@
  *
  */
 
-namespace Simnang\LoanPro\Constants;
+namespace Simnang\LoanPro\Constants\REFERENCES;
 
 /**
- * Class PHONES
+ * Class REFERENCES_RELATION__C
  * @package Simnang\LoanPro\Constants
  */
-class PHONES{
-    const ENTITY_ID                 = 'entityId';
-    const ENTITY_TYPE               = 'entityType';
-    const PHONE                     = 'phone';
-    const TYPE__C                   = 'type';
-    const IS_PRIMARY                = 'isPrimary';
-    const IS_SECONDARY              = 'isSecondary';
-    const SBT_MKT_VERIFY_PIN        = 'sbtMktVerifyPIN';
-    const SBT_MKT_VERIFY_PENDING    = 'sbtMktVerifyPending';
-    const SBT_MKT_VERIFIED          = 'sbtMktVerified';
-    const SBT_ACT_VERIRY_PIN        = 'sbtActVerifyPIN';
-    const SBT_ACT_VERIFY_PENDING    = 'sbtActVerifyPending';
-    const SBT_ACT_VERIFIED          = 'sbtActVerified';
-    const CARRIER_NAME              = 'carrierName';
-    const CARRIER_VERIFIED          = 'carrierVerified';
-    const IS_LAND_LINE              = 'isLandLine';
-    const DND_ENABLED               = 'dndEnabled';
-    const ACTIVE                    = 'active';
+class REFERENCES_RELATION__C
+{
+    const BROTHER   = 'customerReference.relation.brother';
+    const CO_WORKER = 'customerReference.relation.coWorker';
+    const DAUGHTER  = 'customerReference.relation.daughter';
+    const FATHER    = 'customerReference.relation.father';
+    const FRIEND    = 'customerReference.relation.friend';
+    const HUSBAND   = 'customerReference.relation.husband';
+    const MOTHER    = 'customerReference.relation.mother';
+    const SISTER    = 'customerReference.relation.sister';
+    const SON       = 'customerReference.relation.son';
+    const WIFE      = 'customerReference.relation.wife';
 }

@@ -16,28 +16,17 @@
  *
  */
 
-namespace Simnang\LoanPro\Constants;
+namespace Simnang\LoanPro\Constants\PHONES;
 
 /**
- * Class PHONES
- * @package Simnang\LoanPro\Constants
+ * Class PHONES_TYPE__C
+ * @package Simnang\LoanPro\Constants\PAYMENTS
  */
-class PHONES{
-    const ENTITY_ID                 = 'entityId';
-    const ENTITY_TYPE               = 'entityType';
-    const PHONE                     = 'phone';
-    const TYPE__C                   = 'type';
-    const IS_PRIMARY                = 'isPrimary';
-    const IS_SECONDARY              = 'isSecondary';
-    const SBT_MKT_VERIFY_PIN        = 'sbtMktVerifyPIN';
-    const SBT_MKT_VERIFY_PENDING    = 'sbtMktVerifyPending';
-    const SBT_MKT_VERIFIED          = 'sbtMktVerified';
-    const SBT_ACT_VERIRY_PIN        = 'sbtActVerifyPIN';
-    const SBT_ACT_VERIFY_PENDING    = 'sbtActVerifyPending';
-    const SBT_ACT_VERIFIED          = 'sbtActVerified';
-    const CARRIER_NAME              = 'carrierName';
-    const CARRIER_VERIFIED          = 'carrierVerified';
-    const IS_LAND_LINE              = 'isLandLine';
-    const DND_ENABLED               = 'dndEnabled';
-    const ACTIVE                    = 'active';
+class PHONES_TYPE__C{
+    const CELL              = 'customer.phoneType.cell';
+    const CELL_SMART_PHONE  = 'customer.phoneType.cellSmartPhone';
+    const FAX               = 'customer.phoneType.fax';
+    const HOME              = 'customer.phoneType.home';
+    const OFFICE            = 'customer.phoneType.office';
+    const OTHER             = 'customer.phoneType.other';
 }

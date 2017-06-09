@@ -26,13 +26,17 @@ use Simnang\LoanPro\Validator\FieldValidator;
 
 class PaymentAccountEntity extends  BaseEntity
 {
-
+    public function __construct($title, $type){
+        parent::__construct($title, $type);
+    }
 
     /**
      * List of required fields
      * @var array
      */
     protected static $required = [
+        PAYMENT_ACCOUNT::TITLE,
+        PAYMENT_ACCOUNT::TYPE__C
     ];
 
     /**

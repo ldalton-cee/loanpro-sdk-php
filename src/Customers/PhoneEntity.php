@@ -26,13 +26,16 @@ use Simnang\LoanPro\Validator\FieldValidator;
 
 class PhoneEntity extends  BaseEntity
 {
-
+    public function __construct($phoneNum){
+        parent::__construct($phoneNum);
+    }
 
     /**
      * List of required fields
      * @var array
      */
     protected static $required = [
+        PHONES::PHONE
     ];
 
     /**
@@ -60,7 +63,7 @@ class PhoneEntity extends  BaseEntity
         PHONES::ENTITY_ID   => FieldValidator::INT,
         PHONES::ENTITY_TYPE => FieldValidator::ENTITY_TYPE,
         PHONES::PHONE   => FieldValidator::STRING,
-        PHONES::TYPE    => FieldValidator::COLLECTION,
+        PHONES::TYPE__C => FieldValidator::COLLECTION,
         PHONES::IS_PRIMARY  => FieldValidator::BOOL,
         PHONES::IS_SECONDARY    => FieldValidator::BOOL,
         PHONES::SBT_MKT_VERIFY_PIN  => FieldValidator::STRING,
