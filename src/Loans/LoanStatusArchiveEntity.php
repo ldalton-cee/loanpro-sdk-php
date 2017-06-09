@@ -37,7 +37,7 @@ class LoanStatusArchiveEntity extends BaseEntity
      * List of required fields
      * @var array
      */
-    protected static $required = [ BASE_ENTITY::ID ];
+    protected static $required = [ ];
 
     /**
      * The name of the constant collection list

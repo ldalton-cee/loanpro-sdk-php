@@ -392,7 +392,6 @@ class LoanEntity extends BaseEntity
         LOAN::ESCROW_CALCULATORS        => FieldValidator::OBJECT_LIST,
         LOAN::ESCROW_TRANSACTIONS       => FieldValidator::OBJECT_LIST,
         LOAN::ESCROW_SUBSET             => FieldValidator::OBJECT_LIST,
-        LOAN::ESCROW_SUBSET_OPTIONS     => FieldValidator::OBJECT_LIST,
         LOAN::LINKED_LOAN_VALUES        => FieldValidator::OBJECT_LIST,
         LOAN::LOAN_FUNDING              => FieldValidator::OBJECT_LIST,
         LOAN::LOAN_MODIFICATIONS        => FieldValidator::OBJECT_LIST,
@@ -419,6 +418,7 @@ class LoanEntity extends BaseEntity
         LOAN::RULES_APPLIED_CHECKLIST           => FieldValidator::READ_ONLY,
         LOAN::RULES_APPLIED_STOP_INTEREST       => FieldValidator::READ_ONLY,
         LOAN::LSTATUS_ARCHIVE                   => FieldValidator::READ_ONLY,
+        LOAN::ESCROW_SUBSET_OPTIONS             => FieldValidator::READ_ONLY,
     ];
 
     /**

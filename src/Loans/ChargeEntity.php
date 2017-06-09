@@ -19,6 +19,7 @@
 namespace Simnang\LoanPro\Loans;
 
 use Simnang\LoanPro\BaseEntity;
+use Simnang\LoanPro\Constants\CHECKING_ACCOUNT;
 use Simnang\LoanPro\Validator\FieldValidator;
 use Simnang\LoanPro\Constants\CHARGES;
 
@@ -77,7 +78,10 @@ class ChargeEntity extends BaseEntity
 
         CHARGES::DATE                   => FieldValidator::DATE,
 
+        CHARGES::ENTITY_TYPE            => FieldValidator::ENTITY_TYPE,
+
         CHARGES::CHARGE_TYPE_ID         => FieldValidator::INT,
+        CHARGES::ENTITY_ID              => FieldValidator::INT,
         CHARGES::ORDER                  => FieldValidator::INT,
 
         CHARGES::AMOUNT                 => FieldValidator::NUMBER,
@@ -91,5 +95,8 @@ class ChargeEntity extends BaseEntity
         CHARGES::EXPANSION              => FieldValidator::READ_ONLY,
         CHARGES::PARENT_CHARGE          => FieldValidator::READ_ONLY,
         CHARGES::CHILD_CHARGE           => FieldValidator::READ_ONLY,
+        CHARGES::PAST_DUE_CALCULATION   => FieldValidator::READ_ONLY,
+        CHARGES::CHARGE_TYPE            => FieldValidator::READ_ONLY,
+        CHARGES::LINKED_INFO            => FieldValidator::READ_ONLY,
     ];
 }

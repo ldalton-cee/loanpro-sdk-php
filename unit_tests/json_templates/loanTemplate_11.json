@@ -122,8 +122,6 @@
       "results": [
         {
           "id": 7357,
-          "entityId": 312,
-          "entityType": "Entity.Collateral",
           "customFieldId": 276,
           "customFieldValue": "0"
         }

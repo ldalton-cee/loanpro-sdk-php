@@ -211,12 +211,11 @@ class Communicator
      */
     public function saveLoan($loan){
         $client = $this->client;
-        $id = $loan->get(BASE_ENTITY::ID)
-        ;
+        $id = $loan->get(BASE_ENTITY::ID);
         if(is_null($id)) {
             if(is_null($loan->get(LOAN::LSETUP)))
                 throw new InvalidStateException("Cannot create new loan on server without loan setup!");
-            $response = $client->POST("$this->baseUrl/odata.svc/Loans", $loan);
+            $response = $client->POST("$this->baseUrl/odata.svc/Loans()", $loan);
         }
         else
             $response = $client->PUT("$this->baseUrl/odata.svc/Loans($id)",$loan);

@@ -42,4 +42,10 @@ class CHARGES{
     const ORDER                 = 'order';
     const EDIT_COMMENT          = 'editComment';
     const IS_REVERSAL           = 'isReversal';
+    const ENTITY_ID             = 'entityId';
+    const ENTITY_TYPE           = 'entityType';
+
+    const PAST_DUE_CALCULATION  = 'pastDueCalculation';
+    const CHARGE_TYPE           = 'ChargeType';
+    const LINKED_INFO           = 'LinkedInfo';
 }

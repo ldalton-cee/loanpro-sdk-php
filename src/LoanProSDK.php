@@ -23,6 +23,7 @@ use Simnang\LoanPro\Communicator\ApiClient;
 use Simnang\LoanPro\Communicator\Communicator;
 use Simnang\LoanPro\Constants\APD_ADJUSTMENTS;
 use Simnang\LoanPro\Constants\AUTOPAYS;
+use Simnang\LoanPro\Constants\CUSTOM_FIELD_VALUES;
 use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Constants\DOCUMENTS;
 use Simnang\LoanPro\Constants\EMPLOYERS;
@@ -433,8 +434,8 @@ class LoanProSDK
      * @param $entityType - The type of associated entity
      * @return CustomFieldValuesEntity
      */
-    public function CreateCustomField($entityId,$entityType){
-        return new CustomFieldValuesEntity($entityId,$entityType);
+    public function CreateCustomField($customFieldId,$customFieldValue){
+        return (new CustomFieldValuesEntity($customFieldId))->set(CUSTOM_FIELD_VALUES::CUSTOM_FIELD_VALUE, $customFieldValue);
     }
 
     /**

@@ -29,15 +29,15 @@ class CustomFieldValuesEntity extends BaseEntity
      * Creates a new loan settings entity. This entity will pull defaults when created, so there aren't any minimum fields required
      * @throws \ReflectionException
      */
-    public function __construct($entityid, $entityType){
-        parent::__construct($entityid, $entityType);
+    public function __construct($customFieldId){
+        parent::__construct($customFieldId);
     }
 
     /**
      * List of required fields
      * @var array
      */
-    protected static $required = [ CUSTOM_FIELD_VALUES::ENTITY_ID, CUSTOM_FIELD_VALUES::ENTITY_TYPE ];
+    protected static $required = [ CUSTOM_FIELD_VALUES::CUSTOM_FIELD_ID ];
 
     /**
      * The name of the constant collection list
