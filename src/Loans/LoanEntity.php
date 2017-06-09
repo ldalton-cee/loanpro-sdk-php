@@ -24,6 +24,7 @@ use Simnang\LoanPro\Communicator\Communicator;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETUP;
+use Simnang\LoanPro\Customers\CustomerEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\LoanProSDK;
@@ -309,6 +310,18 @@ class LoanEntity extends BaseEntity
     }
 
     /**
+     * Adds the provided customer to the loan with the provided role
+     * @param CustomerEntity $loan - Customer to add
+     * @param                $customerRole - Customer role to use (see Constants/CUSTOMER_ROLE)
+     * @return bool
+     * @throws InvalidStateException
+     * @throws \Simnang\LoanPro\Exceptions\ApiException
+     */
+    public function addCustomer(CustomerEntity $customer, $customerRole){
+        return LoanProSDK::GetInstance()->GetApiComm()->linkCustomerAndLoan($customer, $this, $customerRole);
+    }
+
+    /**
      * returns loan flag archive report
      * @return array
      * @throws ApiException
@@ -384,6 +397,7 @@ class LoanEntity extends BaseEntity
         LOAN::CHECKLIST_VALUES          => FieldValidator::OBJECT_LIST,
         LOAN::CHARGES                   => FieldValidator::OBJECT_LIST,
         LOAN::CREDITS                   => FieldValidator::OBJECT_LIST,
+        LOAN::CUSTOMERS                 => FieldValidator::OBJECT_LIST,
         LOAN::DOCUMENTS                 => FieldValidator::OBJECT_LIST,
         LOAN::DPD_ADJUSTMENTS           => FieldValidator::OBJECT_LIST,
         LOAN::DUE_DATE_CHANGES          => FieldValidator::OBJECT_LIST,
@@ -402,7 +416,6 @@ class LoanEntity extends BaseEntity
         LOAN::PORTFOLIOS                => FieldValidator::OBJECT_LIST,
         LOAN::PROMISES                  => FieldValidator::OBJECT_LIST,
         LOAN::RECURRENT_CHARGES         => FieldValidator::OBJECT_LIST,
-
         LOAN::SCHEDULE_ROLLS            => FieldValidator::OBJECT_LIST,
         LOAN::STOP_INTEREST_DATES       => FieldValidator::OBJECT_LIST,
         LOAN::SUB_PORTFOLIOS            => FieldValidator::OBJECT_LIST,

@@ -38,6 +38,8 @@ use Simnang\LoanPro\LoanProSDK as LPSDK,
     \Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY,
     \Simnang\LoanPro\Constants\COLLATERAL as COLLATERAL;
 
+require_once(__DIR__.'/CleanUp.php');
+
 ////////////////////
 /// Done Setting Up Aliasing
 ////////////////////
@@ -52,9 +54,20 @@ class ApiClientTest extends TestCase
     protected static $loanId;
     protected static $loanJSON;
     private static $minSetup;
+    private static $cid = 0;
 
     private static function generateRandomString($length = 17) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    private static function generateRandomNum($length = 9) {
+        $characters = '0123456789';
         $charactersLength = strlen($characters);
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {
@@ -86,7 +99,6 @@ class ApiClientTest extends TestCase
                     )
                   )
                 );
-        $today =
         $json = json_decode($json);
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoanFromJSON(json_encode($json[0]));
         $res = $loan->save();
@@ -94,11 +106,31 @@ class ApiClientTest extends TestCase
         $loanUpdate = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoanFromJSON(json_encode($json[1]));
         $loanUpdate->set(BASE_ENTITY::ID, static::$loanId)->save();
         static::$minSetup = new \Simnang\LoanPro\Loans\LoanSetupEntity(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
+
+        $fname = static::generateRandomString(10);
+        $lname = static::generateRandomString(10);
+        $access = $fname.$lname;
+        $ssn = static::generateRandomNum();
+
+        $json = str_replace('[[ACCESS]]', $access,
+                    str_replace('[[LNAME]]', $lname,
+                        str_replace('[[FNAME]]', $fname,
+                            str_replace('[[SSN]]',$ssn,
+                                file_get_contents(__DIR__.'/json_templates/online_templates/customerTemplate_create1.json')
+                            )
+                        )
+                    )
+        );
+        $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateCustomerFromJSON($json);
+        static::$cid = $customer->SetIgnoreWarnings(true)->save()->get(BASE_ENTITY::ID);
     }
 
     public static function tearDownAfterClass(){
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoan("")->set(BASE_ENTITY::ID, static::$loanId);
         $loan->delete(true);
+
+        if(static::$cid)
+            \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->secret(static::$cid);
     }
 
     /**
@@ -447,5 +479,21 @@ class ApiClientTest extends TestCase
         $loans = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoans_RAW([], $paginator, $filter);
         $this->assertTrue(is_array($loans));
         $this->assertEquals(0, count($loans));
+    }
+
+    /**
+     * @group online
+     * @group new
+     */
+    public function testCustomerAdd(){
+        $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(2);
+        $customer2 = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(4);
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoan(static::$loanId);
+        $loan = $loan->addCustomer($customer, CONSTS\CUSTOMER_ROLE::PRIMARY);
+        $loan = $loan->addCustomer($customer2, CONSTS\CUSTOMER_ROLE::SECONDARY);
+
+        $this->assertEquals(2, count($loan->get(LOAN::CUSTOMERS)));
+        $this->assertEquals(2, $loan->get(LOAN::CUSTOMERS)[0]->get(BASE_ENTITY::ID));
+        $this->assertEquals(4, $loan->get(LOAN::CUSTOMERS)[1]->get(BASE_ENTITY::ID));
     }
 }

@@ -21,6 +21,7 @@ namespace Simnang\LoanPro\Loans;
 use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\CUSTOM_FIELD_VALUES;
+use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Validator\FieldValidator;
 
 class CustomFieldValuesEntity extends BaseEntity
@@ -69,5 +70,23 @@ class CustomFieldValuesEntity extends BaseEntity
         CUSTOM_FIELD_VALUES::CUSTOM_FIELD_VALUE => FieldValidator::STRING,
 
         CUSTOM_FIELD_VALUES::CUSTOM_FIELD       => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::NAME   => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::DESC   => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::AUTO_CALC  => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::AUTO_CALC_OP   => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::CRED_REP_ENAB  => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::REQUIRED   => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::ACTIVE => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::SEARCHABLE => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::REPORT_ENABLED => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::ARCHIVE_ENABLED    => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::SUMMARY_ENABLED    => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::MAX_LENGTH => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::DEFAULT_VAL    => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::SECTION_ID => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::DISPLAY_ORDER  => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::SELECT_OPTIONS => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::DEFINITION => FieldValidator::READ_ONLY,
+        CUSTOM_FIELD_VALUES::TYPE => FieldValidator::READ_ONLY,
     ];
 }

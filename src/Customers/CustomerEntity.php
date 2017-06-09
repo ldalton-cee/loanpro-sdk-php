@@ -20,7 +20,11 @@ namespace Simnang\LoanPro\Customers;
 
 
 use Simnang\LoanPro\BaseEntity;
+use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\CUSTOMERS;
+use Simnang\LoanPro\Exceptions\InvalidStateException;
+use Simnang\LoanPro\LoanProSDK;
+use Simnang\LoanPro\Loans\LoanEntity;
 use Simnang\LoanPro\Validator\FieldValidator;
 
 class CustomerEntity extends  BaseEntity
@@ -56,6 +60,22 @@ class CustomerEntity extends  BaseEntity
     protected static $constSetup = false;
 
     /**
+     * Adds the customer to the provided loan with the provided role
+     * @param LoanEntity $loan - Loan to add to
+     * @param            $customerRole - Customer role to use (see Constants/CUSTOMER_ROLE)
+     * @return bool
+     * @throws InvalidStateException
+     * @throws \Simnang\LoanPro\Exceptions\ApiException
+     */
+    public function addToLoan(LoanEntity $loan, $customerRole){
+        return LoanProSDK::GetInstance()->GetApiComm()->linkCustomerAndLoan($this, $loan, $customerRole);
+    }
+
+    public function save(){
+        return LoanProSDK::GetInstance()->GetApiComm()->saveCustomer($this);
+    }
+
+    /**
      * List of constant fields and their associated types
      * @var array
      */
@@ -75,7 +95,7 @@ class CustomerEntity extends  BaseEntity
         CUSTOMERS::CREATED  => FieldValidator::DATE,
         CUSTOMERS::LAST_UPDATED => FieldValidator::DATE,
 
-        CUSTOMERS::CUSTOMER_ID  => FieldValidator::INT,
+        CUSTOMERS::CUSTOMER_ID  => FieldValidator::STRING,
         CUSTOMERS::CREDIT_SCORE_ID  => FieldValidator::INT,
         CUSTOMERS::MC_ID    => FieldValidator::INT,
 
@@ -110,4 +130,13 @@ class CustomerEntity extends  BaseEntity
         CUSTOMERS::LOAN_ROLE         => FieldValidator::READ_ONLY,
         CUSTOMERS::LOANS    => FieldValidator::READ_ONLY,
     ];
+
+    /**
+     * Throws an InvalidStateException if there is no valid Customer ID
+     * @throws InvalidStateException
+     */
+    public function insureHasID(){
+        if(is_null($this->get(BASE_ENTITY::ID)))
+            throw new InvalidStateException("Cannot perform operation on a loan without an ID");
+    }
 }

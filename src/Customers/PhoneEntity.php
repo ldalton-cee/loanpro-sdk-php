@@ -77,5 +77,11 @@ class PhoneEntity extends  BaseEntity
         PHONES::IS_LAND_LINE    => FieldValidator::BOOL,
         PHONES::DND_ENABLED => FieldValidator::BOOL,
         PHONES::ACTIVE  => FieldValidator::BOOL,
+
+        PHONES::DELETE  => FieldValidator::READ_ONLY,
+        PHONES::INDEX   => FieldValidator::READ_ONLY,
+        PHONES::CUR_PHON_VAL    => FieldValidator::READ_ONLY,
+        PHONES::IS_DIRTY    => FieldValidator::READ_ONLY,
+        PHONES::LOOKUP_IN_PROG  => FieldValidator::READ_ONLY,
     ];
 }

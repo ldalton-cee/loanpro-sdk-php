@@ -40,4 +40,10 @@ class PHONES{
     const IS_LAND_LINE              = 'isLandLine';
     const DND_ENABLED               = 'dndEnabled';
     const ACTIVE                    = 'active';
+
+    const DELETE    = 'delete';
+    const INDEX     = '_index';
+    const CUR_PHON_VAL  = '_$$currentPhoneValue';
+    const IS_DIRTY  = '__isDirty';
+    const LOOKUP_IN_PROG    = '__lookupInProgress';
 }

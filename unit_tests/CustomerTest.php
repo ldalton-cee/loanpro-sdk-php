@@ -49,7 +49,6 @@ class CustomerTest extends TestCase
     /**
      * @group create_correctness
      * @group offline
-     * @group new
      */
     public function testInstantiate(){
         $customer = LPSDK::GetInstance()->CreateCustomer("John", "Doe");
@@ -62,7 +61,6 @@ class CustomerTest extends TestCase
      * @depends testInstantiate
      * @group create_correctness
      * @group offline
-     * @group new
      */
     public function testEmployerCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
         $employer = LPSDK::GetInstance()->CreateEmployer("Company");
@@ -76,7 +74,6 @@ class CustomerTest extends TestCase
      * @depends testEmployerCreate
      * @group create_correctness
      * @group offline
-     * @group new
      */
     public function testAddressCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
         $address = LPSDK::GetInstance()->CreateAddress(ADDRESS_STATE__C::ALABAMA,"12345");
@@ -94,7 +91,6 @@ class CustomerTest extends TestCase
      * @depends testAddressCreate
      * @group create_correctness
      * @group offline
-     * @group new
      */
     public function testCreditScoreCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
         $score = LPSDK::GetInstance()->CreateCreditScore()->set(
@@ -112,7 +108,6 @@ class CustomerTest extends TestCase
      * @depends testCreditScoreCreate
      * @group create_correctness
      * @group offline
-     * @group new
      */
     public function testReferencesCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
         $ref = LPSDK::GetInstance()->CreateCustomerReference("Bob");
@@ -127,7 +122,6 @@ class CustomerTest extends TestCase
      * @depends testReferencesCreate
      * @group create_correctness
      * @group offline
-     * @group new
      */
     public function testPaymentsAccountCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
         $title = uniqid('CUSTOMER');
@@ -144,7 +138,6 @@ class CustomerTest extends TestCase
      * @depends testPaymentsAccountCreate
      * @group create_correctness
      * @group offline
-     * @group new
      */
     public function testPhoneCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
         $phn = LPSDK::GetInstance()->CreatePhoneNumber('111-222-3333');
@@ -159,7 +152,6 @@ class CustomerTest extends TestCase
      * @depends testPhoneCreate
      * @group create_correctness
      * @group offline
-     * @group new
      */
     public function testSocialProfileEntity(\Simnang\LoanPro\Customers\CustomerEntity $customer){
         $profile = (new \Simnang\LoanPro\Customers\SocialProfileEntity())->set(
@@ -185,7 +177,6 @@ class CustomerTest extends TestCase
     /**
      * @group json_correctness
      * @group offline
-     * @group new
      * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
      */
     public function testLoadFromJSON(){

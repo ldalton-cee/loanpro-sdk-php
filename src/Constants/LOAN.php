@@ -36,6 +36,7 @@ class LOAN{
     const CREATED                   = 'created';
     const CREATED_BY                = 'createdBy';
     const CREDITS                   = 'Credits';
+    const CUSTOMERS                 = 'Customers';
     const DELETED                   = 'deleted';
     const DELETED_AT                = 'deletedAt';
     const DISP_ID                   = 'displayId';

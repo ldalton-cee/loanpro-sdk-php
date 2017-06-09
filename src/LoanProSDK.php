@@ -116,6 +116,18 @@ class LoanProSDK
         return $this->apiComm->getLoan($id, $expandProps, $nopageProps);
     }
 
+    /**
+     * Gets a customer from the LoanPro servers.
+     * @param int $id - ID of customer to pull
+     * @param array $expandProps - array of properties to expand
+     * @param bool|true $nopageProps
+     * @return CustomerEntity
+     * @throws ApiException
+     */
+    public function GetCustomer($id, $expandProps = [], $nopageProps = true){
+        return $this->apiComm->getCustomer($id, $expandProps, $nopageProps);
+    }
+
     public function GetLoans_RAW($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
         return $this->apiComm->getLoans($expandProps, $paginationParams, $filter);
     }
@@ -136,7 +148,7 @@ class LoanProSDK
                     $type = (isset($config['config']['type']))? $config['config']['type'] : 'ini';
                     switch($type){
                         case 'json':
-                            $config = json_decode(file_get_contents($config['config']['file']));
+                            $config = json_decode(file_get_contents($config['config']['file']),true);
                             break;
                         case 'ini':
                             $config = parse_ini_file($config['config']['file'], true);
@@ -665,6 +677,7 @@ class LoanProSDK
         LOAN::ADVANCEMENTS              =>['class'=>AdvancementsEntity::class,              'isList'=>true ],
         LOAN::AUTOPAY                   =>['class'=>AutopayEntity::class,                   'isList'=>true ],
         LOAN::CHARGES                   =>['class'=>ChargeEntity::class,                    'isList'=>true ],
+        LOAN::CUSTOMERS                 =>['class'=>CustomerEntity::class,                  'isList'=>true ],
         LOAN::CREDITS                   =>['class'=>CreditEntity::class,                    'isList'=>true ],
         LOAN::CHECKLIST_VALUES          =>['class'=>ChecklistItemValueEntity::class,        'isList'=>true ],
         LOAN::DOCUMENTS                 =>['class'=>DocumentEntity::class,                  'isList'=>true ],

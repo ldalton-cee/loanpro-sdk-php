@@ -18,34 +18,11 @@
 
 namespace Simnang\LoanPro\Constants;
 
-/**
- * Class CUSTOM_FIELD_VALUES
- * Holds the list of all loan settings rules applied
- * @package Simnang\LoanPro\Constants
- */
-class CUSTOM_FIELD_VALUES{
-    const ENTITY_ID             = 'entityId';
-    const ENTITY_TYPE           = 'entityType';
-    const CUSTOM_FIELD_ID       = 'customFieldId';
-    const CUSTOM_FIELD_VALUE    = 'customFieldValue';
-    const CUSTOM_FIELD          = 'CustomField';
 
-    const NAME  = 'name';
-    const DESC  = 'description';
-    const AUTO_CALC = 'autoCalculate';
-    const AUTO_CALC_OP  = 'autoCalculateOperationType';
-    const CRED_REP_ENAB = 'creditReportEnabled';
-    const REQUIRED  = 'required';
-    const ACTIVE    = 'active';
-    const SEARCHABLE    = 'searchable';
-    const REPORT_ENABLED    = 'reportEnabled';
-    const ARCHIVE_ENABLED   = 'archiveEnable';
-    const SUMMARY_ENABLED   = 'summaryEnabled';
-    const MAX_LENGTH    = 'maxLength';
-    const DEFAULT_VAL   = 'defaultValue';
-    const SECTION_ID    = 'sectionIdentifier';
-    const DISPLAY_ORDER = 'displayOrder';
-    const SELECT_OPTIONS = 'selectOptions';
-    const DEFINITION    = '_$$definition';
-    const TYPE  = 'type';
+class CUSTOMER_ROLE
+{
+    const ADDITIONAL    = 'loan.customerRole.additional';
+    const PRIMARY       = 'loan.customerRole.primary';
+    const SECONDARY     = 'loan.customerRole.secondary';
+    const UNASSIGNED    = 'loan.customerRole.unassigned';
 }
