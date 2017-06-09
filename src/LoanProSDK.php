@@ -23,7 +23,9 @@ use Simnang\LoanPro\Communicator\ApiClient;
 use Simnang\LoanPro\Communicator\Communicator;
 use Simnang\LoanPro\Constants\APD_ADJUSTMENTS;
 use Simnang\LoanPro\Constants\AUTOPAYS;
+use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Constants\DOCUMENTS;
+use Simnang\LoanPro\Constants\EMPLOYERS;
 use Simnang\LoanPro\Constants\LINKED_LOAN_VALUES;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LSETTINGS;
@@ -38,6 +40,7 @@ use Simnang\LoanPro\Customers\EmployerEntity;
 use Simnang\LoanPro\Customers\PaymentAccountEntity;
 use Simnang\LoanPro\Customers\PhoneEntity;
 use Simnang\LoanPro\Customers\ReferencesEntity;
+use Simnang\LoanPro\Customers\SocialProfileEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Iteration\FilterParams;
@@ -180,7 +183,7 @@ class LoanProSDK
 
     /**
      * Creates a new loan with the minimal amount of information required
-     * @param string $dispId
+     * @param string $dispId - Display ID for the loan
      * @return Loans\LoanEntity
      */
     public function CreateLoan(string $dispId){
@@ -277,10 +280,32 @@ class LoanProSDK
         return (new Loans\LoanEntity($json[LOAN::DISP_ID]))->set($setVars);
     }
 
+    public function CreateCustomerFromJSON($json){
+        if(!is_string($json) && !is_array($json))
+            throw new \InvalidArgumentException("Expected a JSON string or array");
+        if(is_string($json))
+            $json = json_decode($json, true);
+        $json = static::CleanJSON($json);
+        if(!isset($json[CUSTOMERS::FIRST_NAME]))
+            throw new \InvalidArgumentException("Missing first name");
+        if(!isset($json[CUSTOMERS::LAST_NAME]))
+            throw new \InvalidArgumentException("Missing last name");
+
+        $setVars = [];
+
+        foreach($json as $key => $val){
+            $val = LoanProSDK::GetObjectForm($key, $val);
+            if(!is_null($val))
+                $setVars[$key] = $val;
+        }
+
+        return (new CustomerEntity($json[CUSTOMERS::FIRST_NAME],$json[CUSTOMERS::LAST_NAME]))->set($setVars);
+    }
+
     /**
      * Creates a new loan setup entity with the minimal amount of data needed.
-     * @param string $class -
-     * @param string $type
+     * @param string $class - Class of loan
+     * @param string $type - Type of loan
      * @return LoanSetupEntity
      */
     public function CreateLoanSetup(string $class, string $type){
@@ -609,6 +634,13 @@ class LoanProSDK
     private static $entities = [
         AUTOPAYS::MC_PROCESSOR          =>['class'=>MCProcessorEntity::class],
 
+        CUSTOMERS::PRIMARY_ADDRESS      =>['class'=>AddressEntity::class],
+        CUSTOMERS::MAIL_ADDRESS         =>['class'=>AddressEntity::class],
+        CUSTOMERS::EMPLOYER             =>['class'=>EmployerEntity::class],
+        CUSTOMERS::CREDIT_SCORE         =>['class'=>CreditScoreEntity::class],
+
+        EMPLOYERS::ADDRESS              =>['class'=>AddressEntity::class],
+
         LOAN::LSETUP                    =>['class'=>LoanSetupEntity::class      ],
         LOAN::LSETTINGS                 =>['class'=>LoanSettingsEntity::class   ],
         LOAN::COLLATERAL                =>['class'=>CollateralEntity::class     ],
@@ -620,6 +652,13 @@ class LoanProSDK
         LSETTINGS::LOAN_STATUS          =>['class'=>LoanStatusEntity::class     ],
         LSETTINGS::LOAN_SUB_STATUS      =>['class'=>LoanSubStatusEntity::class  ],
         LSETTINGS::SOURCE_COMPANY       =>['class'=>SourceCompanyEntity::class  ],
+
+
+
+        CUSTOMERS::PAYMENT_ACCOUNTS     =>['class'=>PaymentAccountEntity::class,            'isList'=>true ],
+        CUSTOMERS::PHONES               =>['class'=>PhoneEntity::class,                     'isList'=>true ],
+        CUSTOMERS::SOCIAL_PROFILES      =>['class'=>SocialProfileEntity::class,             'isList'=>true ],
+        CUSTOMERS::REFERENCES           =>['class'=>ReferencesEntity::class,                'isList'=>true ],
 
         LOAN::APD_ADJUSTMENTS           =>['class'=>APDAdjustmentEntity::class,             'isList'=>true ],
         LOAN::ADVANCEMENTS              =>['class'=>AdvancementsEntity::class,              'isList'=>true ],

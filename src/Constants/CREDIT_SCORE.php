@@ -26,6 +26,6 @@ class CREDIT_SCORE{
     const EQUIFAX_SCORE     = 'equifaxScore';
     const TRANSUNION_SCORE  = 'transunionScore';
     const EXPERIAN_SCORE    = 'experianScore';
-    const CREATED           = 'craeted';
+    const CREATED           = 'created';
     const MODIFIED          = 'modified';
 }

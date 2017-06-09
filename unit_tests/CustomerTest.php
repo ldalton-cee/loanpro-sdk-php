@@ -181,4 +181,27 @@ class CustomerTest extends TestCase
 
         return $customer;
     }
+
+    /**
+     * @group json_correctness
+     * @group offline
+     * @group new
+     * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
+     */
+    public function testLoadFromJSON(){
+        $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateCustomerFromJSON(file_get_contents(__DIR__."/json_templates/customerTemplate_1.json"));
+        $addr = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateAddress(ADDRESS_STATE__C::CALIFORNIA, 94510)->set(
+            BASE_ENTITY::ID, 3,
+            ADDRESS::ADDRESS_1, '123 Oak Lane',
+            ADDRESS::CITY, 'Benicia',
+            ADDRESS::COUNTRY__C, ADDRESS\ADDRESS_COUNTRY__C::USA,
+            ADDRESS::GEO_LAT, '38.0459878',
+            ADDRESS::GEO_LON, '-122.1292439',
+            ADDRESS::CREATED, 1493234716,
+            ADDRESS::ACTIVE, 1,
+            ADDRESS::IS_VERIFIED, 0,
+            ADDRESS::IS_STANDARDIZED, 0
+        );
+        $this->assertEquals([CUSTOMERS::PRIMARY_ADDRESS=>$addr, CUSTOMERS::MAIL_ADDRESS=>$addr], $customer->get(CUSTOMERS::PRIMARY_ADDRESS, CUSTOMERS::MAIL_ADDRESS));
+    }
 }

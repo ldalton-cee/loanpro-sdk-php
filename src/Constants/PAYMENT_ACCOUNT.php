@@ -34,4 +34,8 @@ class PAYMENT_ACCOUNT{
     const CHECKING_ACCOUNT_ID   = 'checkingAccountId';
     const ACTIVE                = 'active';
     const VERIFY                = 'verify';
+
+    const ADDRESS               = 'Address';
+    const CHECKING_ACCOUNT      = 'CheckingAccount';
+    const CREDIT_CARD           = 'CreditCard';
 }

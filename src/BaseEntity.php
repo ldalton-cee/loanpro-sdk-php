@@ -253,8 +253,12 @@ abstract class BaseEntity implements \JsonSerializable
                 } else if ($obj->IsValidField($key, $val) || ($key === BASE_ENTITY::ID && FieldValidator::IsValidInt($val))) {
                     $obj->properties[ $key ] = $obj->GetValidField($key, $val);
                 } else if (!$obj->IsField($key)) {
-                    if (BaseEntity::$strictMode)
-                        throw new \InvalidArgumentException("Invalid property '$key' for class " . get_class($this) . " (Ref val: '$val')");
+                    if (BaseEntity::$strictMode) {
+                        if(FieldValidator::IsValidString($val))
+                            throw new \InvalidArgumentException("Invalid property '$key' for class " . get_class($this) . " (Ref val: '$val')");
+                        else
+                            throw new \InvalidArgumentException("Invalid property '$key' for class " . get_class($this) . " Ref val: ".print_r($val, true));
+                    }
                     else
                         $obj->properties[ $key ] = $val;
                 }

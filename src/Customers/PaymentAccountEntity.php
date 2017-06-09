@@ -22,6 +22,7 @@ namespace Simnang\LoanPro\Customers;
 use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Constants\PAYMENT_ACCOUNT;
+use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Validator\FieldValidator;
 
 class PaymentAccountEntity extends  BaseEntity
@@ -72,5 +73,10 @@ class PaymentAccountEntity extends  BaseEntity
         PAYMENT_ACCOUNT::CHECKING_ACCOUNT_ID    => FieldValidator::INT,
         PAYMENT_ACCOUNT::ACTIVE                 => FieldValidator::BOOL,
         PAYMENT_ACCOUNT::VERIFY                 => FieldValidator::BOOL,
+
+        PAYMENT_ACCOUNT::ADDRESS                => FieldValidator::OBJECT,
+
+        PAYMENT_ACCOUNT::CHECKING_ACCOUNT       => FieldValidator::READ_ONLY,
+        PAYMENT_ACCOUNT::CREDIT_CARD            => FieldValidator::READ_ONLY,
     ];
 }
