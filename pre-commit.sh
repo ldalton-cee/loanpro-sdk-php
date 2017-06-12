@@ -1,4 +1,4 @@
 #/bin/bash
 
-php composer.phar offline
+php composer.phar test
 

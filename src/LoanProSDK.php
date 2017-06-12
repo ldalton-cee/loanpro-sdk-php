@@ -104,6 +104,7 @@ class LoanProSDK
 {
     private static $inst;
     private static $clientType = ApiClient::TYPE_SYNC;
+    private static $env = Communicator::PRODUCTION;
     private $apiComm;
 
     /**
@@ -176,6 +177,16 @@ class LoanProSDK
         return $this->apiComm->getCustomers($expandProps, $paginationParams, $filter);
     }
 
+    public static function trimRecursive($arg){
+        if(is_array($arg)) {
+            $ret = [];
+            foreach($arg as $k => $v)
+                $ret[$k] = static::trimRecursive($v);
+            return $ret;
+        }
+        return trim($arg);
+    }
+
     /**
      * Returns the singleton instance of the SDK
      * @return LoanProSDK
@@ -183,23 +194,28 @@ class LoanProSDK
      */
     public static function GetInstance(){
         if(static::$inst == null){
+            $loadedConfig = false;
             if(!ApiClient::AreTokensSet()){
+                $loadedConfig = true;
                 $config = parse_ini_file(__DIR__."/config.ini", true);
                 $confFile = __DIR__."/config.ini";
                 // Load config from another source
-                if(isset($config['config']) && isset($config['config']['file']) && file_exists($config['config']['file'])){
+                $depthRemaining = 10;
+                while(isset($config['config']) && isset($config['config']['file']) && file_exists($config['config']['file']) && $depthRemaining >= 0){
+                    $depthRemaining--;
                     $confFile = $config['config']['file'];
-                    $type = (isset($config['config']['type']))? $config['config']['type'] : strrchr($config['config']['type'], '.');
+                    $type = (isset($config['config']['type']))? $config['config']['type'] : substr(strrchr($config['config']['file'], '.'), 1);
+                    unset($config['config']);
                     switch($type){
                         case 'json':
-                            $config = json_decode(file_get_contents($config['config']['file']),true);
+                            $config = array_replace_recursive($config, json_decode(file_get_contents($confFile),true));
                             break;
                         case 'ini':
-                            $config = parse_ini_file($config['config']['file'], true);
+                            $config = array_replace_recursive($config, parse_ini_file($confFile, true));
                             break;
                         case 'xml':
-                            $xml = simplexml_load_string(file_get_contents($config['config']['file']));
-                            $config = json_decode(json_encode($xml), true);
+                            $xml = simplexml_load_string(file_get_contents($confFile));
+                            $config = array_replace_recursive($config,static::trimRecursive(json_decode(json_encode($xml), true)));
                             break;
                         default:
                             throw new \InvalidArgumentException("Unknown config file type '$type', expected json, ini, or xml");
@@ -210,7 +226,7 @@ class LoanProSDK
                 }
                 else{
                     throw new InvalidStateException('Configuration does not have api credentials! Loading from '.$confFile);
-            }
+                }
                 $clientType = (isset($config['communicator']) && isset($config['communicator']['type'])) ? $config['communicator']['type'] : 'async';
 
                 switch($clientType){
@@ -223,6 +239,21 @@ class LoanProSDK
                     default:
                         throw new \InvalidArgumentException("Unkown client type '$clientType', expected async or sync");
                 }
+
+                $env = (isset($config['communicator']) && isset($config['communicator']['env'])) ? $config['communicator']['env'] : 'prod';
+
+                switch($env){
+                    case 'beta':
+                        $env = Communicator::BETA;
+                        break;
+                    case 'staging':
+                        $env = Communicator::STAGING;
+                        break;
+                    case 'prod':
+                    default:
+                        $env = Communicator::PRODUCTION;
+                }
+                static::$env = $env;
             }
             static::$inst = new LoanProSDK();
         }
@@ -856,7 +887,7 @@ class LoanProSDK
     }
 
     private function __construct(){
-        $this->apiComm = Communicator::GetCommunicator(static::$clientType);
+        $this->apiComm = Communicator::GetCommunicator(static::$clientType, static::$env);
     }
 
 
