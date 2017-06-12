@@ -483,17 +483,43 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
-    public function testCustomerAdd(){
-        $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(2);
-        $customer2 = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(4);
+    public function testCustomerAddToLoan(){
+        $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(static::$cid);
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoan(static::$loanId);
         $loan = $loan->addCustomer($customer, CONSTS\CUSTOMER_ROLE::PRIMARY);
-        $loan = $loan->addCustomer($customer2, CONSTS\CUSTOMER_ROLE::SECONDARY);
 
-        $this->assertEquals(2, count($loan->get(LOAN::CUSTOMERS)));
-        $this->assertEquals(2, $loan->get(LOAN::CUSTOMERS)[0]->get(BASE_ENTITY::ID));
-        $this->assertEquals(4, $loan->get(LOAN::CUSTOMERS)[1]->get(BASE_ENTITY::ID));
+        $this->assertEquals(1, count($loan->get(LOAN::CUSTOMERS)));
+        $this->assertEquals(static::$cid, $loan->get(LOAN::CUSTOMERS)[0]->get(BASE_ENTITY::ID));
+    }
+
+    /**
+     * @group online
+     */
+    public function testOfacTest(){
+        $customer= \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(static::$cid);
+        $ofacRes = $customer->runOfacTest();
+        $this->assertEquals([false,[]], $ofacRes);
+    }
+
+    /**
+     * @depends testCustomerAddToLoan
+     * @group online
+     */
+    public function testGetCustomerAccess(){
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->MakeLoanShellFromID(static::$loanId);
+        $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->MakeCustomerShellFromID(static::$cid);
+        $this->assertEquals([static::$loanId=>['web'=>0,'sms'=>0,'email'=>0]],$customer->getLoanAccess($loan));
+        $this->assertEquals(['web'=>0,'sms'=>0,'email'=>0],$customer->getLoanAccessForLoan($loan));
+        $loan2 = (new \Simnang\LoanPro\Loans\LoanEntity('UnExistant'))->set(BASE_ENTITY::ID, 1);
+        $this->assertTrue(is_null($customer->getLoanAccessForLoan($loan2)));
+
+        $this->assertEquals(['web'=>1, 'sms'=>1, 'email'=>1], $customer->setLoanAccessForLoan($loan, ['web'=>1, 'sms'=>1,'email'=>1]));
+
+        $this->assertEquals(['web'=>0, 'sms'=>0, 'email'=>1], $customer->setLoanAccessForLoan($loan, ['web'=>0, 'sms'=>0,'email'=>1]));
+
+        $this->assertEquals(['web'=>0, 'sms'=>1, 'email'=>0], $customer->setLoanAccessForLoan($loan, ['web'=>0, 'sms'=>1,'email'=>0]));
+
+        $this->assertEquals(['web'=>1, 'sms'=>0, 'email'=>0], $customer->setLoanAccessForLoan($loan, ['web'=>1, 'sms'=>0,'email'=>0]));
     }
 }

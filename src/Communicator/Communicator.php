@@ -21,9 +21,11 @@ namespace Simnang\LoanPro\Communicator;
 
 use Psr\Http\Message\ResponseInterface;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
+use Simnang\LoanPro\Constants\CREDIT_SCORE;
 use Simnang\LoanPro\Constants\CUSTOMER_ROLE;
 use Simnang\LoanPro\Constants\ENTITY_TYPES;
 use Simnang\LoanPro\Constants\LOAN;
+use Simnang\LoanPro\Customers\CreditScoreEntity;
 use Simnang\LoanPro\Customers\CustomerEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
@@ -650,6 +652,182 @@ class Communicator
             }
         }
         throw new ApiException($res);
+    }
+
+    /**
+     * Pulls credit score for customer and saves to customer on server; returns CreditScoreEntity with result
+     * @param CustomerEntity $customer - customer to pull score for
+     * @param array          $expansion - array expansion for customer
+     * @param bool|false     $exportAsPDF - whether or not to save results as a PDF
+     * @return CreditScoreEntity
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function pullCreditScore(CustomerEntity $customer, $expansion = [], $exportAsPDF = false){
+        $customer->insureHasID();
+
+        $query = [];
+        if($exportAsPDF)
+            $query[] = '$export=true';
+        if(count($expansion))
+        {
+            $allowedExpansion = [CREDIT_SCORE::EXPERIAN_SCORE=>'experian', CREDIT_SCORE::EQUIFAX_SCORE=>'equifax', CREDIT_SCORE::TRANSUNION_SCORE=>'transunion'];
+            foreach($expansion as $val){
+                if(!isset($allowedExpansion[$val]) && !in_array($val,$allowedExpansion))
+                    throw new \InvalidArgumentException("Unknown credit bureau '$val', please pass in a CREDIT_SCORE credit bureau constant such as CREDIT_SCORE::EXPERIAN_SCORE");
+            }
+            $query[] = '$select='.implode(',',$expansion);
+        }
+        else
+            throw new \InvalidArgumentException("Need to provide an expansion property");
+        $query = '?'.implode('&',array_filter($query));
+
+        $id = $customer->get(BASE_ENTITY::ID);
+
+        $res = $this->client->POST("$this->baseUrl/odata.svc/Customers($id)/Autopal.GetCreditScore()$query");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['success']) && isset($body['d']['result']) && isset($body['d']['result']['scores']) && $body['d']['success']) {
+                $scores = $body['d']['result']['scores'];
+                $set = [];
+                if(!is_null($scores['Experian']))
+                    $set[CREDIT_SCORE::EXPERIAN_SCORE] =$scores['Experian'];
+                if(!is_null($scores['Equifax']))
+                    $set[CREDIT_SCORE::EQUIFAX_SCORE] =$scores['Equifax'];
+                if(!is_null($scores['TransUnion']))
+                    $set[CREDIT_SCORE::TRANSUNION_SCORE] =$scores['TransUnion'];
+
+                return (new CreditScoreEntity())->set($set);
+            }
+        }
+        throw new ApiException($res);
+
+    }
+
+    /**
+     * This runs an OFAC test for a customer. The return result is an array where the first element is wether or not there was a match and the second element is a list of matches
+     * @param CustomerEntity $customer - The customer to run an OFAC Test against
+     * @return array - First element is a boolean, second argument is a list of OFAC matches
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function runOfacTest(CustomerEntity $customer){
+        $customer->insureHasID();
+        $id = $customer->get(BASE_ENTITY::ID);
+
+        $res = $this->client->POST("$this->baseUrl/odata.svc/Customers($id)/Autopal.OfacTest()");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['matchesFound'])) {
+                if(!$body['d']['matchesFound'])
+                    return [$body['d']['matchesFound'], []];
+                return [true, $body['d']['matches']];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * @param CustomerEntity  $customer
+     * @param LoanEntity|null $loan
+     * @return array|null
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getCustomerLoanAccess(CustomerEntity $customer, LoanEntity $loan = null){
+        $customer->insureHasID();
+        $id = $customer->get(BASE_ENTITY::ID);
+        if(!is_null($loan))
+            $loan->insureHasID();
+
+
+        $res = $this->client->GET("$this->baseUrl/odata.svc/Customers($id)?\$expand=Loans,Loans/StatusArchive&nopaging=true");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['Loans'])) {
+                if($loan){
+                    foreach($body['d']['Loans'] as $l){
+                        if($l['id'] == $loan->get(BASE_ENTITY::ID))
+                        {
+                            return [
+                                'web'=>$l['_relatedMetadata']['customerWebAccess'],
+                                'sms'=>$l['_relatedMetadata']['customerSmsAccess'],
+                                'email'=>$l['_relatedMetadata']['customerEmailEnrollmentAccess'],
+                            ];
+                        }
+                    }
+                    return null;
+                }
+                $accessSettings = [];
+                foreach($body['d']['Loans'] as $l){
+                    $accessSettings[$l['id']] = [
+                        'web'=>$l['_relatedMetadata']['customerWebAccess'],
+                        'sms'=>$l['_relatedMetadata']['customerSmsAccess'],
+                        'email'=>$l['_relatedMetadata']['customerEmailEnrollmentAccess'],
+                    ];
+                }
+                return $accessSettings;
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Sets the customer access restrictions for a loan
+     * @param CustomerEntity $customer
+     * @param LoanEntity     $loan
+     * @param array          $access
+     * @return array|null
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function setCustomerLoanAccess(CustomerEntity $customer, LoanEntity $loan, $access = []){
+        $customer->insureHasID();
+        $loan->insureHasID();
+
+        $cid = $customer->get(BASE_ENTITY::ID);
+        $lid = $loan->get(BASE_ENTITY::ID);
+
+        $raccess = [
+            '__id'=>$cid,
+            '__update'=>true,
+        ];
+
+        if(isset($access['web']))
+            $raccess['__setCustomerWebAccess'] = $access['web'];
+        else if(isset($access['customerWebAccess']))
+            $raccess['__setCustomerWebAccess'] = $access['customerWebAccess'];
+
+        if(isset($access['sms']))
+            $raccess['__setCustomerSmsAccess'] = $access['sms'];
+        else if(isset($access['customerSmsAccess']))
+            $raccess['__setCustomerSmsAccess'] = $access['customerSmsAccess'];
+
+        if(isset($access['email']))
+            $raccess['__setCustomerEmailAccess'] = $access['email'];
+        else if(isset($access['customerEmailEnrollmentAccess']))
+            $raccess['__setCustomerEmailAccess'] = $access['customerEmailEnrollmentAccess'];
+
+        $req = [
+            'id'=>$lid,
+            'Customers'=>[
+                'results'=>[
+                        $raccess
+                ]
+            ],
+            '__update'=>true,
+            '__id'=>$lid
+        ];
+
+
+        $response = $this->client->PUT("$this->baseUrl/odata.svc/Loans($lid)",$req);
+
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d']))
+                return $this->getCustomerLoanAccess($customer, $loan);
+        }
+        throw new ApiException($response);
     }
 
     /// @cond false

@@ -71,8 +71,77 @@ class CustomerEntity extends  BaseEntity
         return LoanProSDK::GetInstance()->GetApiComm()->linkCustomerAndLoan($this, $loan, $customerRole);
     }
 
+    /**
+     * Saves the customer to the server (if there's an ID, it updates the customer, otherwise it deletes the customer)
+     * @return CustomerEntity
+     * @throws InvalidStateException
+     * @throws \Simnang\LoanPro\Exceptions\ApiException
+     */
     public function save(){
         return LoanProSDK::GetInstance()->GetApiComm()->saveCustomer($this);
+    }
+
+    /**
+     * Pulls credit score for customer and saves to customer on server; returns CreditScoreEntity with result
+     * @param array          $expansion - array of credit beuraus to pull (such as CREDIT_SCORE::EXPERIAN_SCORE)
+     * @param bool|false     $exportAsPDF - whether or not to save results as a PDF
+     * @return CreditScoreEntity
+     * @throws InvalidStateException
+     * @throws \Simnang\LoanPro\Exceptions\ApiException
+     */
+    public function pullCreditScore($expansion = [], $exportAsPDF = false){
+        return LoanProSDK::GetInstance()->GetApiComm()->pullCreditScore($this, $expansion, $exportAsPDF);
+    }
+
+    /**
+     * This runs an OFAC test for a customer. The return result is an array where the first element is wether or not there was a match and the second element is a list of matches
+     * @param CustomerEntity $customer - The customer to run an OFAC Test against
+     * @return array - First element is a boolean, second argument is a list of OFAC matches
+     * @throws InvalidStateException
+     * @throws \Simnang\LoanPro\Exceptions\ApiException
+     */
+    public function runOfacTest(){
+        return LoanProSDK::GetInstance()->GetApiComm()->runOfacTest($this);
+    }
+
+    /**
+     * Returns an array of access settings for all loans the customer is linked to
+     * The results are returned as an array, where the keys are loan ids and the values are arrays
+     *  The nested arrays have the keys 'web', 'sms', and 'email'; their values are either 1 or 0 depending on whether or not the customer has that form of access
+     * @return array
+     * @throws InvalidStateException
+     * @throws \Simnang\LoanPro\Exceptions\ApiException
+     */
+    public function getLoanAccess(){
+        return LoanProSDK::GetInstance()->GetApiComm()->getCustomerLoanAccess($this);
+    }
+
+    /**
+     * Returns an array of access settings for a particular loans the customer is linked to
+     * The results are returned as an array
+     *  The keys 'web', 'sms', and 'email'; their values are either 1 or 0 depending on whether or not the customer has that form of access
+     *
+     * If the customer is not linked to the loan then null is returned
+     * @param LoanEntity $loan
+     * @return array|null
+     * @throws InvalidStateException
+     * @throws \Simnang\LoanPro\Exceptions\ApiException
+     */
+    public function getLoanAccessForLoan(LoanEntity $loan){
+        return LoanProSDK::GetInstance()->GetApiComm()->getCustomerLoanAccess($this, $loan);
+    }
+
+    /**
+     * Sets the access settings for a loan and then returns an array of the results
+     *  Keys for $access should be 'web', 'sms', and 'email'; the values should be either 1 or 0
+     * @param LoanEntity $loan
+     * @param array      $access
+     * @return array|null
+     * @throws InvalidStateException
+     * @throws \Simnang\LoanPro\Exceptions\ApiException
+     */
+    public function setLoanAccessForLoan(LoanEntity $loan, $access = []){
+        return LoanProSDK::GetInstance()->GetApiComm()->setCustomerLoanAccess($this, $loan, $access);
     }
 
     /**

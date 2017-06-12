@@ -23,6 +23,7 @@ use Simnang\LoanPro\Communicator\ApiClient;
 use Simnang\LoanPro\Communicator\Communicator;
 use Simnang\LoanPro\Constants\APD_ADJUSTMENTS;
 use Simnang\LoanPro\Constants\AUTOPAYS;
+use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\CUSTOM_FIELD_VALUES;
 use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Constants\DOCUMENTS;
@@ -92,6 +93,7 @@ use Simnang\LoanPro\Loans\ScheduleRollEntity;
 use Simnang\LoanPro\Loans\SourceCompanyEntity;
 use Simnang\LoanPro\Loans\StopInterestDateEntity;
 use Simnang\LoanPro\Loans\SubPortfolioEntity;
+use Symfony\Component\Yaml\Tests\B;
 
 /**
  * Class LoanProSDK
@@ -114,6 +116,26 @@ class LoanProSDK
      */
     public function GetLoan($id, $expandProps = [], $nopageProps = true){
         return $this->apiComm->getLoan($id, $expandProps, $nopageProps);
+    }
+
+    /**
+     * Returns a loan entity shell around an ID (good for performance)
+     * DO NOT USE 'save()' ON THIS ENTITY
+     * @param $loanId - ID of loan entity
+     * @return LoanEntity
+     */
+    public function MakeLoanShellFromID($loanId){
+        return (new LoanEntity(''))->set(BASE_ENTITY::ID, $loanId);
+    }
+
+    /**
+     * Returns a customer entity shell around an ID (good for performance)
+     * DO NOT USE 'save()' ON THIS ENTITY
+     * @param $customerId - ID of customer entity
+     * @return CustomerEntity
+     */
+    public function MakeCustomerShellFromID($customerId){
+        return (new CustomerEntity('',''))->set(BASE_ENTITY::ID, $customerId);
     }
 
     /**
