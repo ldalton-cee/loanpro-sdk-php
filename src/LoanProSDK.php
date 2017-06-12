@@ -150,8 +150,30 @@ class LoanProSDK
         return $this->apiComm->getCustomer($id, $expandProps, $nopageProps);
     }
 
+    /**
+     * Returns an array of loan entities
+     * @param array                 $expandProps - expand properties to expand by
+     * @param PaginationParams|null $paginationParams - Pagination options
+     * @param FilterParams|null     $filter - filter object
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
     public function GetLoans_RAW($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
         return $this->apiComm->getLoans($expandProps, $paginationParams, $filter);
+    }
+
+    /**
+     * Returns an array of customer entities
+     * @param array                 $expandProps - expand properties to expand by
+     * @param PaginationParams|null $paginationParams - Pagination options
+     * @param FilterParams|null     $filter - filter object
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetCustomers_RAW($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
+        return $this->apiComm->getCustomers($expandProps, $paginationParams, $filter);
     }
 
     /**

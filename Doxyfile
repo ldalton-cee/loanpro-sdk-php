@@ -1784,7 +1784,7 @@ USE_PDFLATEX           = YES
 # The default value is: NO.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_BATCHMODE        = NO
+LATEX_BATCHMODE        = YES
 
 # If the LATEX_HIDE_INDICES tag is set to YES then doxygen will not include the
 # index chapters (such as File Index, Compound Index, etc.) in the output.
@@ -1801,7 +1801,7 @@ LATEX_HIDE_INDICES     = NO
 # The default value is: NO.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_SOURCE_CODE      = NO
+LATEX_SOURCE_CODE      = YES
 
 # The LATEX_BIB_STYLE tag can be used to specify the style to use for the
 # bibliography, e.g. plainnat, or ieeetr. See

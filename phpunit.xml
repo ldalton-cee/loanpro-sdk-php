@@ -24,7 +24,31 @@
          verbose="false">
     <testsuites>
         <testsuite name="all">
-        <directory>unit_tests</directory>
+            <directory>unit_tests</directory>
+        </testsuite>
+        <testsuite name="offline">
+            <directory>unit_tests</directory>
+            <group>offline</group>
+            <exclude>unit_tests/ApiClientTest.php</exclude>
+            <groups>
+                <include>
+                    <group>offline</group>
+                </include>
+                <exclude>
+                    <group>online</group>
+                </exclude>
+            </groups>
+        </testsuite>
+        <testsuite name="online">
+            <directory>unit_tests</directory>
+            <groups>
+                <include>
+                    <group>online</group>
+                </include>
+                <exclude>
+                    <group>offline</group>
+                </exclude>
+            </groups>
         </testsuite>
     </testsuites>
     <filter>

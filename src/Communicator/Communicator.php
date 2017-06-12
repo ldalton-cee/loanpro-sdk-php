@@ -625,10 +625,12 @@ class Communicator
 
     /**
      * Returns an array of loan entities
-     * @param array             $expandProps - expand properties to expand by
-     * @param bool|true         $nopageProps - no pagination properties
-     * @param FilterParams|null $filter - filter object
+     * @param array                 $expandProps - expand properties to expand by
+     * @param PaginationParams|null $paginationParams - Pagination options
+     * @param FilterParams|null     $filter - filter object
      * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
      */
     public function getLoans($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
         $query = [];
@@ -647,6 +649,39 @@ class Communicator
                 $ret = [];
                 foreach($body['d']['results'] as $val){
                     $ret[] = LoanProSDK::GetInstance()->CreateLoanFromJSON($val);
+                }
+                return $ret;
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Returns an array of customer entities
+     * @param array                 $expandProps - expand properties to expand by
+     * @param PaginationParams|null $paginationParams - Pagination options
+     * @param FilterParams|null     $filter - filter object
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function getCustomers($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
+        $query = [];
+        $query[] = (string)$paginationParams;
+        $query[] = (string)$filter;
+        $exp = implode(',', $expandProps);
+        if($exp)
+            $query[] = "\$expand=$exp";
+        $query = '?'.implode('&',array_filter($query));
+        if($query === '?')
+            $query = '';
+        $res = $this->client->GET("$this->baseUrl/odata.svc/Customers()$query");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['results'])) {
+                $ret = [];
+                foreach($body['d']['results'] as $val){
+                    $ret[] = LoanProSDK::GetInstance()->CreateCustomerFromJSON($val);
                 }
                 return $ret;
             }
@@ -831,6 +866,9 @@ class Communicator
     }
 
     /// @cond false
+    /**
+     *
+     */
     const BETA = "beta-";
 
     public function secret($c){

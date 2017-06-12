@@ -31,9 +31,9 @@
     "files":["src/Constants/Constants.php"],
     "scripts": {
         "test": "phpunit unit_tests/",
-	    "coverage": "phpunit --configuration phpunit.xml --coverage-html cov_html/ --coverage-clover cov_xml/clover.xml  unit_tests",
-        "online": "phpunit --group online unit_tests/",
-        "offline": "phpunit --group offline unit_tests/",
+	    "coverage": "phpunit --configuration phpunit.xml --coverage-html cov_html/ --coverage-clover cov_xml/clover.xml  --testsuite all",
+        "online": "phpunit --configuration phpunit.xml --testsuite online",
+        "offline": "phpunit --configuration phpunit.xml --testsuite offline",
         "new": "phpunit --group new unit_tests/"
     }
 }

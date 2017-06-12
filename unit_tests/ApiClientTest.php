@@ -84,6 +84,7 @@ class ApiClientTest extends TestCase
     /**
      * This sets up the authorization for the API client and sets up an async communicator to use
      * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
+     * @group online
      */
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
@@ -125,6 +126,10 @@ class ApiClientTest extends TestCase
         static::$cid = $customer->SetIgnoreWarnings(true)->save()->get(BASE_ENTITY::ID);
     }
 
+    /**
+     * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
+     * @group online
+     */
     public static function tearDownAfterClass(){
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoan("")->set(BASE_ENTITY::ID, static::$loanId);
         $loan->delete(true);
@@ -521,5 +526,52 @@ class ApiClientTest extends TestCase
         $this->assertEquals(['web'=>0, 'sms'=>1, 'email'=>0], $customer->setLoanAccessForLoan($loan, ['web'=>0, 'sms'=>1,'email'=>0]));
 
         $this->assertEquals(['web'=>1, 'sms'=>0, 'email'=>0], $customer->setLoanAccessForLoan($loan, ['web'=>1, 'sms'=>0,'email'=>0]));
+    }
+
+    /**
+     * @group online
+     * @group new
+     */
+    public function testGetCustomers(){
+        $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW();
+        $this->assertTrue(is_array($customers));
+        $this->assertGreaterThan(1, count($customers));
+        foreach($customers as $c){
+            $this->assertTrue($c instanceof \Simnang\LoanPro\Customers\CustomerEntity);
+        }
+        $paginator = new \Simnang\LoanPro\Iteration\PaginationParams(false, 0, 1);
+        $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW([], $paginator);
+        $this->assertTrue(is_array($customers));
+        $this->assertEquals(1, count($customers));
+        foreach($customers as $c){
+            $this->assertTrue($c instanceof \Simnang\LoanPro\Customers\CustomerEntity);
+        }
+
+        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromODataString("4 lt 5");
+        $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW([], $paginator, $filter);
+        $this->assertTrue(is_array($customers));
+        $this->assertEquals(1, count($customers));
+        foreach($customers as $c){
+            $this->assertTrue($c instanceof \Simnang\LoanPro\Customers\CustomerEntity);
+        }
+
+        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromODataString("4 gt 5");
+        $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW([], $paginator, $filter);
+        $this->assertTrue(is_array($customers));
+        $this->assertEquals(0, count($customers));
+
+
+        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromLogicString("4 < 5");
+        $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW([], $paginator, $filter);
+        $this->assertTrue(is_array($customers));
+        $this->assertEquals(1, count($customers));
+        foreach($customers as $c){
+            $this->assertTrue($c instanceof \Simnang\LoanPro\Customers\CustomerEntity);
+        }
+
+        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromLogicString("4 > 5");
+        $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW([], $paginator, $filter);
+        $this->assertTrue(is_array($customers));
+        $this->assertEquals(0, count($customers));
     }
 }
