@@ -20,7 +20,7 @@ namespace Simnang\LoanPro\Loans;
 
 use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
-use Simnang\LoanPro\Constants\LSTATUS_ARCHIVE;
+use Simnang\LoanPro\Constants\STATUS_ARCHIVE;
 use Simnang\LoanPro\Validator\FieldValidator;
 
 class LoanStatusArchiveEntity extends BaseEntity
@@ -43,7 +43,7 @@ class LoanStatusArchiveEntity extends BaseEntity
      * The name of the constant collection list
      * @var string
      */
-    protected static $constCollectionPrefix = "LSTATUS_ARCHIVE";
+    protected static $constCollectionPrefix = "STATUS_ARCHIVE";
 
     /**
      * Required to keep type fields from colliding with other types
@@ -61,63 +61,63 @@ class LoanStatusArchiveEntity extends BaseEntity
      * @var array
      */
     protected static $fields = [
-        LSTATUS_ARCHIVE::DATE                       => FieldValidator::DATE,
-        LSTATUS_ARCHIVE::DATE_LAST_CURRENT          => FieldValidator::DATE,
-        LSTATUS_ARCHIVE::DATE_LAST_CURRENT_30       => FieldValidator::DATE,
-        LSTATUS_ARCHIVE::FINAL_PAYMENT_DATE         => FieldValidator::DATE,
-        LSTATUS_ARCHIVE::FIRST_DELINQUENCY_DATE     => FieldValidator::DATE,
-        LSTATUS_ARCHIVE::NEXT_PAYMENT_DATE          => FieldValidator::DATE,
-        LSTATUS_ARCHIVE::LAST_HUMAN_ACTIVITY        => FieldValidator::DATE,
-        LSTATUS_ARCHIVE::LAST_PAYMENT_DATE          => FieldValidator::DATE,
-        LSTATUS_ARCHIVE::PERIOD_START               => FieldValidator::DATE,
-        LSTATUS_ARCHIVE::PERIOD_END                 => FieldValidator::DATE,
+        STATUS_ARCHIVE::DATE                       => FieldValidator::DATE,
+        STATUS_ARCHIVE::DATE_LAST_CURRENT          => FieldValidator::DATE,
+        STATUS_ARCHIVE::DATE_LAST_CURRENT_30       => FieldValidator::DATE,
+        STATUS_ARCHIVE::FINAL_PAYMENT_DATE         => FieldValidator::DATE,
+        STATUS_ARCHIVE::FIRST_DELINQUENCY_DATE     => FieldValidator::DATE,
+        STATUS_ARCHIVE::NEXT_PAYMENT_DATE          => FieldValidator::DATE,
+        STATUS_ARCHIVE::LAST_HUMAN_ACTIVITY        => FieldValidator::DATE,
+        STATUS_ARCHIVE::LAST_PAYMENT_DATE          => FieldValidator::DATE,
+        STATUS_ARCHIVE::PERIOD_START               => FieldValidator::DATE,
+        STATUS_ARCHIVE::PERIOD_END                 => FieldValidator::DATE,
 
-        LSTATUS_ARCHIVE::CALCED_ECOA__C             => FieldValidator::COLLECTION,
-        LSTATUS_ARCHIVE::CALCED_ECOA_CO_BUYER__C    => FieldValidator::COLLECTION,
-        LSTATUS_ARCHIVE::CREDIT_STATUS__C           => FieldValidator::COLLECTION,
-        LSTATUS_ARCHIVE::STOPLIGHT__C               => FieldValidator::COLLECTION,
+        STATUS_ARCHIVE::CALCED_ECOA__C             => FieldValidator::COLLECTION,
+        STATUS_ARCHIVE::CALCED_ECOA_CO_BUYER__C    => FieldValidator::COLLECTION,
+        STATUS_ARCHIVE::CREDIT_STATUS__C           => FieldValidator::COLLECTION,
+        STATUS_ARCHIVE::STOPLIGHT__C               => FieldValidator::COLLECTION,
 
-        LSTATUS_ARCHIVE::DAYS_PAST_DUE              => FieldValidator::INT,
-        LSTATUS_ARCHIVE::DELINQUENT_DAYS            => FieldValidator::INT,
-        LSTATUS_ARCHIVE::LOAN_AGE                   => FieldValidator::INT,
-        LSTATUS_ARCHIVE::LOAN_ID                    => FieldValidator::INT,
-        LSTATUS_ARCHIVE::LOAN_STATUS_ID             => FieldValidator::INT,
-        LSTATUS_ARCHIVE::LOAN_SUB_STATUS_ID         => FieldValidator::INT,
-        LSTATUS_ARCHIVE::LOAN_RECENCY               => FieldValidator::INT,
-        LSTATUS_ARCHIVE::PERIODS_REMAINING          => FieldValidator::INT,
-        LSTATUS_ARCHIVE::SOURCE_COMPANY_ID          => FieldValidator::INT,
-        LSTATUS_ARCHIVE::UNIQUE_DELINQUENCIES       => FieldValidator::INT,
+        STATUS_ARCHIVE::DAYS_PAST_DUE              => FieldValidator::INT,
+        STATUS_ARCHIVE::DELINQUENT_DAYS            => FieldValidator::INT,
+        STATUS_ARCHIVE::LOAN_AGE                   => FieldValidator::INT,
+        STATUS_ARCHIVE::LOAN_ID                    => FieldValidator::INT,
+        STATUS_ARCHIVE::LOAN_STATUS_ID             => FieldValidator::INT,
+        STATUS_ARCHIVE::LOAN_SUB_STATUS_ID         => FieldValidator::INT,
+        STATUS_ARCHIVE::LOAN_RECENCY               => FieldValidator::INT,
+        STATUS_ARCHIVE::PERIODS_REMAINING          => FieldValidator::INT,
+        STATUS_ARCHIVE::SOURCE_COMPANY_ID          => FieldValidator::INT,
+        STATUS_ARCHIVE::UNIQUE_DELINQUENCIES       => FieldValidator::INT,
 
-        LSTATUS_ARCHIVE::AMOUNT_DUE                 => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::AMOUNT_PAST_DUE_30         => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::AVAILABLE_CREDIT           => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::CREDIT_LIMIT               => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::DISCOUNT_REMAINING         => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::DUE_INTEREST               => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::DUE_PRINCIPAL              => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::DUE_DISCOUNT               => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::DUE_ESCROW                 => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::DUE_FEES                   => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::DUE_PNI                    => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::DELINQUENCY_PERCENT        => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::ESCROW_BALANCE             => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::FINAL_PAYMENT_AMOUNT       => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::INTEREST_ACCRUED_TODAY     => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::LAST_PAYMENT_AMOUNT        => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::NET_CHARGE_OFF             => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::NEXT_PAYMENT_AMOUNT        => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::PAYOFF                     => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::PAYOFF_FEES                => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::PERDIEM                    => FieldValidator::NUMBER,
-        LSTATUS_ARCHIVE::PRINCIPAL_BALANCE          => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::AMOUNT_DUE                 => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::AMOUNT_PAST_DUE_30         => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::AVAILABLE_CREDIT           => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::CREDIT_LIMIT               => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::DISCOUNT_REMAINING         => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::DUE_INTEREST               => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::DUE_PRINCIPAL              => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::DUE_DISCOUNT               => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::DUE_ESCROW                 => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::DUE_FEES                   => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::DUE_PNI                    => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::DELINQUENCY_PERCENT        => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::ESCROW_BALANCE             => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::FINAL_PAYMENT_AMOUNT       => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::INTEREST_ACCRUED_TODAY     => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::LAST_PAYMENT_AMOUNT        => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::NET_CHARGE_OFF             => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::NEXT_PAYMENT_AMOUNT        => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::PAYOFF                     => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::PAYOFF_FEES                => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::PERDIEM                    => FieldValidator::NUMBER,
+        STATUS_ARCHIVE::PRINCIPAL_BALANCE          => FieldValidator::NUMBER,
 
-        LSTATUS_ARCHIVE::CUSTOM_FIELDS_BREAKDOWN    => FieldValidator::STRING,
-        LSTATUS_ARCHIVE::DUE_ESCROW_BREAKDOWN       => FieldValidator::STRING,
-        LSTATUS_ARCHIVE::ESCROW_BALANCE_BREAKDOWN   => FieldValidator::STRING,
-        LSTATUS_ARCHIVE::LOAN_STATUS_TEXT           => FieldValidator::STRING,
-        LSTATUS_ARCHIVE::LOAN_SUB_STATUS_TEXT       => FieldValidator::STRING,
-        LSTATUS_ARCHIVE::PORTFOLIO_BREAKDOWN        => FieldValidator::STRING,
-        LSTATUS_ARCHIVE::SOURCE_COMPANY_TEXT        => FieldValidator::STRING,
-        LSTATUS_ARCHIVE::SUB_PORTFOLIO_BREAKDOWN    => FieldValidator::STRING,
+        STATUS_ARCHIVE::CUSTOM_FIELDS_BREAKDOWN    => FieldValidator::STRING,
+        STATUS_ARCHIVE::DUE_ESCROW_BREAKDOWN       => FieldValidator::STRING,
+        STATUS_ARCHIVE::ESCROW_BALANCE_BREAKDOWN   => FieldValidator::STRING,
+        STATUS_ARCHIVE::LOAN_STATUS_TEXT           => FieldValidator::STRING,
+        STATUS_ARCHIVE::LOAN_SUB_STATUS_TEXT       => FieldValidator::STRING,
+        STATUS_ARCHIVE::PORTFOLIO_BREAKDOWN        => FieldValidator::STRING,
+        STATUS_ARCHIVE::SOURCE_COMPANY_TEXT        => FieldValidator::STRING,
+        STATUS_ARCHIVE::SUB_PORTFOLIO_BREAKDOWN    => FieldValidator::STRING,
     ];
 }

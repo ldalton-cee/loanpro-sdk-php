@@ -20,7 +20,7 @@ namespace Simnang\LoanPro;
 
 use Simnang\LoanPro\Communicator\JsonBody;
 use Simnang\LoanPro\Constants\LOAN;
-use Simnang\LoanPro\Constants\LSETTINGS;
+use Simnang\LoanPro\Constants\LOAN_SETTINGS;
 use Simnang\LoanPro\Utils\ArrayUtils;
 use Simnang\LoanPro\Validator\FieldValidator;
 use Simnang\LoanPro\Constants\BASE_ENTITY;

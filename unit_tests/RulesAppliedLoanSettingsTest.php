@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 
 use Simnang\LoanPro\LoanProSDK as LPSDK,
     Simnang\LoanPro\Constants\LOAN as LOAN,
-    Simnang\LoanPro\Constants\LSRULES_APPLIED as LSRULES_APPLIED,
+    Simnang\LoanPro\Constants\LOAN_SETTINGS_RULES_APPLIED as LOAN_SETTINGS_RULES_APPLIED,
     Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY
     ;
 
@@ -56,7 +56,7 @@ class RulesAppliedLoanSettingsTest extends TestCase
      * @group offline
      */
     public function testRulesAppliedLoanSettingsSet(){
-        $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true)->set(BASE_ENTITY::ID, 12)->set(LSRULES_APPLIED::ENABLED, false);
+        $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true)->set(BASE_ENTITY::ID, 12)->set(LOAN_SETTINGS_RULES_APPLIED::ENABLED, false);
         $this->assertEquals(12, $rulesApplied->get(BASE_ENTITY::ID));
     }
 
@@ -91,11 +91,11 @@ class RulesAppliedLoanSettingsTest extends TestCase
      */
     public function testRulesAppliedLoanSettings_DelEnabled(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot delete \''.LSRULES_APPLIED::ENABLED.'\', field is required.');
+        $this->expectExceptionMessage('Cannot delete \''.LOAN_SETTINGS_RULES_APPLIED::ENABLED.'\', field is required.');
         $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true);
 
         // should throw exception
-        $rulesApplied->rem(LSRULES_APPLIED::ENABLED);
+        $rulesApplied->rem(LOAN_SETTINGS_RULES_APPLIED::ENABLED);
     }
 
     /**
@@ -105,6 +105,6 @@ class RulesAppliedLoanSettingsTest extends TestCase
     public function testAddToLoan(){
         $loan = static::$sdk->CreateLoan("Test ID");
         $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true);
-        $this->assertEquals([$rulesApplied], $loan->set(LOAN::LSRULES_APPLIED, $rulesApplied)->get(LOAN::LSRULES_APPLIED));
+        $this->assertEquals([$rulesApplied], $loan->set(LOAN::LOAN_SETTINGS_RULES_APPLIED, $rulesApplied)->get(LOAN::LOAN_SETTINGS_RULES_APPLIED));
     }
 }

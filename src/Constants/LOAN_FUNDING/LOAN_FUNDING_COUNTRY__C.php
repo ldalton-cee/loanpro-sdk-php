@@ -12,7 +12,7 @@ namespace Simnang\LoanPro\Constants\LOAN_FUNDING;
 
 /**
  * Class LOAN_FUNDING_COUNTRY__C
- * @package Simnang\LoanPro\Constants\LSETUP
+ * @package Simnang\LoanPro\Constants\LOAN_SETUP
  */
 class LOAN_FUNDING_COUNTRY__C{
     const CANADA        = 'company.country.can';

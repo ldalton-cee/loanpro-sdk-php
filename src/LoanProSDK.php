@@ -30,9 +30,9 @@ use Simnang\LoanPro\Constants\DOCUMENTS;
 use Simnang\LoanPro\Constants\EMPLOYERS;
 use Simnang\LoanPro\Constants\LINKED_LOAN_VALUES;
 use Simnang\LoanPro\Constants\LOAN;
-use Simnang\LoanPro\Constants\LSETTINGS;
-use Simnang\LoanPro\Constants\LSETUP;
-use Simnang\LoanPro\Constants\LSTATUS_ARCHIVE;
+use Simnang\LoanPro\Constants\LOAN_SETTINGS;
+use Simnang\LoanPro\Constants\LOAN_SETUP;
+use Simnang\LoanPro\Constants\STATUS_ARCHIVE;
 use Simnang\LoanPro\Constants\MC_PROCESSOR;
 use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Customers\AddressEntity;
@@ -188,6 +188,45 @@ class LoanProSDK
     }
 
     /**
+     * Sets the configuration for the loan pro instance (will re-set the instance if API credentials have been set)
+     *  If non-null $tenant and $token is provided, will also set credentials
+     * @param string      $commType - communicator type to use, accepts 'sync' or 'async', defaults to 'sync'
+     * @param string      $env - environment to use, accepts 'prod' or 'staging', defaults to 'prod'
+     * @param string|null $tenant - Tenant ID
+     * @param string|null $token - API Token
+     */
+    public static function SetConfig($commType = 'sync', $env = 'prod', $tenant = null, $token = null){
+        if(!is_null($tenant) && !is_null($token)){
+            ApiClient::SetAuthorization($tenant, $token);
+        }
+
+        switch($commType){
+            case 'async':
+                static::$clientType = ApiClient::TYPE_ASYNC;
+                break;
+            case 'sync':
+            default:
+                static::$clientType = ApiClient::TYPE_SYNC;
+                break;
+        }
+        switch($env){
+            case 'beta':
+                $env = Communicator::BETA;
+                break;
+            case 'staging':
+                $env = Communicator::STAGING;
+                break;
+            case 'prod':
+            default:
+                $env = Communicator::PRODUCTION;
+        }
+        static::$env = $env;
+
+        if(ApiClient::AreTokensSet())
+            static::$inst = new LoanProSDK();
+    }
+
+    /**
      * Returns the singleton instance of the SDK
      * @return LoanProSDK
      * @throws InvalidStateException
@@ -227,17 +266,16 @@ class LoanProSDK
                 else{
                     throw new InvalidStateException('Configuration does not have api credentials! Loading from '.$confFile);
                 }
-                $clientType = (isset($config['communicator']) && isset($config['communicator']['type'])) ? $config['communicator']['type'] : 'async';
+                $clientType = (isset($config['communicator']) && isset($config['communicator']['type'])) ? $config['communicator']['type'] : 'sync';
 
                 switch($clientType){
                     case 'async':
                         static::$clientType = ApiClient::TYPE_ASYNC;
                         break;
                     case 'sync':
+                    default:
                         static::$clientType = ApiClient::TYPE_SYNC;
                         break;
-                    default:
-                        throw new \InvalidArgumentException("Unkown client type '$clientType', expected async or sync");
                 }
 
                 $env = (isset($config['communicator']) && isset($config['communicator']['env'])) ? $config['communicator']['env'] : 'prod';
@@ -729,17 +767,17 @@ class LoanProSDK
 
         EMPLOYERS::ADDRESS              =>['class'=>AddressEntity::class],
 
-        LOAN::LSETUP                    =>['class'=>LoanSetupEntity::class      ],
-        LOAN::LSETTINGS                 =>['class'=>LoanSettingsEntity::class   ],
+        LOAN::LOAN_SETUP                    =>['class'=>LoanSetupEntity::class      ],
+        LOAN::LOAN_SETTINGS                 =>['class'=>LoanSettingsEntity::class   ],
         LOAN::COLLATERAL                =>['class'=>CollateralEntity::class     ],
         LOAN::INSURANCE                 =>['class'=>InsuranceEntity::class      ],
 
         DOCUMENTS::DOC_SECTION          =>['class'=>DocSectionEntity::class     ],
         DOCUMENTS::FILE_ATTACMENT       =>['class'=>FileAttachmentEntity::class ],
 
-        LSETTINGS::LOAN_STATUS          =>['class'=>LoanStatusEntity::class     ],
-        LSETTINGS::LOAN_SUB_STATUS      =>['class'=>LoanSubStatusEntity::class  ],
-        LSETTINGS::SOURCE_COMPANY       =>['class'=>SourceCompanyEntity::class  ],
+        LOAN_SETTINGS::LOAN_STATUS          =>['class'=>LoanStatusEntity::class     ],
+        LOAN_SETTINGS::LOAN_SUB_STATUS      =>['class'=>LoanSubStatusEntity::class  ],
+        LOAN_SETTINGS::SOURCE_COMPANY       =>['class'=>SourceCompanyEntity::class  ],
 
 
 
@@ -767,7 +805,7 @@ class LoanProSDK
         LOAN::LINKED_LOAN_VALUES        =>['class'=>LinkedLoanValuesEntity::class,          'isList'=>true ],
         LOAN::LOAN_MODIFICATIONS        =>['class'=>LoanModificationEntity::class,          'isList'=>true ],
         LOAN::LOAN_FUNDING              =>['class'=>LoanFundingEntity::class,               'isList'=>true ],
-        LOAN::LSTATUS_ARCHIVE           =>['class'=>LoanStatusArchiveEntity::class,         'isList'=>true ],
+        LOAN::STATUS_ARCHIVE           =>['class'=>LoanStatusArchiveEntity::class,         'isList'=>true ],
         LOAN::PAY_NEAR_ME_ORDERS        =>['class'=>PaynearmeOrderEntity::class,            'isList'=>true ],
         LOAN::PAYMENTS                  =>['class'=>PaymentEntity::class,                   'isList'=>true ],
         LOAN::PROMISES                  =>['class'=>PromisesEntity::class,                  'isList'=>true ],
@@ -778,10 +816,10 @@ class LoanProSDK
         LOAN::NOTES                     =>['class'=>NotesEntity::class,                     'isList'=>true ],
         LOAN::SCHEDULE_ROLLS            =>['class'=>ScheduleRollEntity::class,              'isList'=>true ],
         LOAN::STOP_INTEREST_DATES       =>['class'=>StopInterestDateEntity::class,          'isList'=>true ],
-        LOAN::LSRULES_APPLIED           =>['class'=>RulesAppliedLoanSettingsEntity::class,  'isList'=>true ],
+        LOAN::LOAN_SETTINGS_RULES_APPLIED           =>['class'=>RulesAppliedLoanSettingsEntity::class,  'isList'=>true ],
         LOAN::TRANSACTIONS              =>['class'=>LoanTransactionEntity::class,           'isList'=>true ],
 
-        LSETUP::CUSTOM_FIELD_VALUES     =>['class'=>CustomFieldValuesEntity::class, 'isList'=>true ],
+        LOAN_SETUP::CUSTOM_FIELD_VALUES     =>['class'=>CustomFieldValuesEntity::class, 'isList'=>true ],
 
         MC_PROCESSOR::BANK_ACCOUNT      =>['class'=>PCIWalletTokenEntity::class],
         MC_PROCESSOR::CREDIT_CARD       =>['class'=>PCIWalletTokenEntity::class],
@@ -898,9 +936,9 @@ class LoanProSDK
         if(is_string($json))
             $json = json_decode($json, true);
         $json = static::CleanJSON($json);
-        if(!isset($json[LSETUP::LCLASS__C]))
+        if(!isset($json[LOAN_SETUP::LCLASS__C]))
             throw new \InvalidArgumentException("Missing loan class");
-        if(!isset($json[LSETUP::LTYPE__C]))
+        if(!isset($json[LOAN_SETUP::LTYPE__C]))
             throw new \InvalidArgumentException("Missing loan type");
 
         $setVars = [];
@@ -911,7 +949,7 @@ class LoanProSDK
                 $setVars[$key] = $val;
         }
 
-        return (new Loans\LoanSetupEntity($json[LSETUP::LCLASS__C],$json[LSETUP::LTYPE__C]))->set($setVars);
+        return (new Loans\LoanSetupEntity($json[LOAN_SETUP::LCLASS__C],$json[LOAN_SETUP::LTYPE__C]))->set($setVars);
     }
     /// @endcond
 }
@@ -926,20 +964,20 @@ class LoanProSDK
  * To show how simple it is to use the SDK, below is a sample of creating a modification for a loan and doubling the lending amount:
  *
  * ```php
- * use Simnang\LoanPro\Constants\LOAN, Simnang\LoanPro\Constants\LSETUP, Simnang\LoanPro\Loans\LoanSetupEntity;
- * $loan = LoanProSDK::GetInstance()->GetLoan(55, [LOAN::LSETUP]);
- * $lsetup = $loan->get(LOAN::LSETUP);
- * $loan->createModification($lsetup->set(LSETUP::LOAN_AMT, $lsetup->get(LSETUP::LOAN_AMT) / 2));
+ * use Simnang\LoanPro\Constants\LOAN, Simnang\LoanPro\Constants\LOAN_SETUP, Simnang\LoanPro\Loans\LoanSetupEntity;
+ * $loan = LoanProSDK::GetInstance()->GetLoan(55, [LOAN::LOAN_SETUP]);
+ * $lsetup = $loan->get(LOAN::LOAN_SETUP);
+ * $loan->createModification($lsetup->set(LOAN_SETUP::LOAN_AMT, $lsetup->get(LOAN_SETUP::LOAN_AMT) / 2));
  * ```
  *
  * Below is an example of halving the loan amount, discount, and interest rate for another loan
  *
  * ```php
- * use Simnang\LoanPro\Constants\LOAN, Simnang\LoanPro\Constants\LSETUP, Simnang\LoanPro\Loans\LoanSetupEntity;
+ * use Simnang\LoanPro\Constants\LOAN, Simnang\LoanPro\Constants\LOAN_SETUP, Simnang\LoanPro\Loans\LoanSetupEntity;
  * $halve = function($a){ return $a / 2; };
- * $loan = LoanProSDK::GetInstance()->GetLoan(55, [LOAN::LSETUP]);
- * $lsetup = $loan->get(LOAN::LSETUP);
- * $loan->set(LOAN::LSETUP, $lsetup->set(array_map($halve,$lsetup->get(LSETUP::LOAN_AMT, LSETUP::DISCOUNT, LSETUP::LOAN_RATE))))->save();
+ * $loan = LoanProSDK::GetInstance()->GetLoan(55, [LOAN::LOAN_SETUP]);
+ * $lsetup = $loan->get(LOAN::LOAN_SETUP);
+ * $loan->set(LOAN::LOAN_SETUP, $lsetup->set(array_map($halve,$lsetup->get(LOAN_SETUP::LOAN_AMT, LOAN_SETUP::DISCOUNT, LOAN_SETUP::LOAN_RATE))))->save();
  * ```
  *
  */

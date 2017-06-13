@@ -20,7 +20,7 @@ namespace Simnang\LoanPro\Constants\EMPLOYERS;
 
 /**
  * Class EMPLOYERS_PAY_DATE_FREQUENCY__C
- * @package Simnang\LoanPro\Constants\LSETUP
+ * @package Simnang\LoanPro\Constants\LOAN_SETUP
  */
 class EMPLOYERS_PAY_DATE_FREQUENCY__C{
     const MONTHLY       = 'customerEmployer.payDateFrequency.monthly';

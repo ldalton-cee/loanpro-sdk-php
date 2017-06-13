@@ -20,7 +20,7 @@ namespace Simnang\LoanPro\Constants\EMPLOYERS;
 
 /**
  * Class EMPLOYERS_INCOME_FREQUENCY__C
- * @package Simnang\LoanPro\Constants\LSETUP
+ * @package Simnang\LoanPro\Constants\LOAN_SETUP
  */
 class EMPLOYERS_INCOME_FREQUENCY__C{
     const ANNUALLY      = 'customerEmployer.incomeFrequency.annually';

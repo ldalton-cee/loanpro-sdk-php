@@ -13,7 +13,7 @@ namespace Simnang\LoanPro\Constants\CUSTOMERS;
 
 /**
  * Class CUSTOMERS_GENDER__C
- * @package Simnang\LoanPro\Constants\LSETUP
+ * @package Simnang\LoanPro\Constants\LOAN_SETUP
  */
 class CUSTOMERS_GENDER__C{
     const FEMALE    = 'customer.gender.female';

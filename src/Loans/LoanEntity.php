@@ -23,7 +23,7 @@ use Simnang\LoanPro\Communicator\ApiClient;
 use Simnang\LoanPro\Communicator\Communicator;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\LOAN;
-use Simnang\LoanPro\Constants\LSETUP;
+use Simnang\LoanPro\Constants\LOAN_SETUP;
 use Simnang\LoanPro\Customers\CustomerEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
@@ -66,23 +66,23 @@ class LoanEntity extends BaseEntity
             throw new InvalidStateException("Loan ID is not set, cannot modify loan");
 
 
-        $res = $comm->modifyLoan($this, true);
+        $res = $comm->modifyLoan($this);
 
         if($res === true)
         {
             if($newLoanSetup instanceof LoanSetupEntity){
-                $updatedLoan = $sdk->GetLoan(($this->get(BASE_ENTITY::ID)), [LOAN::LSETUP], true);
+                $updatedLoan = $sdk->GetLoan(($this->get(BASE_ENTITY::ID)), [LOAN::LOAN_SETUP], true);
                 $newLoanSetup = $newLoanSetup->set(
-                    LSETUP::MOD_ID, $updatedLoan->get(LSETUP::MOD_ID),
-                    LSETUP::ACTIVE, 0,
-                    BASE_ENTITY::ID, $updatedLoan->get(LOAN::LSETUP)->get(BASE_ENTITY::ID));
+                    LOAN_SETUP::MOD_ID, $updatedLoan->get(LOAN_SETUP::MOD_ID),
+                    LOAN_SETUP::ACTIVE, 0,
+                    BASE_ENTITY::ID, $updatedLoan->get(LOAN::LOAN_SETUP)->get(BASE_ENTITY::ID));
 
-                $latestLoan = $this->set(LOAN::LSETUP, $newLoanSetup);
+                $latestLoan = $this->set(LOAN::LOAN_SETUP, $newLoanSetup);
                 $latestLoan->save(true);
                 return $latestLoan;
             }
             else {
-                return $sdk->GetLoan(($this->get(BASE_ENTITY::ID)), [LOAN::LSETUP], true);
+                return $sdk->GetLoan(($this->get(BASE_ENTITY::ID)), [LOAN::LOAN_SETUP], true);
             }
         }
         else
@@ -121,8 +121,8 @@ class LoanEntity extends BaseEntity
     public function activate(){
         $this->insureHasID();
         LoanProSDK::GetInstance()->GetApiComm()->activateLoan($this);
-        if(!is_null($this->get(LOAN::LSETUP)))
-            return $this->set(LOAN::LSETUP, $this->get(LOAN::LSETUP)->set(LSETUP::ACTIVE, 1));
+        if(!is_null($this->get(LOAN::LOAN_SETUP)))
+            return $this->set(LOAN::LOAN_SETUP, $this->get(LOAN::LOAN_SETUP)->set(LOAN_SETUP::ACTIVE, 1));
         return $this;
     }
 
@@ -134,19 +134,19 @@ class LoanEntity extends BaseEntity
      */
     public function inactivate(){
         $this->insureHasID();
-        if(!is_null($this->get(LOAN::LSETUP)))
-            $lsetup = (new LoanSetupEntity(LSETUP\LSETUP_LCLASS__C::OTHER,LSETUP\LSETUP_LTYPE__C::CRED_LIMIT,true))->set(
-                BASE_ENTITY::ID, $this->get(LOAN::LSETUP)->get(BASE_ENTITY::ID),
-                LSETUP::ACTIVE, 0);
+        if(!is_null($this->get(LOAN::LOAN_SETUP)))
+            $lsetup = (new LoanSetupEntity(LOAN_SETUP\LOAN_SETUP_LCLASS__C::OTHER,LOAN_SETUP\LOAN_SETUP_LTYPE__C::CRED_LIMIT,true))->set(
+                BASE_ENTITY::ID, $this->get(LOAN::LOAN_SETUP)->get(BASE_ENTITY::ID),
+                LOAN_SETUP::ACTIVE, 0);
         else
-            $lsetup = (new LoanSetupEntity(LSETUP\LSETUP_LCLASS__C::OTHER,LSETUP\LSETUP_LTYPE__C::CRED_LIMIT,true))->set(
-                BASE_ENTITY::ID, LoanProSDK::GetInstance()->GetApiComm()->getLoan($this->get(BASE_ENTITY::ID), [LOAN::LSETUP])->get(LOAN::LSETUP)->get(BASE_ENTITY::ID),
-                LSETUP::ACTIVE, 0);
+            $lsetup = (new LoanSetupEntity(LOAN_SETUP\LOAN_SETUP_LCLASS__C::OTHER,LOAN_SETUP\LOAN_SETUP_LTYPE__C::CRED_LIMIT,true))->set(
+                BASE_ENTITY::ID, LoanProSDK::GetInstance()->GetApiComm()->getLoan($this->get(BASE_ENTITY::ID), [LOAN::LOAN_SETUP])->get(LOAN::LOAN_SETUP)->get(BASE_ENTITY::ID),
+                LOAN_SETUP::ACTIVE, 0);
         (new LoanEntity($this->get(LOAN::DISP_ID)))->set(
             BASE_ENTITY::ID, $this->get(BASE_ENTITY::ID),
-            LOAN::LSETUP, $lsetup
+            LOAN::LOAN_SETUP, $lsetup
         )->save();
-        return $this->set(LOAN::LSETUP, $lsetup);
+        return $this->set(LOAN::LOAN_SETUP, $lsetup);
     }
 
     /**
@@ -388,8 +388,8 @@ class LoanEntity extends BaseEntity
 
         LOAN::COLLATERAL                => FieldValidator::OBJECT,
         LOAN::INSURANCE                 => FieldValidator::OBJECT,
-        LOAN::LSETUP                    => FieldValidator::OBJECT,
-        LOAN::LSETTINGS                 => FieldValidator::OBJECT,
+        LOAN::LOAN_SETUP                    => FieldValidator::OBJECT,
+        LOAN::LOAN_SETTINGS                 => FieldValidator::OBJECT,
 
         LOAN::ADVANCEMENTS              => FieldValidator::OBJECT_LIST,
         LOAN::APD_ADJUSTMENTS           => FieldValidator::OBJECT_LIST,
@@ -409,7 +409,7 @@ class LoanEntity extends BaseEntity
         LOAN::LINKED_LOAN_VALUES        => FieldValidator::OBJECT_LIST,
         LOAN::LOAN_FUNDING              => FieldValidator::OBJECT_LIST,
         LOAN::LOAN_MODIFICATIONS        => FieldValidator::OBJECT_LIST,
-        LOAN::LSRULES_APPLIED           => FieldValidator::OBJECT_LIST,
+        LOAN::LOAN_SETTINGS_RULES_APPLIED           => FieldValidator::OBJECT_LIST,
         LOAN::NOTES                     => FieldValidator::OBJECT_LIST,
         LOAN::PAY_NEAR_ME_ORDERS        => FieldValidator::OBJECT_LIST,
         LOAN::PAYMENTS                  => FieldValidator::OBJECT_LIST,
@@ -430,7 +430,7 @@ class LoanEntity extends BaseEntity
         LOAN::RULES_APPLIED_APD_RESET           => FieldValidator::READ_ONLY,
         LOAN::RULES_APPLIED_CHECKLIST           => FieldValidator::READ_ONLY,
         LOAN::RULES_APPLIED_STOP_INTEREST       => FieldValidator::READ_ONLY,
-        LOAN::LSTATUS_ARCHIVE                   => FieldValidator::READ_ONLY,
+        LOAN::STATUS_ARCHIVE                   => FieldValidator::READ_ONLY,
         LOAN::ESCROW_SUBSET_OPTIONS             => FieldValidator::READ_ONLY,
     ];
 

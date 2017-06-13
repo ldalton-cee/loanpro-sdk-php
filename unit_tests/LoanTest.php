@@ -27,11 +27,11 @@ use PHPUnit\Framework\TestCase;
 use Simnang\LoanPro\LoanProSDK as LPSDK,
     Simnang\LoanPro\Constants as CONSTS,
     Simnang\LoanPro\Constants\LOAN as LOAN,
-    Simnang\LoanPro\Constants\LSETUP as LSETUP,
-    Simnang\LoanPro\Constants\LSETUP\LSETUP_LCLASS__C as LSETUP_LCLASS,
-    Simnang\LoanPro\Constants\LSETUP\LSETUP_LTYPE__C as LSETUP_LTYPE,
-    Simnang\LoanPro\Constants\LSETTINGS\LSETTINGS_CARD_FEE_TYPE__C as LSETTINGS_CARD_FEE_TYPE,
-    Simnang\LoanPro\Constants\LSETTINGS as LSETTINGS,
+    Simnang\LoanPro\Constants\LOAN_SETUP as LOAN_SETUP,
+    Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LCLASS__C as LOAN_SETUP_LCLASS,
+    Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LTYPE__C as LOAN_SETUP_LTYPE,
+    Simnang\LoanPro\Constants\LOAN_SETTINGS\LOAN_SETTINGS_CARD_FEE_TYPE__C as LOAN_SETTINGS_CARD_FEE_TYPE,
+    Simnang\LoanPro\Constants\LOAN_SETTINGS as LOAN_SETTINGS,
     \Simnang\LoanPro\Constants\INSURANCE as INSURANCE,
     \Simnang\LoanPro\Constants\PAYMENTS as PAYMENTS,
     \Simnang\LoanPro\Constants\CHARGES as CHARGES,
@@ -63,7 +63,7 @@ class LoanTest extends TestCase
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
         static::$sdk = LPSDK::GetInstance();
-        static::$minSetup = new \Simnang\LoanPro\Loans\LoanSetupEntity(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
+        static::$minSetup = new \Simnang\LoanPro\Loans\LoanSetupEntity(LOAN_SETUP_LCLASS::CONSUMER, LOAN_SETUP_LTYPE::INSTALLMENT);
     }
 
     /**
@@ -81,7 +81,7 @@ class LoanTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            if($key === LOAN::DISP_ID || $key === LOAN::LSETUP)
+            if($key === LOAN::DISP_ID || $key === LOAN::LOAN_SETUP)
                 continue;
             $this->assertNull(null,$loan->get($field));
         }
@@ -116,11 +116,11 @@ class LoanTest extends TestCase
      */
     public function testLoanSelOnlyValid(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid property \''.LSETUP::LOAN_AMT.'\'');
+        $this->expectExceptionMessage('Invalid property \''.LOAN_SETUP::LOAN_AMT.'\'');
         $loan = static::$sdk->CreateLoan("Display Id");
 
         /* should throw error */
-        $loan->set(LSETUP::LOAN_AMT, 12500);
+        $loan->set(LOAN_SETUP::LOAN_AMT, 12500);
     }
 
     /**
@@ -129,11 +129,11 @@ class LoanTest extends TestCase
      */
     public function testLoanDelOnlyValid(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid property \''.LSETUP::LOAN_AMT.'\'');
+        $this->expectExceptionMessage('Invalid property \''.LOAN_SETUP::LOAN_AMT.'\'');
         $loan = static::$sdk->CreateLoan("Display Id")->set(LOAN::LOAN_ALERT, "This is an alert");
 
         /* should throw error */
-        $loan->rem(LSETUP::LOAN_AMT);
+        $loan->rem(LOAN_SETUP::LOAN_AMT);
     }
 
     /**
@@ -182,39 +182,39 @@ class LoanTest extends TestCase
         // properties and collection values will be set as constants in a namespace or class; here it assumes its for a class
 
         // Create functions will take the minimal parameters that can be used to create the object via the API
-        $loanSetup = static::$sdk->CreateLoanSetup(LSETUP_LCLASS::CAR, LSETUP_LTYPE::INSTALLMENT);
+        $loanSetup = static::$sdk->CreateLoanSetup(LOAN_SETUP_LCLASS::CAR, LOAN_SETUP_LTYPE::INSTALLMENT);
         $loan = static::$sdk->CreateLoan("DISP_ID_001", $loanSetup);
-        static::$sdk->CreateLoanSetup(LSETUP_LCLASS::MORTGAGE, LSETUP_LTYPE::CRED_LIMIT);
+        static::$sdk->CreateLoanSetup(LOAN_SETUP_LCLASS::MORTGAGE, LOAN_SETUP_LTYPE::CRED_LIMIT);
 
         $this->assertEquals("DISP_ID_001", $loan->get(LOAN::DISP_ID));
 
         // set can take an array with key value pairs of what to set (keys = property, values = value)
-        $loanSetup = $loanSetup->set([LSETUP::LOAN_AMT=>36000, LSETUP::DISCOUNT=> 1400, LSETUP::UNDERWRITING=> 800]);
+        $loanSetup = $loanSetup->set([LOAN_SETUP::LOAN_AMT=>36000, LOAN_SETUP::DISCOUNT=> 1400, LOAN_SETUP::UNDERWRITING=> 800]);
 
         // set can also take a list of the property key followed by the value
-        $loan = $loan->set(LOAN::LSETUP, $loanSetup, LOAN::DISP_ID, "Test_Loan_0001");
+        $loan = $loan->set(LOAN::LOAN_SETUP, $loanSetup, LOAN::DISP_ID, "Test_Loan_0001");
 
 
         // Halve the amount and the underwriting of the loan setup
         // works since get returns an array with key/value pairs which is also accepted by set and can be operated on by array_map
         $halve = function($a){ return $a / 2; };
-        $loanSetupHalved = $loanSetup->set(array_map($halve, $loanSetup->get(LSETUP::LOAN_AMT, LSETUP::UNDERWRITING)));
+        $loanSetupHalved = $loanSetup->set(array_map($halve, $loanSetup->get(LOAN_SETUP::LOAN_AMT, LOAN_SETUP::UNDERWRITING)));
 
         // get with a single, non-array parameter will return a single value
-        $this->assertEquals(18000, $loanSetupHalved->get(LSETUP::LOAN_AMT));
+        $this->assertEquals(18000, $loanSetupHalved->get(LOAN_SETUP::LOAN_AMT));
         // Make sure a copy was returned from set
-        $this->assertEquals(36000, $loanSetup->get(LSETUP::LOAN_AMT));
+        $this->assertEquals(36000, $loanSetup->get(LOAN_SETUP::LOAN_AMT));
 
         // get with multiple parameters will return an array with key/value pairs
-        $this->assertEquals($loanSetupHalved->get(LSETUP::LOAN_AMT, LSETUP::DISCOUNT, LSETUP::UNDERWRITING), [LSETUP::LOAN_AMT=>18000, LSETUP::DISCOUNT=>1400, LSETUP::UNDERWRITING=>400]);
-        $this->assertEquals($loanSetup->get(LSETUP::LOAN_AMT, LSETUP::DISCOUNT, LSETUP::UNDERWRITING), [LSETUP::LOAN_AMT=>36000, LSETUP::DISCOUNT=>1400, LSETUP::UNDERWRITING=>800]);
+        $this->assertEquals($loanSetupHalved->get(LOAN_SETUP::LOAN_AMT, LOAN_SETUP::DISCOUNT, LOAN_SETUP::UNDERWRITING), [LOAN_SETUP::LOAN_AMT=>18000, LOAN_SETUP::DISCOUNT=>1400, LOAN_SETUP::UNDERWRITING=>400]);
+        $this->assertEquals($loanSetup->get(LOAN_SETUP::LOAN_AMT, LOAN_SETUP::DISCOUNT, LOAN_SETUP::UNDERWRITING), [LOAN_SETUP::LOAN_AMT=>36000, LOAN_SETUP::DISCOUNT=>1400, LOAN_SETUP::UNDERWRITING=>800]);
 
         // get with a single array parameter will return an array, regardless of how many elements are present
-        $this->assertEquals([LSETUP::LOAN_AMT=>36000], $loan->get(LOAN::LSETUP)->get([LSETUP::LOAN_AMT]));
+        $this->assertEquals([LOAN_SETUP::LOAN_AMT=>36000], $loan->get(LOAN::LOAN_SETUP)->get([LOAN_SETUP::LOAN_AMT]));
 
         // some more assertions
-        $this->assertEquals([LSETUP::DISCOUNT=>1400, LSETUP::UNDERWRITING=>800], $loan->get(LOAN::LSETUP)->get([LSETUP::DISCOUNT, LSETUP::UNDERWRITING]));
-        $this->assertEquals($loan->get(LOAN::LSETUP)->get(LSETUP::DISCOUNT), $loanSetup->get(LSETUP::DISCOUNT));
+        $this->assertEquals([LOAN_SETUP::DISCOUNT=>1400, LOAN_SETUP::UNDERWRITING=>800], $loan->get(LOAN::LOAN_SETUP)->get([LOAN_SETUP::DISCOUNT, LOAN_SETUP::UNDERWRITING]));
+        $this->assertEquals($loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::DISCOUNT), $loanSetup->get(LOAN_SETUP::DISCOUNT));
     }
 
     /**
@@ -267,8 +267,8 @@ class LoanTest extends TestCase
         $this->assertEquals("Testing alerts", $loan->get(LOAN::LOAN_ALERT));
         $this->assertEquals(1, $loan->get(LOAN::DELETED));
         $this->assertEquals(0, $loan->get(LOAN::TEMPORARY));
-        $this->assertEquals(LSETUP_LCLASS::CAR, $loan->get(LOAN::LSETUP)->get(LSETUP::LCLASS__C));
-        $this->assertEquals(LSETUP_LTYPE::FLOORING, $loan->get(LOAN::LSETUP)->get(LSETUP::LTYPE__C));
+        $this->assertEquals(LOAN_SETUP_LCLASS::CAR, $loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::LCLASS__C));
+        $this->assertEquals(LOAN_SETUP_LTYPE::FLOORING, $loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::LTYPE__C));
     }
 
     /**
@@ -284,53 +284,53 @@ class LoanTest extends TestCase
         $this->assertEquals(1, $loan->get(LOAN::ACTIVE));
         $this->assertEquals("Testing alerts", $loan->get(LOAN::LOAN_ALERT));
         $this->assertEquals(1, $loan->get(LOAN::DELETED));
-        $this->assertEquals(LSETUP_LCLASS::CAR, $loan->get(LOAN::LSETUP)->get(LSETUP::LCLASS__C));
-        $this->assertEquals(LSETUP_LTYPE::INSTALLMENT, $loan->get(LOAN::LSETUP)->get(LSETUP::LTYPE__C));
+        $this->assertEquals(LOAN_SETUP_LCLASS::CAR, $loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::LCLASS__C));
+        $this->assertEquals(LOAN_SETUP_LTYPE::INSTALLMENT, $loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::LTYPE__C));
 
         $loanSetupVals = [
-            LSETUP::LOAN_AMT=>12000.00,
-            LSETUP::DISCOUNT=>500.00,
-            LSETUP::UNDERWRITING=>0.00,
-            LSETUP::LOAN_RATE=>12.0212,
-            LSETUP::LRATE_TYPE__C=>LSETUP\LSETUP_LRATE_TYPE__C::ANNUAL,
-            LSETUP::LOAN_TERM=>36,
-            LSETUP::CONTRACT_DATE=>1430956800,
-            LSETUP::FIRST_PAY_DATE=>1431043200,
-            LSETUP::AMT_DOWN=>0.00,
-            LSETUP::RESERVE=>5.00,
-            LSETUP::SALES_PRICE=>12000,
-            LSETUP::GAP=>1120.0,
-            LSETUP::WARRANTY=>2500,
-            LSETUP::DEALER_PROFIT=>1000,
-            LSETUP::TAXES=>125.25,
-            LSETUP::CREDIT_LIMIT=>15500,
-            LSETUP::DISCOUNT_SPLIT=>1,
-            LSETUP::PAY_FREQ__C=>LSETUP\LSETUP_PAY_FREQ__C::MONTHLY,
-            LSETUP::CALC_TYPE__C=>LSETUP\LSETUP_CALC_TYPE__C::SIMPLE_INTEREST,
-            LSETUP::DAYS_IN_YEAR__C=>LSETUP\LSETUP_DAYS_IN_YEAR__C::FREQUENCY,
-            LSETUP::INTEREST_APP__C=>LSETUP\LSETUP_INTEREST_APP__C::BETWEEN_TRANSACTIONS,
-            LSETUP::BEG_END__C=>LSETUP\LSETUP_BEG_END__C::END,
-            LSETUP::FIRST_PER_DAYS__C=>LSETUP\LSETUP_FIRST_PER_DAYS__C::FREQUENCY,
-            LSETUP::FIRST_DAY_INT__C=>LSETUP\LSETUP_FIRST_DAY_INT__C::YES,
-            LSETUP::DISCOUNT_CALC__C=>LSETUP\LSETUP_DISCOUNT_CALC__C::STRAIGHT_LINE,
-            LSETUP::DIY_ALT__C=>LSETUP\LSETUP_DIY_ALT__C::NO,
-            LSETUP::DAYS_IN_PERIOD__C=>LSETUP\LSETUP_DAYS_IN_PERIOD__C::_24,
-            LSETUP::ROUND_DECIMALS=>5,
-            LSETUP::LAST_AS_FINAL__C=>LSETUP\LSETUP_LAST_AS_FINAL__C::NO,
-            LSETUP::CURTAIL_PERC_BASE__C=>LSETUP\LSETUP_CURTAIL_PERC_BASE__C::LOAN_AMOUNT,
-            LSETUP::NDD_CALC__C=>LSETUP\LSETUP_NDD_CALC__C::STANDARD,
-            LSETUP::END_INTEREST__C=>LSETUP\LSETUP_END_INTEREST__C::NO,
-            LSETUP::FEES_PAID_BY__C=>LSETUP\LSETUP_FEES_PAID_BY__C::DATE,
-            LSETUP::GRACE_DAYS=>5,
-            LSETUP::LATE_FEE_TYPE__C=>LSETUP\LSETUP_LATE_FEE_TYPE__C::PERCENTAGE,
-            LSETUP::LATE_FEE_AMT=>30.00,
-            LSETUP::LATE_FEE_PERCENT=>10.00,
-            LSETUP::LATE_FEE_CALC__C=>LSETUP\LSETUP_LATE_FEE_CALC__C::STANDARD,
-            LSETUP::LATE_FEE_PERC_BASE__C=>LSETUP\LSETUP_LATE_FEE_PERC_BASE__C::REGULAR,
-            LSETUP::PAYMENT_DATE_APP__C=>LSETUP\LSETUP_PAYMENT_DATE_APP__C::ACTUAL,
+            LOAN_SETUP::LOAN_AMT=>12000.00,
+            LOAN_SETUP::DISCOUNT=>500.00,
+            LOAN_SETUP::UNDERWRITING=>0.00,
+            LOAN_SETUP::LOAN_RATE=>12.0212,
+            LOAN_SETUP::LRATE_TYPE__C=>LOAN_SETUP\LOAN_SETUP_LRATE_TYPE__C::ANNUAL,
+            LOAN_SETUP::LOAN_TERM=>36,
+            LOAN_SETUP::CONTRACT_DATE=>1430956800,
+            LOAN_SETUP::FIRST_PAY_DATE=>1431043200,
+            LOAN_SETUP::AMT_DOWN=>0.00,
+            LOAN_SETUP::RESERVE=>5.00,
+            LOAN_SETUP::SALES_PRICE=>12000,
+            LOAN_SETUP::GAP=>1120.0,
+            LOAN_SETUP::WARRANTY=>2500,
+            LOAN_SETUP::DEALER_PROFIT=>1000,
+            LOAN_SETUP::TAXES=>125.25,
+            LOAN_SETUP::CREDIT_LIMIT=>15500,
+            LOAN_SETUP::DISCOUNT_SPLIT=>1,
+            LOAN_SETUP::PAY_FREQ__C=>LOAN_SETUP\LOAN_SETUP_PAY_FREQ__C::MONTHLY,
+            LOAN_SETUP::CALC_TYPE__C=>LOAN_SETUP\LOAN_SETUP_CALC_TYPE__C::SIMPLE_INTEREST,
+            LOAN_SETUP::DAYS_IN_YEAR__C=>LOAN_SETUP\LOAN_SETUP_DAYS_IN_YEAR__C::FREQUENCY,
+            LOAN_SETUP::INTEREST_APP__C=>LOAN_SETUP\LOAN_SETUP_INTEREST_APP__C::BETWEEN_TRANSACTIONS,
+            LOAN_SETUP::BEG_END__C=>LOAN_SETUP\LOAN_SETUP_BEG_END__C::END,
+            LOAN_SETUP::FIRST_PER_DAYS__C=>LOAN_SETUP\LOAN_SETUP_FIRST_PER_DAYS__C::FREQUENCY,
+            LOAN_SETUP::FIRST_DAY_INT__C=>LOAN_SETUP\LOAN_SETUP_FIRST_DAY_INT__C::YES,
+            LOAN_SETUP::DISCOUNT_CALC__C=>LOAN_SETUP\LOAN_SETUP_DISCOUNT_CALC__C::STRAIGHT_LINE,
+            LOAN_SETUP::DIY_ALT__C=>LOAN_SETUP\LOAN_SETUP_DIY_ALT__C::NO,
+            LOAN_SETUP::DAYS_IN_PERIOD__C=>LOAN_SETUP\LOAN_SETUP_DAYS_IN_PERIOD__C::_24,
+            LOAN_SETUP::ROUND_DECIMALS=>5,
+            LOAN_SETUP::LAST_AS_FINAL__C=>LOAN_SETUP\LOAN_SETUP_LAST_AS_FINAL__C::NO,
+            LOAN_SETUP::CURTAIL_PERC_BASE__C=>LOAN_SETUP\LOAN_SETUP_CURTAIL_PERC_BASE__C::LOAN_AMOUNT,
+            LOAN_SETUP::NDD_CALC__C=>LOAN_SETUP\LOAN_SETUP_NDD_CALC__C::STANDARD,
+            LOAN_SETUP::END_INTEREST__C=>LOAN_SETUP\LOAN_SETUP_END_INTEREST__C::NO,
+            LOAN_SETUP::FEES_PAID_BY__C=>LOAN_SETUP\LOAN_SETUP_FEES_PAID_BY__C::DATE,
+            LOAN_SETUP::GRACE_DAYS=>5,
+            LOAN_SETUP::LATE_FEE_TYPE__C=>LOAN_SETUP\LOAN_SETUP_LATE_FEE_TYPE__C::PERCENTAGE,
+            LOAN_SETUP::LATE_FEE_AMT=>30.00,
+            LOAN_SETUP::LATE_FEE_PERCENT=>10.00,
+            LOAN_SETUP::LATE_FEE_CALC__C=>LOAN_SETUP\LOAN_SETUP_LATE_FEE_CALC__C::STANDARD,
+            LOAN_SETUP::LATE_FEE_PERC_BASE__C=>LOAN_SETUP\LOAN_SETUP_LATE_FEE_PERC_BASE__C::REGULAR,
+            LOAN_SETUP::PAYMENT_DATE_APP__C=>LOAN_SETUP\LOAN_SETUP_PAYMENT_DATE_APP__C::ACTUAL,
         ];
 
-        $this->assertEquals($loanSetupVals,$loan->get(LOAN::LSETUP)->get(array_keys($loanSetupVals)));
+        $this->assertEquals($loanSetupVals,$loan->get(LOAN::LOAN_SETUP)->get(array_keys($loanSetupVals)));
     }
 
     /**
@@ -347,14 +347,14 @@ class LoanTest extends TestCase
         $this->assertEquals(0, $loan->get(LOAN::ACTIVE));
         $this->assertNull($loan->get(LOAN::LOAN_ALERT));
         $this->assertEquals(0, $loan->get(LOAN::DELETED));
-        $this->assertNotNull($loan->get(LOAN::LSETTINGS));
+        $this->assertNotNull($loan->get(LOAN::LOAN_SETTINGS));
 
-        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LSETTINGS');
+        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LOAN_SETTINGS');
         $consts = $rclass->getConstants();
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$loan->get(LOAN::LSETTINGS)->get($field));
+            $this->assertNull(null,$loan->get(LOAN::LOAN_SETTINGS)->get($field));
         }
     }
 
@@ -372,17 +372,17 @@ class LoanTest extends TestCase
         $this->assertEquals(0, $loan->get(LOAN::ACTIVE));
         $this->assertNull($loan->get(LOAN::LOAN_ALERT));
         $this->assertEquals(0, $loan->get(LOAN::DELETED));
-        $this->assertNotNull($loan->get(LOAN::LSETTINGS));
-        $this->assertEquals(LSETUP_LCLASS::CAR, $loan->get(LOAN::LSETUP)->get(LSETUP::LCLASS__C));
-        $this->assertEquals(LSETUP_LTYPE::FLOORING, $loan->get(LOAN::LSETUP)->get(LSETUP::LTYPE__C));
-        $this->assertNull($loan->get(LOAN::LSETUP)->get(LSETUP::LOAN_TERM));
+        $this->assertNotNull($loan->get(LOAN::LOAN_SETTINGS));
+        $this->assertEquals(LOAN_SETUP_LCLASS::CAR, $loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::LCLASS__C));
+        $this->assertEquals(LOAN_SETUP_LTYPE::FLOORING, $loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::LTYPE__C));
+        $this->assertNull($loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::LOAN_TERM));
 
-        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LSETTINGS');
+        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LOAN_SETTINGS');
         $consts = $rclass->getConstants();
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$loan->get(LOAN::LSETTINGS)->get($field));
+            $this->assertNull(null,$loan->get(LOAN::LOAN_SETTINGS)->get($field));
         }
     }
 
@@ -400,75 +400,75 @@ class LoanTest extends TestCase
         $this->assertEquals(0, $loan->get(LOAN::ACTIVE));
         $this->assertNull($loan->get(LOAN::LOAN_ALERT));
         $this->assertEquals(0, $loan->get(LOAN::DELETED));
-        $this->assertNotNull($loan->get(LOAN::LSETTINGS));
+        $this->assertNotNull($loan->get(LOAN::LOAN_SETTINGS));
 
         $loanSetupVals = [
-            LSETUP::LOAN_AMT=>12000.00,
-            LSETUP::DISCOUNT=>500.00,
-            LSETUP::UNDERWRITING=>0.00,
-            LSETUP::LOAN_RATE=>12.0212,
-            LSETUP::LRATE_TYPE__C=>LSETUP\LSETUP_LRATE_TYPE__C::ANNUAL,
-            LSETUP::LOAN_TERM=>36,
-            LSETUP::CONTRACT_DATE=>1430956800,
-            LSETUP::FIRST_PAY_DATE=>1431043200,
-            LSETUP::AMT_DOWN=>0.00,
-            LSETUP::RESERVE=>5.00,
-            LSETUP::SALES_PRICE=>12000,
-            LSETUP::GAP=>1120.0,
-            LSETUP::WARRANTY=>2500,
-            LSETUP::DEALER_PROFIT=>1000,
-            LSETUP::TAXES=>125.25,
-            LSETUP::CREDIT_LIMIT=>15500,
-            LSETUP::DISCOUNT_SPLIT=>1,
-            LSETUP::PAY_FREQ__C=>LSETUP\LSETUP_PAY_FREQ__C::MONTHLY,
-            LSETUP::CALC_TYPE__C=>LSETUP\LSETUP_CALC_TYPE__C::SIMPLE_INTEREST,
-            LSETUP::DAYS_IN_YEAR__C=>LSETUP\LSETUP_DAYS_IN_YEAR__C::FREQUENCY,
-            LSETUP::INTEREST_APP__C=>LSETUP\LSETUP_INTEREST_APP__C::BETWEEN_TRANSACTIONS,
-            LSETUP::BEG_END__C=>LSETUP\LSETUP_BEG_END__C::END,
-            LSETUP::FIRST_PER_DAYS__C=>LSETUP\LSETUP_FIRST_PER_DAYS__C::FREQUENCY,
-            LSETUP::FIRST_DAY_INT__C=>LSETUP\LSETUP_FIRST_DAY_INT__C::YES,
-            LSETUP::DISCOUNT_CALC__C=>LSETUP\LSETUP_DISCOUNT_CALC__C::STRAIGHT_LINE,
-            LSETUP::DIY_ALT__C=>LSETUP\LSETUP_DIY_ALT__C::NO,
-            LSETUP::DAYS_IN_PERIOD__C=>LSETUP\LSETUP_DAYS_IN_PERIOD__C::_24,
-            LSETUP::ROUND_DECIMALS=>5,
-            LSETUP::LAST_AS_FINAL__C=>LSETUP\LSETUP_LAST_AS_FINAL__C::NO,
-            LSETUP::CURTAIL_PERC_BASE__C=>LSETUP\LSETUP_CURTAIL_PERC_BASE__C::LOAN_AMOUNT,
-            LSETUP::NDD_CALC__C=>LSETUP\LSETUP_NDD_CALC__C::STANDARD,
-            LSETUP::END_INTEREST__C=>LSETUP\LSETUP_END_INTEREST__C::NO,
-            LSETUP::FEES_PAID_BY__C=>LSETUP\LSETUP_FEES_PAID_BY__C::DATE,
-            LSETUP::GRACE_DAYS=>5,
-            LSETUP::LATE_FEE_TYPE__C=>LSETUP\LSETUP_LATE_FEE_TYPE__C::PERCENTAGE,
-            LSETUP::LATE_FEE_AMT=>30.00,
-            LSETUP::LATE_FEE_PERCENT=>10.00,
-            LSETUP::LATE_FEE_CALC__C=>LSETUP\LSETUP_LATE_FEE_CALC__C::STANDARD,
-            LSETUP::LATE_FEE_PERC_BASE__C=>LSETUP\LSETUP_LATE_FEE_PERC_BASE__C::REGULAR,
-            LSETUP::PAYMENT_DATE_APP__C=>LSETUP\LSETUP_PAYMENT_DATE_APP__C::ACTUAL,
+            LOAN_SETUP::LOAN_AMT=>12000.00,
+            LOAN_SETUP::DISCOUNT=>500.00,
+            LOAN_SETUP::UNDERWRITING=>0.00,
+            LOAN_SETUP::LOAN_RATE=>12.0212,
+            LOAN_SETUP::LRATE_TYPE__C=>LOAN_SETUP\LOAN_SETUP_LRATE_TYPE__C::ANNUAL,
+            LOAN_SETUP::LOAN_TERM=>36,
+            LOAN_SETUP::CONTRACT_DATE=>1430956800,
+            LOAN_SETUP::FIRST_PAY_DATE=>1431043200,
+            LOAN_SETUP::AMT_DOWN=>0.00,
+            LOAN_SETUP::RESERVE=>5.00,
+            LOAN_SETUP::SALES_PRICE=>12000,
+            LOAN_SETUP::GAP=>1120.0,
+            LOAN_SETUP::WARRANTY=>2500,
+            LOAN_SETUP::DEALER_PROFIT=>1000,
+            LOAN_SETUP::TAXES=>125.25,
+            LOAN_SETUP::CREDIT_LIMIT=>15500,
+            LOAN_SETUP::DISCOUNT_SPLIT=>1,
+            LOAN_SETUP::PAY_FREQ__C=>LOAN_SETUP\LOAN_SETUP_PAY_FREQ__C::MONTHLY,
+            LOAN_SETUP::CALC_TYPE__C=>LOAN_SETUP\LOAN_SETUP_CALC_TYPE__C::SIMPLE_INTEREST,
+            LOAN_SETUP::DAYS_IN_YEAR__C=>LOAN_SETUP\LOAN_SETUP_DAYS_IN_YEAR__C::FREQUENCY,
+            LOAN_SETUP::INTEREST_APP__C=>LOAN_SETUP\LOAN_SETUP_INTEREST_APP__C::BETWEEN_TRANSACTIONS,
+            LOAN_SETUP::BEG_END__C=>LOAN_SETUP\LOAN_SETUP_BEG_END__C::END,
+            LOAN_SETUP::FIRST_PER_DAYS__C=>LOAN_SETUP\LOAN_SETUP_FIRST_PER_DAYS__C::FREQUENCY,
+            LOAN_SETUP::FIRST_DAY_INT__C=>LOAN_SETUP\LOAN_SETUP_FIRST_DAY_INT__C::YES,
+            LOAN_SETUP::DISCOUNT_CALC__C=>LOAN_SETUP\LOAN_SETUP_DISCOUNT_CALC__C::STRAIGHT_LINE,
+            LOAN_SETUP::DIY_ALT__C=>LOAN_SETUP\LOAN_SETUP_DIY_ALT__C::NO,
+            LOAN_SETUP::DAYS_IN_PERIOD__C=>LOAN_SETUP\LOAN_SETUP_DAYS_IN_PERIOD__C::_24,
+            LOAN_SETUP::ROUND_DECIMALS=>5,
+            LOAN_SETUP::LAST_AS_FINAL__C=>LOAN_SETUP\LOAN_SETUP_LAST_AS_FINAL__C::NO,
+            LOAN_SETUP::CURTAIL_PERC_BASE__C=>LOAN_SETUP\LOAN_SETUP_CURTAIL_PERC_BASE__C::LOAN_AMOUNT,
+            LOAN_SETUP::NDD_CALC__C=>LOAN_SETUP\LOAN_SETUP_NDD_CALC__C::STANDARD,
+            LOAN_SETUP::END_INTEREST__C=>LOAN_SETUP\LOAN_SETUP_END_INTEREST__C::NO,
+            LOAN_SETUP::FEES_PAID_BY__C=>LOAN_SETUP\LOAN_SETUP_FEES_PAID_BY__C::DATE,
+            LOAN_SETUP::GRACE_DAYS=>5,
+            LOAN_SETUP::LATE_FEE_TYPE__C=>LOAN_SETUP\LOAN_SETUP_LATE_FEE_TYPE__C::PERCENTAGE,
+            LOAN_SETUP::LATE_FEE_AMT=>30.00,
+            LOAN_SETUP::LATE_FEE_PERCENT=>10.00,
+            LOAN_SETUP::LATE_FEE_CALC__C=>LOAN_SETUP\LOAN_SETUP_LATE_FEE_CALC__C::STANDARD,
+            LOAN_SETUP::LATE_FEE_PERC_BASE__C=>LOAN_SETUP\LOAN_SETUP_LATE_FEE_PERC_BASE__C::REGULAR,
+            LOAN_SETUP::PAYMENT_DATE_APP__C=>LOAN_SETUP\LOAN_SETUP_PAYMENT_DATE_APP__C::ACTUAL,
         ];
 
-        $this->assertEquals($loanSetupVals,$loan->get(LOAN::LSETUP)->get(array_keys($loanSetupVals)));
+        $this->assertEquals($loanSetupVals,$loan->get(LOAN::LOAN_SETUP)->get(array_keys($loanSetupVals)));
 
         $loanSettingsVals = [
-            LSETTINGS::CARD_FEE_AMT=>5,
-            LSETTINGS::CARD_FEE_TYPE__C=>LSETTINGS_CARD_FEE_TYPE::FLAT,
-            LSETTINGS::CARD_FEE_PERC=>6.3,
-            LSETTINGS::AGENT=>12,
-            LSETTINGS::LOAN_STATUS_ID=>2,
-            LSETTINGS::LOAN_SUB_STATUS_ID=>10,
-            LSETTINGS::SOURCE_COMPANY_ID=>3,
-            LSETTINGS::EBILLING__C=>LSETTINGS\LSETTINGS_EBILLING__C::NO,
-            LSETTINGS::ECOA_CODE__C=>LSETTINGS\LSETTINGS_ECOA_CODE__C::NOT_SPECIFIED,
-            LSETTINGS::CO_BUYER_ECOA_CODE__C=>LSETTINGS\LSETTINGS_CO_BUYER_ECOA_CODE__C::NOT_SPECIFIED,
-            LSETTINGS::CREDIT_STATUS__C=>LSETTINGS\LSETTINGS_CREDIT_STATUS__C::AUTO,
-            LSETTINGS::CREDIT_BUREAU__C=>LSETTINGS\LSETTINGS_CREDIT_BUREAU__C::AUTO_LOAN,
-            LSETTINGS::REPORTING_TYPE__C=>LSETTINGS\LSETTINGS_REPORTING_TYPE__C::INSTALLMENT,
-            LSETTINGS::SECURED=>1,
-            LSETTINGS::AUTOPAY_ENABLED=>1,
-            LSETTINGS::REPO_DATE=>1427829732,
-            LSETTINGS::CLOSED_DATE=> 1427829732,
-            LSETTINGS::LIQUIDATION_DATE=>1427829732,
-            LSETTINGS::STOPLGHT_MANUALLY_SET=>0,
-            LSETTINGS::LOAN_STATUS=>(new \Simnang\LoanPro\Loans\LoanStatusEntity())->set([BASE_ENTITY::ID,2,\Simnang\LoanPro\Constants\LOAN_STATUS::ACTIVE,1, \Simnang\LoanPro\Constants\LOAN_STATUS::TITLE,'Active']),
-            LSETTINGS::LOAN_SUB_STATUS=>(new \Simnang\LoanPro\Loans\LoanSubStatusEntity())->set([
+            LOAN_SETTINGS::CARD_FEE_AMT=>5,
+            LOAN_SETTINGS::CARD_FEE_TYPE__C=>LOAN_SETTINGS_CARD_FEE_TYPE::FLAT,
+            LOAN_SETTINGS::CARD_FEE_PERC=>6.3,
+            LOAN_SETTINGS::AGENT=>12,
+            LOAN_SETTINGS::LOAN_STATUS_ID=>2,
+            LOAN_SETTINGS::LOAN_SUB_STATUS_ID=>10,
+            LOAN_SETTINGS::SOURCE_COMPANY_ID=>3,
+            LOAN_SETTINGS::EBILLING__C=>LOAN_SETTINGS\LOAN_SETTINGS_EBILLING__C::NO,
+            LOAN_SETTINGS::ECOA_CODE__C=>LOAN_SETTINGS\LOAN_SETTINGS_ECOA_CODE__C::NOT_SPECIFIED,
+            LOAN_SETTINGS::CO_BUYER_ECOA_CODE__C=>LOAN_SETTINGS\LOAN_SETTINGS_CO_BUYER_ECOA_CODE__C::NOT_SPECIFIED,
+            LOAN_SETTINGS::CREDIT_STATUS__C=>LOAN_SETTINGS\LOAN_SETTINGS_CREDIT_STATUS__C::AUTO,
+            LOAN_SETTINGS::CREDIT_BUREAU__C=>LOAN_SETTINGS\LOAN_SETTINGS_CREDIT_BUREAU__C::AUTO_LOAN,
+            LOAN_SETTINGS::REPORTING_TYPE__C=>LOAN_SETTINGS\LOAN_SETTINGS_REPORTING_TYPE__C::INSTALLMENT,
+            LOAN_SETTINGS::SECURED=>1,
+            LOAN_SETTINGS::AUTOPAY_ENABLED=>1,
+            LOAN_SETTINGS::REPO_DATE=>1427829732,
+            LOAN_SETTINGS::CLOSED_DATE=> 1427829732,
+            LOAN_SETTINGS::LIQUIDATION_DATE=>1427829732,
+            LOAN_SETTINGS::STOPLGHT_MANUALLY_SET=>0,
+            LOAN_SETTINGS::LOAN_STATUS=>(new \Simnang\LoanPro\Loans\LoanStatusEntity())->set([BASE_ENTITY::ID,2,\Simnang\LoanPro\Constants\LOAN_STATUS::ACTIVE,1, \Simnang\LoanPro\Constants\LOAN_STATUS::TITLE,'Active']),
+            LOAN_SETTINGS::LOAN_SUB_STATUS=>(new \Simnang\LoanPro\Loans\LoanSubStatusEntity())->set([
                 BASE_ENTITY::ID,38,
                 LOAN_SUB_STATUS::TITLE, 'CTEST Active',
                 LOAN_SUB_STATUS::PARENT, 2,
@@ -479,7 +479,7 @@ class LoanTest extends TestCase
                 LOAN_SUB_STATUS::DISPLAY_ORDER, 7,
                 LOAN_SUB_STATUS::ACTIVE, 1
             ]),
-            LSETTINGS::SOURCE_COMPANY => (new \Simnang\LoanPro\Loans\SourceCompanyEntity())->set(
+            LOAN_SETTINGS::SOURCE_COMPANY => (new \Simnang\LoanPro\Loans\SourceCompanyEntity())->set(
                 SOURCE_COMPANY::COMPANY_NAME, 'CTEST Source Company',
                 BASE_ENTITY::ID, 4,
                 SOURCE_COMPANY::CONTACT_NAME, 'CTEST',
@@ -496,8 +496,8 @@ class LoanTest extends TestCase
         ];
 
         // Validate Loan Settings
-        $this->assertEquals($loanSettingsVals,$loan->get(LOAN::LSETTINGS)->get(array_keys($loanSettingsVals)));
-        $this->assertEquals(\Simnang\LoanPro\Utils\ArrayUtils::ConvertToIndexedArray($loanSettingsVals), \Simnang\LoanPro\Utils\ArrayUtils::ConvertToIndexedArray($loan->get(LOAN::LSETTINGS)->get(array_keys($loanSettingsVals))));
+        $this->assertEquals($loanSettingsVals,$loan->get(LOAN::LOAN_SETTINGS)->get(array_keys($loanSettingsVals)));
+        $this->assertEquals(\Simnang\LoanPro\Utils\ArrayUtils::ConvertToIndexedArray($loanSettingsVals), \Simnang\LoanPro\Utils\ArrayUtils::ConvertToIndexedArray($loan->get(LOAN::LOAN_SETTINGS)->get(array_keys($loanSettingsVals))));
     }
 
     /**
@@ -715,101 +715,101 @@ class LoanTest extends TestCase
 
         $statusArchive = (new \Simnang\LoanPro\Loans\LoanStatusArchiveEntity())->set(
             BASE_ENTITY::ID, 3,
-            CONSTS\LSTATUS_ARCHIVE::LOAN_ID, 3,
-            CONSTS\LSTATUS_ARCHIVE::DATE, 1496102400,
-            CONSTS\LSTATUS_ARCHIVE::AMOUNT_DUE, 9450.00,
-            CONSTS\LSTATUS_ARCHIVE::DUE_INTEREST, 30.91,
-            CONSTS\LSTATUS_ARCHIVE::DUE_PRINCIPAL, 0.00,
-            CONSTS\LSTATUS_ARCHIVE::DUE_DISCOUNT, 0.00,
-            CONSTS\LSTATUS_ARCHIVE::DUE_ESCROW, 0.00,
-            CONSTS\LSTATUS_ARCHIVE::DUE_ESCROW_BREAKDOWN, "{\"2\":0,\"3\":0}",
-            CONSTS\LSTATUS_ARCHIVE::DUE_FEES, 0.00,
-            CONSTS\LSTATUS_ARCHIVE::DUE_PNI, 30.91,
-            CONSTS\LSTATUS_ARCHIVE::PAYOFF_FEES, 0.00,
-            CONSTS\LSTATUS_ARCHIVE::NEXT_PAYMENT_DATE, 1496275200,
-            CONSTS\LSTATUS_ARCHIVE::NEXT_PAYMENT_AMOUNT, 900.00,
-            CONSTS\LSTATUS_ARCHIVE::LAST_PAYMENT_DATE, 1494374400,
-            CONSTS\LSTATUS_ARCHIVE::LAST_PAYMENT_AMOUNT, 900.00,
-            CONSTS\LSTATUS_ARCHIVE::PRINCIPAL_BALANCE, 308691.44,
-            CONSTS\LSTATUS_ARCHIVE::AMOUNT_PAST_DUE_30, 0.00,
-            CONSTS\LSTATUS_ARCHIVE::DAYS_PAST_DUE, 19,
-            CONSTS\LSTATUS_ARCHIVE::PAYOFF, 320021.68,
-            CONSTS\LSTATUS_ARCHIVE::PERDIEM, 30.01,
-            CONSTS\LSTATUS_ARCHIVE::INTEREST_ACCRUED_TODAY, 30.01,
-            CONSTS\LSTATUS_ARCHIVE::AVAILABLE_CREDIT, 0.00,
-            CONSTS\LSTATUS_ARCHIVE::CREDIT_LIMIT, 0.00,
-            CONSTS\LSTATUS_ARCHIVE::PERIOD_START, 1493596800,
-            CONSTS\LSTATUS_ARCHIVE::PERIOD_END, 1496188800,
-            CONSTS\LSTATUS_ARCHIVE::PERIODS_REMAINING, 51,
-            CONSTS\LSTATUS_ARCHIVE::ESCROW_BALANCE, 0.00,
-            CONSTS\LSTATUS_ARCHIVE::ESCROW_BALANCE_BREAKDOWN, "{\"1\":0,\"2\":0,\"3\":0}",
-            CONSTS\LSTATUS_ARCHIVE::DISCOUNT_REMAINING, 0.00,
-            CONSTS\LSTATUS_ARCHIVE::LOAN_STATUS_ID, 6,
-            CONSTS\LSTATUS_ARCHIVE::LOAN_STATUS_TEXT, "Open",
-            CONSTS\LSTATUS_ARCHIVE::LOAN_SUB_STATUS_ID, 32,
-            CONSTS\LSTATUS_ARCHIVE::LOAN_SUB_STATUS_TEXT, "Auto-Deferred (AD1)",
-            CONSTS\LSTATUS_ARCHIVE::SOURCE_COMPANY_ID, 4,
-            CONSTS\LSTATUS_ARCHIVE::SOURCE_COMPANY_TEXT, "CTEST Source Company",
-            CONSTS\LSTATUS_ARCHIVE::CREDIT_STATUS__C, CONSTS\LSTATUS_ARCHIVE\LSTATUS_ARCHIVE_CREDIT_STATUS__C::CURRENT,
-            CONSTS\LSTATUS_ARCHIVE::LOAN_AGE, 410,
-            CONSTS\LSTATUS_ARCHIVE::LOAN_RECENCY, 20,
-            CONSTS\LSTATUS_ARCHIVE::LAST_HUMAN_ACTIVITY, 1495411200,
-            CONSTS\LSTATUS_ARCHIVE::STOPLIGHT__C, CONSTS\LSTATUS_ARCHIVE\LSTATUS_ARCHIVE_STOPLIGHT__C::YELLOW,
-            CONSTS\LSTATUS_ARCHIVE::FINAL_PAYMENT_DATE, 1627776000,
-            CONSTS\LSTATUS_ARCHIVE::FINAL_PAYMENT_AMOUNT, 10627.96,
-            CONSTS\LSTATUS_ARCHIVE::NET_CHARGE_OFF, 0.00,
-            CONSTS\LSTATUS_ARCHIVE::UNIQUE_DELINQUENCIES, 1,
-            CONSTS\LSTATUS_ARCHIVE::DELINQUENCY_PERCENT, 87.83,
-            CONSTS\LSTATUS_ARCHIVE::DELINQUENT_DAYS, 361,
-            CONSTS\LSTATUS_ARCHIVE::CALCED_ECOA__C,CONSTS\LSTATUS_ARCHIVE\LSTATUS_ARCHIVE_CALCED_ECOA__C::INDIVIDUAL_PRI,
-            CONSTS\LSTATUS_ARCHIVE::CALCED_ECOA_CO_BUYER__C, CONSTS\LSTATUS_ARCHIVE\LSTATUS_ARCHIVE_CALCED_ECOA_CO_BUYER__C::NOT_SPECIFIED,
-            CONSTS\LSTATUS_ARCHIVE::CUSTOM_FIELDS_BREAKDOWN, "{\"296\":\"2017-11-15 18:14:00\",\"297\":\"2017-11-15\"}",
-            CONSTS\LSTATUS_ARCHIVE::PORTFOLIO_BREAKDOWN, "[\"7\",\"15\"]",
-            CONSTS\LSTATUS_ARCHIVE::SUB_PORTFOLIO_BREAKDOWN, "[]"
+            CONSTS\STATUS_ARCHIVE::LOAN_ID, 3,
+            CONSTS\STATUS_ARCHIVE::DATE, 1496102400,
+            CONSTS\STATUS_ARCHIVE::AMOUNT_DUE, 9450.00,
+            CONSTS\STATUS_ARCHIVE::DUE_INTEREST, 30.91,
+            CONSTS\STATUS_ARCHIVE::DUE_PRINCIPAL, 0.00,
+            CONSTS\STATUS_ARCHIVE::DUE_DISCOUNT, 0.00,
+            CONSTS\STATUS_ARCHIVE::DUE_ESCROW, 0.00,
+            CONSTS\STATUS_ARCHIVE::DUE_ESCROW_BREAKDOWN, "{\"2\":0,\"3\":0}",
+            CONSTS\STATUS_ARCHIVE::DUE_FEES, 0.00,
+            CONSTS\STATUS_ARCHIVE::DUE_PNI, 30.91,
+            CONSTS\STATUS_ARCHIVE::PAYOFF_FEES, 0.00,
+            CONSTS\STATUS_ARCHIVE::NEXT_PAYMENT_DATE, 1496275200,
+            CONSTS\STATUS_ARCHIVE::NEXT_PAYMENT_AMOUNT, 900.00,
+            CONSTS\STATUS_ARCHIVE::LAST_PAYMENT_DATE, 1494374400,
+            CONSTS\STATUS_ARCHIVE::LAST_PAYMENT_AMOUNT, 900.00,
+            CONSTS\STATUS_ARCHIVE::PRINCIPAL_BALANCE, 308691.44,
+            CONSTS\STATUS_ARCHIVE::AMOUNT_PAST_DUE_30, 0.00,
+            CONSTS\STATUS_ARCHIVE::DAYS_PAST_DUE, 19,
+            CONSTS\STATUS_ARCHIVE::PAYOFF, 320021.68,
+            CONSTS\STATUS_ARCHIVE::PERDIEM, 30.01,
+            CONSTS\STATUS_ARCHIVE::INTEREST_ACCRUED_TODAY, 30.01,
+            CONSTS\STATUS_ARCHIVE::AVAILABLE_CREDIT, 0.00,
+            CONSTS\STATUS_ARCHIVE::CREDIT_LIMIT, 0.00,
+            CONSTS\STATUS_ARCHIVE::PERIOD_START, 1493596800,
+            CONSTS\STATUS_ARCHIVE::PERIOD_END, 1496188800,
+            CONSTS\STATUS_ARCHIVE::PERIODS_REMAINING, 51,
+            CONSTS\STATUS_ARCHIVE::ESCROW_BALANCE, 0.00,
+            CONSTS\STATUS_ARCHIVE::ESCROW_BALANCE_BREAKDOWN, "{\"1\":0,\"2\":0,\"3\":0}",
+            CONSTS\STATUS_ARCHIVE::DISCOUNT_REMAINING, 0.00,
+            CONSTS\STATUS_ARCHIVE::LOAN_STATUS_ID, 6,
+            CONSTS\STATUS_ARCHIVE::LOAN_STATUS_TEXT, "Open",
+            CONSTS\STATUS_ARCHIVE::LOAN_SUB_STATUS_ID, 32,
+            CONSTS\STATUS_ARCHIVE::LOAN_SUB_STATUS_TEXT, "Auto-Deferred (AD1)",
+            CONSTS\STATUS_ARCHIVE::SOURCE_COMPANY_ID, 4,
+            CONSTS\STATUS_ARCHIVE::SOURCE_COMPANY_TEXT, "CTEST Source Company",
+            CONSTS\STATUS_ARCHIVE::CREDIT_STATUS__C, CONSTS\STATUS_ARCHIVE\STATUS_ARCHIVE_CREDIT_STATUS__C::CURRENT,
+            CONSTS\STATUS_ARCHIVE::LOAN_AGE, 410,
+            CONSTS\STATUS_ARCHIVE::LOAN_RECENCY, 20,
+            CONSTS\STATUS_ARCHIVE::LAST_HUMAN_ACTIVITY, 1495411200,
+            CONSTS\STATUS_ARCHIVE::STOPLIGHT__C, CONSTS\STATUS_ARCHIVE\STATUS_ARCHIVE_STOPLIGHT__C::YELLOW,
+            CONSTS\STATUS_ARCHIVE::FINAL_PAYMENT_DATE, 1627776000,
+            CONSTS\STATUS_ARCHIVE::FINAL_PAYMENT_AMOUNT, 10627.96,
+            CONSTS\STATUS_ARCHIVE::NET_CHARGE_OFF, 0.00,
+            CONSTS\STATUS_ARCHIVE::UNIQUE_DELINQUENCIES, 1,
+            CONSTS\STATUS_ARCHIVE::DELINQUENCY_PERCENT, 87.83,
+            CONSTS\STATUS_ARCHIVE::DELINQUENT_DAYS, 361,
+            CONSTS\STATUS_ARCHIVE::CALCED_ECOA__C,CONSTS\STATUS_ARCHIVE\STATUS_ARCHIVE_CALCED_ECOA__C::INDIVIDUAL_PRI,
+            CONSTS\STATUS_ARCHIVE::CALCED_ECOA_CO_BUYER__C, CONSTS\STATUS_ARCHIVE\STATUS_ARCHIVE_CALCED_ECOA_CO_BUYER__C::NOT_SPECIFIED,
+            CONSTS\STATUS_ARCHIVE::CUSTOM_FIELDS_BREAKDOWN, "{\"296\":\"2017-11-15 18:14:00\",\"297\":\"2017-11-15\"}",
+            CONSTS\STATUS_ARCHIVE::PORTFOLIO_BREAKDOWN, "[\"7\",\"15\"]",
+            CONSTS\STATUS_ARCHIVE::SUB_PORTFOLIO_BREAKDOWN, "[]"
         );
 
-        $this->assertEquals([$statusArchive], $loan->get(LOAN::LSTATUS_ARCHIVE));
+        $this->assertEquals([$statusArchive], $loan->get(LOAN::STATUS_ARCHIVE));
 
 
         $tx = (new \Simnang\LoanPro\Loans\LoanTransactionEntity())->set(
             BASE_ENTITY::ID, 855,
-            CONSTS\LTRANSACTIONS::TX_ID, "3-0-spm42",
-            CONSTS\LTRANSACTIONS::ENTITY_TYPE, ENTITY_TYPES::LOAN,
-            CONSTS\LTRANSACTIONS::ENTITY_ID, 3,
-            CONSTS\LTRANSACTIONS::MOD_ID, 0,
-            CONSTS\LTRANSACTIONS::DATE, 1575158400,
-            CONSTS\LTRANSACTIONS::PERIOD, 42,
-            CONSTS\LTRANSACTIONS::PERIOD_START, 1572566400,
-            CONSTS\LTRANSACTIONS::PERIOD_END, 1575072000,
-            CONSTS\LTRANSACTIONS::TITLE, "Scheduled Payment: 43",
-            CONSTS\LTRANSACTIONS::TYPE, "scheduledPayment",
-            CONSTS\LTRANSACTIONS::INFO_ONLY, 0,
-            CONSTS\LTRANSACTIONS::PAYMENT_ID, 0,
-            CONSTS\LTRANSACTIONS::PAYMENT_DISPLAY_ID, 0,
-            CONSTS\LTRANSACTIONS::PAYMENT_AMOUNT, 0,
-            CONSTS\LTRANSACTIONS::PAYMENT_INTEREST, 0,
-            CONSTS\LTRANSACTIONS::PAYMENT_PRINCIPAL, 0,
-            CONSTS\LTRANSACTIONS::PAYMENT_DISCOUNT, 0,
-            CONSTS\LTRANSACTIONS::PAYMENT_FEES, 0,
-            CONSTS\LTRANSACTIONS::PAYMENT_ESCROW, 0,
-            CONSTS\LTRANSACTIONS::CHARGE_AMOUNT, 900,
-            CONSTS\LTRANSACTIONS::CHARGE_INTEREST, 900.35,
-            CONSTS\LTRANSACTIONS::CHARGE_PRINCIPAL, 0,
-            CONSTS\LTRANSACTIONS::CHARGE_DISCOUNT, 0,
-            CONSTS\LTRANSACTIONS::CHARGE_FEES, 0,
-            CONSTS\LTRANSACTIONS::CHARGE_ESCROW, 0,
-            CONSTS\LTRANSACTIONS::CHARGE_ESCROW_BREAKDOWN, "{\"subsets\":{\"2\":0,\"3\":0}}",
-            CONSTS\LTRANSACTIONS::FUTURE, 1,
-            CONSTS\LTRANSACTIONS::PRINCIPAL_ONLY, 0,
-            CONSTS\LTRANSACTIONS::ADVANCEMENT, 0,
-            CONSTS\LTRANSACTIONS::PAYOFF_FEE, 0,
-            CONSTS\LTRANSACTIONS::ADVANCEMENT, 0,
-            CONSTS\LTRANSACTIONS::CHARGE_OFF, 0,
-            CONSTS\LTRANSACTIONS::PAYMENT_TYPE, 0,
-            CONSTS\LTRANSACTIONS::ADB_DAYS, 30,
-            CONSTS\LTRANSACTIONS::ADB, '308691.44',
-            CONSTS\LTRANSACTIONS::PRINCIPAL_BALANCE, '308691.44',
-            CONSTS\LTRANSACTIONS::DISPLAY_ORDER, 0
+            CONSTS\LOAN_TRANSACTIONS::TX_ID, "3-0-spm42",
+            CONSTS\LOAN_TRANSACTIONS::ENTITY_TYPE, ENTITY_TYPES::LOAN,
+            CONSTS\LOAN_TRANSACTIONS::ENTITY_ID, 3,
+            CONSTS\LOAN_TRANSACTIONS::MOD_ID, 0,
+            CONSTS\LOAN_TRANSACTIONS::DATE, 1575158400,
+            CONSTS\LOAN_TRANSACTIONS::PERIOD, 42,
+            CONSTS\LOAN_TRANSACTIONS::PERIOD_START, 1572566400,
+            CONSTS\LOAN_TRANSACTIONS::PERIOD_END, 1575072000,
+            CONSTS\LOAN_TRANSACTIONS::TITLE, "Scheduled Payment: 43",
+            CONSTS\LOAN_TRANSACTIONS::TYPE, "scheduledPayment",
+            CONSTS\LOAN_TRANSACTIONS::INFO_ONLY, 0,
+            CONSTS\LOAN_TRANSACTIONS::PAYMENT_ID, 0,
+            CONSTS\LOAN_TRANSACTIONS::PAYMENT_DISPLAY_ID, 0,
+            CONSTS\LOAN_TRANSACTIONS::PAYMENT_AMOUNT, 0,
+            CONSTS\LOAN_TRANSACTIONS::PAYMENT_INTEREST, 0,
+            CONSTS\LOAN_TRANSACTIONS::PAYMENT_PRINCIPAL, 0,
+            CONSTS\LOAN_TRANSACTIONS::PAYMENT_DISCOUNT, 0,
+            CONSTS\LOAN_TRANSACTIONS::PAYMENT_FEES, 0,
+            CONSTS\LOAN_TRANSACTIONS::PAYMENT_ESCROW, 0,
+            CONSTS\LOAN_TRANSACTIONS::CHARGE_AMOUNT, 900,
+            CONSTS\LOAN_TRANSACTIONS::CHARGE_INTEREST, 900.35,
+            CONSTS\LOAN_TRANSACTIONS::CHARGE_PRINCIPAL, 0,
+            CONSTS\LOAN_TRANSACTIONS::CHARGE_DISCOUNT, 0,
+            CONSTS\LOAN_TRANSACTIONS::CHARGE_FEES, 0,
+            CONSTS\LOAN_TRANSACTIONS::CHARGE_ESCROW, 0,
+            CONSTS\LOAN_TRANSACTIONS::CHARGE_ESCROW_BREAKDOWN, "{\"subsets\":{\"2\":0,\"3\":0}}",
+            CONSTS\LOAN_TRANSACTIONS::FUTURE, 1,
+            CONSTS\LOAN_TRANSACTIONS::PRINCIPAL_ONLY, 0,
+            CONSTS\LOAN_TRANSACTIONS::ADVANCEMENT, 0,
+            CONSTS\LOAN_TRANSACTIONS::PAYOFF_FEE, 0,
+            CONSTS\LOAN_TRANSACTIONS::ADVANCEMENT, 0,
+            CONSTS\LOAN_TRANSACTIONS::CHARGE_OFF, 0,
+            CONSTS\LOAN_TRANSACTIONS::PAYMENT_TYPE, 0,
+            CONSTS\LOAN_TRANSACTIONS::ADB_DAYS, 30,
+            CONSTS\LOAN_TRANSACTIONS::ADB, '308691.44',
+            CONSTS\LOAN_TRANSACTIONS::PRINCIPAL_BALANCE, '308691.44',
+            CONSTS\LOAN_TRANSACTIONS::DISPLAY_ORDER, 0
         );
 
         $this->assertEquals([$tx], $loan->get(LOAN::TRANSACTIONS));
@@ -964,21 +964,21 @@ class LoanTest extends TestCase
 
         $ruleAppliedSettings = (new \Simnang\LoanPro\Loans\RulesAppliedLoanSettingsEntity(18, 1))->set(
             [
-                CONSTS\LSRULES_APPLIED::NAME    => "C2",
-                CONSTS\LSRULES_APPLIED::RULE    => "(= status-days-past-due 2)",
-                CONSTS\LSRULES_APPLIED::EVAL_IN_REAL_TIME   => 1,
-                CONSTS\LSRULES_APPLIED::EVAL_IN_DAILY_MAINT => 0,
-                CONSTS\LSRULES_APPLIED::ENROLL_NEW_LOANS    => 1,
-                CONSTS\LSRULES_APPLIED::ENROLL_EXISTING_LOANS   => 0,
-                CONSTS\LSRULES_APPLIED::FORCING => 0,
-                CONSTS\LSRULES_APPLIED::ORDER   => 29,
-                CONSTS\LSRULES_APPLIED::LOAN_ENABLED    => 1,
-                CONSTS\LSRULES_APPLIED::SOURCE_COMPANY => 4,
-                CONSTS\LSRULES_APPLIED::DELETE_PORTFOLIOS => 0
+                CONSTS\LOAN_SETTINGS_RULES_APPLIED::NAME    => "C2",
+                CONSTS\LOAN_SETTINGS_RULES_APPLIED::RULE    => "(= status-days-past-due 2)",
+                CONSTS\LOAN_SETTINGS_RULES_APPLIED::EVAL_IN_REAL_TIME   => 1,
+                CONSTS\LOAN_SETTINGS_RULES_APPLIED::EVAL_IN_DAILY_MAINT => 0,
+                CONSTS\LOAN_SETTINGS_RULES_APPLIED::ENROLL_NEW_LOANS    => 1,
+                CONSTS\LOAN_SETTINGS_RULES_APPLIED::ENROLL_EXISTING_LOANS   => 0,
+                CONSTS\LOAN_SETTINGS_RULES_APPLIED::FORCING => 0,
+                CONSTS\LOAN_SETTINGS_RULES_APPLIED::ORDER   => 29,
+                CONSTS\LOAN_SETTINGS_RULES_APPLIED::LOAN_ENABLED    => 1,
+                CONSTS\LOAN_SETTINGS_RULES_APPLIED::SOURCE_COMPANY => 4,
+                CONSTS\LOAN_SETTINGS_RULES_APPLIED::DELETE_PORTFOLIOS => 0
             ]
         );
 
-        $this->assertEquals([$ruleAppliedSettings], $loan->get(LOAN::LSRULES_APPLIED));
+        $this->assertEquals([$ruleAppliedSettings], $loan->get(LOAN::LOAN_SETTINGS_RULES_APPLIED));
 
         $ruleAppliedChargeoff = (new \Simnang\LoanPro\Loans\RulesAppliedChargeoffEntity(4, 1))->set(
             [

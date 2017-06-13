@@ -27,10 +27,10 @@ use Simnang\LoanPro\Communicator\ApiClient;
 use Simnang\LoanPro\LoanProSDK as LPSDK,
     \Simnang\LoanPro\Constants\LOAN as LOAN,
     Simnang\LoanPro\Constants as CONSTS,
-    Simnang\LoanPro\Constants\LSETUP as LSETUP,
-    Simnang\LoanPro\Constants\LSETUP\LSETUP_LCLASS__C as LSETUP_LCLASS,
-    Simnang\LoanPro\Constants\LSETUP\LSETUP_LTYPE__C as LSETUP_LTYPE,
-    Simnang\LoanPro\Constants\LSETTINGS as LSETTINGS,
+    Simnang\LoanPro\Constants\LOAN_SETUP as LOAN_SETUP,
+    Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LCLASS__C as LOAN_SETUP_LCLASS,
+    Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LTYPE__C as LOAN_SETUP_LTYPE,
+    Simnang\LoanPro\Constants\LOAN_SETTINGS as LOAN_SETTINGS,
     \Simnang\LoanPro\Constants\PAYMENTS as PAYMENTS,
     \Simnang\LoanPro\Constants\CHARGES as CHARGES,
     \Simnang\LoanPro\Constants\PAY_NEAR_ME_ORDERS as PAY_NEAR_ME_ORDERS,
@@ -106,7 +106,7 @@ class ApiClientTest extends TestCase
         static::$loanId =$res->get(BASE_ENTITY::ID);
         $loanUpdate = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoanFromJSON(json_encode($json[1]));
         $loanUpdate->set(BASE_ENTITY::ID, static::$loanId)->save();
-        static::$minSetup = new \Simnang\LoanPro\Loans\LoanSetupEntity(LSETUP_LCLASS::CONSUMER, LSETUP_LTYPE::INSTALLMENT);
+        static::$minSetup = new \Simnang\LoanPro\Loans\LoanSetupEntity(LOAN_SETUP_LCLASS::CONSUMER, LOAN_SETUP_LTYPE::INSTALLMENT);
 
         $fname = static::generateRandomString(10);
         $lname = static::generateRandomString(10);
@@ -185,12 +185,12 @@ class ApiClientTest extends TestCase
                 $this->assertEquals(806, $loan->get(LOAN::CREATED_BY));
             };
 
-        $responses[] = ApiClientTest::$comm->getLoan(static::$loanId, [LOAN::LSETUP, LOAN::NOTES]);
+        $responses[] = ApiClientTest::$comm->getLoan(static::$loanId, [LOAN::LOAN_SETUP, LOAN::NOTES]);
         $funcs[] = function(\Simnang\LoanPro\Loans\LoanEntity $loan){
             $this->assertEquals(static::$loanId, $loan->get(\Simnang\LoanPro\Constants\BASE_ENTITY::ID));
             $this->assertEquals(806, $loan->get(LOAN::CREATED_BY));
             //$this->assertEquals(static::$loanId, $loan->get(LOAN::NOTES)[0]->get(\Simnang\LoanPro\Constants\NOTES::PARENT_ID));
-            $this->assertEquals(static::$loanId, $loan->get(LOAN::LSETUP)->get(\Simnang\LoanPro\Constants\LSETUP::LOAN_ID));
+            $this->assertEquals(static::$loanId, $loan->get(LOAN::LOAN_SETUP)->get(\Simnang\LoanPro\Constants\LOAN_SETUP::LOAN_ID));
         };
 
         try {
@@ -219,7 +219,7 @@ class ApiClientTest extends TestCase
                 $this->assertEquals(static::$loanId, $loan->get(\Simnang\LoanPro\Constants\BASE_ENTITY::ID));
                 $this->assertEquals(806, $loan->get(LOAN::CREATED_BY));
                 //$this->assertEquals(static::$loanId, $loan->get(LOAN::NOTES)[0]->get(\Simnang\LoanPro\Constants\NOTES::PARENT_ID));
-                $this->assertEquals(static::$loanId, $loan->get(LOAN::LSETUP)->get(\Simnang\LoanPro\Constants\LSETUP::LOAN_ID));
+                $this->assertEquals(static::$loanId, $loan->get(LOAN::LOAN_SETUP)->get(\Simnang\LoanPro\Constants\LOAN_SETUP::LOAN_ID));
             };
 
         for($i = 0; $i < count($responses); ++$i){
@@ -290,23 +290,23 @@ class ApiClientTest extends TestCase
      */
     public function testModification(){
         $comm = \Simnang\LoanPro\Communicator\Communicator::GetCommunicator(\Simnang\LoanPro\Communicator\ApiClient::TYPE_ASYNC);
-        $loan = $comm->getLoan(static::$loanId, [LOAN::LSETUP]);
+        $loan = $comm->getLoan(static::$loanId, [LOAN::LOAN_SETUP]);
         $loan->activate();
-        $oldLoanSetup = $loan->get(LOAN::LSETUP);
-        $loanModified = $loan->createModification($loan->get(LOAN::LSETUP)->set(LSETUP::LOAN_AMT, 9000.50));
+        $oldLoanSetup = $loan->get(LOAN::LOAN_SETUP);
+        $loanModified = $loan->createModification($loan->get(LOAN::LOAN_SETUP)->set(LOAN_SETUP::LOAN_AMT, 9000.50));
         $this->assertEquals(true, $loanModified instanceof \Simnang\LoanPro\Loans\LoanEntity);
         $this->assertEquals($oldLoanSetup->rem(
-            BASE_ENTITY::ID, LSETUP::MOD_ID,LSETUP::APR,
-            LSETUP::ORIG_FINAL_PAY_AMT,LSETUP::TIL_PAYMENT_SCHEDULE,
-            LSETUP::TIL_FINANCE_CHARGE, LSETUP::TIL_LOAN_AMOUNT,
-            LSETUP::TIL_PAYMENT_SCHEDULE, LSETUP::TIL_TOTAL_OF_PAYMENTS,
-            LSETUP::LOAN_AMT, LSETUP::IS_SETUP_VALID, LSETUP::ACTIVE
+            BASE_ENTITY::ID, LOAN_SETUP::MOD_ID,LOAN_SETUP::APR,
+            LOAN_SETUP::ORIG_FINAL_PAY_AMT,LOAN_SETUP::TIL_PAYMENT_SCHEDULE,
+            LOAN_SETUP::TIL_FINANCE_CHARGE, LOAN_SETUP::TIL_LOAN_AMOUNT,
+            LOAN_SETUP::TIL_PAYMENT_SCHEDULE, LOAN_SETUP::TIL_TOTAL_OF_PAYMENTS,
+            LOAN_SETUP::LOAN_AMT, LOAN_SETUP::IS_SETUP_VALID, LOAN_SETUP::ACTIVE
         ), $loan->getPreModificationSetup()->rem(
-            BASE_ENTITY::ID, LSETUP::MOD_ID,LSETUP::APR,
-            LSETUP::ORIG_FINAL_PAY_AMT,LSETUP::TIL_PAYMENT_SCHEDULE,
-            LSETUP::TIL_FINANCE_CHARGE, LSETUP::TIL_LOAN_AMOUNT,
-            LSETUP::TIL_PAYMENT_SCHEDULE, LSETUP::TIL_TOTAL_OF_PAYMENTS,
-            LSETUP::LOAN_AMT, LSETUP::IS_SETUP_VALID, LSETUP::ACTIVE
+            BASE_ENTITY::ID, LOAN_SETUP::MOD_ID,LOAN_SETUP::APR,
+            LOAN_SETUP::ORIG_FINAL_PAY_AMT,LOAN_SETUP::TIL_PAYMENT_SCHEDULE,
+            LOAN_SETUP::TIL_FINANCE_CHARGE, LOAN_SETUP::TIL_LOAN_AMOUNT,
+            LOAN_SETUP::TIL_PAYMENT_SCHEDULE, LOAN_SETUP::TIL_TOTAL_OF_PAYMENTS,
+            LOAN_SETUP::LOAN_AMT, LOAN_SETUP::IS_SETUP_VALID, LOAN_SETUP::ACTIVE
         ));
 
         $loanModified = $loan->cancelModification();
@@ -318,7 +318,7 @@ class ApiClientTest extends TestCase
      */
     public function testCreate(){
         $newId = uniqid("LOAN");
-        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoan($newId)->set(LOAN::LSETUP, static::$minSetup);
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoan($newId)->set(LOAN::LOAN_SETUP, static::$minSetup);
 
         // Should throw exception
         $this->assertEquals($newId, $loan->get(LOAN::DISP_ID));
@@ -377,18 +377,18 @@ class ApiClientTest extends TestCase
 
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->getLoan(static::$loanId, $expansion);
         $loan = $loan->inactivate();
-        $this->assertEquals(0, $loan->get(LOAN::LSETUP)->get(LSETUP::ACTIVE));
+        $this->assertEquals(0, $loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::ACTIVE));
         //echo(json_encode($loan));
         $loan->save();
         $loan = $loan->activate();
-        $this->assertEquals(1, $loan->get(LOAN::LSETUP)->get(LSETUP::ACTIVE));
+        $this->assertEquals(1, $loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::ACTIVE));
     }
 
     /**
      * @group online
      */
     public function testActivation(){
-        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->getLoan(static::$loanId, [LOAN::LSETUP]);
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->getLoan(static::$loanId, [LOAN::LOAN_SETUP]);
 
         $this->assertEquals(true, $loan->inactivate() instanceof \Simnang\LoanPro\Loans\LoanEntity);
 

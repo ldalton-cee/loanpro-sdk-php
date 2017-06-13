@@ -296,7 +296,7 @@ class Communicator
         $client = $this->client;
         $id = $loan->get(BASE_ENTITY::ID);
         if(is_null($id)) {
-            if(is_null($loan->get(LOAN::LSETUP)))
+            if(is_null($loan->get(LOAN::LOAN_SETUP)))
                 throw new InvalidStateException("Cannot create new loan on server without loan setup!");
             $response = $client->POST("$this->baseUrl/odata.svc/Loans()", $loan);
         }

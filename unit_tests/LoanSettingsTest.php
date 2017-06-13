@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 ////////////////////
 
 use Simnang\LoanPro\LoanProSDK as LPSDK,
-    Simnang\LoanPro\Constants\LSETTINGS as LSETTINGS,
+    Simnang\LoanPro\Constants\LOAN_SETTINGS as LOAN_SETTINGS,
     Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY
     ;
 
@@ -47,7 +47,7 @@ class LoanSettingsTest extends TestCase
     public function testLoanSettingsInstantiate(){
         $loanSettings = static::$sdk->CreateLoanSettings();
 
-        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LSETTINGS');
+        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LOAN_SETTINGS');
         $consts = $rclass->getConstants();
 
         // make sure every other field is null
@@ -64,13 +64,13 @@ class LoanSettingsTest extends TestCase
         $loanSettings = static::$sdk->CreateLoanSettings();
 
 
-        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LSETTINGS');
+        $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LOAN_SETTINGS');
         $consts = $rclass->getConstants();
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
             if(substr($key, -3) === '__C'){
-                $collName = '\Simnang\LoanPro\Constants\LSETTINGS\LSETTINGS_' . $key;
+                $collName = '\Simnang\LoanPro\Constants\LOAN_SETTINGS\LOAN_SETTINGS_' . $key;
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
@@ -86,9 +86,9 @@ class LoanSettingsTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.LSETTINGS::AGENT.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage('Value for \''.LOAN_SETTINGS::AGENT.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
         static::$sdk->CreateLoanSettings()
-            /* should throw exception when setting LOAN_AMT to null */ ->set(LSETTINGS::AGENT, null);
+            /* should throw exception when setting LOAN_AMT to null */ ->set(LOAN_SETTINGS::AGENT, null);
     }
 
     /**
@@ -97,12 +97,12 @@ class LoanSettingsTest extends TestCase
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
+        $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN.'\'');
         $ls = static::$sdk->CreateLoanSettings();
         $ls->set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, 1280.32);
+        $ls->set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
     }
 
     /**
@@ -110,12 +110,12 @@ class LoanSettingsTest extends TestCase
      * @group offline
      */
     public function testLoanSettingsDel(){
-        $loanSettings = static::$sdk->CreateLoanSettings()->set([LSETTINGS::AGENT=> 2, LSETTINGS::LOAN_SUB_STATUS_ID=>5, LSETTINGS::LOAN_STATUS_ID=>6, LSETTINGS::SECURED=>1]);
-        $this->assertEquals(2, $loanSettings->get(LSETTINGS::AGENT));
+        $loanSettings = static::$sdk->CreateLoanSettings()->set([LOAN_SETTINGS::AGENT=> 2, LOAN_SETTINGS::LOAN_SUB_STATUS_ID=>5, LOAN_SETTINGS::LOAN_STATUS_ID=>6, LOAN_SETTINGS::SECURED=>1]);
+        $this->assertEquals(2, $loanSettings->get(LOAN_SETTINGS::AGENT));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($loanSettings->rem(LSETTINGS::AGENT)->get(LSETTINGS::AGENT));
+        $this->assertNull($loanSettings->rem(LOAN_SETTINGS::AGENT)->get(LOAN_SETTINGS::AGENT));
         /* deletions should also not affect the original object (just return a copy) */
-        $this->assertEquals(2, $loanSettings->get(LSETTINGS::AGENT));
+        $this->assertEquals(2, $loanSettings->get(LOAN_SETTINGS::AGENT));
     }
 
 }

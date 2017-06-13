@@ -20,7 +20,7 @@ namespace Simnang\LoanPro\Loans;
 
 use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
-use Simnang\LoanPro\Constants\LTRANSACTIONS;
+use Simnang\LoanPro\Constants\LOAN_TRANSACTIONS;
 use Simnang\LoanPro\Validator\FieldValidator;
 
 class LoanTransactionEntity extends BaseEntity
@@ -43,7 +43,7 @@ class LoanTransactionEntity extends BaseEntity
      * The name of the constant collection list
      * @var string
      */
-    protected static $constCollectionPrefix = "LTRANSACTIONS";
+    protected static $constCollectionPrefix = "LOAN_TRANSACTIONS";
 
     /**
      * Required to keep type fields from colliding with other types
@@ -61,50 +61,50 @@ class LoanTransactionEntity extends BaseEntity
      * @var array
      */
     protected static $fields = [
-        LTRANSACTIONS::ADVANCEMENT              => FieldValidator::BOOL,
-        LTRANSACTIONS::CHARGE_OFF               => FieldValidator::BOOL,
-        LTRANSACTIONS::FUTURE                   => FieldValidator::BOOL,
-        LTRANSACTIONS::INFO_ONLY                => FieldValidator::BOOL,
-        LTRANSACTIONS::PAYMENT_TYPE             => FieldValidator::BOOL,
-        LTRANSACTIONS::PAYOFF_FEE               => FieldValidator::BOOL,
-        LTRANSACTIONS::PRINCIPAL_ONLY           => FieldValidator::BOOL,
+        LOAN_TRANSACTIONS::ADVANCEMENT              => FieldValidator::BOOL,
+        LOAN_TRANSACTIONS::CHARGE_OFF               => FieldValidator::BOOL,
+        LOAN_TRANSACTIONS::FUTURE                   => FieldValidator::BOOL,
+        LOAN_TRANSACTIONS::INFO_ONLY                => FieldValidator::BOOL,
+        LOAN_TRANSACTIONS::PAYMENT_TYPE             => FieldValidator::BOOL,
+        LOAN_TRANSACTIONS::PAYOFF_FEE               => FieldValidator::BOOL,
+        LOAN_TRANSACTIONS::PRINCIPAL_ONLY           => FieldValidator::BOOL,
 
-        LTRANSACTIONS::ADB_DAYS                 => FieldValidator::INT,
-        LTRANSACTIONS::DISPLAY_ORDER            => FieldValidator::INT,
-        LTRANSACTIONS::ENTITY_ID                => FieldValidator::INT,
-        LTRANSACTIONS::MOD_ID                   => FieldValidator::INT,
-        LTRANSACTIONS::PAYMENT_ID               => FieldValidator::INT,
-        LTRANSACTIONS::PAYMENT_DISPLAY_ID       => FieldValidator::INT,
-        LTRANSACTIONS::PAYMENT_ESCROW           => FieldValidator::INT,
-        LTRANSACTIONS::PERIOD                   => FieldValidator::INT,
+        LOAN_TRANSACTIONS::ADB_DAYS                 => FieldValidator::INT,
+        LOAN_TRANSACTIONS::DISPLAY_ORDER            => FieldValidator::INT,
+        LOAN_TRANSACTIONS::ENTITY_ID                => FieldValidator::INT,
+        LOAN_TRANSACTIONS::MOD_ID                   => FieldValidator::INT,
+        LOAN_TRANSACTIONS::PAYMENT_ID               => FieldValidator::INT,
+        LOAN_TRANSACTIONS::PAYMENT_DISPLAY_ID       => FieldValidator::INT,
+        LOAN_TRANSACTIONS::PAYMENT_ESCROW           => FieldValidator::INT,
+        LOAN_TRANSACTIONS::PERIOD                   => FieldValidator::INT,
 
-        LTRANSACTIONS::DATE                     => FieldValidator::DATE,
-        LTRANSACTIONS::PERIOD_START             => FieldValidator::DATE,
-        LTRANSACTIONS::PERIOD_END               => FieldValidator::DATE,
+        LOAN_TRANSACTIONS::DATE                     => FieldValidator::DATE,
+        LOAN_TRANSACTIONS::PERIOD_START             => FieldValidator::DATE,
+        LOAN_TRANSACTIONS::PERIOD_END               => FieldValidator::DATE,
 
-        LTRANSACTIONS::ENTITY_TYPE              => FieldValidator::ENTITY_TYPE,
+        LOAN_TRANSACTIONS::ENTITY_TYPE              => FieldValidator::ENTITY_TYPE,
 
-        LTRANSACTIONS::INFO_DETAILS             => FieldValidator::STRING,
-        LTRANSACTIONS::CHARGE_ESCROW_BREAKDOWN  => FieldValidator::STRING,
-        LTRANSACTIONS::TITLE                    => FieldValidator::STRING,
-        LTRANSACTIONS::TYPE                     => FieldValidator::STRING,
-        LTRANSACTIONS::TX_ID                    => FieldValidator::STRING,
+        LOAN_TRANSACTIONS::INFO_DETAILS             => FieldValidator::STRING,
+        LOAN_TRANSACTIONS::CHARGE_ESCROW_BREAKDOWN  => FieldValidator::STRING,
+        LOAN_TRANSACTIONS::TITLE                    => FieldValidator::STRING,
+        LOAN_TRANSACTIONS::TYPE                     => FieldValidator::STRING,
+        LOAN_TRANSACTIONS::TX_ID                    => FieldValidator::STRING,
 
-        LTRANSACTIONS::ADB                      => FieldValidator::NUMBER,
-        LTRANSACTIONS::CHARGE_AMOUNT            => FieldValidator::NUMBER,
-        LTRANSACTIONS::CHARGE_DISCOUNT          => FieldValidator::NUMBER,
-        LTRANSACTIONS::CHARGE_FEES              => FieldValidator::NUMBER,
-        LTRANSACTIONS::CHARGE_ESCROW            => FieldValidator::NUMBER,
-        LTRANSACTIONS::CHARGE_INTEREST          => FieldValidator::NUMBER,
-        LTRANSACTIONS::CHARGE_PRINCIPAL         => FieldValidator::NUMBER,
-        LTRANSACTIONS::PAYMENT_AMOUNT           => FieldValidator::NUMBER,
-        LTRANSACTIONS::PAYMENT_DISCOUNT         => FieldValidator::NUMBER,
-        LTRANSACTIONS::PAYMENT_FEES             => FieldValidator::NUMBER,
-        LTRANSACTIONS::PAYMENT_INTEREST         => FieldValidator::NUMBER,
-        LTRANSACTIONS::PAYMENT_PRINCIPAL        => FieldValidator::NUMBER,
-        LTRANSACTIONS::PRINCIPAL_BALANCE        => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::ADB                      => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::CHARGE_AMOUNT            => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::CHARGE_DISCOUNT          => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::CHARGE_FEES              => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::CHARGE_ESCROW            => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::CHARGE_INTEREST          => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::CHARGE_PRINCIPAL         => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::PAYMENT_AMOUNT           => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::PAYMENT_DISCOUNT         => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::PAYMENT_FEES             => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::PAYMENT_INTEREST         => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::PAYMENT_PRINCIPAL        => FieldValidator::NUMBER,
+        LOAN_TRANSACTIONS::PRINCIPAL_BALANCE        => FieldValidator::NUMBER,
 
-        LTRANSACTIONS::FEES_PAID_DETAILS        => FieldValidator::READ_ONLY,
-        LTRANSACTIONS::PAYMENT_ESCROW_BREAKDOWN => FieldValidator::READ_ONLY,
+        LOAN_TRANSACTIONS::FEES_PAID_DETAILS        => FieldValidator::READ_ONLY,
+        LOAN_TRANSACTIONS::PAYMENT_ESCROW_BREAKDOWN => FieldValidator::READ_ONLY,
     ];
 }

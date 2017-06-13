@@ -11,9 +11,9 @@
 namespace Simnang\LoanPro\Constants;
 
 /**
- * Class LSETTINGS_CO_BUYER_ECOA_CODE__C
+ * Class ECOA_CODES
  * Holds collection values for co buyer ecoa codes
- * @package Simnang\LoanPro\Constants\LSETUP
+ * @package Simnang\LoanPro\Constants\LOAN_SETUP
  */
 class ECOA_CODES{
     const NOT_SPECIFIED     = 'loan.ecoacodes.0';

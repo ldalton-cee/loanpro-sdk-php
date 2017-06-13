@@ -21,7 +21,7 @@ use Simnang\LoanPro\Constants\STATE_COLLECTIONS;
 
 /**
  * Class ADDRESS_STATE__C
- * @package Simnang\LoanPro\Constants\LSETUP
+ * @package Simnang\LoanPro\Constants\LOAN_SETUP
  */
 class ADDRESS_STATE__C extends STATE_COLLECTIONS{
 }

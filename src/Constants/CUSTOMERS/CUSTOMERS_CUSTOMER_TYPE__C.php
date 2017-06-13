@@ -13,7 +13,7 @@ namespace Simnang\LoanPro\Constants\CUSTOMERS;
 
 /**
  * Class CUSTOMERS_CUSTOMER_TYPE__C
- * @package Simnang\LoanPro\Constants\LSETUP
+ * @package Simnang\LoanPro\Constants\LOAN_SETUP
  */
 class CUSTOMERS_CUSTOMER_TYPE__C{
     const COMPANY   = 'customer.type.company';

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-php composer.phar online
+php composer.phar test
 

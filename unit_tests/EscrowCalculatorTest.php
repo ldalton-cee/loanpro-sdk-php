@@ -126,12 +126,12 @@ class EscrowCalculatorTest extends TestCase
      */
     public function testLoanCheckValidProp(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN.'\'');
+        $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN.'\'');
         $ls = $escrowCalc = static::$sdk->CreateEscrowCalculator(1);
         $ls->set(BASE_ENTITY::ID, 120);
 
         // should throw exception when setting AGENT to null
-        $ls->set(\Simnang\LoanPro\Constants\LSETUP::AMT_DOWN, 1280.32);
+        $ls->set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
     }
 
     /**

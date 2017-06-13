@@ -13,7 +13,7 @@ namespace Simnang\LoanPro\Constants\CUSTOMERS;
 
 /**
  * Class CUSTOMERS_GENERATION_CODE__C
- * @package Simnang\LoanPro\Constants\LSETUP
+ * @package Simnang\LoanPro\Constants\LOAN_SETUP
  */
 class CUSTOMERS_GENERATION_CODE__C{
     const II    = 'customer.generationCode.ii';

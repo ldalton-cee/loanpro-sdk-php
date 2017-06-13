@@ -21,7 +21,7 @@ use Simnang\LoanPro\Constants\COUNTRY_COLLECTIONS;
 
 /**
  * Class ADDRESS_COUNTRY__C
- * @package Simnang\LoanPro\Constants\LSETUP
+ * @package Simnang\LoanPro\Constants\LOAN_SETUP
  */
 class ADDRESS_COUNTRY__C extends COUNTRY_COLLECTIONS{
 }

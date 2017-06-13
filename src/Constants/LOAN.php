@@ -61,10 +61,10 @@ class LOAN{
     const LOAN_FUNDING              = 'LoanFunding';
     const LOAN_MODIFICATIONS        = 'LoanModifications';
     const LOANS                     = 'Loans';
-    const LSETTINGS                 = 'LoanSettings';
-    const LSETUP                    = 'LoanSetup';
-    const LSRULES_APPLIED           = 'RuleAppliedLoanSettings';
-    const LSTATUS_ARCHIVE           = 'StatusArchive';
+    const LOAN_SETTINGS                 = 'LoanSettings';
+    const LOAN_SETUP                    = 'LoanSetup';
+    const LOAN_SETTINGS_RULES_APPLIED           = 'RuleAppliedLoanSettings';
+    const STATUS_ARCHIVE           = 'StatusArchive';
     const MOD_ID                    = 'modId';
     const MOD_TOTAL                 = 'modTotal';
     const NOTES                     = 'Notes';
