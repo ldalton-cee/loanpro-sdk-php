@@ -87,7 +87,6 @@ class ApiClientTest extends TestCase
      * @group online
      */
     public static function setUpBeforeClass(){
-        return;
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
         \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm();
         ApiClientTest::$comm = \Simnang\LoanPro\Communicator\Communicator::GetCommunicator(ApiClient::TYPE_ASYNC);
@@ -132,7 +131,6 @@ class ApiClientTest extends TestCase
      * @group online
      */
     public static function tearDownAfterClass(){
-        return;
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoan("")->set(BASE_ENTITY::ID, static::$loanId);
         $loan->delete(true);
 
