@@ -17,13 +17,13 @@ eg.
 
 ## Constant Lists
 
-Constant lists for entities are always in all caps. If its for an entity with just one word, then the name is the name of the entity. If there are multiple words, then the name is the first letters of all the words except the last word, the last word is the full word.
+Constant lists for entities are always in all caps. The name is the name of the entity (excluding the trailing "Entity").
  
 eg.
 
 * The Loan entity becomes "LOAN"
-* The Loan Settings entity becomes "LSETTINGS"
-* The Loan Setup entity becomes "LSETUP"
+* The Loan Settings entity becomes "LOAN_SETTINGS"
+* The Loan Setup entity becomes "LOAN_SETUP"
 * The Customer entity becomes "CUSTOMER"
 
 ### Fields
@@ -36,6 +36,6 @@ Collection lists will be in a namespace with the constant list name for the enti
  
 eg.
 
-* For the loan class in Loan Setup, the field name is "LCLASS__C", so the collection list will be called "LSETUP_LCLASS__C".
-* For the payment frequency in Loan Setup, the field name is "PAY_FREQ__C", so the collection list will be called "LSETUP_PAY_FREQ__C".
+* For the loan class in Loan Setup, the field name is "LCLASS__C", so the collection list will be called "LOAN_SETUP_LCLASS__C".
+* For the payment frequency in Loan Setup, the field name is "PAY_FREQ__C", so the collection list will be called "LOAN_SETUP_PAY_FREQ__C".
 

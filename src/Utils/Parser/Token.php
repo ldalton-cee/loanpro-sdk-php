@@ -16,10 +16,16 @@
  *
  */
 
-namespace Simnang\LoanPro\Iterator;
+namespace Simnang\LoanPro\Utils\Parser;
 
 
-class LoanIterator
+class Token
 {
+    public $token = 0;
+    public $sequence = '';
 
+    public function __construct($token = '', $sequence = '') {
+        $this->token = $token;
+        $this->sequence = $sequence;
+    }
 }
