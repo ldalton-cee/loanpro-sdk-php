@@ -27,25 +27,146 @@ class LL1_Parser
     private $tokenSymbols = [];
     private $start = 'EXPR';
     private $grammar = [];
-    private $exprTreeRules = null;
+    private $expressionTreeProcessor = null;
 
-    private function AddTokenRegex($regex = '', $tokenId){
-        $this->tokenInfos[] = new TokenInfo($tokenId, '$^('.$regex.')$');
+    /**
+     * Creates a new parser with the provided token symbols and the provided grammar
+     * For token symbols, it is an array whose keys are in all caps and values are a regular expression (minus starting and ending delimiter, which is a dollar sign)
+     *
+     * For grammars, it is the LL(1) Parse table to use for parsing
+     *  It is an array of arrays
+     *      The first array has keys whose symbols are in all caps and are the grammar rules, the value is the grammar productions
+     *          In the productions of the grammar the names of tokens found by the tokenizer are in lowercase
+     *
+     * @param array $tokenSymbols - tokens to find by the tokenizer
+     * @param array $grammar - LL(1) parse table
+     * @throws \Exception
+     */
+    public function __construct($tokenSymbols, $grammar, $startToken = 'EXPR'){
+        $this->SetTokenSymbols($tokenSymbols);
+        $this->SetGrammar($grammar, $startToken);
     }
 
-    public function SetTokenSymbols($tokenSymbols = []){
+    /**
+     * Sets the expression tree generator to be using the default expression tree generator
+     * @param array $expr
+     */
+    public function SetExpressionTree($expr = []){
+        $this->expressionTreeProcessor = new DefaultExpressionTreeGenerator($this->tokenSymbols, $expr);
+    }
+
+    /**
+     * Sets the expression tree generator to be a custom generator
+     * @param ExpressionTreeGenerator $gen
+     */
+    public function SetExpressionTreeGenerator(ExpressionTreeGenerator $gen){
+        $this->expressionTreeProcessor = $gen;
+    }
+
+    /**
+     * Takes a string and tokenizes it
+     * @param string $str
+     * @return array
+     */
+    public function Tokenize($str = ''){
+        if(!strlen($str))
+            return [];
+        $tokens = [];
+        while($str !== ''){
+            $str = trim($str);
+            $match = false;
+            foreach($this->tokenInfos as $tokenInfo) {
+                $matches = [];
+                if (preg_match($tokenInfo->regex, $str, $matches)){
+                    $match = true;
+                    $tokens[] = new Token($tokenInfo->value, $matches[1]);
+                    $str = preg_replace($tokenInfo->regex, '', $str, 1);
+                    break;
+                }
+            }
+            if (!$match)
+                throw new \InvalidArgumentException("Unexpected character in input: ".$str);
+        }
+        return $tokens;
+    }
+
+    /**
+     * Parses a string, if there is an expression tree generator provided it will return the expression tree, otherwise it will return true
+     *
+     * It will thrown an InvalidArgumentException if there is an error parsing
+     *
+     * @param $str
+     * @return bool
+     * @throws \InvalidArgumentException
+     */
+    public function Parse($str){
+        $tokens = $this->Tokenize($str);
+
+        if(!is_null($this->expressionTreeProcessor))
+            $this->expressionTreeProcessor->Reset();
+
+        $stack = new Stack();
+        $stack->Push($this->start);
+        $curToken = array_shift($tokens);
+        $curNode = null;
+        if(is_null($curToken))
+            $curToken = new Token('$','');
+
+        while($stack->Size()){
+            $svar = $stack->Pop();
+            if($svar === strtolower($curToken->token))
+            {
+                if(!is_null($this->expressionTreeProcessor))
+                    $this->expressionTreeProcessor->ProcessToken($curToken);
+                $curToken = array_shift($tokens);
+                if(is_null($curToken))
+                    $curToken = new Token('$','');
+                continue;
+            }
+            $prod = $this->grammar[ $svar ];
+            $prod = $prod[ strtolower($curToken->token) ];
+            if (is_null($prod))
+                throw new \InvalidArgumentException("Unexpected token " . $curToken->token. " in parse, invalidates rule for " . $svar);
+            if($prod === 'EPSILON')
+                continue;
+            $items = explode(' ', $prod);
+            $cntItems = count($items);
+            for($i = $cntItems - 1; $i >= 0; --$i)
+                $stack->Push($items[$i]);
+        }
+
+        if($curToken->token != '$')
+            throw new \InvalidArgumentException("Unexpected token ".$this->tokenLookAhead->token." at end of string");
+
+        if(!is_null($this->expressionTreeProcessor))
+            return $this->expressionTreeProcessor->GetExpressionTree();
+        return true;
+    }
+
+    /**
+     * Transforms an array of tokens to an array of arrays (used in unit testing)
+     * @param $tokens
+     * @return array
+     */
+    public function TransformTokensToArr($tokens){
+        $ret = [];
+        foreach($tokens as $t)
+            $ret[] = [$t->token, $t->sequence];
+        return $ret;
+    }
+
+    protected function SetTokenSymbols($tokenSymbols = []){
         $this->tokenInfos = [];
         $this->tokenSymbols = array_unique(array_map('strtolower',array_merge(['EPSILON'], array_keys($tokenSymbols))));
 
         $i = 0;
         foreach($tokenSymbols as $key => $regex){
             ++$i;
-            $this->AddTokenRegex($regex, $key);
+            $this->tokenInfos[] = new TokenInfo($key, '$^('.$regex.')$');
         }
     }
 
-    public function SetGrammar($grammar = [], $start = 'EXPR'){
-
+    protected function SetGrammar($grammar = [], $start = 'EXPR'){
         foreach($grammar as $rule => $production){
             // isset returns false if the value is null, so we get around that by doing error checking
             try{
@@ -70,214 +191,6 @@ class LL1_Parser
 
         $this->grammar = $grammar;
         $this->start = $start;
-    }
-
-    public function SetExpressionTree($expr = []){
-        $validOps = ['terminal','binary_op', 'ignore'];
-        foreach($this->tokenSymbols as $symbol) {
-            if($symbol === 'epsilon')
-                continue;
-            if(!isset($expr[$symbol])){
-                throw new \InvalidArgumentException("Missing symbol '$symbol' in expression tree");
-            }
-            if(!in_array($expr[$symbol]['type'],$validOps)){
-                throw new \InvalidArgumentException("Invalid option '$expr[$symbol]' for symbol $symbol");
-            }
-        }
-        $this->exprTreeRules = $expr;
-    }
-
-    public function Tokenize($str = ''){
-        if(!strlen($str))
-            return [];
-        $tokens = [];
-        while($str !== ''){
-            $str = trim($str);
-            $match = false;
-            foreach($this->tokenInfos as $tokenInfo) {
-                $matches = [];
-                if (preg_match($tokenInfo->regex, $str, $matches)){
-                    $match = true;
-                    $tokens[] = new Token($tokenInfo->value, $matches[1]);
-                    $str = preg_replace($tokenInfo->regex, '', $str, 1);
-                    break;
-                }
-            }
-            if (!$match)
-                throw new \InvalidArgumentException("Unexpected character in input: ".$str);
-        }
-        return $tokens;
-    }
-
-    private function IsTreeChild($parent, $child, $childType = 'left'){
-        $parent = strtolower($parent);
-        $child = strtolower($child);
-        if((isset($this->exprTreeRules[$parent]['children']) && in_array(strtolower($child),$this->exprTreeRules[$parent]['children']))
-            || (isset($this->exprTreeRules[$parent][$childType]) && in_array(strtolower($child),$this->exprTreeRules[$parent][$childType])))
-            return true;
-        return false;
-    }
-
-    private function TakeCareOfNodeStack(&$nodes, &$node){
-
-        while (!is_null($nodes->Peek()) &&
-            (($nodes->Peek()->MissingLeftChild() && $this->IsTreeChild($nodes->Peek()->token->token, $node->token->token, 'left')) ||
-                ($nodes->Peek()->MissingRightChild() && $this->IsTreeChild($nodes->Peek()->token->token, $node->token->token, 'right')))) {
-            if ($nodes->Peek()->MissingLeftChild() && $this->IsTreeChild($nodes->Peek()->token->token, $node->token->token, 'left')) {
-                $n = $nodes->Pop();
-                $n->AddLeftChildNode($node);
-            }
-            else{
-                $n = $nodes->Pop();
-                $n->AddRightChildNode($node);
-            }
-        }
-    }
-
-    public function Parse($str){
-        $tokens = $this->Tokenize($str);
-
-        $stack = new Stack();
-        $stack->Push($this->start);
-        $terminals = new Stack();
-        $nodes = new Stack();
-        $curToken = array_shift($tokens);
-        $curNode = null;
-        if(is_null($curToken))
-            $curToken = new Token('$','');
-
-        while($stack->Size()){
-            $svar = $stack->Pop();
-            if($svar === strtolower($curToken->token))
-            {
-                if(!is_null($this->exprTreeRules[$svar])){
-                    if($this->exprTreeRules[$svar]['type'] === 'ignore'){}
-                    elseif($this->exprTreeRules[$svar]['type'] === 'terminal'){
-                        if(!is_null($curNode)){
-                            $tvar = strtolower($curNode->token->token);
-                            if($this->IsTreeChild($tvar, $svar, 'right') && $curNode->MissingRightChild()){
-                                $curNode->AddRightChildNode(new ExpressionTreeNode($curToken));
-                                while(!is_null($curNode->parentNode) && $curNode->HasBothChildren())
-                                    $curNode = $curNode->parentNode;
-                                $this->TakeCareOfNodeStack($nodes, $curNode);
-                            }
-                            else {
-                                $terminals->Push(new ExpressionTreeNode($curToken));
-                            }
-                        }
-                        else {
-                            $terminals->Push(new ExpressionTreeNode($curToken));
-                        }
-                    }
-                    else if($this->exprTreeRules[$svar]['type'] === 'binary_op') {
-                        $node = new ExpressionTreeNode($curToken);
-
-                        //var_dump($nodes->Peek());
-                        $cnodeChanged = false;
-                        if(is_null($curNode)){
-                            $curNode = $node;
-                            $cnodeChanged = true;
-                        }
-                        else if($node->MissingLeftChild() && !is_null($curNode) &&$this->IsTreeChild($svar, $curNode->token->token, 'left')){
-                                $node->AddLeftChildNode($curNode);
-                                $curNode = $node;
-                                $cnodeChanged = true;
-                            }
-                        else if($node->MissingRightChild() && !$cnodeChanged && $this->IsTreeChild($svar, $curNode->token->token, 'right')){
-                                $node->AddLeftChildNode($curNode);
-                                $curNode = $node;
-                                $cnodeChanged = true;
-                        }
-
-
-                        $this->TakeCareOfNodeStack($nodes, $curNode);
-
-
-                        while(!is_null($terminals->Peek()) &&
-                            (($node->MissingLeftChild() && $this->IsTreeChild($svar, $terminals->Peek()->token->token, 'left')))){
-                            if($node->MissingLeftChild() && $this->IsTreeChild($svar, $terminals->Peek()->token->token, 'left')){
-                                $node->AddLeftChildNode($terminals->Pop());
-                            }
-                        }
-
-                        if(!$cnodeChanged){
-                            $n = $node;
-                            while($n->HasParent())
-                                $n = $n->parentNode;
-                            if($curNode->MissingLeftChild() && $this->IsTreeChild($curNode->token->token, $n->token->token, 'left')){
-                                $curNode->AddLeftChildNode($n);
-                                $curNode = $n;
-                            }
-                            else if ($curNode->MissingRightChild() && $this->IsTreeChild($curNode->token->token, $n->token->token, 'right')) {
-                                $curNode->AddRightChildNode($n);
-                                $curNode = $n;
-                            }
-                            else {
-                                $nodes->Push($curNode);
-                                $curNode = $node;
-                            }
-                        }
-                    }
-                }
-                $curToken = array_shift($tokens);
-                if(is_null($curToken))
-                    $curToken = new Token('$','');
-                continue;
-            }
-            $prod = $this->grammar[ $svar ];
-            $prod = $prod[ strtolower($curToken->token) ];
-            if (is_null($prod))
-                throw new \InvalidArgumentException("Unexpected token " . $curToken->token. " in parse, invalidates rule for " . $svar);
-            if($prod === 'EPSILON')
-                continue;
-            $items = explode(' ', $prod);
-            $cntItems = count($items);
-            for($i = $cntItems - 1; $i >= 0; --$i)
-                $stack->Push($items[$i]);
-        }
-
-        if($curToken->token != '$')
-            throw new \InvalidArgumentException("Unexpected token ".$this->tokenLookAhead->token." at end of string");
-
-        if(!is_null($curNode))
-        {
-            while(!is_null($curNode->parentNode))
-                $curNode = $curNode->parentNode;
-        }
-
-
-        while($nodes->Size() && !is_null($curNode)){
-            $n = $nodes->Pop();
-            if(($this->IsTreeChild($curNode->token->token, $n->token->token,'left') && $curNode->MissingLeftChild()) ||
-                ($this->IsTreeChild($curNode->token->token, $n->token->token,'right') && $curNode->MissingRightChild())){
-                if($this->IsTreeChild($curNode->token->token, $n->token->token,'left') && $curNode->MissingLeftChild()){
-                    $curNode->AddLeftChildNode($n);
-                }
-                else{
-                    $curNode->AddRightChildNode($n);
-                }
-                $curNode = $n;
-                while(!is_null($curNode->parentNode))
-                    $curNode = $curNode->parentNode;
-            }else{
-                if(($this->IsTreeChild($n->token->token, $curNode->token->token, 'left') && $n->MissingLeftChild())){
-                    $n->AddLeftChildNode($curNode);
-                }
-                else{
-                    $n->AddRightChildNode($curNode);
-                }
-                while(!is_null($curNode->parentNode))
-                    $curNode = $curNode->parentNode;
-            }
-        }
-        return $curNode;
-    }
-
-    public function TransformTokensToArr($tokens){
-        $ret = [];
-        foreach($tokens as $t)
-            $ret[] = [$t->token, $t->sequence];
-        return $ret;
     }
 }
 

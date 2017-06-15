@@ -43,7 +43,7 @@ class ExpressionTreeNode implements \JsonSerializable {
         }
     }
 
-    public function AddNextChild(ExpressionTreeNode $node){
+    public function AddNextChildNode(ExpressionTreeNode $node){
         if(is_null($this->leftNode)) {
             $this->leftNode = $node;
             $node->parentNode = $this;

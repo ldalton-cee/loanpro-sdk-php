@@ -29,11 +29,14 @@ use Simnang\LoanPro\Customers\CreditScoreEntity;
 use Simnang\LoanPro\Customers\CustomerEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
+use Simnang\LoanPro\Iteration\AggregateParams;
 use Simnang\LoanPro\Iteration\FilterParams;
 use Simnang\LoanPro\Iteration\PaginationParams;
+use Simnang\LoanPro\Iteration\SearchParams;
 use Simnang\LoanPro\LoanProSDK;
 use Simnang\LoanPro\Loans\LoanEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
+use Simnang\LoanPro\Utils\Parser\SearchGenerator;
 use Simnang\LoanPro\Validator\FieldValidator;
 
 /**
@@ -544,26 +547,6 @@ class Communicator
     }
 
     /**
-     * Returns paid breakdown for the loan
-     * @param LoanEntity $loan
-     * @return array
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    /*public function getLoanPaidBreakdown(LoanEntity $loan){
-        $loan->insureHasID();
-        $id = $loan->get(BASE_ENTITY::ID);
-        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.PaidBreakdown()");
-        if ($res->getStatusCode() == 200) {
-            $body = json_decode($res->getBody(), true);
-            if (isset($body['d'])) {
-                return $body['d'];
-            }
-        }
-        throw new ApiException($res);
-    }*/
-
-    /**
      * Returns interest fees history
      * @param LoanEntity $loan
      * @return array
@@ -649,6 +632,80 @@ class Communicator
                 $ret = [];
                 foreach($body['d']['results'] as $val){
                     $ret[] = LoanProSDK::GetInstance()->CreateLoanFromJSON($val);
+                }
+                return $ret;
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Performs a loan search
+     * @param SearchParams|null     $searchParams - parameters to search by
+     * @param AggregateParams|null  $aggParams - aggregate data to pull
+     * @param PaginationParams|null $paginationParams - pagination settings
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function searchLoans(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
+        $query = [];
+        $query[] = (string)$paginationParams;
+        $query = '?'.implode('&',array_filter($query));
+        if($query === '?')
+            $query = '';
+
+        $request = array_merge($searchParams->get(), $aggParams->get());
+
+        $res = $this->client->POST("$this->baseUrl/Loans/Autopal.Search()$query", $request);
+
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['results'])) {
+                $ret = [];
+                foreach($body['d']['results'] as $val){
+                    $ret[] = $val;
+                }
+                $ret = ['results'=>$ret, 'aggregates'=>[]];
+                if(isset($body['d']['summary']) && isset($body['d']['summary']['aggregations'])){
+                    $ret['aggregates'] = $body['d']['summary']['aggregations'];
+                }
+                return $ret;
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Performs a customer search
+     * @param SearchParams|null     $searchParams - parameters to search by
+     * @param AggregateParams|null  $aggParams - aggregate data to pull
+     * @param PaginationParams|null $paginationParams - pagination settings
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function searchCustomers(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
+        $query = [];
+        $query[] = (string)$paginationParams;
+        $query = '?'.implode('&',array_filter($query));
+        if($query === '?')
+            $query = '';
+
+        $request = array_merge($searchParams->get(), $aggParams->get());
+
+        $res = $this->client->POST("$this->baseUrl/Customers/Autopal.Search()$query", $request);
+
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['results'])) {
+                $ret = [];
+                foreach($body['d']['results'] as $val){
+                    $ret[] = $val;
+                }
+                $ret = ['results'=>$ret, 'aggregates'=>[]];
+                if(isset($body['d']['summary']) && isset($body['d']['summary']['aggregations'])){
+                    $ret['aggregates'] = $body['d']['summary']['aggregations'];
                 }
                 return $ret;
             }

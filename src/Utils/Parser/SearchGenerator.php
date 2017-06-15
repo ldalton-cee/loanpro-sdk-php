@@ -38,7 +38,7 @@ class SearchGenerator
         'LOGICAL_EXPR'=>['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'regex'=>null,      'like'=>null,           'const'=>null,              'compare'=>null,            'logical_op'=>'logical_op EXPR', ],
         'STATEMENT'=>   ['$'=>null,     'array'=>'LIST COMP FSTATEMENT',    'nest'=>null,   'nest_name'=>'LIST COMP FSTATEMENT',    'concat'=>null,             'regex'=>null,      'like'=>null,           'const'=>null,              'compare'=>null,            'logical_op'=>null,              ],
         'COMP'=>        ['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'regex'=>null,      'like'=>'like regex',   'const'=>null,              'compare'=>'compare COMPT', 'logical_op'=>null,              ],
-        'COMPT'=>        ['$'=>null,    'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'regex'=>'regex',   'like'=>null,           'const'=>'const',           'compare'=>null,            'logical_op'=>null,              ],
+        'COMPT'=>       ['$'=>null,    'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'regex'=>'regex',   'like'=>null,           'const'=>'const',           'compare'=>null,            'logical_op'=>null,              ],
         'FSTATEMENT'=>  ['$'=>'EPSILON','array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'regex'=>null,      'like'=>null,           'const'=>null,              'compare'=>null,            'logical_op'=>'LOGICAL_EXPR',    ],
         'LIST'=>        ['$'=>null,     'array'=>'TERM FTERM',              'nest'=>null,   'nest_name'=>'TERM FTERM',              'concat'=>null,             'regex'=>null,      'like'=>null,           'const'=>null,              'compare'=>null,            'logical_op'=>null,              ],
         'FTERM'=>       ['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>'concat LIST',    'regex'=>null,      'like'=>'EPSILON',      'const'=>null,              'compare'=>'EPSILON',       'logical_op'=>null,              ],
@@ -59,9 +59,7 @@ class SearchGenerator
 
     private $parser = null;
     public function __construct(){
-        $this->parser = new LL1_Parser();
-        $this->parser->SetTokenSymbols(SearchGenerator::TOKEN_SYMBOLS);
-        $this->parser->SetGrammar(SearchGenerator::GRAMMAR, 'EXPR');
+        $this->parser = new LL1_Parser(SearchGenerator::TOKEN_SYMBOLS, SearchGenerator::GRAMMAR, 'EXPR');
         $this->parser->SetExpressionTree(SearchGenerator::TREE_RULES);
     }
 
@@ -71,6 +69,13 @@ class SearchGenerator
 
     public function Generate($str = ''){
         $eTree = $this->parser->Parse($str);
+
+        if($eTree->token->token !== 'LOGICAL_OP')
+        {
+            $root = new ExpressionTreeNode(new Token('LOGICAL_OP','|'));
+            $root->AddLeftChildNode($eTree);
+            $eTree = $root;
+        }
 
         $res = ['query'=>['bool'=>$this->processTree($eTree)]];
 
@@ -87,7 +92,11 @@ class SearchGenerator
                 $key = 'must';
             else
                 $key = 'should';
-            $json[$key] = [$this->processTree($actionNode->leftNode),$this->processTree($actionNode->rightNode)];
+
+            if(!is_null($actionNode->rightNode))
+                $json[$key] = [$this->processTree($actionNode->leftNode),$this->processTree($actionNode->rightNode)];
+            else
+                $json[$key] = [$this->processTree($actionNode->leftNode)];
         }
         else if($token->token === 'LIKE'){
             $op = 'should';

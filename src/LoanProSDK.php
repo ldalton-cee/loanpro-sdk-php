@@ -45,8 +45,10 @@ use Simnang\LoanPro\Customers\ReferencesEntity;
 use Simnang\LoanPro\Customers\SocialProfileEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
+use Simnang\LoanPro\Iteration\AggregateParams;
 use Simnang\LoanPro\Iteration\FilterParams;
 use Simnang\LoanPro\Iteration\PaginationParams;
+use Simnang\LoanPro\Iteration\SearchParams;
 use Simnang\LoanPro\Loans\AdvancementsEntity;
 use Simnang\LoanPro\Loans\APDAdjustmentEntity;
 use Simnang\LoanPro\Loans\AutopayEntity;
@@ -177,14 +179,28 @@ class LoanProSDK
         return $this->apiComm->getCustomers($expandProps, $paginationParams, $filter);
     }
 
-    public static function trimRecursive($arg){
-        if(is_array($arg)) {
-            $ret = [];
-            foreach($arg as $k => $v)
-                $ret[$k] = static::trimRecursive($v);
-            return $ret;
-        }
-        return trim($arg);
+    /**
+     * Performs a loan search and returns the direct results
+     * @param PaginationParams|null $paginationParams - pagination settings
+     * @param SearchParams|null     $searchParams - parameters to search by
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function SearchLoans_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
+        return $this->apiComm->searchLoans($searchParams, $aggParams, $paginationParams);
+    }
+
+    /**
+     * Performs a customer search and returns the direct results
+     * @param PaginationParams|null $paginationParams - pagination settings
+     * @param SearchParams|null     $searchParams - parameters to search by
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function SearchCustomers_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
+        return $this->apiComm->searchCustomers($searchParams, $aggParams, $paginationParams);
     }
 
     /**
@@ -952,6 +968,16 @@ class LoanProSDK
         return (new Loans\LoanSetupEntity($json[LOAN_SETUP::LCLASS__C],$json[LOAN_SETUP::LTYPE__C]))->set($setVars);
     }
     /// @endcond
+
+    protected static function trimRecursive($arg){
+        if(is_array($arg)) {
+            $ret = [];
+            foreach($arg as $k => $v)
+                $ret[$k] = static::trimRecursive($v);
+            return $ret;
+        }
+        return trim($arg);
+    }
 }
 
 

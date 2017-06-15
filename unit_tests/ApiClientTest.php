@@ -378,7 +378,7 @@ class ApiClientTest extends TestCase
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->getLoan(static::$loanId, $expansion);
         $loan = $loan->inactivate();
         $this->assertEquals(0, $loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::ACTIVE));
-        //echo(json_encode($loan));
+
         $loan->save();
         $loan = $loan->activate();
         $this->assertEquals(1, $loan->get(LOAN::LOAN_SETUP)->get(LOAN_SETUP::ACTIVE));
@@ -572,5 +572,37 @@ class ApiClientTest extends TestCase
         $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW([], $paginator, $filter);
         $this->assertTrue(is_array($customers));
         $this->assertEquals(0, count($customers));
+    }
+
+    /**
+     * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
+     */
+    public function testLoanSearch(){
+        $searchParams = new \Simnang\LoanPro\Iteration\SearchParams('[displayId] ~ "*LOAN*"');
+        $paginationParams = new \Simnang\LoanPro\Iteration\PaginationParams(true);
+        $aggregateParams = new \Simnang\LoanPro\Iteration\AggregateParams("loan_amount:sum,max;loan_payoff:avg");
+        $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->SearchLoans_RAW($searchParams, $aggregateParams, $paginationParams);
+        $this->assertGreaterThan(0, count($res['results']));
+
+        $this->assertTrue(isset($res['aggregates']));
+        $this->assertTrue(isset($res['aggregates']['sum_loanamount']));
+        $this->assertTrue(isset($res['aggregates']['max_loanamount']));
+        $this->assertTrue(isset($res['aggregates']['avg_loanpayoff']));
+    }
+
+    /**
+     * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
+     */
+    public function testCustomerSearch(){
+        $searchParams = new \Simnang\LoanPro\Iteration\SearchParams('[email] ~ "*none.com"');
+        $paginationParams = new \Simnang\LoanPro\Iteration\PaginationParams(true);
+        $aggregateParams = new \Simnang\LoanPro\Iteration\AggregateParams("age:sum,max;loanCount:avg");
+        $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->SearchCustomers_RAW($searchParams, $aggregateParams, $paginationParams);
+        $this->assertGreaterThan(0, count($res['results']));
+
+        $this->assertTrue(isset($res['aggregates']));
+        $this->assertTrue(isset($res['aggregates']['sum_age']));
+        $this->assertTrue(isset($res['aggregates']['max_age']));
+        $this->assertTrue(isset($res['aggregates']['avg_loancount']));
     }
 }
