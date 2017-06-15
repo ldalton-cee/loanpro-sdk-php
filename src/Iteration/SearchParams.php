@@ -25,8 +25,11 @@ class SearchParams
 {
     private static $searchGenerator = null;
     private $json;
-    private $str = null;
 
+    /**
+     * Creates a new search parameter object based on a search DSL string
+     * @param string $searchString
+     */
     public function __construct(string $searchString){
         if(is_null(static::$searchGenerator))
             static::$searchGenerator = new SearchGenerator();
@@ -34,6 +37,10 @@ class SearchParams
         $this->json = static::$searchGenerator->Generate($searchString);
     }
 
+    /**
+     * Gets JSON representation of search parameters
+     * @return array
+     */
     public function get(){
         return $this->json;
     }

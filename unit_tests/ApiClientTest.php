@@ -607,4 +607,61 @@ class ApiClientTest extends TestCase
         $this->assertTrue(isset($res['aggregates']['max_age']));
         $this->assertTrue(isset($res['aggregates']['avg_loancount']));
     }
+
+    /**
+     * @group online
+     */
+    public function testIterators(){
+        $it = new \Simnang\LoanPro\Iteration\LoanIterator([], null, [], \Simnang\LoanPro\Iteration\PaginationParams::ASCENDING_ORDER, 1);
+        $foundLoan = false;
+        foreach($it as $key => $i){
+            $this->assertTrue(!is_null($i->get(LOAN::DISP_ID)));
+            if($i->get(BASE_ENTITY::ID) == static::$loanId)
+                $foundLoan = true;
+        }
+        $this->assertTrue($foundLoan);
+
+        $it = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoans();
+        $foundLoan = false;
+        foreach($it as $key => $i){
+            $this->assertTrue(!is_null($i->get(LOAN::DISP_ID)));
+            if($i->get(BASE_ENTITY::ID) == static::$loanId)
+                $foundLoan = true;
+        }
+        $this->assertTrue($foundLoan);
+
+
+        $it = new \Simnang\LoanPro\Iteration\CustomerIterator([], null, [], \Simnang\LoanPro\Iteration\PaginationParams::ASCENDING_ORDER, 8);
+        $foundLoan = false;
+        foreach($it as $key => $i){
+            $this->assertTrue(!is_null($i->get(CONSTS\CUSTOMERS::FIRST_NAME)));
+            if($i->get(BASE_ENTITY::ID) == static::$cid)
+                $foundLoan = true;
+        }
+        $this->assertTrue($foundLoan);
+
+        $it = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers();
+        $foundLoan = false;
+        foreach($it as $key => $i){
+            $this->assertTrue(!is_null($i->get(CONSTS\CUSTOMERS::FIRST_NAME)));
+            if($i->get(BASE_ENTITY::ID) == static::$cid)
+                $foundLoan = true;
+        }
+        $this->assertTrue($foundLoan);
+    }
+
+    /**
+     * @group online
+     */
+    public function testYaLinqo(){
+        $res = from(\Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoans())
+            ->where(function($loan){ return $loan->get(BASE_ENTITY::ID) == static::$loanId;})->count();
+
+        $this->assertEquals(1, $res);
+
+        $res = from(\Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers())
+            ->where(function($cust){ return $cust->get(BASE_ENTITY::ID) == static::$cid;})->count();
+        $this->assertEquals(1, $res);
+
+    }
 }

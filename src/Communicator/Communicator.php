@@ -617,6 +617,8 @@ class Communicator
      */
     public function getLoans($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
         $query = [];
+        if(!is_null($paginationParams))
+            $paginationParams = $paginationParams->setUseSkip(true);
         $query[] = (string)$paginationParams;
         $query[] = (string)$filter;
         $exp = implode(',', $expandProps);
@@ -724,6 +726,8 @@ class Communicator
      */
     public function getCustomers($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
         $query = [];
+        if(!is_null($paginationParams))
+            $paginationParams = $paginationParams->setUseSkip(true);
         $query[] = (string)$paginationParams;
         $query[] = (string)$filter;
         $exp = implode(',', $expandProps);

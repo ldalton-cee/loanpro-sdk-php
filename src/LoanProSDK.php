@@ -46,7 +46,9 @@ use Simnang\LoanPro\Customers\SocialProfileEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Iteration\AggregateParams;
+use Simnang\LoanPro\Iteration\CustomerIterator;
 use Simnang\LoanPro\Iteration\FilterParams;
+use Simnang\LoanPro\Iteration\LoanIterator;
 use Simnang\LoanPro\Iteration\PaginationParams;
 use Simnang\LoanPro\Iteration\SearchParams;
 use Simnang\LoanPro\Loans\AdvancementsEntity;
@@ -154,6 +156,19 @@ class LoanProSDK
     }
 
     /**
+     * Returns an iterator that will iterate over all loans on the server
+     *  It caches only a small number of loans locally and will grab the rest as needed
+     * @param array                 $expandProps
+     * @param FilterParams|null     $filter
+     * @param array                 $orderBy
+     * @param string                $order
+     * @return LoanIterator
+     */
+    public function GetLoans($expandProps = [], FilterParams $filter = null, $orderBy = [], $order = PaginationParams::ASCENDING_ORDER){
+        return new LoanIterator($expandProps, $filter, $orderBy, $order);
+    }
+
+    /**
      * Returns an array of loan entities
      * @param array                 $expandProps - expand properties to expand by
      * @param PaginationParams|null $paginationParams - Pagination options
@@ -164,6 +179,19 @@ class LoanProSDK
      */
     public function GetLoans_RAW($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
         return $this->apiComm->getLoans($expandProps, $paginationParams, $filter);
+    }
+
+    /**
+     * Returns an iterator that will iterate over all loans on the server
+     *  It caches only a small number of loans locally and will grab the rest as needed
+     * @param array                 $expandProps
+     * @param FilterParams|null     $filter
+     * @param array                 $orderBy
+     * @param string                $order
+     * @return LoanIterator
+     */
+    public function GetCustomers($expandProps = [], FilterParams $filter = null, $orderBy = [], $order = PaginationParams::ASCENDING_ORDER){
+        return new CustomerIterator($expandProps, $filter, $orderBy, $order);
     }
 
     /**

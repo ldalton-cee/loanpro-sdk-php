@@ -37,6 +37,7 @@ class PaginationParams
     private $pgSize;
     private $orderBy;
     private $order;
+    private $useSkip = false;
 
     /**
      * Creates new PaginationParams
@@ -63,7 +64,7 @@ class PaginationParams
 
     /**
      * Sets the ordering options
-     * @param string     $orderBy - Name of field to order by
+     * @param array      $orderBy - Name of field to order by
      * @param string     $order - order that things should be ordered by
      */
     public function setOrdering($orderBy, $order){
@@ -126,11 +127,35 @@ class PaginationParams
     }
 
     /**
+     * Adds the current page size to the offset and returns the modified copy
+     * @return PaginationParams
+     */
+    public function nextPage(){
+        $obj = clone $this;
+        $obj->start += $obj->pgSize;
+        return $obj;
+    }
+
+    /**
      * Returns whether or not the nopaging option is true (if true, then pagination is ignored)
      * @return bool
      */
     public function isNoPagingEnabled(){
         return ($this->nopaging);
+    }
+
+    /**
+     * Returns the current offset
+     * @return int
+     */
+    public function getOffset(){
+        return $this->start;
+    }
+
+    public function setUseSkip($use = true){
+        $obj = clone $this;
+        $obj->useSkip = $use;
+        return $obj;
     }
 
     /**
@@ -143,7 +168,12 @@ class PaginationParams
             $options[] = 'nopaging=true';
         else {
             if ($this->start)
-                $options[] = "\$start=$this->start";
+            {
+                if($this->useSkip)
+                    $options[] = "\$skip=$this->start";
+                else
+                    $options[] = "\$start=$this->start";
+            }
             if ($this->pgSize)
                 $options[] = "\$top=$this->pgSize";
         }

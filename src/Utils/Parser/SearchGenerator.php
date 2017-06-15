@@ -58,15 +58,29 @@ class SearchGenerator
     ];
 
     private $parser = null;
+
+    /**
+     * Creates a new search json generator
+     */
     public function __construct(){
         $this->parser = new LL1_Parser(SearchGenerator::TOKEN_SYMBOLS, SearchGenerator::GRAMMAR, 'EXPR');
         $this->parser->SetExpressionTree(SearchGenerator::TREE_RULES);
     }
 
+    /**
+     * TODO: Implement ElasticSearch lookup
+     * @param $var
+     * @return string
+     */
     private function ConvertToElasticSearchVar($var){
         return strtolower($var);
     }
 
+    /**
+     * Generates the search generator based on the search DSL
+     * @param string $str
+     * @return array
+     */
     public function Generate($str = ''){
         $eTree = $this->parser->Parse($str);
 
@@ -82,6 +96,12 @@ class SearchGenerator
         return $res;
     }
 
+    /**
+     * Processes the expression tree and creates the JSON representation
+     * @param       $actionNode
+     * @param array $compareObj
+     * @return array
+     */
     private function processTree($actionNode, $compareObj = []){
         $token = $actionNode->token;
         $json = [];

@@ -22,13 +22,13 @@ namespace Simnang\LoanPro\Iteration;
 use Simnang\LoanPro\LoanProSDK;
 
 /**
- * Class LoanIterator
+ * Class CustomerIterator
  *
- * An iterator for loans stored on LoanPro which abstracts away pagination
+ * An iterator for customers stored on LoanPro which abstracts away pagination
  *
  * @package Simnang\LoanPro\Iteration
  */
-class LoanIterator implements \Iterator
+class CustomerIterator implements \Iterator
 {
     private $paginationVar = null;
     private $res = [];
@@ -40,7 +40,7 @@ class LoanIterator implements \Iterator
     private $internalPageSize;
 
     /**
-     * Creates a new loan iterator that will iterate over all the loans on the server
+     * Creates a new customer iterator that will iterate over all the customers on the server
      * @param array             $expand
      * @param FilterParams|null $filterParams
      * @param array             $orderBy
@@ -143,7 +143,7 @@ class LoanIterator implements \Iterator
                 return;
             }
         }
-        $this->res = LoanProSDK::GetInstance()->GetLoans_RAW($this->expand, $this->paginationVar, $this->filterParams);
+        $this->res = LoanProSDK::GetInstance()->GetCustomers_RAW($this->expand, $this->paginationVar, $this->filterParams);
         $this->curIndex = 0;
     }
 }
