@@ -576,6 +576,7 @@ class ApiClientTest extends TestCase
 
     /**
      * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
+     * @group online
      */
     public function testLoanSearch(){
         $searchParams = new \Simnang\LoanPro\Iteration\SearchParams('[displayId] ~ "*LOAN*"');
@@ -592,6 +593,7 @@ class ApiClientTest extends TestCase
 
     /**
      * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
+     * @group online
      */
     public function testCustomerSearch(){
         $searchParams = new \Simnang\LoanPro\Iteration\SearchParams('[email] ~ "*none.com"');
