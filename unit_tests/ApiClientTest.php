@@ -442,11 +442,12 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
+     * @group new
      */
     public function testGetLoans(){
         $loans = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoans_RAW();
         $this->assertTrue(is_array($loans));
-        $this->assertGreaterThan(1, count($loans));
+        $this->assertGreaterThan(0, count($loans));
         foreach($loans as $loan){
             $this->assertTrue($loan instanceof \Simnang\LoanPro\Loans\LoanEntity);
         }
@@ -530,6 +531,7 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
+     * @group new
      */
     public function testGetCustomers(){
         $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW();

@@ -114,7 +114,9 @@ class LL1_Parser
 
         while($stack->Size()){
             $svar = $stack->Pop();
-            if($svar === strtolower($curToken->token))
+            if($svar === '$')
+                break;
+            else if($svar === strtolower($curToken->token))
             {
                 if(!is_null($this->expressionTreeProcessor))
                     $this->expressionTreeProcessor->ProcessToken($curToken);
@@ -125,8 +127,12 @@ class LL1_Parser
             }
             $prod = $this->grammar[ $svar ];
             $prod = $prod[ strtolower($curToken->token) ];
-            if (is_null($prod))
-                throw new \InvalidArgumentException("Unexpected token " . $curToken->token. " in parse, invalidates rule for " . $svar);
+            if (is_null($prod)) {
+                if($curToken->token === '$')
+                    throw new \InvalidArgumentException("Unexpected end of string for token " . $svar);
+                else
+                    throw new \InvalidArgumentException("Unexpected " . $curToken->sequence . " in parse, invalidates rule for " . $svar);
+            }
             if($prod === 'EPSILON')
                 continue;
             $items = explode(' ', $prod);
@@ -136,7 +142,9 @@ class LL1_Parser
         }
 
         if($curToken->token != '$')
-            throw new \InvalidArgumentException("Unexpected token ".$this->tokenLookAhead->token." at end of string");
+            throw new \InvalidArgumentException("Unexpected token ".$curToken->token." at end of string");
+        if($stack->Size())
+            throw new \InvalidArgumentException("Unexpected end of string, expected ".$stack->Peek());
 
         if(!is_null($this->expressionTreeProcessor))
             return $this->expressionTreeProcessor->GetExpressionTree();

@@ -29,6 +29,7 @@ class FilterTest extends TestCase
 {
     /**
      * @group offline
+     * @group new
      */
     public function testODataInit(){
         $filterParams = FilterParams::MakeFromODataString('not Address/City eq \'Redmond\' or Address/City eq \' add Idaho\' and (Price sub 5) gt 10 and (concat(Address/City     , Address/State) ne isof(Address/Address))');
@@ -38,30 +39,33 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidNot(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid filter statement: Expected an expression after \'not\', got end of line instead');
+        $this->expectExceptionMessage('Unexpected end of string for token TSTATEMENT');
         $filterParams = FilterParams::MakeFromODataString('not  ');
         $this->assertTrue(is_null($filterParams));
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidNot2(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid filter statement: Expected an expression before \'add\'');
+        $this->expectExceptionMessage('Unexpected add in parse, invalidates rule for TSTATEMENT');
         $filterParams = FilterParams::MakeFromODataString('not add ');
         $this->assertTrue(is_null($filterParams));
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidNot3(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid filter statement: Expected an expression after \'not\', got end of line instead');
+        $this->expectExceptionMessage('Unexpected not in parse, invalidates rule for TOP');
         $filterParams = FilterParams::MakeFromODataString('not 4 add 3 not');
         $this->assertTrue(is_null($filterParams));
     }
@@ -69,10 +73,11 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMisingQuote1(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid filter statement: Missing terminating \' for character at position 21');
+        $this->expectExceptionMessage("Unexpected character in input: 'test");
         $filterParams = FilterParams::MakeFromODataString('not 4 add 3 add not \'test');
         $this->assertTrue(is_null($filterParams));
     }
@@ -80,10 +85,11 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMisingQuote2(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid filter statement: Missing terminating " for character at position 5');
+        $this->expectExceptionMessage('Unexpected character in input: "4 add 3 add not test');
         $filterParams = FilterParams::MakeFromODataString('not "4 add 3 add not test');
         $this->assertTrue(is_null($filterParams));
     }
@@ -91,40 +97,44 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgEmpty(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid filter statement: Blank parameter provided for function \'month\'');
+        $this->expectExceptionMessage('Unexpected character in input: ,)');
         $filterParams = FilterParams::MakeFromODataString('not 4 add 3 add not month(Address/State,)');
         $this->assertTrue(is_null($filterParams));
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgMissingQuote(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid filter statement: Missing terminating ' for character at position 27");
+        $this->expectExceptionMessage("Unexpected character in input: 'Address/State,)");
         $filterParams = FilterParams::MakeFromODataString('not 4 add 3 add not month(\'Address/State,)');
         $this->assertTrue(is_null($filterParams));
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgMissingParenth(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid filter statement: Missing terminating ) for character at position 26");
+        $this->expectExceptionMessage("Unexpected character in input: ,)");
         $filterParams = FilterParams::MakeFromODataString('not 4 add 3 add not month((Address/State,)');
         $this->assertTrue(is_null($filterParams));
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMissingParenth(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid filter statement: Missing terminating ) for character at position 1");
+        $this->expectExceptionMessage("Unexpected character in input: ,)");
         $filterParams = FilterParams::MakeFromODataString('(not 4 add 3 add not month(Address/State,)');
         $this->assertTrue(is_null($filterParams));
     }
@@ -132,10 +142,11 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidFuncName(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid filter statement: Unknown function 'notafunc'");
+        $this->expectExceptionMessage("Unexpected character in input: ,Test)");
         $filterParams = FilterParams::MakeFromODataString('not 4 add 3 add not notAFunc(Address/State,Test)');
         $this->assertTrue(is_null($filterParams));
     }
@@ -146,47 +157,61 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInit_L(){
-        $filterParams = FilterParams::MakeFromLogicString('! Address/City==\'Redmond\'||Address/City ==\' + Idaho\' && (Price - 5) >10 && concat( Address/City     , Address/State) != isof(Address/Address)');
+        $filterParams = FilterParams::MakeFromLogicString('! Address/City==\'Redmond\'||Address/City ==\' + Idaho\' && (Price - 5) >10 && concat ( Address/City     , Address/State) != isof(Address/Address)');
+        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromLogicString('! Address/City==\'Redmond\'||Address/City ==\' + Idaho\' && (Price - 5) * 2 >10 && concat ( Address/City     , Address/State) != isof(Address/Address)');
+
         $this->assertTrue($filterParams instanceof FilterParams);
-        $this->assertEquals(("\$filter=not Address/City and 'Redmond' or Address/City and ' + Idaho' and Price sub 5 gt 10 and concat(Address/City,Address/State) ne isof(Address/Address)"), (string)$filterParams);
+        $this->assertEquals(("\$filter=not Address/City eq 'Redmond' or Address/City eq ' + Idaho' and (Price sub 5) gt 10 and concat(Address/City , Address/State) ne isof(Address/Address)"), (string)$filterParams);
+
+        $this->assertTrue($filter instanceof FilterParams);
+        $this->assertEquals(("\$filter=not Address/City eq 'Redmond' or Address/City eq ' + Idaho' and (Price sub 5) mul 2 gt 10 and concat(Address/City , Address/State) ne isof(Address/Address)"), (string)$filter);
+
+        $filterParams = FilterParams::MakeFromLogicString('! 4 + 3 == 8');
+        $this->assertEquals(("\$filter=not 4 add 3 eq 8"), (string)$filterParams);
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testOData1_L(){
+        $this->expectException(\Simnang\LoanPro\Exceptions\InvalidStateException::class);
+        $this->expectExceptionMessage('INVALID STATE! Missing statements, unable to complete expression tree');
         $filterParams = FilterParams::MakeFromLogicString('! 4 + 3');
-        $this->assertEquals(("\$filter=not 4 add 3"), (string)$filterParams);
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidNot_L(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid filter statement: Expected an expression after \'!\', got end of line instead');
+        $this->expectExceptionMessage('Unexpected end of string for token TSTATEMENT');
         $filterParams = FilterParams::MakeFromLogicString('!  ');
         $this->assertTrue(is_null($filterParams));
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidNot2_L(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid filter statement: Expected an expression before '+' got '!' instead");
+        $this->expectExceptionMessage("Unexpected + in parse, invalidates rule for TSTATEMENT");
         $filterParams = FilterParams::MakeFromLogicString('! + ');
         $this->assertTrue(is_null($filterParams));
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidNot3_L(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid filter statement: Expected an expression after '!', got end of line instead");
+        $this->expectExceptionMessage("Unexpected ! in parse, invalidates rule for TOP");
         $filterParams = FilterParams::MakeFromLogicString('! 4 + 3 !');
         $this->assertTrue(is_null($filterParams));
     }
@@ -194,10 +219,11 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMisingQuote1_L(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid filter statement: Missing terminating \' for character at position 13');
+        $this->expectExceptionMessage('Unexpected character in input: \'test');
         $filterParams = FilterParams::MakeFromLogicString('! 4 + 3 + ! \'test');
         $this->assertTrue(is_null($filterParams));
     }
@@ -205,10 +231,11 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMisingQuote2_L(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid filter statement: Missing terminating " for character at position 3');
+        $this->expectExceptionMessage('Unexpected character in input: "4+3+ !test');
         $filterParams = FilterParams::MakeFromLogicString('! "4+3+ !test');
         $this->assertTrue(is_null($filterParams));
     }
@@ -216,49 +243,55 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgEmpty_L(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid filter statement: Blank parameter provided for function \'month\'');
+        $this->expectExceptionMessage('Unexpected character in input: ,)');
         $filterParams = FilterParams::MakeFromLogicString('! 4 + 3 + !month(Address/State,)');
         $this->assertTrue(is_null($filterParams));
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgMissingQuote_L(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid filter statement: Missing terminating ' for character at position 14");
+        $this->expectExceptionMessage("Unexpected character in input: 'Address/State,)");
         $filterParams = FilterParams::MakeFromLogicString('!4+3+ !month(\'Address/State,)');
         $this->assertTrue(is_null($filterParams));
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgMissingParenth_L(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid filter statement: Missing terminating ) for character at position 16");
+        $this->expectExceptionMessage("Unexpected character in input: ,)");
         $filterParams = FilterParams::MakeFromLogicString('! 4 +3 + !month((Address/State,)');
         $this->assertTrue(is_null($filterParams));
     }
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidExpressionMissingParenth_L(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid filter statement: Missing terminating ) for character at position 1");
+        $this->expectExceptionMessage("Unexpected character in input: ,)");
         $filterParams = FilterParams::MakeFromLogicString('(! 4 +3 + !month(Address/State,)');
         $this->assertTrue(is_null($filterParams));
     }
+
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidFuncUnknownToken_L(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid filter statement: Unknown token '+!'; not identifiable as an expression or operator.");
+        $this->expectExceptionMessage("Unexpected character in input: ,Test)");
         $filterParams = FilterParams::MakeFromLogicString('! 4 +3 +!notAFunc(Address/State,Test)');
         $this->assertTrue(is_null($filterParams));
     }
@@ -266,10 +299,11 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
+     * @group new
      */
     public function testODataInvalidFuncName_L(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid filter statement: Unknown function 'notafunc'");
+        $this->expectExceptionMessage("Unexpected character in input: ,Test)");
         $filterParams = FilterParams::MakeFromLogicString('! 4 +3 + !notAFunc(Address/State,Test)');
         $this->assertTrue(is_null($filterParams));
     }

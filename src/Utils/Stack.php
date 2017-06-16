@@ -41,6 +41,10 @@ class Stack implements \JsonSerializable
         return null;
     }
 
+    public function Append(Stack $other){
+        $this->arr = array_merge($this->arr, $other->arr);
+    }
+
     /**
      * Specify data which should be serialized to JSON
      *
