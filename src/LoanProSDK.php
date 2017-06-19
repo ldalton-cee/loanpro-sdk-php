@@ -47,8 +47,10 @@ use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Iteration\AggregateParams;
 use Simnang\LoanPro\Iteration\CustomerIterator;
+use Simnang\LoanPro\Iteration\CustomerSearchIterator;
 use Simnang\LoanPro\Iteration\FilterParams;
 use Simnang\LoanPro\Iteration\LoanIterator;
+use Simnang\LoanPro\Iteration\LoanSearchIterator;
 use Simnang\LoanPro\Iteration\PaginationParams;
 use Simnang\LoanPro\Iteration\SearchParams;
 use Simnang\LoanPro\Loans\AdvancementsEntity;
@@ -110,6 +112,17 @@ class LoanProSDK
     private static $clientType = ApiClient::TYPE_SYNC;
     private static $env = Communicator::PRODUCTION;
     private $apiComm;
+
+    /**
+     * Attempts to login to the customer facing website. Returns true if successful, 401 if authentication failed, and throws an API error on an error
+     * @param string $username - Username of customer
+     * @param string $password - Password of user
+     * @return bool
+     * @throws ApiException
+     */
+    public function LoginToCustomerSite($username = '', $password = ''){
+        return $this->apiComm->loginToCustomerSite( $username, $password);
+    }
 
     /**
      * Gets a loan from the LoanPro servers.
@@ -182,6 +195,33 @@ class LoanProSDK
     }
 
     /**
+     * Performs a loan search and returns an iterator for the results
+     * @param SearchParams|null     $searchParams - search params
+     * @param AggregateParams|null  $aggParams - aggregate params
+     * @param array                 $orderBy
+     * @param string                $order
+     * @param int                   $internalPageSize
+     * @return LoanSearchIterator
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function SearchLoans(SearchParams $searchParams, AggregateParams $aggParams, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
+        return new LoanSearchIterator($searchParams, $aggParams, $orderBy, $order, $internalPageSize);
+    }
+
+    /**
+     * Performs a loan search and returns the direct results
+     * @param PaginationParams|null $paginationParams - pagination settings
+     * @param SearchParams|null     $searchParams - parameters to search by
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function SearchLoans_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
+        return $this->apiComm->searchLoans($searchParams, $aggParams, $paginationParams);
+    }
+
+    /**
      * Returns an iterator that will iterate over all loans on the server
      *  It caches only a small number of loans locally and will grab the rest as needed
      * @param array                 $expandProps
@@ -192,6 +232,18 @@ class LoanProSDK
      */
     public function GetCustomers($expandProps = [], FilterParams $filter = null, $orderBy = [], $order = PaginationParams::ASCENDING_ORDER){
         return new CustomerIterator($expandProps, $filter, $orderBy, $order);
+    }
+
+    /**
+     * Performs a customer search and returns the direct results
+     * @param PaginationParams|null $paginationParams - pagination settings
+     * @param SearchParams|null     $searchParams - parameters to search by
+     * @return CustomerSearchIterator
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function SearchCustomers_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
+        return $this->apiComm->searchCustomers($searchParams, $aggParams, $paginationParams);
     }
 
     /**
@@ -208,27 +260,18 @@ class LoanProSDK
     }
 
     /**
-     * Performs a loan search and returns the direct results
-     * @param PaginationParams|null $paginationParams - pagination settings
-     * @param SearchParams|null     $searchParams - parameters to search by
-     * @return array
+     * Performs a customer search and returns an iterator for the results
+     * @param SearchParams|null     $searchParams - search params
+     * @param AggregateParams|null  $aggParams - aggregate params
+     * @param array                 $orderBy
+     * @param string                $order
+     * @param int                   $internalPageSize
+     * @return CustomerSearchIterator
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function SearchLoans_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
-        return $this->apiComm->searchLoans($searchParams, $aggParams, $paginationParams);
-    }
-
-    /**
-     * Performs a customer search and returns the direct results
-     * @param PaginationParams|null $paginationParams - pagination settings
-     * @param SearchParams|null     $searchParams - parameters to search by
-     * @return array
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    public function SearchCustomers_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
-        return $this->apiComm->searchCustomers($searchParams, $aggParams, $paginationParams);
+    public function SearchCustomers(SearchParams $searchParams, AggregateParams $aggParams, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
+        return new CustomerSearchIterator($searchParams, $aggParams, $orderBy, $order, $internalPageSize);
     }
 
     /**

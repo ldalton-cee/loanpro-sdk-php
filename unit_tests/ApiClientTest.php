@@ -55,6 +55,7 @@ class ApiClientTest extends TestCase
     protected static $loanJSON;
     private static $minSetup;
     private static $cid = 0;
+    private static $access;
 
     private static function generateRandomString($length = 17) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -110,10 +111,10 @@ class ApiClientTest extends TestCase
 
         $fname = static::generateRandomString(10);
         $lname = static::generateRandomString(10);
-        $access = $fname.$lname;
+        static::$access = $fname.$lname;
         $ssn = static::generateRandomNum();
 
-        $json = str_replace('[[ACCESS]]', $access,
+        $json = str_replace('[[ACCESS]]', static::$access,
                     str_replace('[[LNAME]]', $lname,
                         str_replace('[[FNAME]]', $fname,
                             str_replace('[[SSN]]',$ssn,
@@ -589,6 +590,17 @@ class ApiClientTest extends TestCase
         $this->assertTrue(isset($res['aggregates']['sum_loanamount']));
         $this->assertTrue(isset($res['aggregates']['max_loanamount']));
         $this->assertTrue(isset($res['aggregates']['avg_loanpayoff']));
+
+        $cnt = 0;
+        $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->SearchLoans($searchParams, $aggregateParams);
+        foreach($res as $r){
+            $cnt++;
+            $this->assertTrue(isset($r['displayId']) && $r['displayId'] != '' && !is_null($r['displayId']));
+        }
+        $this->assertGreaterThan(0, $cnt);
+
+        $this->assertGreaterThan(0,$res->GetAggregates()['sum_loanamount']['value']);
+        $this->assertGreaterThan(0,$res->GetAggregates()['max_loanamount']['value']);
     }
 
     /**
@@ -606,6 +618,17 @@ class ApiClientTest extends TestCase
         $this->assertTrue(isset($res['aggregates']['sum_age']));
         $this->assertTrue(isset($res['aggregates']['max_age']));
         $this->assertTrue(isset($res['aggregates']['avg_loancount']));
+
+        $cnt = 0;
+        $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->SearchCustomers($searchParams, $aggregateParams);
+        foreach($res as $r){
+            $cnt++;
+            $this->assertTrue(isset($r['firstName']) && $r['firstName'] != '' && !is_null($r['firstName']));
+        }
+        $this->assertGreaterThan(0, $cnt);
+
+        $this->assertGreaterThan(0,$res->GetAggregates()['sum_age']['value']);
+        $this->assertGreaterThan(0,$res->GetAggregates()['max_age']['value']);
     }
 
     /**
@@ -663,5 +686,15 @@ class ApiClientTest extends TestCase
             ->where(function($cust){ return $cust->get(BASE_ENTITY::ID) == static::$cid;})->count();
         $this->assertEquals(1, $res);
 
+    }
+
+    /**
+     * @group online
+     */
+    public function testCustomerLogin(){
+        $this->assertTrue(\Simnang\LoanPro\LoanProSDK::GetInstance()->LoginToCustomerSite(static::$access, "Password1!"));
+        $this->assertFalse(\Simnang\LoanPro\LoanProSDK::GetInstance()->LoginToCustomerSite(static::$access, "Password2!"));
+        $this->assertFalse(\Simnang\LoanPro\LoanProSDK::GetInstance()->LoginToCustomerSite(static::$access."non_existant123214213", "Password1!"));
+        $this->assertFalse(\Simnang\LoanPro\LoanProSDK::GetInstance()->LoginToCustomerSite(static::$access."non_existant123214213", "Password2!"));
     }
 }
