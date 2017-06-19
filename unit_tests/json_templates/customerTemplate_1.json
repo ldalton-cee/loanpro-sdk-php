@@ -1,0 +1,513 @@
+{
+  "__metadata": {
+    "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/Customers(id=2)",
+    "type": "Entity.Customer"
+  },
+  "PrimaryAddress": {
+    "__metadata": {
+      "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/Address(id=3)",
+      "type": "Entity.Address"
+    },
+    "id": 3,
+    "address1": "123 Oak Lane",
+    "address2": null,
+    "city": "Benicia",
+    "state": "geo.state.CA",
+    "zipcode": "94510",
+    "country": "company.country.usa",
+    "geoLat": "38.0459878",
+    "geoLon": "-122.1292439",
+    "created": "/Date(1493234716)/",
+    "active": 1,
+    "isVerified": 0,
+    "isStandardized": 0
+  },
+  "MailAddress": {
+    "__metadata": {
+      "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/Address(id=3)",
+      "type": "Entity.Address"
+    },
+    "id": 3,
+    "address1": "123 Oak Lane",
+    "address2": null,
+    "city": "Benicia",
+    "state": "geo.state.CA",
+    "zipcode": "94510",
+    "country": "company.country.usa",
+    "geoLat": "38.0459878",
+    "geoLon": "-122.1292439",
+    "created": "/Date(1493234716)/",
+    "active": 1,
+    "isVerified": 0,
+    "isStandardized": 0
+  },
+  "Employer": {
+    "__metadata": {
+      "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/Employers(id=1)",
+      "type": "Entity.Employer"
+    },
+    "Address": {
+      "__deferred": {
+        "uri": "Employers(id=1)/Address"
+      }
+    },
+    "CustomFieldValues": {
+      "__deferred": {
+        "uri": "Employers(id=1)/CustomFieldValues"
+      }
+    },
+    "id": 1,
+    "companyName": "Merril Lynch",
+    "title": "Shift Manager",
+    "phone": "2222222222",
+    "income": "120000.00",
+    "incomeFrequency": "customerEmployer.incomeFrequency.annually",
+    "hireDate": "/Date(1496880000)/",
+    "payDate": "/Date(1497484800)/",
+    "payDateFrequency": "customerEmployer.payDateFrequency.semiMonthly",
+    "active": "1",
+    "created": "/Date(1496953056)/"
+  },
+  "References": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/References(id=1)",
+          "type": "Entity.Reference"
+        },
+        "Address": {
+          "__deferred": {
+            "uri": "References(id=1)/Address"
+          }
+        },
+        "id": 1,
+        "name": "John Doe",
+        "relation": "customerReference.relation.friend",
+        "primaryPhone": "1111111111",
+        "secondaryPhone": "2222222222",
+        "active": 1,
+        "created": "/Date(1496953088)/"
+      }
+    ]
+  },
+  "PaymentAccounts": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/PaymentAccounts(id=3)",
+          "type": "Entity.PaymentAccount"
+        },
+        "CheckingAccount": {
+          "__metadata": {
+            "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/CheckingAccounts(id=2)",
+            "type": "Entity.CheckingAccount"
+          },
+          "Address": {
+            "__deferred": {
+              "uri": "CheckingAccounts(id=2)/Address"
+            }
+          },
+          "id": 2,
+          "addressId": 66,
+          "processor": null,
+          "accountType": "bankacct.type.checking",
+          "token": "AQEDAHhILY31B9OpyMDrx6vWdKpWwvj27eBx1WSIYjq7QmQaGgAAAH4wfAYJKoZIhvcNAQcGoG8wbQIBADBoBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDNkwoO+AL8ZTiB80JwIBEIA7DnjyZcXtV8k2D2Sd8TXvB1GF3mUwJF0/cjKKf5u2QNllAc3x9YLgpUHUI5AHPduWgQQ01dyW2+FBvog=.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMTIzIE9hayBMYW5lIiwidXBkYXRlZCI6MTQ5Njk1NDU4NSwiY2l0eSI6IkJPVU5USUZVTCIsImJhbmtfbmFtZSI6IlRlc3QgQmFuayIsImNyZWF0ZWQiOjE0OTY5NTQ1ODUsInN0YXRlIjoiQUwiLCJ6aXBjb2RlIjoiODQwMTAiLCJhY2NvdW50aG9sZGVyX25hbWUiOiJUZXN0IiwiaWQiOjEyNjY1OSwiYWRkcmVzc19pZCI6MjM1OTg5LCJ1c2VyX2lkIjoxNTgsImNvdW50cnkiOiJVU0EiLCJjdXN0b21lcl9pZCI6bnVsbH0.9n4q__8LvotEsCzTDwVq-qSLK1bHVznMioctpf8Iobw",
+          "created": "/Date(1496954590)/",
+          "accountNumber": "12341354235",
+          "routingNumber": "123124125",
+          "branchNumber": null,
+          "institutionNumber": null,
+          "bankName": "Test Bank",
+          "cardHolderName": "Test"
+        },
+        "CreditCard": {
+          "__deferred": {
+            "uri": "PaymentAccounts(id=3)/CreditCard"
+          }
+        },
+        "id": 3,
+        "entityId": 2,
+        "entityType": "Entity.Customer",
+        "importId": null,
+        "isPrimary": 0,
+        "isSecondary": 0,
+        "title": "test 2",
+        "type": "paymentAccount.type.checking",
+        "creditCardId": null,
+        "checkingAccountId": 2,
+        "active": 1,
+        "verify": 0
+      },
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/PaymentAccounts(id=1)",
+          "type": "Entity.PaymentAccount"
+        },
+        "CheckingAccount": {
+          "__metadata": {
+            "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/CheckingAccounts(id=1)",
+            "type": "Entity.CheckingAccount"
+          },
+          "Address": {
+            "__deferred": {
+              "uri": "CheckingAccounts(id=1)/Address"
+            }
+          },
+          "id": 1,
+          "addressId": 55,
+          "processor": null,
+          "accountType": "bankacct.type.checking",
+          "token": "AQEDAHhILY31B9OpyMDrx6vWdKpWwvj27eBx1WSIYjq7QmQaGgAAAH4wfAYJKoZIhvcNAQcGoG8wbQIBADBoBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDMbcFxH5lAV1wPmJuwIBEIA7MxlIOvkoi9RSoXJRYPuqm4TS4yIR6IG2NSueNvDj8YilzgUTXUQz7Eo6NoOwvWWwn0Mn0ai2Uc22ZRA=.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJhZGRyZXNzIjoiMTIzIE9hayBMYW5lIiwidXBkYXRlZCI6MTQ5MzQwNjE1NiwiY2l0eSI6IkJlbmljaWEiLCJiYW5rX25hbWUiOiJUaGUgQmFuayIsImNyZWF0ZWQiOjE0OTM0MDYxNTYsInN0YXRlIjoiQ0EiLCJ6aXBjb2RlIjoiOTQ1MTAiLCJhY2NvdW50aG9sZGVyX25hbWUiOiJKb2huIERvZSIsImlkIjoxMTU0OTgsImFkZHJlc3NfaWQiOjIxNTM4NSwidXNlcl9pZCI6MTU4LCJjb3VudHJ5IjoiVVNBIiwiY3VzdG9tZXJfaWQiOm51bGx9.1jlcxQw9oNg0Qi64F8b8plCfkqjaSQ4wkpODnALA66c",
+          "created": "/Date(1493406170)/",
+          "accountNumber": "000000000",
+          "routingNumber": "000000000",
+          "branchNumber": null,
+          "institutionNumber": null,
+          "bankName": "The Bank",
+          "cardHolderName": "John Doe"
+        },
+        "CreditCard": {
+          "__deferred": {
+            "uri": "PaymentAccounts(id=1)/CreditCard"
+          }
+        },
+        "id": 1,
+        "entityId": 2,
+        "entityType": "Entity.Customer",
+        "importId": null,
+        "isPrimary": 1,
+        "isSecondary": 1,
+        "title": "Sample Payment Profile",
+        "type": "paymentAccount.type.checking",
+        "creditCardId": null,
+        "checkingAccountId": 1,
+        "active": 1,
+        "verify": 0
+      }
+    ]
+  },
+  "Phones": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/Phones(id=2)",
+          "type": "Entity.Phone"
+        },
+        "id": 2,
+        "entityId": 2,
+        "entityType": "Entity.Customer",
+        "phone": "5555555555",
+        "type": "customer.phoneType.cell",
+        "isPrimary": 1,
+        "isSecondary": 0,
+        "sbtMktVerifyPIN": "0",
+        "sbtActVerifyPIN": "0",
+        "sbtMktVerifyPending": 0,
+        "sbtActVerifyPending": 0,
+        "sbtMktVerified": 0,
+        "sbtActVerified": 0,
+        "carrierName": null,
+        "carrierVerified": 1,
+        "isLandLine": 0,
+        "dndEnabled": 0,
+        "active": 1
+      }
+    ]
+  },
+  "CustomFieldValues": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/CustomFieldValues(id=9)",
+          "type": "Entity.CustomFieldValue"
+        },
+        "CustomField": {
+          "__deferred": {
+            "uri": "CustomFieldValues(id=9)/CustomField"
+          }
+        },
+        "id": 9,
+        "entityId": 2,
+        "entityType": "Entity.Customer",
+        "customFieldId": 3,
+        "customFieldValue": "This is some sample text"
+      }
+    ]
+  },
+  "Documents": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/CustomerDocuments(id=2)",
+          "type": "Entity.CustomerDocument"
+        },
+        "Customer": {
+          "__deferred": {
+            "uri": "CustomerDocuments(id=2)/Customer"
+          }
+        },
+        "DocSection": {
+          "__deferred": {
+            "uri": "CustomerDocuments(id=2)/DocSection"
+          }
+        },
+        "FileAttachment": {
+          "__deferred": {
+            "uri": "CustomerDocuments(id=2)/FileAttachment"
+          }
+        },
+        "id": 2,
+        "fileName": "Rhombus_01.png",
+        "description": null,
+        "sectionId": 1,
+        "userId": 806,
+        "userName": "Simnang Support",
+        "remoteAddress": "98.202.100.158, 10.0",
+        "size": 35366,
+        "archived": 0,
+        "active": 1,
+        "created": "/Date(1496897418)/"
+      },
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/CustomerDocuments(id=1)",
+          "type": "Entity.CustomerDocument"
+        },
+        "Customer": {
+          "__deferred": {
+            "uri": "CustomerDocuments(id=1)/Customer"
+          }
+        },
+        "DocSection": {
+          "__deferred": {
+            "uri": "CustomerDocuments(id=1)/DocSection"
+          }
+        },
+        "FileAttachment": {
+          "__deferred": {
+            "uri": "CustomerDocuments(id=1)/FileAttachment"
+          }
+        },
+        "id": 1,
+        "fileName": "res.txt",
+        "description": null,
+        "sectionId": 1,
+        "userId": 806,
+        "userName": "Simnang Support",
+        "remoteAddress": "73.98.150.163, 10.0.",
+        "size": 16,
+        "archived": 0,
+        "active": 1,
+        "created": "/Date(1494258197)/"
+      }
+    ]
+  },
+  "CreditScore": {
+    "__metadata": {
+      "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/CreditScores(id=1)",
+      "type": "Entity.CreditScore"
+    },
+    "id": 1,
+    "equifaxScore": 480,
+    "transunionScore": 510,
+    "experianScore": 450,
+    "created": "/Date(1496956419)/",
+    "modified": "/Date(1496956437)/"
+  },
+  "Loans": {
+    "__deferred": {
+      "uri": "Customers(id=2)/Loans"
+    }
+  },
+  "SocialProfiles": {
+    "results": []
+  },
+  "Notes": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/Notes(id=118)",
+          "type": "Entity.Note"
+        },
+        "Category": {
+          "__deferred": {
+            "uri": "Notes(id=118)/Category"
+          }
+        },
+        "Author": {
+          "__deferred": {
+            "uri": "Notes(id=118)/Author"
+          }
+        },
+        "Attachments": {
+          "__deferred": {
+            "uri": "Notes(id=118)/Attachments"
+          }
+        },
+        "id": 118,
+        "parentType": "Entity.Customer",
+        "parentId": 2,
+        "categoryId": 1,
+        "subject": "Sample",
+        "body": "<p>Sample Note</p>",
+        "authorId": 806,
+        "authorName": "Simnang Support",
+        "remoteAddress": "98.202.100.158, 10.0",
+        "created": "/Date(1496897388)/"
+      },
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/Notes(id=59)",
+          "type": "Entity.Note"
+        },
+        "Category": {
+          "__deferred": {
+            "uri": "Notes(id=59)/Category"
+          }
+        },
+        "Author": {
+          "__deferred": {
+            "uri": "Notes(id=59)/Author"
+          }
+        },
+        "Attachments": {
+          "__deferred": {
+            "uri": "Notes(id=59)/Attachments"
+          }
+        },
+        "id": 59,
+        "parentType": "Entity.Customer",
+        "parentId": 2,
+        "categoryId": 1,
+        "subject": "Sample",
+        "body": "<p>Sample Note</p>",
+        "authorId": 806,
+        "authorName": "Simnang Support",
+        "remoteAddress": "73.98.150.163, 10.0.",
+        "created": "/Date(1496165993)/"
+      },
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/Notes(id=57)",
+          "type": "Entity.Note"
+        },
+        "Category": {
+          "__deferred": {
+            "uri": "Notes(id=57)/Category"
+          }
+        },
+        "Author": {
+          "__deferred": {
+            "uri": "Notes(id=57)/Author"
+          }
+        },
+        "Attachments": {
+          "__deferred": {
+            "uri": "Notes(id=57)/Attachments"
+          }
+        },
+        "id": 57,
+        "parentType": "Entity.Customer",
+        "parentId": 2,
+        "categoryId": 1,
+        "subject": "Sample",
+        "body": "<p>Sample Note</p>",
+        "authorId": 806,
+        "authorName": "Simnang Support",
+        "remoteAddress": "73.98.150.163, 10.0.",
+        "created": "/Date(1496163238)/"
+      },
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/Notes(id=55)",
+          "type": "Entity.Note"
+        },
+        "Category": {
+          "__deferred": {
+            "uri": "Notes(id=55)/Category"
+          }
+        },
+        "Author": {
+          "__deferred": {
+            "uri": "Notes(id=55)/Author"
+          }
+        },
+        "Attachments": {
+          "__deferred": {
+            "uri": "Notes(id=55)/Attachments"
+          }
+        },
+        "id": 55,
+        "parentType": "Entity.Customer",
+        "parentId": 2,
+        "categoryId": 1,
+        "subject": "Triumph",
+        "body": "<p>This was a triump. I'm making a note here, huge success. There's now a photo&nbsp;to see.</p>",
+        "authorId": 806,
+        "authorName": "Simnang Support",
+        "remoteAddress": "73.98.150.163, 10.0.",
+        "created": "/Date(1496162707)/"
+      },
+      {
+        "__metadata": {
+          "uri": "http://loanpro.simnang.com/api/public/api/1/odata.svc/Notes(id=54)",
+          "type": "Entity.Note"
+        },
+        "Category": {
+          "__deferred": {
+            "uri": "Notes(id=54)/Category"
+          }
+        },
+        "Author": {
+          "__deferred": {
+            "uri": "Notes(id=54)/Author"
+          }
+        },
+        "Attachments": {
+          "__deferred": {
+            "uri": "Notes(id=54)/Attachments"
+          }
+        },
+        "id": 54,
+        "parentType": "Entity.Customer",
+        "parentId": 2,
+        "categoryId": 1,
+        "subject": "Sample Note",
+        "body": "<p>This is a sample.</p>",
+        "authorId": 806,
+        "authorName": "Simnang Support",
+        "remoteAddress": "73.98.150.163, 10.0.",
+        "created": "/Date(1496162559)/"
+      }
+    ]
+  },
+  "id": 2,
+  "customId": null,
+  "mcId": 87350,
+  "customerType": "customer.type.individual",
+  "status": "Active",
+  "firstName": "John",
+  "lastName": "Doe",
+  "middleName": null,
+  "birthDate": "/Date(0)/",
+  "gender": "customer.gender.male",
+  "generationCode": "customer.generationCode.none",
+  "email": "john.doe@email.com",
+  "ssn": "000000000",
+  "driverLicense": "123-45-6789",
+  "companyName": null,
+  "contactName": null,
+  "customerIdType": "customer.idType.ssn",
+  "customerId": null,
+  "creditLimit": 0,
+  "accessUserName": "john.doe0000",
+  "accessPassword": null,
+  "active": 1,
+  "ofacMatch": 0,
+  "ofacTested": 0,
+  "hasAvatar": 0,
+  "loanRole": null,
+  "created": "/Date(1493234716)/",
+  "lastUpdate": "/Date(1496956419)/",
+  "creditScoreId": 1
+}

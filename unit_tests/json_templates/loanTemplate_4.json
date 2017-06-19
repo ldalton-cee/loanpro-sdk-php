@@ -1,0 +1,80 @@
+{
+  "displayId": "L150342",
+  "title": "Loan Title",
+  "modTotal": 3,
+  "modId": 2413,
+  "active": 1,
+  "loanAlert": "Testing alerts",
+  "deleted": 1,
+  "LoanSetup":
+  {
+    "loanClass": "loan.class.carLoan",
+    "loanType": "loan.type.installment",
+
+    "loanAmount": "12000.00",
+    "discount": "500.00",
+    "underwriting": "0.00",
+    "loanRate": "12.0212",
+    "loanRateType": "loan.rateType.annually",
+
+    "loanTerm": "36",
+    "contractDate": "2015-05-07",
+    "firstPaymentDate": "2015-05-08",
+    "amountDown": "0.00",
+    "reserve": "5.00",
+
+    "salesPrice": "12000",
+    "gap": "1120.",
+    "warranty": "2500",
+    "dealerProfit": "1000",
+    "taxes": "125.25",
+
+    "creditLimit": "15500",
+    "discountSplit": "1",
+    "paymentFrequency": "loan.frequency.monthly",
+    "calcType": "loan.calcType.simpleInterest",
+
+    "daysInYear": "loan.daysInYear.frequency",
+    "interestApplication": "loan.interestApplication.betweenTransactions",
+    "begEnd": "loan.begend.end",
+    "firstPeriodDays": "loan.firstPeriodDays.frequency",
+    "firstDayInterest": "loan.firstdayinterest.yes",
+    "discountCalc": "loan.discountCalc.straightLine",
+    "diyAlt": "loan.diyAlt.no",
+    "daysInPeriod": "loan.daysinperiod.24",
+    "roundDecimals": 5,
+    "lastAsFinal": "loan.lastasfinal.no",
+    "curtailPercentBase": "loan.curtailpercentbase.loanAmount",
+    "nddCalc": "loan.nddCalc.standard",
+    "endInterest": "loan.endInterest.no",
+    "feesPaidBy": "loan.feesPaidBy.date",
+    "graceDays": "5",
+    "lateFeeType": "loan.lateFee.3",
+    "lateFeeAmount": "30.00",
+    "lateFeePercent": "10.00",
+    "lateFeeCalc": "loan.lateFeeCalc.standard",
+    "lateFeePercentBase": "loan.latefeepercentbase.regular",
+    "paymentDateApp": "loan.pmtdateapp.actual",
+
+    "CustomFieldValues": {
+      "results": [
+        {
+          "__metadata": {
+            "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/CustomFieldValues(id=7750)",
+            "type": "Entity.CustomFieldValue"
+          },
+          "CustomField": {
+            "__deferred": {
+              "uri": "CustomFieldValues(id=7750)/CustomField"
+            }
+          },
+          "id": 7750,
+          "entityId": 3,
+          "entityType": "Entity.LoanSetup",
+          "customFieldId": 288,
+          "customFieldValue": null
+        }
+      ]
+    }
+  }
+}

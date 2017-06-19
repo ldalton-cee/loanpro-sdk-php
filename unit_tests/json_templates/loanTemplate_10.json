@@ -1,0 +1,61 @@
+{
+  "id": 20,
+  "displayId": "My Loan",
+  "title": null,
+  "modTotal": 0,
+  "modId": 0,
+  "active": 0,
+  "loanAlert": null,
+  "deleted": 0,
+  "Payments":{
+    "results":[
+      {
+        "paymentMethodId": 19,
+        "early": 0,
+        "cashDrawerId": 2,
+        "amount": "289.38",
+        "date": "2015-11-16",
+        "info": "Demo Payment",
+        "paymentTypeId": 1,
+        "active": 1,
+        "resetPastDue": 0,
+        "payoffPayment": false,
+        "quickPay": "amountDue",
+        "extra": "payment.extra.tx.principal",
+        "chargeFeeType": "loan.cardfee.types.1",
+        "chargeFeeAmount": "5",
+        "chargeFeePercentage": "5",
+        "__logOnly": true,
+        "payoffFlag": 0
+      },
+      {
+        "selectedProcessor": "0",
+        "paymentMethodId": 4,
+        "early": 0,
+        "echeckAuthType": "payment.echeckauth.WEB",
+        "amount": "50",
+        "date": "2017-05-23",
+        "info": "05/23/2017 Bank Account",
+        "paymentTypeId": 1,
+        "active": 1,
+        "resetPastDue": 0,
+        "payoffPayment": false,
+        "quickPay": "",
+        "_saveProfile": 0,
+        "extra": "payment.extra.tx.classic",
+        "__processorName": "{\"id\":\"89\",\"key\":\"nacha\",\"name\":\"NAchaApiTest\",\"default\":\"0\"}",
+        "isOneTimeOnly": 0,
+        "paymentAccountId": 372,
+        "chargeFeeType": "loan.cardfee.types.2",
+        "chargeFeeAmount": "10",
+        "chargeFeePercentage": "5",
+        "payoffFlag": 0
+      }
+    ]
+  },
+  "LoanSetup":
+  {
+    "loanClass":"loan.class.carLoan",
+    "loanType":"loan.type.flooring"
+  }
+}

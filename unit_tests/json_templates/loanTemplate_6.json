@@ -1,0 +1,20 @@
+{
+  "id": 24,
+  "displayId": "My Loan",
+  "title": null,
+  "modTotal": 0,
+  "modId": 0,
+  "active": 0,
+  "loanAlert": null,
+  "deleted": 0,
+  "LoanSetup":
+  {
+    "loanClass":"loan.class.carLoan",
+    "loanType":"loan.type.flooring",
+    "loanTerm": null
+  },
+  "LoanSettings":
+  {
+    "agent":null
+  }
+}

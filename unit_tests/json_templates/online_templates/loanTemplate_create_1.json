@@ -1,0 +1,151 @@
+[
+  {
+    "displayId": "[[GUID_LOAN]]",
+    "LoanSetup":
+    {
+      "loanClass": "loan.class.carLoan",
+      "loanType": "loan.type.installment",
+
+      "loanAmount": "12000.00",
+      "discount": "500.00",
+      "underwriting": "0.00",
+      "loanRate": "12.0212",
+      "loanRateType": "loan.rateType.annually",
+
+      "loanTerm": "36",
+      "contractDate": "2015-05-07",
+      "firstPaymentDate": "2015-05-08",
+      "amountDown": "0.00",
+      "reserve": "5.00",
+
+      "salesPrice": "12000",
+      "gap": "1120.",
+      "warranty": "2500",
+      "dealerProfit": "1000",
+      "taxes": "125.25",
+
+      "creditLimit": "15500",
+      "discountSplit": "1",
+      "paymentFrequency": "loan.frequency.monthly",
+      "calcType": "loan.calcType.simpleInterest",
+
+      "daysInYear": "loan.daysInYear.frequency",
+      "interestApplication": "loan.interestApplication.betweenTransactions",
+      "begEnd": "loan.begend.end",
+      "firstPeriodDays": "loan.firstPeriodDays.frequency",
+      "firstDayInterest": "loan.firstdayinterest.yes",
+      "discountCalc": "loan.discountCalc.straightLine",
+      "diyAlt": "loan.diyAlt.no",
+      "daysInPeriod": "loan.daysinperiod.24",
+      "roundDecimals": 5,
+      "lastAsFinal": "loan.lastasfinal.no",
+      "curtailPercentBase": "loan.curtailpercentbase.loanAmount",
+      "nddCalc": "loan.nddCalc.standard",
+      "endInterest": "loan.endInterest.no",
+      "feesPaidBy": "loan.feesPaidBy.date",
+      "graceDays": "5",
+      "lateFeeType": "loan.lateFee.3",
+      "lateFeeAmount": "30.00",
+      "lateFeePercent": "10.00",
+      "lateFeeCalc": "loan.lateFeeCalc.standard",
+      "lateFeePercentBase": "loan.latefeepercentbase.regular",
+      "paymentDateApp": "loan.pmtdateapp.actual"
+    }
+  },
+  {
+    "displayId": "[[GUID_LOAN]]",
+    "Charges": {
+      "results": [
+        {
+          "amount": 1250,
+          "date": "2017-05-29",
+          "info": "Late Fee 05/29/2017",
+          "chargeTypeId": 1,
+          "chargeApplicationType": "loan.latefeeapp.standard",
+          "interestBearing": 1,
+          "displayId": "3651",
+          "priorcutoff": 0,
+          "paidAmount": 60,
+          "paidPercent": 4.8,
+          "active": 1,
+          "_notEditable": 0,
+          "order": 0,
+          "editComment": "Test"
+        }
+      ]
+    },
+    "EscrowCalculators": {
+      "results": [
+        {
+          "subset": 3,
+          "modId": 0,
+          "term": 360,
+          "total": 0,
+          "percent": 0,
+          "firstPeriod": 0,
+          "regularPeriod": 0,
+          "percentBase": "loan.escrowPercentBase.loanAmount",
+          "proRate1st": "loan.escrowProrateFirst.none",
+          "extendFinal": 0
+        }
+      ]
+    },
+    "Collateral": {
+      "CustomFieldValues": {
+        "results": [
+          {
+            "customFieldId": 2,
+            "customFieldValue": "0"
+          }
+        ]
+      },
+      "a": "2144",
+      "b": "2134",
+      "c": "1234",
+      "d": "1234",
+      "additional": "additional",
+      "collateralType": "collateral.type.other",
+      "vin": "[[VIN]]",
+      "distance": 134.23,
+      "bookValue": 13000,
+      "color": "blue",
+      "gpsStatus": "collateral.gpsstatus.installed",
+      "gpsCode": "132s4f56",
+      "licensePlate": "111 222",
+      "gap": 554.32,
+      "warranty": 123.45
+    },
+    "Notes": {
+      "results": [
+        {
+          "categoryId": 3,
+          "subject": "Test Queue 2",
+          "body": "<p>test note</p>",
+          "parentType": "Entity.Loan",
+          "parentId": 3,
+          "authorId": 10,
+          "authorName": "George",
+          "remoteAddress": "127.0.0.1",
+          "created": "2017-05-11"
+        }
+      ]
+    },
+    "Promises": {
+      "results": [
+        {
+          "subject": "Test Promise",
+          "note": "<p>Things</p>",
+          "dueDate": "2017-05-11",
+          "amount": 100,
+          "fulfilled": 0,
+          "fulfillmentDate": "2017-05-17",
+          "type": "loanpromise.type.payment",
+          "created": "2017-05-08",
+          "fulfilledDate": "2017-05-17",
+          "loggedBy": "David",
+          "fulfilledBy": "Test Item"
+        }
+      ]
+    }
+  }
+]

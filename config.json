@@ -1,0 +1,9 @@
+{
+	"communicator":{
+		"env":"beta",
+		"type":"async"
+	},
+	"config":{
+		"file":"config.xml"
+	}
+}
