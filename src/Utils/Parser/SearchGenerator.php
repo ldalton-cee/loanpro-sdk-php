@@ -30,31 +30,26 @@ class SearchGenerator
         'NEST_NAME'=>'[A-Z]+',
         'LOGICAL_OP'=>'(\|\|?)|(\&\&?)',
         'REGEX' => '"(\\\\.|[^\\\\"])*"',
-        'CONST' => '([\w\d]+)'
+        'L_PAREN' => '\(',
+        'R_PAREN' => '\)',
+        'CONST' => '([\w\d]+)',
+        'NOT' => '!',
     ]);
 
     const GRAMMAR = [
-        'EXPR'=>        ['$'=>null,     'array'=>'STATEMENT',               'nest'=>null,   'nest_name'=>'STATEMENT',               'concat'=>null,             'regex'=>null,      'like'=>null,           'const'=>null,              'compare'=>null,            'logical_op'=>null,              ],
-        'LOGICAL_EXPR'=>['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'regex'=>null,      'like'=>null,           'const'=>null,              'compare'=>null,            'logical_op'=>'logical_op EXPR', ],
-        'STATEMENT'=>   ['$'=>null,     'array'=>'LIST COMP FSTATEMENT',    'nest'=>null,   'nest_name'=>'LIST COMP FSTATEMENT',    'concat'=>null,             'regex'=>null,      'like'=>null,           'const'=>null,              'compare'=>null,            'logical_op'=>null,              ],
-        'COMP'=>        ['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'regex'=>null,      'like'=>'like regex',   'const'=>null,              'compare'=>'compare COMPT', 'logical_op'=>null,              ],
-        'COMPT'=>       ['$'=>null,    'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'regex'=>'regex',   'like'=>null,           'const'=>'const',           'compare'=>null,            'logical_op'=>null,              ],
-        'FSTATEMENT'=>  ['$'=>'EPSILON','array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'regex'=>null,      'like'=>null,           'const'=>null,              'compare'=>null,            'logical_op'=>'LOGICAL_EXPR',    ],
-        'LIST'=>        ['$'=>null,     'array'=>'TERM FTERM',              'nest'=>null,   'nest_name'=>'TERM FTERM',              'concat'=>null,             'regex'=>null,      'like'=>null,           'const'=>null,              'compare'=>null,            'logical_op'=>null,              ],
-        'FTERM'=>       ['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>'concat LIST',    'regex'=>null,      'like'=>'EPSILON',      'const'=>null,              'compare'=>'EPSILON',       'logical_op'=>null,              ],
-        'TERM'=>        ['$'=>null,     'array'=>'array',                   'nest'=>null,   'nest_name'=>'nest_name nest array',    'concat'=>null,             'regex'=>null,      'like'=>null,           'const'=>null,              'compare'=>null,            'logical_op'=>null,              ],
-    ];
-
-    const TREE_RULES = [
-        'array'=>['type'=>'terminal'],
-        'const'=>['type'=>'terminal'],
-        'regex'=>['type'=>'terminal'],
-        'nest_name'=>['type'=>'terminal'],
-        'compare'=>['type'=>'binary_op','left'=>['concat','nest','array'],'right'=>['const','regex']],
-        'like'=>['type'=>'binary_op','left'=>['concat','nest','array'],'right'=>['regex']],
-        'logical_op'=>['type'=>'binary_op','children'=>['like','compare','logical_op']],
-        'concat'=>['type'=>'binary_op','children'=>['array','concat','nest']],
-        'nest'=>['type'=>'binary_op','left'=>['nest_name'],'right'=>['array']],
+        'EXPR'=>        ['$'=>null,     'array'=>'TUN_OP TSTATEMENT',       'nest'=>null,   'nest_name'=>'TUN_OP TSTATEMENT',       'concat'=>null,             'l_paren'=>'TUN_OP TSTATEMENT',         'r_paren'=>null,                        'regex'=>null,      'like'=>null,                                   'const'=>null,              'compare'=>null,                                    'logical_op'=>null,                 'not'=>'TUN_OP TSTATEMENT', ],
+        'TSTATEMENT'=>  ['$'=>null,     'array'=>'STATEMENT',               'nest'=>null,   'nest_name'=>'STATEMENT',               'concat'=>null,             'l_paren'=>'PSTATEMENT',                'r_paren'=>null,                        'regex'=>null,      'like'=>null,                                   'const'=>null,              'compare'=>null,                                    'logical_op'=>null,                 'not'=>null,                ],
+        'TUN_OP'=>      ['$'=>null,     'array'=>'EPSILON',                 'nest'=>null,   'nest_name'=>'EPSILON',                 'concat'=>null,             'l_paren'=>'EPSILON',                   'r_paren'=>null,                        'regex'=>null,      'like'=>null,                                   'const'=>null,              'compare'=>null,                                    'logical_op'=>null,                 'not'=>'not',                ],
+        'LOGICAL_EXPR'=>['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'l_paren'=>null,                        'r_paren'=>null,                        'regex'=>null,      'like'=>null,                                   'const'=>null,              'compare'=>null,                                    'logical_op'=>'logical_op EXPR',    'not'=>null,                ],
+        'STATEMENT'=>   ['$'=>null,     'array'=>'LIST COMP FSTATEMENT',    'nest'=>null,   'nest_name'=>'LIST COMP FSTATEMENT',    'concat'=>null,             'l_paren'=>null,                        'r_paren'=>null,                        'regex'=>null,      'like'=>null,                                   'const'=>null,              'compare'=>null,                                    'logical_op'=>null,                 'not'=>null,                ],
+        'COMP'=>        ['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'l_paren'=>null,                        'r_paren'=>null,                        'regex'=>null,      'like'=>'like regex',                           'const'=>null,              'compare'=>'compare COMPT',                         'logical_op'=>null,                 'not'=>null,                ],
+        'COMPT'=>       ['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'l_paren'=>null,                        'r_paren'=>null,                        'regex'=>'regex',   'like'=>null,                                   'const'=>'const',           'compare'=>null,                                    'logical_op'=>null,                 'not'=>null,                ],
+        'FSTATEMENT'=>  ['$'=>'EPSILON','array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'l_paren'=>null,                        'r_paren'=>'EPSILON',                   'regex'=>null,      'like'=>null,                                   'const'=>null,              'compare'=>null,                                    'logical_op'=>'LOGICAL_EXPR',       'not'=>null,                ],
+        'PSTATEMENT'=>  ['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'l_paren'=>'l_paren LIST PFSTATEMENT',  'r_paren'=>null,                        'regex'=>null,      'like'=>null,                                   'const'=>null,              'compare'=>null,                                    'logical_op'=>null,                 'not'=>null,                ],
+        'PFSTATEMENT'=> ['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>null,             'l_paren'=>null,                        'r_paren'=>'r_paren COMP FSTATEMENT',   'regex'=>null,      'like'=>'COMP FSTATEMENT r_paren FSTATEMENT',   'const'=>null,              'compare'=>'COMP FSTATEMENT r_paren FSTATEMENT',    'logical_op'=>null,                 'not'=>null,                ],
+        'LIST'=>        ['$'=>null,     'array'=>'TERM FTERM',              'nest'=>null,   'nest_name'=>'TERM FTERM',              'concat'=>null,             'l_paren'=>null,                        'r_paren'=>null,                        'regex'=>null,      'like'=>null,                                   'const'=>null,              'compare'=>null,                                    'logical_op'=>null,                 'not'=>null,                ],
+        'FTERM'=>       ['$'=>null,     'array'=>null,                      'nest'=>null,   'nest_name'=>null,                      'concat'=>'concat LIST',    'l_paren'=>null,                        'r_paren'=>null,                        'regex'=>null,      'like'=>'EPSILON',                              'const'=>null,              'compare'=>'EPSILON',                               'logical_op'=>null,                 'not'=>null,                ],
+        'TERM'=>        ['$'=>null,     'array'=>'array',                   'nest'=>null,   'nest_name'=>'nest_name nest array',    'concat'=>null,             'l_paren'=>null,                        'r_paren'=>null,                        'regex'=>null,      'like'=>null,                                   'const'=>null,              'compare'=>null,                                    'logical_op'=>null,                 'not'=>null,                ],
     ];
 
     private $parser = null;
@@ -64,7 +59,7 @@ class SearchGenerator
      */
     public function __construct(){
         $this->parser = new LL1_Parser(SearchGenerator::TOKEN_SYMBOLS, SearchGenerator::GRAMMAR, 'EXPR');
-        $this->parser->SetExpressionTree(SearchGenerator::TREE_RULES);
+        $this->parser->SetExpressionTreeGenerator(new SearchExpressionTreeGenerator(SearchGenerator::TOKEN_SYMBOLS));
     }
 
     /**
@@ -83,16 +78,13 @@ class SearchGenerator
      */
     public function Generate($str = ''){
         $eTree = $this->parser->Parse($str);
-
         if($eTree->token->token !== 'LOGICAL_OP')
         {
             $root = new ExpressionTreeNode(new Token('LOGICAL_OP','|'));
             $root->AddLeftChildNode($eTree);
             $eTree = $root;
         }
-
-        $res = ['query'=>['bool'=>$this->processTree($eTree)]];
-
+        $res = ['query'=>$this->processTree($eTree)];
         return $res;
     }
 
@@ -105,18 +97,16 @@ class SearchGenerator
     private function processTree($actionNode, $compareObj = []){
         $token = $actionNode->token;
         $json = [];
-
         if($token->token === 'LOGICAL_OP')
         {
             if(substr($token->sequence,0,1) === '&')
                 $key = 'must';
             else
                 $key = 'should';
-
             if(!is_null($actionNode->rightNode))
-                $json[$key] = [$this->processTree($actionNode->leftNode),$this->processTree($actionNode->rightNode)];
+                $json['bool'] = [$key=>[$this->processTree($actionNode->leftNode),$this->processTree($actionNode->rightNode)]];
             else
-                $json[$key] = [$this->processTree($actionNode->leftNode)];
+                $json['bool'] = [$key=>[$this->processTree($actionNode->leftNode)]];
         }
         else if($token->token === 'LIKE'){
             $op = 'should';
@@ -159,7 +149,6 @@ class SearchGenerator
                         'default_operator' => $defaultOp,
                     ]
                 ];
-
                 return $json;
             }
             else{
@@ -182,7 +171,7 @@ class SearchGenerator
                     }
                     else
                         $json[ 'match' ] = [
-                                $field => substr($compareObj['phrase'], 1, -1)
+                            $field => substr($compareObj['phrase'], 1, -1)
                         ];
                 }
                 return $json;
@@ -193,8 +182,8 @@ class SearchGenerator
                 'nested'=>[
                     'path'=> $this->ConvertToElasticSearchVar($actionNode->leftNode->token->sequence),
                     'query'=>[
-                            'bool'=>[
-                                $compareObj['operator'] => [
+                        'bool'=>[
+                            $compareObj['operator'] => [
                                 $this->processTree($actionNode->rightNode, $compareObj)
                             ]
                         ]
@@ -202,7 +191,15 @@ class SearchGenerator
                 ]
             ];
         }
-
+        else if($token->token === 'NOT'){
+            $json = [
+                'bool'=>[
+                    'mustNot'=>[
+                        $this->processTree($actionNode->leftNode)
+                    ]
+                ]
+            ];
+        }
         return $json;
     }
 }

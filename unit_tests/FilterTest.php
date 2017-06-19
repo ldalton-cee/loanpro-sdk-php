@@ -29,7 +29,6 @@ class FilterTest extends TestCase
 {
     /**
      * @group offline
-     * @group new
      */
     public function testODataInit(){
         $filterParams = FilterParams::MakeFromODataString('not Address/City eq \'Redmond\' or Address/City eq \' add Idaho\' and (Price sub 5) gt 10 and (concat(Address/City     , Address/State) ne isof(Address/Address))');
@@ -39,7 +38,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidNot(){
         $this->expectException(\InvalidArgumentException::class);
@@ -50,7 +48,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidNot2(){
         $this->expectException(\InvalidArgumentException::class);
@@ -61,7 +58,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidNot3(){
         $this->expectException(\InvalidArgumentException::class);
@@ -73,7 +69,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMisingQuote1(){
         $this->expectException(\InvalidArgumentException::class);
@@ -85,7 +80,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMisingQuote2(){
         $this->expectException(\InvalidArgumentException::class);
@@ -97,7 +91,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgEmpty(){
         $this->expectException(\InvalidArgumentException::class);
@@ -108,7 +101,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgMissingQuote(){
         $this->expectException(\InvalidArgumentException::class);
@@ -119,7 +111,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgMissingParenth(){
         $this->expectException(\InvalidArgumentException::class);
@@ -130,7 +121,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMissingParenth(){
         $this->expectException(\InvalidArgumentException::class);
@@ -142,7 +132,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidFuncName(){
         $this->expectException(\InvalidArgumentException::class);
@@ -157,7 +146,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInit_L(){
         $filterParams = FilterParams::MakeFromLogicString('! Address/City==\'Redmond\'||Address/City ==\' + Idaho\' && (Price - 5) >10 && concat ( Address/City     , Address/State) != isof(Address/Address)');
@@ -175,7 +163,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testOData1_L(){
         $this->expectException(\Simnang\LoanPro\Exceptions\InvalidStateException::class);
@@ -185,7 +172,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidNot_L(){
         $this->expectException(\InvalidArgumentException::class);
@@ -196,7 +182,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidNot2_L(){
         $this->expectException(\InvalidArgumentException::class);
@@ -207,7 +192,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidNot3_L(){
         $this->expectException(\InvalidArgumentException::class);
@@ -219,7 +203,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMisingQuote1_L(){
         $this->expectException(\InvalidArgumentException::class);
@@ -231,7 +214,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMisingQuote2_L(){
         $this->expectException(\InvalidArgumentException::class);
@@ -243,7 +225,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgEmpty_L(){
         $this->expectException(\InvalidArgumentException::class);
@@ -254,7 +235,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgMissingQuote_L(){
         $this->expectException(\InvalidArgumentException::class);
@@ -265,7 +245,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMisingInvalidArgMissingParenth_L(){
         $this->expectException(\InvalidArgumentException::class);
@@ -276,7 +255,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidExpressionMissingParenth_L(){
         $this->expectException(\InvalidArgumentException::class);
@@ -287,7 +265,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidFuncUnknownToken_L(){
         $this->expectException(\InvalidArgumentException::class);
@@ -299,7 +276,6 @@ class FilterTest extends TestCase
 
     /**
      * @group offline
-     * @group new
      */
     public function testODataInvalidFuncName_L(){
         $this->expectException(\InvalidArgumentException::class);

@@ -442,7 +442,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testGetLoans(){
         $loans = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoans_RAW();
@@ -531,7 +530,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testGetCustomers(){
         $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW();

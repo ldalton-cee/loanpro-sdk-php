@@ -39,7 +39,7 @@ class ParserTest extends TestCase
      * @depends testTokenizer
      */
     public function testGrammarParser(\Simnang\LoanPro\Utils\Parser\LL1_Parser $parser){
-        $parser->SetExpressionTree(SearchGenerator::TREE_RULES);
+        $parser->SetExpressionTreeGenerator(new \Simnang\LoanPro\Utils\Parser\SearchExpressionTreeGenerator(SearchGenerator::TOKEN_SYMBOLS));
         $etree = $parser->Parse(' [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] << CUSTOMERS->[lastName] ~& "*100*" && [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] ~ "*100*"');
 
         //$parser->Parse(' [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] ~& "*100*"');
@@ -58,6 +58,15 @@ class ParserTest extends TestCase
         $generator = new SearchGenerator();
         $this->assertEquals(json_decode('{"query":{"bool":{"should":[{"bool":{"must":[{"bool":{"must":[{"query_string":{"fields":["title","displayId","primaryPhone"],"query":"*100*","default_operator":"AND"}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["firstName","email"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["lastName"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"bool":{"must":[{"match":{"primaryPhone":"100"}},{"nested":{"path":"customers","query":{"bool":{"must":[{"match":{"email":"100"}}]}}}}]}}]}}}', true),
             $generator->Generate(' [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] << CUSTOMERS->[lastName] ~& "*100*" || [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] =& "100" '));
+
+        $this->assertEquals(json_decode('{"query":{"bool":{"should":[{"query_string":{"fields":["displayId"],"query":"*LOAN*","default_operator":"OR"}}]}}}', true),
+                            $generator->Generate('[displayId] ~ "*LOAN*"'));
+
+        $this->assertEquals(json_decode('{"query":{"bool":{"must":[{"bool":{"must":[{"bool":{"mustNot":[{"match":{"title":"*World"}}]}},{"bool":{"mustNot":[{"bool":{"should":[{"bool":{"should":[{"query_string":{"fields":["displayId"],"query":"*LOAN*","default_operator":"OR"}},{"bool":{"mustNot":[{"query_string":{"fields":["displayId"],"query":"*Loan*","default_operator":"OR"}}]}}]}},{"query_string":{"fields":["displayId"],"query":"*loan*","default_operator":"OR"}}]}}]}}]}},{"bool":{"mustNot":[{"match":{"title":"Hello*"}}]}}]}}}', true),
+                            $generator->Generate('[title]!="*World"&&!([displayId]~"*LOAN*"||!([displayId]~"*Loan*")||[displayId]~"*loan*")&&[title]!="Hello*"'));
+
+        $this->assertEquals(json_decode('{"query":{"bool":{"must":[{"bool":{"should":[{"bool":{"must":[{"bool":{"must":[{"query_string":{"fields":["title","displayId","primaryPhone"],"query":"*100*","default_operator":"AND"}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["firstName","email"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["lastName"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"bool":{"must":[{"match":{"primaryPhone":"100"}},{"nested":{"path":"customers","query":{"bool":{"must":[{"match":{"email":"100"}}]}}}}]}}]}},{"bool":{"mustNot":[{"match":{"title":""}}]}}]}}}', true),
+                            $generator->Generate(' [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] << CUSTOMERS->[lastName] ~& "*100*" || ([title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] =& "100") && ! ( [title] == 25 ) '));
 
         $this->assertEquals(json_decode('{"query":{"bool":{"should":[{"query_string":{"fields":["displayId"],"query":"*LOAN*","default_operator":"OR"}}]}}}', true),
                             $generator->Generate('[displayId] ~ "*LOAN*"'));
