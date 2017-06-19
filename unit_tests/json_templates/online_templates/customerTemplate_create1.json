@@ -135,5 +135,6 @@
   "ssn": "[[SSN]]",
   "driverLicense": "1234567890",
   "email": "[[ACCESS]]@none.com",
-  "accessUserName": "[[ACCESS]]"
+  "accessUserName": "[[ACCESS]]",
+  "accessPassword": "Password1!"
 }

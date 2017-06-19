@@ -32,6 +32,7 @@ class LoanSearchIterator implements \Iterator
 {
     private $paginationVar = null;
     private $res = [];
+    private $aggs = [];
     private $orderBy = [];
     private $order = PaginationParams::ASCENDING_ORDER;
     private $searchParams = null;
@@ -127,6 +128,9 @@ class LoanSearchIterator implements \Iterator
         $this->paginationVar = null;
     }
 
+    public function GetAggregates(){
+        return $this->aggs;
+    }
 
     private function MakeNextReq(){
         if(is_null($this->paginationVar)) {
@@ -141,7 +145,9 @@ class LoanSearchIterator implements \Iterator
                 return;
             }
         }
-        $this->res = LoanProSDK::GetInstance()->SearchLoans_RAW($this->searchParams, $this->aggParams, $this->paginationVar);
+        $response = LoanProSDK::GetInstance()->SearchLoans_RAW($this->searchParams, $this->aggParams, $this->paginationVar);
+        $this->res = $response['results'];
+        $this->aggs = $response['aggregates'];
         $this->curIndex = 0;
     }
 }

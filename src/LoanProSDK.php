@@ -114,6 +114,17 @@ class LoanProSDK
     private $apiComm;
 
     /**
+     * Attempts to login to the customer facing website. Returns true if successful, 401 if authentication failed, and throws an API error on an error
+     * @param string $username - Username of customer
+     * @param string $password - Password of user
+     * @return bool
+     * @throws ApiException
+     */
+    public function LoginToCustomerSite($username = '', $password = ''){
+        return $this->apiComm->loginToCustomerSite( $username, $password);
+    }
+
+    /**
      * Gets a loan from the LoanPro servers.
      * @param int $id - ID of loan to pull
      * @param array $expandProps - array of properties to expand
@@ -190,7 +201,7 @@ class LoanProSDK
      * @param array                 $orderBy
      * @param string                $order
      * @param int                   $internalPageSize
-     * @return array
+     * @return LoanSearchIterator
      * @throws ApiException
      * @throws InvalidStateException
      */
@@ -227,7 +238,7 @@ class LoanProSDK
      * Performs a customer search and returns the direct results
      * @param PaginationParams|null $paginationParams - pagination settings
      * @param SearchParams|null     $searchParams - parameters to search by
-     * @return array
+     * @return CustomerSearchIterator
      * @throws ApiException
      * @throws InvalidStateException
      */
@@ -255,7 +266,7 @@ class LoanProSDK
      * @param array                 $orderBy
      * @param string                $order
      * @param int                   $internalPageSize
-     * @return array
+     * @return CustomerSearchIterator
      * @throws ApiException
      * @throws InvalidStateException
      */

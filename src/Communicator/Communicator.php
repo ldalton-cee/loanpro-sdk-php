@@ -30,7 +30,9 @@ use Simnang\LoanPro\Customers\CustomerEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Iteration\AggregateParams;
+use Simnang\LoanPro\Iteration\CustomerSearchIterator;
 use Simnang\LoanPro\Iteration\FilterParams;
+use Simnang\LoanPro\Iteration\LoanSearchIterator;
 use Simnang\LoanPro\Iteration\PaginationParams;
 use Simnang\LoanPro\Iteration\SearchParams;
 use Simnang\LoanPro\LoanProSDK;
@@ -99,6 +101,25 @@ class Communicator
                 $this->client = ApiClient::GetAPIClientSync();
                 break;
         }
+    }
+
+    /**
+     * Attempts to login to the customer facing website. Returns true if successful, 401 if authentication failed, and throws an API error on an error
+     * @param string $username - Username of customer
+     * @param string $password - Password of user
+     * @return bool
+     * @throws ApiException
+     */
+    public function loginToCustomerSite($username ='', $password = ''){
+        $tenantId = ApiClient::GetTenantId();
+        $response = $this->client->POST("$this->baseUrl/tenants($tenantId)/customers/authenticate",['username'=>$username, 'password'=>$password]);
+        if($response->getStatusCode() == 200) {
+            return true;
+        }
+        else if($response->getStatusCode() == 401) {
+            return false;
+        }
+        throw new ApiException($response);
     }
 
     /**
@@ -646,7 +667,7 @@ class Communicator
      * @param SearchParams|null     $searchParams - parameters to search by
      * @param AggregateParams|null  $aggParams - aggregate data to pull
      * @param PaginationParams|null $paginationParams - pagination settings
-     * @return array
+     * @return LoanSearchIterator
      * @throws ApiException
      * @throws InvalidStateException
      */
@@ -683,7 +704,7 @@ class Communicator
      * @param SearchParams|null     $searchParams - parameters to search by
      * @param AggregateParams|null  $aggParams - aggregate data to pull
      * @param PaginationParams|null $paginationParams - pagination settings
-     * @return array
+     * @return CustomerSearchIterator
      * @throws ApiException
      * @throws InvalidStateException
      */

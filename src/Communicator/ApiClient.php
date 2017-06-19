@@ -60,6 +60,10 @@ class ApiClient
         return ['Autopal-Instance-Id'=>static::$tenant, 'Authorization'=>'Bearer '.static::$token];
     }
 
+    public static function GetTenantId(){
+        return static::$tenant;
+    }
+
     private $requestFactory = null;
     private $streamFactory = null;
     private $uriFactory = null;
