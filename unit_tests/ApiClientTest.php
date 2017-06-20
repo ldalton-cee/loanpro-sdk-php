@@ -580,7 +580,6 @@ class ApiClientTest extends TestCase
     /**
      * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
      * @group online
-     * @group new
      */
     public function testLoanSearch(){
         $searchParams = new \Simnang\LoanPro\Iteration\SearchParams('[displayId] ~ "*LOAN*"');
@@ -609,7 +608,6 @@ class ApiClientTest extends TestCase
     /**
      * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
      * @group online
-     * @group new
      */
     public function testCustomerSearch(){
         $searchParams = new \Simnang\LoanPro\Iteration\SearchParams('[email] ~ "*none.com"');
@@ -637,7 +635,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testIteratorsLoan()
     {
@@ -653,7 +650,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testIteratorsLoanGet()
     {
@@ -669,7 +665,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testIteratorsCustomer()
     {
@@ -686,7 +681,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testIteratorsCustomerGet()
     {
@@ -706,7 +700,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      * @depends testIteratorsCustomerGet
      */
     public function testIteratorsLoansForCustomer(\Simnang\LoanPro\Customers\CustomerEntity $c){
@@ -723,7 +716,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testYaLinqo(){
         $res = from(\Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoans())
@@ -739,7 +731,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testCustomerLogin(){
         $this->assertTrue(\Simnang\LoanPro\LoanProSDK::GetInstance()->LoginToCustomerSite(static::$access, "Password1!")[0]);
