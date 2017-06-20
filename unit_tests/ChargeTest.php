@@ -53,7 +53,7 @@ class ChargeTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$charge->get($field));
+            $this->assertNull(null,$charge->Get($field));
         }
     }
 
@@ -75,7 +75,7 @@ class ChargeTest extends TestCase
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
-                    $this->assertEquals($cval, $charge->set($field, $cval)->get($field));
+                    $this->assertEquals($cval, $charge->Set($field, $cval)->Get($field));
                 }
             }
         }
@@ -87,9 +87,9 @@ class ChargeTest extends TestCase
      */
     public function testChargeCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.CHARGES::INFO.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage('Value for \''.CHARGES::INFO.'\' is null. The \'Set\' function Cannot unset items, please use \'Rem\' instead for class Simnang\LoanPro\Loans\ChargeEntity');
         $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)
-            /* should throw exception when setting LOAN_AMT to null */ ->set(CHARGES::INFO, null);
+            /* should throw exception when setting LOAN_AMT to null */ ->Set(CHARGES::INFO, null);
     }
 
     /**
@@ -100,10 +100,10 @@ class ChargeTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN.'\'');
         $ls = $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
-        $ls->set(BASE_ENTITY::ID, 120);
+        $ls->Set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
+        $ls->Set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
     }
 
     /**
@@ -111,12 +111,12 @@ class ChargeTest extends TestCase
      * @group offline
      */
     public function testChargeDel(){
-        $charge = $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->set([CHARGES::ACTIVE=> 1]);
-        $this->assertEquals(1, $charge->get(CHARGES::ACTIVE));
+        $charge = $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->Set([CHARGES::ACTIVE=> 1]);
+        $this->assertEquals(1, $charge->Get(CHARGES::ACTIVE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($charge->rem(CHARGES::ACTIVE)->get(CHARGES::ACTIVE));
+        $this->assertNull($charge->Rem(CHARGES::ACTIVE)->Get(CHARGES::ACTIVE));
         /* deletions should also not affect the original object (just return a copy) */
-        $this->assertEquals(1, $charge->get(CHARGES::ACTIVE));
+        $this->assertEquals(1, $charge->Get(CHARGES::ACTIVE));
     }
 
     /**
@@ -129,7 +129,7 @@ class ChargeTest extends TestCase
         $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->rem(CHARGES::AMOUNT);
+        $charge->Rem(CHARGES::AMOUNT);
     }
 
     /**
@@ -142,7 +142,7 @@ class ChargeTest extends TestCase
         $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->rem(CHARGES::DATE);
+        $charge->Rem(CHARGES::DATE);
     }
 
     /**
@@ -155,7 +155,7 @@ class ChargeTest extends TestCase
         $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->rem(CHARGES::INFO);
+        $charge->Rem(CHARGES::INFO);
     }
 
     /**
@@ -168,7 +168,7 @@ class ChargeTest extends TestCase
         $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->rem(CHARGES::CHARGE_TYPE_ID);
+        $charge->Rem(CHARGES::CHARGE_TYPE_ID);
     }
 
     /**
@@ -181,7 +181,7 @@ class ChargeTest extends TestCase
         $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->rem(CHARGES::CHARGE_APP_TYPE__C);
+        $charge->Rem(CHARGES::CHARGE_APP_TYPE__C);
     }
 
     /**
@@ -194,7 +194,7 @@ class ChargeTest extends TestCase
         $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
 
         // should throw exception
-        $charge->rem(CHARGES::INTEREST_BEARING);
+        $charge->Rem(CHARGES::INTEREST_BEARING);
     }
 
     /**
@@ -204,7 +204,7 @@ class ChargeTest extends TestCase
     public function testAddToCharge(){
         $loan = static::$sdk->CreateLoan("Test ID");
         $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
-        $this->assertEquals([$charge], $loan->set(LOAN::CHARGES, $charge)->get(LOAN::CHARGES));
+        $this->assertEquals([$charge], $loan->Set(LOAN::CHARGES, $charge)->Get(LOAN::CHARGES));
     }
 
     /**
@@ -216,32 +216,32 @@ class ChargeTest extends TestCase
         $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);
         $charge2 = static::$sdk->CreateCharge(135, "2017-08-19", "INFO 2", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);;
         $charge3 = static::$sdk->CreateCharge(435, "2017-08-29", "INFO 3", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1);;
-        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::CHARGES, $charge);
+        $loan = static::$sdk->CreateLoan("Test ID")->Set(LOAN::CHARGES, $charge);
 
         // test append
-        $this->assertEquals([$charge], $loan->get(LOAN::CHARGES));
+        $this->assertEquals([$charge], $loan->Get(LOAN::CHARGES));
         $loan = $loan->append(LOAN::CHARGES, $charge2);
-        $this->assertEquals([$charge, $charge2], $loan->get(LOAN::CHARGES));
+        $this->assertEquals([$charge, $charge2], $loan->Get(LOAN::CHARGES));
 
         // test list append
-        $loan = $loan->rem(LOAN::CHARGES)->append(LOAN::CHARGES, $charge2, $charge3, $charge);
-        $this->assertEquals([$charge2, $charge3, $charge], $loan->get(LOAN::CHARGES));
+        $loan = $loan->Rem(LOAN::CHARGES)->append(LOAN::CHARGES, $charge2, $charge3, $charge);
+        $this->assertEquals([$charge2, $charge3, $charge], $loan->Get(LOAN::CHARGES));
 
         // test list append with multiple keys
-        $loan = $loan->rem(LOAN::CHARGES)->append(LOAN::CHARGES, $charge2, $charge, LOAN::CHARGES, $charge);
-        $this->assertEquals([$charge2, $charge, $charge], $loan->get(LOAN::CHARGES));
+        $loan = $loan->Rem(LOAN::CHARGES)->append(LOAN::CHARGES, $charge2, $charge, LOAN::CHARGES, $charge);
+        $this->assertEquals([$charge2, $charge, $charge], $loan->Get(LOAN::CHARGES));
 
         // test array notation 1
-        $loan = $loan->rem(LOAN::CHARGES)->append(LOAN::CHARGES, [$charge3, $charge2, $charge]);
-        $this->assertEquals([$charge3, $charge2, $charge], $loan->get(LOAN::CHARGES));
+        $loan = $loan->Rem(LOAN::CHARGES)->append(LOAN::CHARGES, [$charge3, $charge2, $charge]);
+        $this->assertEquals([$charge3, $charge2, $charge], $loan->Get(LOAN::CHARGES));
 
         // test array notation 2
-        $loan = $loan->rem(LOAN::CHARGES)->append([LOAN::CHARGES => [$charge, $charge3, $charge2]]);
-        $this->assertEquals([$charge, $charge3, $charge2], $loan->get(LOAN::CHARGES));
+        $loan = $loan->Rem(LOAN::CHARGES)->append([LOAN::CHARGES => [$charge, $charge3, $charge2]]);
+        $this->assertEquals([$charge, $charge3, $charge2], $loan->Get(LOAN::CHARGES));
 
         // test array notation 3
-        $loan = $loan->rem(LOAN::CHARGES)->append([LOAN::CHARGES => $charge2]);
-        $this->assertEquals([$charge2], $loan->get(LOAN::CHARGES));
+        $loan = $loan->Rem(LOAN::CHARGES)->append([LOAN::CHARGES => $charge2]);
+        $this->assertEquals([$charge2], $loan->Get(LOAN::CHARGES));
     }
 
     /**
@@ -277,9 +277,9 @@ class ChargeTest extends TestCase
      */
     public function testReadOnly(){
         // create loan and payments
-        $charge = static::$sdk->CreateCharge(435, "2017-08-29", "INFO 3", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->set(CHARGES::EXPANSION, [4, 56, 2, 1]);
-        $this->assertEquals([4, 56, 2, 1], $charge->get(CHARGES::EXPANSION));
-        $this->assertEquals("4, 56, 2, 1", $charge->set(CHARGES::EXPANSION, implode(", ", $charge->get(CHARGES::EXPANSION)))->get(CHARGES::EXPANSION));
+        $charge = static::$sdk->CreateCharge(435, "2017-08-29", "INFO 3", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->Set(CHARGES::EXPANSION, [4, 56, 2, 1]);
+        $this->assertEquals([4, 56, 2, 1], $charge->Get(CHARGES::EXPANSION));
+        $this->assertEquals("4, 56, 2, 1", $charge->Set(CHARGES::EXPANSION, implode(", ", $charge->Get(CHARGES::EXPANSION)))->Get(CHARGES::EXPANSION));
     }
 
     /**
@@ -287,8 +287,8 @@ class ChargeTest extends TestCase
      * @group offline
      */
     public function testLoadReverseCharge(){
-        $charge = $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->set(CHARGES::EDIT_COMMENT, "This is a comment", CHARGES::IS_REVERSAL, 1);
+        $charge = $charge = static::$sdk->CreateCharge(12.5, "2017-07-29", "INFO", 2, CHARGES\CHARGES_CHARGE_APP_TYPE__C::PAYOFF ,1)->Set(CHARGES::EDIT_COMMENT, "This is a comment", CHARGES::IS_REVERSAL, 1);
         $arr = \Simnang\LoanPro\Utils\ArrayUtils::ConvertToKeyedArray([CHARGES::EDIT_COMMENT, "This is a comment", CHARGES::IS_REVERSAL, 1]);
-        $this->assertEquals($arr,$charge->get(array_keys($arr)));
+        $this->assertEquals($arr,$charge->Get(array_keys($arr)));
     }
 }

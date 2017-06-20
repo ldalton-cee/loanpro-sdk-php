@@ -52,7 +52,7 @@ class CollateralTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$collateral->get($field));
+            $this->assertNull(null,$collateral->Get($field));
         }
     }
 
@@ -74,7 +74,7 @@ class CollateralTest extends TestCase
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
-                    $this->assertEquals($cval, $collateral->set($field, $cval)->get($field));
+                    $this->assertEquals($cval, $collateral->Set($field, $cval)->Get($field));
                 }
             }
         }
@@ -86,9 +86,9 @@ class CollateralTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.COLLATERAL::ADDITIONAL.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'additional' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\CollateralEntity");
         static::$sdk->CreateCollateral()
-            /* should throw exception when setting LOAN_AMT to null */ ->set(COLLATERAL::ADDITIONAL, null);
+            /* should throw exception when setting LOAN_AMT to null */ ->Set(COLLATERAL::ADDITIONAL, null);
     }
 
     /**
@@ -99,10 +99,10 @@ class CollateralTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN.'\'');
         $ls = static::$sdk->CreateCollateral();
-        $ls->set(BASE_ENTITY::ID, 120);
+        $ls->Set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
+        $ls->Set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
     }
 
     /**
@@ -110,12 +110,12 @@ class CollateralTest extends TestCase
      * @group offline
      */
     public function testCollateralDel(){
-        $collateral = static::$sdk->CreateCollateral()->set([COLLATERAL::DISTANCE=> 232.23]);
-        $this->assertEquals(232.23, $collateral->get(COLLATERAL::DISTANCE));
+        $collateral = static::$sdk->CreateCollateral()->Set([COLLATERAL::DISTANCE=> 232.23]);
+        $this->assertEquals(232.23, $collateral->Get(COLLATERAL::DISTANCE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($collateral->rem(COLLATERAL::DISTANCE)->get(COLLATERAL::DISTANCE));
+        $this->assertNull($collateral->Rem(COLLATERAL::DISTANCE)->Get(COLLATERAL::DISTANCE));
         /* deletions should also not affect the original object (just return a copy) */
-        $this->assertEquals(232.23, $collateral->get(COLLATERAL::DISTANCE));
+        $this->assertEquals(232.23, $collateral->Get(COLLATERAL::DISTANCE));
     }
 
 }

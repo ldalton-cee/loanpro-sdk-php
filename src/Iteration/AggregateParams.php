@@ -40,7 +40,7 @@ class AggregateParams
         $this->tree = ['aggs'=>AggregateParams::ProcessTree(static::$parser->Parse($str))];
     }
 
-    public function get(){
+    public function Get(){
         return $this->tree;
     }
 

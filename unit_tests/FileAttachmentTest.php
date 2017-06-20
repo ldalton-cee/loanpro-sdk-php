@@ -50,7 +50,7 @@ class FileAttachmentTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$doc->get($field));
+            $this->assertNull(null,$doc->Get($field));
         }
     }
 
@@ -60,9 +60,9 @@ class FileAttachmentTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.FILE_ATTACHMENT::FILE_MIME.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'fileMime' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\FileAttachmentEntity");
         (new \Simnang\LoanPro\Loans\FileAttachmentEntity())
-            /* should throw exception when setting LOAN_AMT to null */ ->set(FILE_ATTACHMENT::FILE_MIME, null);
+            /* should throw exception when setting LOAN_AMT to null */ ->Set(FILE_ATTACHMENT::FILE_MIME, null);
     }
 
     /**
@@ -73,10 +73,10 @@ class FileAttachmentTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN.'\'');
         $ls = (new \Simnang\LoanPro\Loans\FileAttachmentEntity());
-        $ls->set(BASE_ENTITY::ID, 120);
+        $ls->Set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
+        $ls->Set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
     }
 
     /**
@@ -84,11 +84,11 @@ class FileAttachmentTest extends TestCase
      * @group offline
      */
     public function testFileAttachmentDel(){
-        $doc = (new \Simnang\LoanPro\Loans\FileAttachmentEntity())->set([FILE_ATTACHMENT::FILE_MIME=> 1]);
-        $this->assertEquals(1, $doc->get(FILE_ATTACHMENT::FILE_MIME));
+        $doc = (new \Simnang\LoanPro\Loans\FileAttachmentEntity())->Set([FILE_ATTACHMENT::FILE_MIME=> 1]);
+        $this->assertEquals(1, $doc->Get(FILE_ATTACHMENT::FILE_MIME));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($doc->rem(FILE_ATTACHMENT::FILE_MIME)->get(FILE_ATTACHMENT::FILE_MIME));
+        $this->assertNull($doc->Rem(FILE_ATTACHMENT::FILE_MIME)->Get(FILE_ATTACHMENT::FILE_MIME));
         /* deletions should also not affect the original object (just return a copy) */
-        $this->assertEquals(1, $doc->get(FILE_ATTACHMENT::FILE_MIME));
+        $this->assertEquals(1, $doc->Get(FILE_ATTACHMENT::FILE_MIME));
     }
 }

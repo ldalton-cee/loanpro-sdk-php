@@ -47,8 +47,8 @@ class LoanSetupTest extends TestCase
      */
     public function testCreateLoanSetupNoVals(){
         $loanSetup = static::$sdk->CreateLoanSetup(LOAN_SETUP_LCLASS::CONSUMER, LOAN_SETUP_LTYPE::INSTALLMENT);
-        $this->assertEquals(LOAN_SETUP_LCLASS::CONSUMER, $loanSetup->get(LOAN_SETUP::LCLASS__C));
-        $this->assertEquals(LOAN_SETUP_LTYPE::INSTALLMENT, $loanSetup->get(LOAN_SETUP::LTYPE__C));
+        $this->assertEquals(LOAN_SETUP_LCLASS::CONSUMER, $loanSetup->Get(LOAN_SETUP::LCLASS__C));
+        $this->assertEquals(LOAN_SETUP_LTYPE::INSTALLMENT, $loanSetup->Get(LOAN_SETUP::LTYPE__C));
 
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LOAN_SETUP');
@@ -58,7 +58,7 @@ class LoanSetupTest extends TestCase
         foreach($consts as $key=>$field){
             if($key === LOAN_SETUP::LCLASS__C || $key == LOAN_SETUP::LTYPE__C)
                 continue;
-            $this->assertNull(null,$loanSetup->get($field));
+            $this->assertNull(null,$loanSetup->Get($field));
         }
     }
 
@@ -68,8 +68,8 @@ class LoanSetupTest extends TestCase
      */
     public function testLoanSetupSetCollections(){
         $loanSetup = static::$sdk->CreateLoanSetup(LOAN_SETUP_LCLASS::CONSUMER, LOAN_SETUP_LTYPE::INSTALLMENT);
-        $this->assertEquals(LOAN_SETUP_LCLASS::CONSUMER, $loanSetup->get(LOAN_SETUP::LCLASS__C));
-        $this->assertEquals(LOAN_SETUP_LTYPE::INSTALLMENT, $loanSetup->get(LOAN_SETUP::LTYPE__C));
+        $this->assertEquals(LOAN_SETUP_LCLASS::CONSUMER, $loanSetup->Get(LOAN_SETUP::LCLASS__C));
+        $this->assertEquals(LOAN_SETUP_LTYPE::INSTALLMENT, $loanSetup->Get(LOAN_SETUP::LTYPE__C));
 
 
         $rclass = new \ReflectionClass('Simnang\LoanPro\Constants\LOAN_SETUP');
@@ -82,7 +82,7 @@ class LoanSetupTest extends TestCase
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
-                    $this->assertEquals($cval, $loanSetup->set($field, $cval)->get($field));
+                    $this->assertEquals($cval, $loanSetup->Set($field, $cval)->Get($field));
                 }
             }
         }
@@ -94,9 +94,9 @@ class LoanSetupTest extends TestCase
      */
     public function testLoanSetupCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.LOAN_SETUP::LOAN_AMT.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'loanAmount' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\LoanSetupEntity");
         static::$sdk->CreateLoanSetup(LOAN_SETUP_LCLASS::CONSUMER, LOAN_SETUP_LTYPE::INSTALLMENT)
-            /* should throw exception when setting LOAN_AMT to null */ ->set(LOAN_SETUP::LOAN_AMT, null);
+            /* should throw exception when setting LOAN_AMT to null */ ->Set(LOAN_SETUP::LOAN_AMT, null);
     }
 
     /**
@@ -104,12 +104,12 @@ class LoanSetupTest extends TestCase
      * @group offline
      */
     public function testLoanSetupDel(){
-        $loanSetup = static::$sdk->CreateLoanSetup(LOAN_SETUP_LCLASS::CONSUMER, LOAN_SETUP_LTYPE::INSTALLMENT)->set(LOAN_SETUP::LOAN_AMT, 1250.01);
-        $this->assertEquals(1250.01, $loanSetup->get(LOAN_SETUP::LOAN_AMT));
+        $loanSetup = static::$sdk->CreateLoanSetup(LOAN_SETUP_LCLASS::CONSUMER, LOAN_SETUP_LTYPE::INSTALLMENT)->Set(LOAN_SETUP::LOAN_AMT, 1250.01);
+        $this->assertEquals(1250.01, $loanSetup->Get(LOAN_SETUP::LOAN_AMT));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($loanSetup->rem(LOAN_SETUP::LOAN_AMT)->get(LOAN_SETUP::LOAN_AMT));
+        $this->assertNull($loanSetup->Rem(LOAN_SETUP::LOAN_AMT)->Get(LOAN_SETUP::LOAN_AMT));
         /* deletions should also not affect the original object (just return a copy) */
-        $this->assertEquals(1250.01, $loanSetup->get(LOAN_SETUP::LOAN_AMT));
+        $this->assertEquals(1250.01, $loanSetup->Get(LOAN_SETUP::LOAN_AMT));
     }
 
     /**
@@ -122,7 +122,7 @@ class LoanSetupTest extends TestCase
         $loanSetup = static::$sdk->CreateLoanSetup(LOAN_SETUP_LCLASS::CONSUMER, LOAN_SETUP_LTYPE::INSTALLMENT);
 
         // should throw exception
-        $loanSetup->rem(LOAN_SETUP::LCLASS__C);
+        $loanSetup->Rem(LOAN_SETUP::LCLASS__C);
     }
 
     /**
@@ -135,6 +135,6 @@ class LoanSetupTest extends TestCase
         $loanSetup = static::$sdk->CreateLoanSetup(LOAN_SETUP_LCLASS::CONSUMER, LOAN_SETUP_LTYPE::INSTALLMENT);
 
         // should throw exception
-        $loanSetup->rem(LOAN_SETUP::LTYPE__C);
+        $loanSetup->Rem(LOAN_SETUP::LTYPE__C);
     }
 }

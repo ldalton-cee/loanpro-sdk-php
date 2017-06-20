@@ -69,7 +69,7 @@ class JsonBody implements StreamInterface
      *
      * @return resource|null Underlying PHP stream, if any
      */
-    public function detach()
+    public function xetach()
     {
         $this->json = null;
         $this->curIndex = 0;

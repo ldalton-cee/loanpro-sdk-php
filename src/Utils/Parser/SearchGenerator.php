@@ -84,7 +84,7 @@ class SearchGenerator
             $root->AddLeftChildNode($eTree);
             $eTree = $root;
         }
-        $res = ['query'=>$this->processTree($eTree)];
+        $res = ['query'=>$this->ProcessTree($eTree)];
         return $res;
     }
 
@@ -94,7 +94,7 @@ class SearchGenerator
      * @param array $compareObj
      * @return array
      */
-    private function processTree($actionNode, $compareObj = []){
+    private function ProcessTree($actionNode, $compareObj = []){
         $token = $actionNode->token;
         $json = [];
         if($token->token === 'LOGICAL_OP')
@@ -104,16 +104,16 @@ class SearchGenerator
             else
                 $key = 'should';
             if(!is_null($actionNode->rightNode))
-                $json['bool'] = [$key=>[$this->processTree($actionNode->leftNode),$this->processTree($actionNode->rightNode)]];
+                $json['bool'] = [$key=>[$this->ProcessTree($actionNode->leftNode),$this->ProcessTree($actionNode->rightNode)]];
             else
-                $json['bool'] = [$key=>[$this->processTree($actionNode->leftNode)]];
+                $json['bool'] = [$key=>[$this->ProcessTree($actionNode->leftNode)]];
         }
         else if($token->token === 'LIKE'){
             $op = 'should';
             if(substr($token->sequence,-1) === '&')
                 $op = 'must';
             $regex = $actionNode->rightNode->token->sequence;
-            $json = $this->processTree($actionNode->leftNode, ['type'=>'regex','regex'=>$regex,'operator'=>$op]);
+            $json = $this->ProcessTree($actionNode->leftNode, ['type'=>'regex','regex'=>$regex,'operator'=>$op]);
         }
         else if($token->token === 'COMPARE'){
             $op = 'should';
@@ -123,7 +123,7 @@ class SearchGenerator
             if(substr($token->sequence, 0,1) === '!')
                 $invert = true;
             $phrase = $actionNode->rightNode->token->sequence;
-            $json = $this->processTree($actionNode->leftNode, ['type'=>'comp','phrase'=>$phrase,'operator'=>$op, 'invert' => $invert]);
+            $json = $this->ProcessTree($actionNode->leftNode, ['type'=>'comp','phrase'=>$phrase,'operator'=>$op, 'invert' => $invert]);
         }
         else if($token->token === 'CONCAT'){
             $op = 'should';
@@ -134,7 +134,7 @@ class SearchGenerator
                 $op = 'must';
             else if(substr($token->sequence, -1) == '|')
                 $op = 'should';
-            $json = ['bool'=>[$op=>[$this->processTree($actionNode->leftNode, $compareObj),$this->processTree($actionNode->rightNode, $compareObj)]]];
+            $json = ['bool'=>[$op=>[$this->ProcessTree($actionNode->leftNode, $compareObj),$this->ProcessTree($actionNode->rightNode, $compareObj)]]];
         }
         else if($token->token === 'ARRAY'){
             $fields = array_map('trim', explode(',',substr($token->sequence, 1, -1)));
@@ -184,7 +184,7 @@ class SearchGenerator
                     'query'=>[
                         'bool'=>[
                             $compareObj['operator'] => [
-                                $this->processTree($actionNode->rightNode, $compareObj)
+                                $this->ProcessTree($actionNode->rightNode, $compareObj)
                             ]
                         ]
                     ]
@@ -195,7 +195,7 @@ class SearchGenerator
             $json = [
                 'bool'=>[
                     'mustNot'=>[
-                        $this->processTree($actionNode->leftNode)
+                        $this->ProcessTree($actionNode->leftNode)
                     ]
                 ]
             ];

@@ -48,7 +48,7 @@ class ChecklistItemValueTest extends TestCase
     public function testChecklistItemValueInstantiate(){
         $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1);
 
-        $this->assertEquals([CHECKLIST_VALUES::CHECKLIST_ID=>6, CHECKLIST_VALUES::CHECKLIST_ITEM_ID=>12, CHECKLIST_VALUES::CHECKLIST_ITEM_VAL=>1], $checklistValue->get(CHECKLIST_VALUES::CHECKLIST_ID, CHECKLIST_VALUES::CHECKLIST_ITEM_ID, CHECKLIST_VALUES::CHECKLIST_ITEM_VAL));
+        $this->assertEquals([CHECKLIST_VALUES::CHECKLIST_ID=>6, CHECKLIST_VALUES::CHECKLIST_ITEM_ID=>12, CHECKLIST_VALUES::CHECKLIST_ITEM_VAL=>1], $checklistValue->Get(CHECKLIST_VALUES::CHECKLIST_ID, CHECKLIST_VALUES::CHECKLIST_ITEM_ID, CHECKLIST_VALUES::CHECKLIST_ITEM_VAL));
     }
 
     /**
@@ -56,8 +56,8 @@ class ChecklistItemValueTest extends TestCase
      * @group offline
      */
     public function testChecklistItemValueSet(){
-        $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1)->set(BASE_ENTITY::ID, 12);
-        $this->assertEquals(12, $checklistValue->get(BASE_ENTITY::ID));
+        $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1)->Set(BASE_ENTITY::ID, 12);
+        $this->assertEquals(12, $checklistValue->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -66,10 +66,10 @@ class ChecklistItemValueTest extends TestCase
      */
     public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'id' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\ChecklistItemValueEntity");
 
         /* should throw exception when setting LOAN_AMT to null */
-        static::$sdk->CreateChecklistItemValue(6, 12, 1)->set(BASE_ENTITY::ID, null);
+        static::$sdk->CreateChecklistItemValue(6, 12, 1)->Set(BASE_ENTITY::ID, null);
     }
 
     /**
@@ -82,7 +82,7 @@ class ChecklistItemValueTest extends TestCase
         $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1);
 
         // should throw exception
-        $checklistValue->rem(CHECKLIST_VALUES::CHECKLIST_ID);
+        $checklistValue->Rem(CHECKLIST_VALUES::CHECKLIST_ID);
     }
 
     /**
@@ -95,7 +95,7 @@ class ChecklistItemValueTest extends TestCase
         $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1);
 
         // should throw exception
-        $checklistValue->rem(CHECKLIST_VALUES::CHECKLIST_ITEM_VAL);
+        $checklistValue->Rem(CHECKLIST_VALUES::CHECKLIST_ITEM_VAL);
     }
 
     /**
@@ -108,7 +108,7 @@ class ChecklistItemValueTest extends TestCase
         $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1);
 
         // should throw exception
-        $checklistValue->rem(CHECKLIST_VALUES::CHECKLIST_ITEM_ID);
+        $checklistValue->Rem(CHECKLIST_VALUES::CHECKLIST_ITEM_ID);
     }
 
     /**
@@ -118,6 +118,6 @@ class ChecklistItemValueTest extends TestCase
     public function testAddToLoan(){
         $loan = static::$sdk->CreateLoan("Test ID");
         $checklistValue = static::$sdk->CreateChecklistItemValue(6, 12, 1);
-        $this->assertEquals([$checklistValue], $loan->set(LOAN::CHECKLIST_VALUES, $checklistValue)->get(LOAN::CHECKLIST_VALUES));
+        $this->assertEquals([$checklistValue], $loan->Set(LOAN::CHECKLIST_VALUES, $checklistValue)->Get(LOAN::CHECKLIST_VALUES));
     }
 }

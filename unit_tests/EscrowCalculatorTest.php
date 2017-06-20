@@ -54,7 +54,7 @@ class EscrowCalculatorTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$escrowCalc->get($field));
+            $this->assertNull(null,$escrowCalc->Get($field));
         }
     }
 
@@ -76,7 +76,7 @@ class EscrowCalculatorTest extends TestCase
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
-                    $this->assertEquals($cval, $escrowCalc->set($field, $cval)->get($field));
+                    $this->assertEquals($cval, $escrowCalc->Set($field, $cval)->Get($field));
                 }
             }
         }
@@ -104,8 +104,8 @@ class EscrowCalculatorTest extends TestCase
             ESCROW_CALCULATORS::REGULAR_PERIOD => 23
         ];
 
-        $escrowCalc = static::$sdk->CreateEscrowCalculator(1)->set($vals);
-        $this->assertEquals($vals, $escrowCalc->get(array_keys($vals)));
+        $escrowCalc = static::$sdk->CreateEscrowCalculator(1)->Set($vals);
+        $this->assertEquals($vals, $escrowCalc->Get(array_keys($vals)));
     }
 
     /**
@@ -114,10 +114,10 @@ class EscrowCalculatorTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.ESCROW_CALCULATORS::REGULAR_PERIOD.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'regularPeriod' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\EscrowCalculatorEntity");
         $escrowCalc = static::$sdk->CreateEscrowCalculator(1)
         // should throw exception when setting LOAN_AMT to null
-             ->set(ESCROW_CALCULATORS::REGULAR_PERIOD, null);
+             ->Set(ESCROW_CALCULATORS::REGULAR_PERIOD, null);
     }
 
     /**
@@ -128,10 +128,10 @@ class EscrowCalculatorTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN.'\'');
         $ls = $escrowCalc = static::$sdk->CreateEscrowCalculator(1);
-        $ls->set(BASE_ENTITY::ID, 120);
+        $ls->Set(BASE_ENTITY::ID, 120);
 
         // should throw exception when setting AGENT to null
-        $ls->set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
+        $ls->Set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
     }
 
     /**
@@ -156,11 +156,11 @@ class EscrowCalculatorTest extends TestCase
             ESCROW_CALCULATORS::REGULAR_PERIOD => 23
         ];
 
-        $escrowCalc = static::$sdk->CreateEscrowCalculator(1)->set($vals);
-        $this->assertEquals($vals, $escrowCalc->get(array_keys($vals)));
+        $escrowCalc = static::$sdk->CreateEscrowCalculator(1)->Set($vals);
+        $this->assertEquals($vals, $escrowCalc->Get(array_keys($vals)));
         unset($vals[ESCROW_CALCULATORS::REGULAR_PERIOD]);
 
-        $this->assertEquals($vals, $escrowCalc->rem(ESCROW_CALCULATORS::REGULAR_PERIOD)->get(array_keys($vals)));
+        $this->assertEquals($vals, $escrowCalc->Rem(ESCROW_CALCULATORS::REGULAR_PERIOD)->Get(array_keys($vals)));
     }
 
     /**
@@ -173,7 +173,7 @@ class EscrowCalculatorTest extends TestCase
         $escrowCalc = static::$sdk->CreateEscrowCalculator(1);
 
         // should throw exception
-        $escrowCalc->rem(ESCROW_CALCULATORS::SUBSET);
+        $escrowCalc->Rem(ESCROW_CALCULATORS::SUBSET);
     }
 
     /**
@@ -183,7 +183,7 @@ class EscrowCalculatorTest extends TestCase
     public function testAddToLoan(){
         $loan = static::$sdk->CreateLoan("Test ID");
         $escrowCalc = static::$sdk->CreateEscrowCalculator(1);
-        $this->assertEquals([$escrowCalc], $loan->set(LOAN::ESCROW_CALCULATORS, $escrowCalc)->get(LOAN::ESCROW_CALCULATORS));
+        $this->assertEquals([$escrowCalc], $loan->Set(LOAN::ESCROW_CALCULATORS, $escrowCalc)->Get(LOAN::ESCROW_CALCULATORS));
     }
 
     /**
@@ -195,31 +195,31 @@ class EscrowCalculatorTest extends TestCase
         $escrowCalc = static::$sdk->CreateEscrowCalculator(1);
         $escrowCalc2 = static::$sdk->CreateEscrowCalculator(2);
         $escrowCalc3 = static::$sdk->CreateEscrowCalculator(3);
-        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::ESCROW_CALCULATORS, [$escrowCalc]);
+        $loan = static::$sdk->CreateLoan("Test ID")->Set(LOAN::ESCROW_CALCULATORS, [$escrowCalc]);
 
         // test append
-        $this->assertEquals([$escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));
+        $this->assertEquals([$escrowCalc], $loan->Get(LOAN::ESCROW_CALCULATORS));
         $loan = $loan->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2);
-        $this->assertEquals([$escrowCalc, $escrowCalc2], $loan->get(LOAN::ESCROW_CALCULATORS));
+        $this->assertEquals([$escrowCalc, $escrowCalc2], $loan->Get(LOAN::ESCROW_CALCULATORS));
 
         // test list append
-        $loan = $loan->rem(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2, $escrowCalc3, $escrowCalc);
-        $this->assertEquals([$escrowCalc2, $escrowCalc3, $escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));
+        $loan = $loan->Rem(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2, $escrowCalc3, $escrowCalc);
+        $this->assertEquals([$escrowCalc2, $escrowCalc3, $escrowCalc], $loan->Get(LOAN::ESCROW_CALCULATORS));
 
         // test list append with multiple keys
-        $loan = $loan->rem(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2, $escrowCalc, LOAN::ESCROW_CALCULATORS, $escrowCalc);
-        $this->assertEquals([$escrowCalc2, $escrowCalc, $escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));
+        $loan = $loan->Rem(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, $escrowCalc2, $escrowCalc, LOAN::ESCROW_CALCULATORS, $escrowCalc);
+        $this->assertEquals([$escrowCalc2, $escrowCalc, $escrowCalc], $loan->Get(LOAN::ESCROW_CALCULATORS));
 
         // test array notation 1
-        $loan = $loan->rem(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, [$escrowCalc3, $escrowCalc2, $escrowCalc]);
-        $this->assertEquals([$escrowCalc3, $escrowCalc2, $escrowCalc], $loan->get(LOAN::ESCROW_CALCULATORS));
+        $loan = $loan->Rem(LOAN::ESCROW_CALCULATORS)->append(LOAN::ESCROW_CALCULATORS, [$escrowCalc3, $escrowCalc2, $escrowCalc]);
+        $this->assertEquals([$escrowCalc3, $escrowCalc2, $escrowCalc], $loan->Get(LOAN::ESCROW_CALCULATORS));
 
         // test array notation 2
-        $loan = $loan->rem(LOAN::ESCROW_CALCULATORS)->append([LOAN::ESCROW_CALCULATORS => [$escrowCalc, $escrowCalc3, $escrowCalc2]]);
-        $this->assertEquals([$escrowCalc, $escrowCalc3, $escrowCalc2], $loan->get(LOAN::ESCROW_CALCULATORS));
+        $loan = $loan->Rem(LOAN::ESCROW_CALCULATORS)->append([LOAN::ESCROW_CALCULATORS => [$escrowCalc, $escrowCalc3, $escrowCalc2]]);
+        $this->assertEquals([$escrowCalc, $escrowCalc3, $escrowCalc2], $loan->Get(LOAN::ESCROW_CALCULATORS));
 
         // test array notation 3
-        $loan = $loan->rem(LOAN::ESCROW_CALCULATORS)->append([LOAN::ESCROW_CALCULATORS => $escrowCalc2]);
-        $this->assertEquals([$escrowCalc2], $loan->get(LOAN::ESCROW_CALCULATORS));
+        $loan = $loan->Rem(LOAN::ESCROW_CALCULATORS)->append([LOAN::ESCROW_CALCULATORS => $escrowCalc2]);
+        $this->assertEquals([$escrowCalc2], $loan->Get(LOAN::ESCROW_CALCULATORS));
     }
 }

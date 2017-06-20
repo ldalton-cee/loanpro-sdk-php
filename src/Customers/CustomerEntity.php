@@ -23,6 +23,7 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
+use Simnang\LoanPro\Iteration\LoansForCustomerIterator;
 use Simnang\LoanPro\LoanProSDK;
 use Simnang\LoanPro\Loans\LoanEntity;
 use Simnang\LoanPro\Validator\FieldValidator;
@@ -67,8 +68,8 @@ class CustomerEntity extends  BaseEntity
      * @throws InvalidStateException
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
-    public function addToLoan(LoanEntity $loan, $customerRole){
-        return LoanProSDK::GetInstance()->GetApiComm()->linkCustomerAndLoan($this, $loan, $customerRole);
+    public function AddToLoan(LoanEntity $loan, $customerRole){
+        return LoanProSDK::GetInstance()->GetApiComm()->LinkCustomerAndLoan($this, $loan, $customerRole);
     }
 
     /**
@@ -77,8 +78,8 @@ class CustomerEntity extends  BaseEntity
      * @throws InvalidStateException
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
-    public function save(){
-        return LoanProSDK::GetInstance()->GetApiComm()->saveCustomer($this);
+    public function Save(){
+        return LoanProSDK::GetInstance()->GetApiComm()->SaveCustomer($this);
     }
 
     /**
@@ -89,8 +90,8 @@ class CustomerEntity extends  BaseEntity
      * @throws InvalidStateException
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
-    public function pullCreditScore($expansion = [], $exportAsPDF = false){
-        return LoanProSDK::GetInstance()->GetApiComm()->pullCreditScore($this, $expansion, $exportAsPDF);
+    public function PullCreditScore($expansion = [], $exportAsPDF = false){
+        return LoanProSDK::GetInstance()->GetApiComm()->PullCreditScore($this, $expansion, $exportAsPDF);
     }
 
     /**
@@ -100,8 +101,8 @@ class CustomerEntity extends  BaseEntity
      * @throws InvalidStateException
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
-    public function runOfacTest(){
-        return LoanProSDK::GetInstance()->GetApiComm()->runOfacTest($this);
+    public function RunOfacTest(){
+        return LoanProSDK::GetInstance()->GetApiComm()->RunOfacTest($this);
     }
 
     /**
@@ -112,8 +113,8 @@ class CustomerEntity extends  BaseEntity
      * @throws InvalidStateException
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
-    public function getLoanAccess(){
-        return LoanProSDK::GetInstance()->GetApiComm()->getCustomerLoanAccess($this);
+    public function GetLoanAccess(){
+        return LoanProSDK::GetInstance()->GetApiComm()->GetCustomerLoanAccess($this);
     }
 
     /**
@@ -127,8 +128,8 @@ class CustomerEntity extends  BaseEntity
      * @throws InvalidStateException
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
-    public function getLoanAccessForLoan(LoanEntity $loan){
-        return LoanProSDK::GetInstance()->GetApiComm()->getCustomerLoanAccess($this, $loan);
+    public function GetLoanAccessForLoan(LoanEntity $loan){
+        return LoanProSDK::GetInstance()->GetApiComm()->GetCustomerLoanAccess($this, $loan);
     }
 
     /**
@@ -140,8 +141,12 @@ class CustomerEntity extends  BaseEntity
      * @throws InvalidStateException
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
-    public function setLoanAccessForLoan(LoanEntity $loan, $access = []){
-        return LoanProSDK::GetInstance()->GetApiComm()->setCustomerLoanAccess($this, $loan, $access);
+    public function SetLoanAccessForLoan(LoanEntity $loan, $access = []){
+        return LoanProSDK::GetInstance()->GetApiComm()->SetCustomerLoanAccess($this, $loan, $access);
+    }
+
+    public function GetLoans($expand = []){
+        return new LoansForCustomerIterator($this->Get(BASE_ENTITY::ID), $expand);
     }
 
     /**
@@ -204,8 +209,8 @@ class CustomerEntity extends  BaseEntity
      * Throws an InvalidStateException if there is no valid Customer ID
      * @throws InvalidStateException
      */
-    public function insureHasID(){
-        if(is_null($this->get(BASE_ENTITY::ID)))
+    public function InsureHasID(){
+        if(is_null($this->Get(BASE_ENTITY::ID)))
             throw new InvalidStateException("Cannot perform operation on a loan without an ID");
     }
 }

@@ -28,17 +28,8 @@ use Simnang\LoanPro\LoanProSDK;
  *
  * @package Simnang\LoanPro\Iteration
  */
-class CustomerIterator implements \Iterator
+class CustomerIterator extends BaseIterator
 {
-    private $paginationVar = null;
-    private $res = [];
-    private $orderBy = [];
-    private $order = PaginationParams::ASCENDING_ORDER;
-    private $filterParams = null;
-    private $expand = [];
-    private $curIndex = 0;
-    private $internalPageSize;
-
     /**
      * Creates a new customer iterator that will iterate over all the customers on the server
      * @param array             $expand
@@ -48,102 +39,7 @@ class CustomerIterator implements \Iterator
      * @param int               $internalPageSize
      */
     public function __construct($expand = [], FilterParams $filterParams = null, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
-        if($internalPageSize <= 0)
-            $internalPageSize = 1;
-        $this->expand = $expand;
-        $this->filterParams = $filterParams;
-        $this->internalPageSize = $internalPageSize;
-        $this->orderBy = $orderBy;
-        $this->order = $order;
-
-
+        parent::__construct('GetCustomers_RAW', 'normal', ['filterParams'=>$filterParams,'orderBy'=>$orderBy,'order'=>$order],$internalPageSize);
     }
 
-    /**
-     * Return the current element
-     *
-     * @link  http://php.net/manual/en/iterator.current.php
-     * @return mixed Can return any type.
-     * @since 5.0.0
-     */
-    public function current()
-    {
-        if(is_null($this->paginationVar))
-            $this->MakeNextReq();
-        return $this->res[$this->curIndex];
-    }
-
-    /**
-     * Move forward to next element
-     *
-     * @link  http://php.net/manual/en/iterator.next.php
-     * @return void Any returned value is ignored.
-     * @since 5.0.0
-     */
-    public function next()
-    {
-        $this->curIndex++;
-        if($this->curIndex >= count($this->res)){
-            $this->MakeNextReq();
-        }
-    }
-
-    /**
-     * Return the key of the current element
-     *
-     * @link  http://php.net/manual/en/iterator.key.php
-     * @return mixed scalar on success, or null on failure.
-     * @since 5.0.0
-     */
-    public function key()
-    {
-        if(is_null($this->paginationVar))
-            return 0;
-        return $this->curIndex + $this->paginationVar->getOffset();
-    }
-
-    /**
-     * Checks if current position is valid
-     *
-     * @link  http://php.net/manual/en/iterator.valid.php
-     * @return boolean The return value will be casted to boolean and then evaluated.
-     *        Returns true on success or false on failure.
-     * @since 5.0.0
-     */
-    public function valid()
-    {
-        if(is_null($this->paginationVar))
-            return true;
-        return $this->curIndex < count($this->res);
-    }
-
-    /**
-     * Rewind the Iterator to the first element
-     *
-     * @link  http://php.net/manual/en/iterator.rewind.php
-     * @return void Any returned value is ignored.
-     * @since 5.0.0
-     */
-    public function rewind()
-    {
-        $this->paginationVar = null;
-    }
-
-
-    private function MakeNextReq(){
-        if(is_null($this->paginationVar)) {
-            $this->paginationVar = new PaginationParams(false, 0, $this->internalPageSize, $this->orderBy, $this->order);
-            $this->paginationVar->setOrdering($this->orderBy, $this->order);
-        }
-        else{
-            if(count($this->res)){
-                $this->paginationVar = $this->paginationVar->nextPage();
-            }
-            else{
-                return;
-            }
-        }
-        $this->res = LoanProSDK::GetInstance()->GetCustomers_RAW($this->expand, $this->paginationVar, $this->filterParams);
-        $this->curIndex = 0;
-    }
 }

@@ -52,7 +52,7 @@ class LoanSettingsTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$loanSettings->get($field));
+            $this->assertNull(null,$loanSettings->Get($field));
         }
     }
 
@@ -74,7 +74,7 @@ class LoanSettingsTest extends TestCase
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
-                    $this->assertEquals($cval, $loanSettings->set($field, $cval)->get($field));
+                    $this->assertEquals($cval, $loanSettings->Set($field, $cval)->Get($field));
                 }
             }
         }
@@ -86,9 +86,9 @@ class LoanSettingsTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.LOAN_SETTINGS::AGENT.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'agent' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\LoanSettingsEntity");
         static::$sdk->CreateLoanSettings()
-            /* should throw exception when setting LOAN_AMT to null */ ->set(LOAN_SETTINGS::AGENT, null);
+            /* should throw exception when setting LOAN_AMT to null */ ->Set(LOAN_SETTINGS::AGENT, null);
     }
 
     /**
@@ -99,10 +99,10 @@ class LoanSettingsTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN.'\'');
         $ls = static::$sdk->CreateLoanSettings();
-        $ls->set(BASE_ENTITY::ID, 120);
+        $ls->Set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
+        $ls->Set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
     }
 
     /**
@@ -110,12 +110,12 @@ class LoanSettingsTest extends TestCase
      * @group offline
      */
     public function testLoanSettingsDel(){
-        $loanSettings = static::$sdk->CreateLoanSettings()->set([LOAN_SETTINGS::AGENT=> 2, LOAN_SETTINGS::LOAN_SUB_STATUS_ID=>5, LOAN_SETTINGS::LOAN_STATUS_ID=>6, LOAN_SETTINGS::SECURED=>1]);
-        $this->assertEquals(2, $loanSettings->get(LOAN_SETTINGS::AGENT));
+        $loanSettings = static::$sdk->CreateLoanSettings()->Set([LOAN_SETTINGS::AGENT=> 2, LOAN_SETTINGS::LOAN_SUB_STATUS_ID=>5, LOAN_SETTINGS::LOAN_STATUS_ID=>6, LOAN_SETTINGS::SECURED=>1]);
+        $this->assertEquals(2, $loanSettings->Get(LOAN_SETTINGS::AGENT));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($loanSettings->rem(LOAN_SETTINGS::AGENT)->get(LOAN_SETTINGS::AGENT));
+        $this->assertNull($loanSettings->Rem(LOAN_SETTINGS::AGENT)->Get(LOAN_SETTINGS::AGENT));
         /* deletions should also not affect the original object (just return a copy) */
-        $this->assertEquals(2, $loanSettings->get(LOAN_SETTINGS::AGENT));
+        $this->assertEquals(2, $loanSettings->Get(LOAN_SETTINGS::AGENT));
     }
 
 }

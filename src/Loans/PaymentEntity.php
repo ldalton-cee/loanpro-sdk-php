@@ -56,7 +56,7 @@ class PaymentEntity extends BaseEntity
     protected static $constSetup = false;
 
     public function jsonSerialize(){
-        if(is_null($this->get(PAYMENTS::CHILD_ID)))
+        if(is_null($this->Get(PAYMENTS::CHILD_ID)))
             return parent::jsonSerialize();
         return null;
     }
