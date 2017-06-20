@@ -118,7 +118,7 @@ class Communicator
         $response = $this->client->POST("$this->baseUrl/tenants($tenantId)/customers/authenticate",['username'=>$username, 'password'=>$password]);
         if($response->getStatusCode() == 200) {
             $body = json_decode($response->getBody(), true);
-            if(isset($body['d'])){
+            if(isset($body['d']) && isset($body['d']['id'])){
                 return [true, $body['d']];
             }
         }
