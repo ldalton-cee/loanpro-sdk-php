@@ -927,8 +927,8 @@ class Communicator
      * @throws InvalidStateException
      */
     public function SetCustomerLoanAccess(CustomerEntity $customer, LoanEntity $loan, $access = []){
-        $customer->InsureHasID();
-        $loan->InsureHasID();
+        $customer->insureHasID();
+        $loan->insureHasID();
 
         $cid = $customer->Get(BASE_ENTITY::ID);
         $lid = $loan->Get(BASE_ENTITY::ID);

@@ -733,7 +733,8 @@ class ApiClientTest extends TestCase
      * @group online
      */
     public function testCustomerLogin(){
-        $this->assertTrue(\Simnang\LoanPro\LoanProSDK::GetInstance()->LoginToCustomerSite(static::$access, "Password1!")[0]);
+        $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->LoginToCustomerSite(static::$access, "Password1!");
+        $this->assertTrue($res[0]);
         $this->assertEquals(static::$cid, \Simnang\LoanPro\LoanProSDK::GetInstance()->LoginToCustomerSite(static::$access, "Password1!")[1]['id']);
         $this->assertFalse(\Simnang\LoanPro\LoanProSDK::GetInstance()->LoginToCustomerSite(static::$access, "Password2!")[0]);
         $this->assertFalse(\Simnang\LoanPro\LoanProSDK::GetInstance()->LoginToCustomerSite(static::$access."non_existant123214213", "Password1!")[0]);
