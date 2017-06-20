@@ -205,7 +205,7 @@ abstract class BaseEntity implements \JsonSerializable
      *
      * @return BaseEntity
      */
-    public function del()
+    public function Del()
     {
         $obj = clone $this;
         $obj->del = true;
@@ -218,7 +218,7 @@ abstract class BaseEntity implements \JsonSerializable
      *
      * @return bool
      */
-    public function markedForDel()
+    public function MarkedForDel()
     {
         return $this->del;
     }
@@ -232,7 +232,7 @@ abstract class BaseEntity implements \JsonSerializable
      * @param ...$args
      * @return BaseEntity
      */
-    public function set($arg1, ...$args)
+    public function Set($arg1, ...$args)
     {
         $obj = clone $this;
         if (is_array($arg1)) {
@@ -249,7 +249,7 @@ abstract class BaseEntity implements \JsonSerializable
         if (sizeof($args)) {
             foreach ($args as $key => $val) {
                 if (is_null($val)) {
-                    throw new \InvalidArgumentException("Value for '$key' is null. The 'set' function cannot unset items, please use 'rem' instead. for class " . get_class($this));
+                    throw new \InvalidArgumentException("Value for '$key' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class " . get_class($this));
                 } else if ($obj->IsValidField($key, $val) || ($key === BASE_ENTITY::ID && FieldValidator::IsValidInt($val))) {
                     $obj->properties[ $key ] = $obj->GetValidField($key, $val);
                 } else if (!$obj->IsField($key)) {
@@ -283,7 +283,7 @@ abstract class BaseEntity implements \JsonSerializable
      *
      * @return array
      */
-    public static function getReqFields()
+    public static function GetReqFields()
     {
         return static::$required;
     }
@@ -297,7 +297,7 @@ abstract class BaseEntity implements \JsonSerializable
      * @param ...$args
      * @return BaseEntity
      */
-    public function append($arg1, ...$args)
+    public function Append($arg1, ...$args)
     {
         $obj = clone $this;
 
@@ -368,7 +368,7 @@ abstract class BaseEntity implements \JsonSerializable
         if (sizeof($args)) {
             foreach ($args as $key => $val) {
                 if ($obj->IsValidField($key, $val)) {
-                    $props = $obj->get($key);
+                    $props = $obj->Get($key);
                     if (!$props)
                         $props = [];
                     $obj->properties[ $key ] = array_merge($props, $obj->GetValidField($key, $val));
@@ -394,14 +394,14 @@ abstract class BaseEntity implements \JsonSerializable
     /**
      * This returns a copy of the entity without the specified field(s). It can take a single field, a list of fields, or an array of fields. It effectively unloads a field from memory
      *
-     * If trying to delete field marked as "required" (ie. it is required to be set in the constructor) then this function will through an InvalidArgumentException.
+     * If trying to delete field marked as "required" (ie. it is required to be set in the constructor) then this function Will through an InvalidArgumentException.
      * This is since fields marked as "required" are required for creation in LoanPro, and every local entity is considered a prototype of for creating an entity in LoanPro
      *
      * @param $arg1
      * @param ...$args
      * @return BaseEntity
      */
-    public function rem($arg1, ...$args)
+    public function Rem($arg1, ...$args)
     {
         if (is_array($arg1)) {
             $args = $arg1;
@@ -435,7 +435,7 @@ abstract class BaseEntity implements \JsonSerializable
      * @param ...$args
      * @return array|null|mixed
      */
-    public function get($arg1, ...$args)
+    public function Get($arg1, ...$args)
     {
         if (is_array($arg1)) {
             $args = $arg1;
@@ -529,7 +529,7 @@ abstract class BaseEntity implements \JsonSerializable
     }
 
     /**
-     * Called by constructor. This function will setup the constant lists. It allows constants to be used to set fields and also is essential for classes to be properly setup. It is called by calling the parent constructor.
+     * Called by constructor. This function Will setup the constant lists. It allows constants to be used to set fields and also is essential for classes to be properly setup. It is called by calling the parent constructor.
      *
      * IMPORTANT! you need to set $constCollectionPrefix to be the name of the appropriate constant list class!
      *

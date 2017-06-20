@@ -49,7 +49,7 @@ class PortfolioTest extends TestCase
     public function testPortfolioInstantiate(){
         $portfolio = static::$sdk->CreatePortfolio(5);
 
-        $this->assertEquals(5, $portfolio->get(BASE_ENTITY::ID));
+        $this->assertEquals(5, $portfolio->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -68,9 +68,9 @@ class PortfolioTest extends TestCase
             PORTFOLIO::SUB_PORTFOLIO, "SUBPORT"
         ];
 
-        $portfolio = static::$sdk->CreatePortfolio(5)->set(BASE_ENTITY::ID, 12)->set( $arr );
-        $this->assertEquals(12, $portfolio->get(BASE_ENTITY::ID));
-        $this->assertEquals(ArrayUtils::ConvertToKeyedArray($arr), $portfolio->get(array_keys(ArrayUtils::ConvertToKeyedArray($arr))));
+        $portfolio = static::$sdk->CreatePortfolio(5)->Set(BASE_ENTITY::ID, 12)->Set( $arr );
+        $this->assertEquals(12, $portfolio->Get(BASE_ENTITY::ID));
+        $this->assertEquals(ArrayUtils::ConvertToKeyedArray($arr), $portfolio->Get(array_keys(ArrayUtils::ConvertToKeyedArray($arr))));
     }
 
     /**
@@ -79,10 +79,10 @@ class PortfolioTest extends TestCase
      */
     public function testCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'id' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\PortfolioEntity");
 
         /* should throw exception when setting LOAN_AMT to null */
-        static::$sdk->CreatePortfolio(5)->set(BASE_ENTITY::ID, null);
+        static::$sdk->CreatePortfolio(5)->Set(BASE_ENTITY::ID, null);
     }
 
     /**
@@ -95,7 +95,7 @@ class PortfolioTest extends TestCase
         $portfolio = static::$sdk->CreatePortfolio(5);
 
         // should throw exception
-        $portfolio->rem(BASE_ENTITY::ID);
+        $portfolio->Rem(BASE_ENTITY::ID);
     }
 
     /**
@@ -105,6 +105,6 @@ class PortfolioTest extends TestCase
     public function testAddToLoan(){
         $loan = static::$sdk->CreateLoan("Test ID", new \Simnang\LoanPro\Loans\LoanSetupEntity(\Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LCLASS__C::CONSUMER, \Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LTYPE__C::INSTALLMENT));
         $portfolio = static::$sdk->CreatePortfolio(5);
-        $this->assertEquals([$portfolio], $loan->set(LOAN::PORTFOLIOS, $portfolio)->get(LOAN::PORTFOLIOS));
+        $this->assertEquals([$portfolio], $loan->Set(LOAN::PORTFOLIOS, $portfolio)->Get(LOAN::PORTFOLIOS));
     }
 }

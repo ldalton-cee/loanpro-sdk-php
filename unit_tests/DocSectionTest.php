@@ -52,7 +52,7 @@ class DocSectionTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$doc->get($field));
+            $this->assertNull(null,$doc->Get($field));
         }
     }
 
@@ -62,9 +62,9 @@ class DocSectionTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.DOC_SECTION::ACTIVE.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'active' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\DocSectionEntity");
         (new \Simnang\LoanPro\Loans\DocSectionEntity())
-            /* should throw exception when setting LOAN_AMT to null */ ->set(DOC_SECTION::ACTIVE, null);
+            /* should throw exception when setting LOAN_AMT to null */ ->Set(DOC_SECTION::ACTIVE, null);
     }
 
     /**
@@ -75,10 +75,10 @@ class DocSectionTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN.'\'');
         $ls = (new \Simnang\LoanPro\Loans\DocSectionEntity());
-        $ls->set(BASE_ENTITY::ID, 120);
+        $ls->Set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
+        $ls->Set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
     }
 
     /**
@@ -86,11 +86,11 @@ class DocSectionTest extends TestCase
      * @group offline
      */
     public function testDocSectionDel(){
-        $doc = (new \Simnang\LoanPro\Loans\DocSectionEntity())->set([DOC_SECTION::ACTIVE=> 1]);
-        $this->assertEquals(1, $doc->get(DOC_SECTION::ACTIVE));
+        $doc = (new \Simnang\LoanPro\Loans\DocSectionEntity())->Set([DOC_SECTION::ACTIVE=> 1]);
+        $this->assertEquals(1, $doc->Get(DOC_SECTION::ACTIVE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($doc->rem(DOC_SECTION::ACTIVE)->get(DOC_SECTION::ACTIVE));
+        $this->assertNull($doc->Rem(DOC_SECTION::ACTIVE)->Get(DOC_SECTION::ACTIVE));
         /* deletions should also not affect the original object (just return a copy) */
-        $this->assertEquals(1, $doc->get(DOC_SECTION::ACTIVE));
+        $this->assertEquals(1, $doc->Get(DOC_SECTION::ACTIVE));
     }
 }

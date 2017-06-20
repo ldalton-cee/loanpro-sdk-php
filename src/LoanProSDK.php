@@ -114,14 +114,17 @@ class LoanProSDK
     private $apiComm;
 
     /**
-     * Attempts to login to the customer facing website. Returns true if successful, 401 if authentication failed, and throws an API error on an error
+     * Attempts to login to the customer facing website. Returns an array with the first item being whether or not login was successful and the second item is the response from the server.
+     *
+     * If login was successful, the login from the server will hold the customer id and name.
+     *
      * @param string $username - Username of customer
      * @param string $password - Password of user
-     * @return bool
+     * @return array
      * @throws ApiException
      */
     public function LoginToCustomerSite($username = '', $password = ''){
-        return $this->apiComm->loginToCustomerSite( $username, $password);
+        return $this->apiComm->LoginToCustomerSite( $username, $password);
     }
 
     /**
@@ -133,7 +136,7 @@ class LoanProSDK
      * @throws ApiException
      */
     public function GetLoan($id, $expandProps = [], $nopageProps = true){
-        return $this->apiComm->getLoan($id, $expandProps, $nopageProps);
+        return $this->apiComm->GetLoan($id, $expandProps, $nopageProps);
     }
 
     /**
@@ -143,7 +146,11 @@ class LoanProSDK
      * @return LoanEntity
      */
     public function MakeLoanShellFromID($loanId){
-        return (new LoanEntity(''))->set(BASE_ENTITY::ID, $loanId);
+        return (new LoanEntity(''))->Set(BASE_ENTITY::ID, $loanId);
+    }
+
+    public function GetLoansForCustomer($customerId, $expandProps = []){
+        return $this->apiComm->GetLoansForCustomer($customerId, $expandProps);
     }
 
     /**
@@ -153,7 +160,7 @@ class LoanProSDK
      * @return CustomerEntity
      */
     public function MakeCustomerShellFromID($customerId){
-        return (new CustomerEntity('',''))->set(BASE_ENTITY::ID, $customerId);
+        return (new CustomerEntity('',''))->Set(BASE_ENTITY::ID, $customerId);
     }
 
     /**
@@ -165,7 +172,7 @@ class LoanProSDK
      * @throws ApiException
      */
     public function GetCustomer($id, $expandProps = [], $nopageProps = true){
-        return $this->apiComm->getCustomer($id, $expandProps, $nopageProps);
+        return $this->apiComm->GetCustomer($id, $expandProps, $nopageProps);
     }
 
     /**
@@ -191,7 +198,7 @@ class LoanProSDK
      * @throws InvalidStateException
      */
     public function GetLoans_RAW($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
-        return $this->apiComm->getLoans($expandProps, $paginationParams, $filter);
+        return $this->apiComm->GetLoans($expandProps, $paginationParams, $filter);
     }
 
     /**
@@ -218,7 +225,7 @@ class LoanProSDK
      * @throws InvalidStateException
      */
     public function SearchLoans_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
-        return $this->apiComm->searchLoans($searchParams, $aggParams, $paginationParams);
+        return $this->apiComm->SearchLoans($searchParams, $aggParams, $paginationParams);
     }
 
     /**
@@ -243,7 +250,7 @@ class LoanProSDK
      * @throws InvalidStateException
      */
     public function SearchCustomers_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
-        return $this->apiComm->searchCustomers($searchParams, $aggParams, $paginationParams);
+        return $this->apiComm->SearchCustomers($searchParams, $aggParams, $paginationParams);
     }
 
     /**
@@ -256,7 +263,7 @@ class LoanProSDK
      * @throws InvalidStateException
      */
     public function GetCustomers_RAW($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
-        return $this->apiComm->getCustomers($expandProps, $paginationParams, $filter);
+        return $this->apiComm->GetCustomers($expandProps, $paginationParams, $filter);
     }
 
     /**
@@ -490,7 +497,7 @@ class LoanProSDK
                 $setVars[$key] = $val;
         }
 
-        return (new Loans\LoanEntity($json[LOAN::DISP_ID]))->set($setVars);
+        return (new Loans\LoanEntity($json[LOAN::DISP_ID]))->Set($setVars);
     }
 
     public function CreateCustomerFromJSON($json){
@@ -512,7 +519,7 @@ class LoanProSDK
                 $setVars[$key] = $val;
         }
 
-        return (new CustomerEntity($json[CUSTOMERS::FIRST_NAME],$json[CUSTOMERS::LAST_NAME]))->set($setVars);
+        return (new CustomerEntity($json[CUSTOMERS::FIRST_NAME],$json[CUSTOMERS::LAST_NAME]))->Set($setVars);
     }
 
     /**
@@ -647,7 +654,7 @@ class LoanProSDK
      * @return CustomFieldValuesEntity
      */
     public function CreateCustomField($customFieldId,$customFieldValue){
-        return (new CustomFieldValuesEntity($customFieldId))->set(CUSTOM_FIELD_VALUES::CUSTOM_FIELD_VALUE, $customFieldValue);
+        return (new CustomFieldValuesEntity($customFieldId))->Set(CUSTOM_FIELD_VALUES::CUSTOM_FIELD_VALUE, $customFieldValue);
     }
 
     /**
@@ -968,7 +975,7 @@ class LoanProSDK
                     throw new \InvalidArgumentException("Missing '$r' for class '$class'!");
                 $params[] = $j[$r];
             }
-            $list[] = (new $class(...$params))->set($j);
+            $list[] = (new $class(...$params))->Set($j);
         }
         return $list;
     }
@@ -993,7 +1000,7 @@ class LoanProSDK
 
         $json = LoanProSDK::PrepArray(LoanProSDK::CleanJSON($json));
 
-        return (new $class(...$params))->set($json);
+        return (new $class(...$params))->Set($json);
     }
 
     /**
@@ -1036,11 +1043,11 @@ class LoanProSDK
                 $setVars[$key] = $val;
         }
 
-        return (new Loans\LoanSetupEntity($json[LOAN_SETUP::LCLASS__C],$json[LOAN_SETUP::LTYPE__C]))->set($setVars);
+        return (new Loans\LoanSetupEntity($json[LOAN_SETUP::LCLASS__C],$json[LOAN_SETUP::LTYPE__C]))->Set($setVars);
     }
     /// @endcond
 
-    protected static function trimRecursive($arg){
+    protected static function TrimRecursive($arg){
         if(is_array($arg)) {
             $ret = [];
             foreach($arg as $k => $v)
@@ -1063,8 +1070,8 @@ class LoanProSDK
  * ```php
  * use Simnang\LoanPro\Constants\LOAN, Simnang\LoanPro\Constants\LOAN_SETUP, Simnang\LoanPro\Loans\LoanSetupEntity;
  * $loan = LoanProSDK::GetInstance()->GetLoan(55, [LOAN::LOAN_SETUP]);
- * $lsetup = $loan->get(LOAN::LOAN_SETUP);
- * $loan->createModification($lsetup->set(LOAN_SETUP::LOAN_AMT, $lsetup->get(LOAN_SETUP::LOAN_AMT) / 2));
+ * $lsetup = $loan->Get(LOAN::LOAN_SETUP);
+ * $loan->createModification($lsetup->Set(LOAN_SETUP::LOAN_AMT, $lsetup->Get(LOAN_SETUP::LOAN_AMT) / 2));
  * ```
  *
  * Below is an example of halving the loan amount, discount, and interest rate for another loan
@@ -1073,8 +1080,8 @@ class LoanProSDK
  * use Simnang\LoanPro\Constants\LOAN, Simnang\LoanPro\Constants\LOAN_SETUP, Simnang\LoanPro\Loans\LoanSetupEntity;
  * $halve = function($a){ return $a / 2; };
  * $loan = LoanProSDK::GetInstance()->GetLoan(55, [LOAN::LOAN_SETUP]);
- * $lsetup = $loan->get(LOAN::LOAN_SETUP);
- * $loan->set(LOAN::LOAN_SETUP, $lsetup->set(array_map($halve,$lsetup->get(LOAN_SETUP::LOAN_AMT, LOAN_SETUP::DISCOUNT, LOAN_SETUP::LOAN_RATE))))->save();
+ * $lsetup = $loan->Get(LOAN::LOAN_SETUP);
+ * $loan->Set(LOAN::LOAN_SETUP, $lsetup->Set(array_map($halve,$lsetup->Get(LOAN_SETUP::LOAN_AMT, LOAN_SETUP::DISCOUNT, LOAN_SETUP::LOAN_RATE))))->save();
  * ```
  *
  */

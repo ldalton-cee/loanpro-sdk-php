@@ -53,7 +53,7 @@ class PayNearMeOrderTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$charge->get($field));
+            $this->assertNull(null,$charge->Get($field));
         }
     }
 
@@ -75,7 +75,7 @@ class PayNearMeOrderTest extends TestCase
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
-                    $this->assertEquals($cval, $charge->set($field, $cval)->get($field));
+                    $this->assertEquals($cval, $charge->Set($field, $cval)->Get($field));
                 }
             }
         }
@@ -87,9 +87,9 @@ class PayNearMeOrderTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.PAY_NEAR_ME_ORDERS::PHONE.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'phone' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\PaynearmeOrderEntity");
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345')
-            /* should throw exception when setting LOAN_AMT to null */ ->set(PAY_NEAR_ME_ORDERS::PHONE, null);
+            /* should throw exception when setting LOAN_AMT to null */ ->Set(PAY_NEAR_ME_ORDERS::PHONE, null);
     }
 
     /**
@@ -100,10 +100,10 @@ class PayNearMeOrderTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN.'\'');
         $ls = $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-        $ls->set(BASE_ENTITY::ID, 120);
+        $ls->Set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
+        $ls->Set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
     }
 
     /**
@@ -111,12 +111,12 @@ class PayNearMeOrderTest extends TestCase
      * @group offline
      */
     public function testPayNearMeOrderDel(){
-        $charge = $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345')->set([PAY_NEAR_ME_ORDERS::CARD_NUMBER=> "123456789"]);
-        $this->assertEquals("123456789", $charge->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
+        $charge = $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345')->Set([PAY_NEAR_ME_ORDERS::CARD_NUMBER=> "123456789"]);
+        $this->assertEquals("123456789", $charge->Get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($charge->rem(PAY_NEAR_ME_ORDERS::CARD_NUMBER)->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
+        $this->assertNull($charge->Rem(PAY_NEAR_ME_ORDERS::CARD_NUMBER)->Get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
         /* deletions should also not affect the original object (just return a copy) */
-        $this->assertEquals("123456789", $charge->get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
+        $this->assertEquals("123456789", $charge->Get(PAY_NEAR_ME_ORDERS::CARD_NUMBER));
     }
 
     /**
@@ -129,7 +129,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->rem(PAY_NEAR_ME_ORDERS::CUSTOMER_ID);
+        $charge->Rem(PAY_NEAR_ME_ORDERS::CUSTOMER_ID);
     }
 
     /**
@@ -142,7 +142,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->rem(PAY_NEAR_ME_ORDERS::CUSTOMER_NAME);
+        $charge->Rem(PAY_NEAR_ME_ORDERS::CUSTOMER_NAME);
     }
 
     /**
@@ -155,7 +155,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->rem(PAY_NEAR_ME_ORDERS::EMAIL);
+        $charge->Rem(PAY_NEAR_ME_ORDERS::EMAIL);
     }
 
     /**
@@ -168,7 +168,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->rem(PAY_NEAR_ME_ORDERS::PHONE);
+        $charge->Rem(PAY_NEAR_ME_ORDERS::PHONE);
     }
 
     /**
@@ -181,7 +181,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->rem(PAY_NEAR_ME_ORDERS::ADDRESS_1);
+        $charge->Rem(PAY_NEAR_ME_ORDERS::ADDRESS_1);
     }
 
     /**
@@ -194,7 +194,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->rem(PAY_NEAR_ME_ORDERS::CITY);
+        $charge->Rem(PAY_NEAR_ME_ORDERS::CITY);
     }
 
     /**
@@ -207,7 +207,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->rem(PAY_NEAR_ME_ORDERS::STATE__C);
+        $charge->Rem(PAY_NEAR_ME_ORDERS::STATE__C);
     }
 
     /**
@@ -220,7 +220,7 @@ class PayNearMeOrderTest extends TestCase
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
 
         // should throw exception
-        $charge->rem(PAY_NEAR_ME_ORDERS::ZIP_CODE);
+        $charge->Rem(PAY_NEAR_ME_ORDERS::ZIP_CODE);
     }
 
     /**
@@ -230,7 +230,7 @@ class PayNearMeOrderTest extends TestCase
     public function testAddToLoan(){
         $loan = static::$sdk->CreateLoan("Test ID", new \Simnang\LoanPro\Loans\LoanSetupEntity(\Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LCLASS__C::CONSUMER, \Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LTYPE__C::INSTALLMENT));
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-        $this->assertEquals([$charge], $loan->set(LOAN::PAY_NEAR_ME_ORDERS, $charge)->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $this->assertEquals([$charge], $loan->Set(LOAN::PAY_NEAR_ME_ORDERS, $charge)->Get(LOAN::PAY_NEAR_ME_ORDERS));
     }
 
     /**
@@ -242,32 +242,32 @@ class PayNearMeOrderTest extends TestCase
         $charge = static::$sdk->CreatePayNearMeOrder(1, "Bob", "bob@none.com","5551231234", '123 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
         $charge2 = static::$sdk->CreatePayNearMeOrder(2, "Jane", "jane@none.com","5552231234", '1234 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
         $charge3 = static::$sdk->CreatePayNearMeOrder(3, "Jack", "jack@none.com","5551231235", '125 Oak Lane', 'Baltimore', PAY_NEAR_ME_ORDERS\PAY_NEAR_ME_ORDERS_STATE__C::MARYLAND, '12345');
-        $loan = static::$sdk->CreateLoan("Test ID", new \Simnang\LoanPro\Loans\LoanSetupEntity(\Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LCLASS__C::CONSUMER, \Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LTYPE__C::INSTALLMENT))->set(LOAN::PAY_NEAR_ME_ORDERS, $charge);
+        $loan = static::$sdk->CreateLoan("Test ID", new \Simnang\LoanPro\Loans\LoanSetupEntity(\Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LCLASS__C::CONSUMER, \Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LTYPE__C::INSTALLMENT))->Set(LOAN::PAY_NEAR_ME_ORDERS, $charge);
 
         // test append
-        $this->assertEquals([$charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $this->assertEquals([$charge], $loan->Get(LOAN::PAY_NEAR_ME_ORDERS));
         $loan = $loan->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2);
-        $this->assertEquals([$charge, $charge2], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $this->assertEquals([$charge, $charge2], $loan->Get(LOAN::PAY_NEAR_ME_ORDERS));
 
         // test list append
-        $loan = $loan->rem(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2, $charge3, $charge);
-        $this->assertEquals([$charge2, $charge3, $charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $loan = $loan->Rem(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2, $charge3, $charge);
+        $this->assertEquals([$charge2, $charge3, $charge], $loan->Get(LOAN::PAY_NEAR_ME_ORDERS));
 
         // test list append with multiple keys
-        $loan = $loan->rem(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2, $charge, LOAN::PAY_NEAR_ME_ORDERS, $charge);
-        $this->assertEquals([$charge2, $charge, $charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $loan = $loan->Rem(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, $charge2, $charge, LOAN::PAY_NEAR_ME_ORDERS, $charge);
+        $this->assertEquals([$charge2, $charge, $charge], $loan->Get(LOAN::PAY_NEAR_ME_ORDERS));
 
         // test array notation 1
-        $loan = $loan->rem(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, [$charge3, $charge2, $charge]);
-        $this->assertEquals([$charge3, $charge2, $charge], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $loan = $loan->Rem(LOAN::PAY_NEAR_ME_ORDERS)->append(LOAN::PAY_NEAR_ME_ORDERS, [$charge3, $charge2, $charge]);
+        $this->assertEquals([$charge3, $charge2, $charge], $loan->Get(LOAN::PAY_NEAR_ME_ORDERS));
 
         // test array notation 2
-        $loan = $loan->rem(LOAN::PAY_NEAR_ME_ORDERS)->append([LOAN::PAY_NEAR_ME_ORDERS => [$charge, $charge3, $charge2]]);
-        $this->assertEquals([$charge, $charge3, $charge2], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $loan = $loan->Rem(LOAN::PAY_NEAR_ME_ORDERS)->append([LOAN::PAY_NEAR_ME_ORDERS => [$charge, $charge3, $charge2]]);
+        $this->assertEquals([$charge, $charge3, $charge2], $loan->Get(LOAN::PAY_NEAR_ME_ORDERS));
 
         // test array notation 3
-        $loan = $loan->rem(LOAN::PAY_NEAR_ME_ORDERS)->append([LOAN::PAY_NEAR_ME_ORDERS => $charge2]);
-        $this->assertEquals([$charge2], $loan->get(LOAN::PAY_NEAR_ME_ORDERS));
+        $loan = $loan->Rem(LOAN::PAY_NEAR_ME_ORDERS)->append([LOAN::PAY_NEAR_ME_ORDERS => $charge2]);
+        $this->assertEquals([$charge2], $loan->Get(LOAN::PAY_NEAR_ME_ORDERS));
     }
 
     /**

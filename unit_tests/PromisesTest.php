@@ -55,7 +55,7 @@ class PromisesTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$promise->get($field));
+            $this->assertNull(null,$promise->Get($field));
         }
     }
 
@@ -77,7 +77,7 @@ class PromisesTest extends TestCase
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
-                    $this->assertEquals($cval, $promise->set($field, $cval)->get($field));
+                    $this->assertEquals($cval, $promise->Set($field, $cval)->Get($field));
                 }
             }
         }
@@ -89,9 +89,9 @@ class PromisesTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.PROMISES::SUBJECT.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'subject' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\PromisesEntity");
         static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0)
-            /* should throw exception when setting LOAN_AMT to null */ ->set(PROMISES::SUBJECT, null);
+            /* should throw exception when setting LOAN_AMT to null */ ->Set(PROMISES::SUBJECT, null);
     }
 
     /**
@@ -102,10 +102,10 @@ class PromisesTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN.'\'');
         $ls = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
-        $ls->set(BASE_ENTITY::ID, 120);
+        $ls->Set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
+        $ls->Set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
     }
 
     /**
@@ -113,12 +113,12 @@ class PromisesTest extends TestCase
      * @group offline
      */
     public function testPromisesDel(){
-        $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0)->set([PROMISES::LOGGED_BY=> 'Bob']);
-        $this->assertEquals('Bob', $promise->get(PROMISES::LOGGED_BY));
+        $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0)->Set([PROMISES::LOGGED_BY=> 'Bob']);
+        $this->assertEquals('Bob', $promise->Get(PROMISES::LOGGED_BY));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($promise->rem(PROMISES::LOGGED_BY)->get(PROMISES::LOGGED_BY));
+        $this->assertNull($promise->Rem(PROMISES::LOGGED_BY)->Get(PROMISES::LOGGED_BY));
         /* deletions should also not affect the original object (just return a copy) */
-        $this->assertEquals('Bob', $promise->get(PROMISES::LOGGED_BY));
+        $this->assertEquals('Bob', $promise->Get(PROMISES::LOGGED_BY));
     }
 
     /**
@@ -131,7 +131,7 @@ class PromisesTest extends TestCase
         $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
 
         // should throw exception
-        $promise->rem(PROMISES::SUBJECT);
+        $promise->Rem(PROMISES::SUBJECT);
     }
 
     /**
@@ -144,7 +144,7 @@ class PromisesTest extends TestCase
         $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
 
         // should throw exception
-        $promise->rem(PROMISES::NOTE);
+        $promise->Rem(PROMISES::NOTE);
     }
 
     /**
@@ -157,7 +157,7 @@ class PromisesTest extends TestCase
         $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
 
         // should throw exception
-        $promise->rem(PROMISES::AMOUNT);
+        $promise->Rem(PROMISES::AMOUNT);
     }
 
     /**
@@ -170,7 +170,7 @@ class PromisesTest extends TestCase
         $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
 
         // should throw exception
-        $promise->rem(PROMISES::FULFILLED);
+        $promise->Rem(PROMISES::FULFILLED);
     }
 
 
@@ -184,7 +184,7 @@ class PromisesTest extends TestCase
         $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
 
         // should throw exception
-        $promise->rem(PROMISES::DUE_DATE);
+        $promise->Rem(PROMISES::DUE_DATE);
     }
 
 
@@ -195,7 +195,7 @@ class PromisesTest extends TestCase
     public function testAddToLoan(){
         $loan = static::$sdk->CreateLoan("Test ID");
         $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
-        $this->assertEquals([$promise], $loan->set(LOAN::PROMISES, $promise)->get(LOAN::PROMISES));
+        $this->assertEquals([$promise], $loan->Set(LOAN::PROMISES, $promise)->Get(LOAN::PROMISES));
     }
 
     /**
@@ -207,32 +207,32 @@ class PromisesTest extends TestCase
         $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
         $promise2 = static::$sdk->CreatePromise('Promise 2', 'this is a note', '2116-05-30', 120.0, 0);
         $promise3 = static::$sdk->CreatePromise('I forgot', 'i 4got 2 pay u will giv $$ l8r', '2117-10-30', 212.0, 0);
-        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::PROMISES, $promise);
+        $loan = static::$sdk->CreateLoan("Test ID")->Set(LOAN::PROMISES, $promise);
 
         // test append
-        $this->assertEquals([$promise], $loan->get(LOAN::PROMISES));
+        $this->assertEquals([$promise], $loan->Get(LOAN::PROMISES));
         $loan = $loan->append(LOAN::PROMISES, $promise2);
-        $this->assertEquals([$promise, $promise2], $loan->get(LOAN::PROMISES));
+        $this->assertEquals([$promise, $promise2], $loan->Get(LOAN::PROMISES));
 
         // test list append
-        $loan = $loan->rem(LOAN::PROMISES)->append(LOAN::PROMISES, $promise2, $promise3, $promise);
-        $this->assertEquals([$promise2, $promise3, $promise], $loan->get(LOAN::PROMISES));
+        $loan = $loan->Rem(LOAN::PROMISES)->append(LOAN::PROMISES, $promise2, $promise3, $promise);
+        $this->assertEquals([$promise2, $promise3, $promise], $loan->Get(LOAN::PROMISES));
 
         // test list append with multiple keys
-        $loan = $loan->rem(LOAN::PROMISES)->append(LOAN::PROMISES, $promise2, $promise, LOAN::PROMISES, $promise);
-        $this->assertEquals([$promise2, $promise, $promise], $loan->get(LOAN::PROMISES));
+        $loan = $loan->Rem(LOAN::PROMISES)->append(LOAN::PROMISES, $promise2, $promise, LOAN::PROMISES, $promise);
+        $this->assertEquals([$promise2, $promise, $promise], $loan->Get(LOAN::PROMISES));
 
         // test array notation 1
-        $loan = $loan->rem(LOAN::PROMISES)->append(LOAN::PROMISES, [$promise3, $promise2, $promise]);
-        $this->assertEquals([$promise3, $promise2, $promise], $loan->get(LOAN::PROMISES));
+        $loan = $loan->Rem(LOAN::PROMISES)->append(LOAN::PROMISES, [$promise3, $promise2, $promise]);
+        $this->assertEquals([$promise3, $promise2, $promise], $loan->Get(LOAN::PROMISES));
 
         // test array notation 2
-        $loan = $loan->rem(LOAN::PROMISES)->append([LOAN::PROMISES => [$promise, $promise3, $promise2]]);
-        $this->assertEquals([$promise, $promise3, $promise2], $loan->get(LOAN::PROMISES));
+        $loan = $loan->Rem(LOAN::PROMISES)->append([LOAN::PROMISES => [$promise, $promise3, $promise2]]);
+        $this->assertEquals([$promise, $promise3, $promise2], $loan->Get(LOAN::PROMISES));
 
         // test array notation 3
-        $loan = $loan->rem(LOAN::PROMISES)->append([LOAN::PROMISES => $promise2]);
-        $this->assertEquals([$promise2], $loan->get(LOAN::PROMISES));
+        $loan = $loan->Rem(LOAN::PROMISES)->append([LOAN::PROMISES => $promise2]);
+        $this->assertEquals([$promise2], $loan->Get(LOAN::PROMISES));
     }
 
     /**
@@ -257,7 +257,7 @@ class PromisesTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Property \''.LOAN::INSURANCE.'\' is not an object list, can only append to object lists!');
         $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
-        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::PROMISES, $promise);
+        $loan = static::$sdk->CreateLoan("Test ID")->Set(LOAN::PROMISES, $promise);
 
         $loan->append(LOAN::PROMISES, $promise, LOAN::INSURANCE, static::$sdk->CreateInsurance());
     }
@@ -271,7 +271,7 @@ class PromisesTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected two parameters, only got one');
         $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
-        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::PROMISES, $promise);
+        $loan = static::$sdk->CreateLoan("Test ID")->Set(LOAN::PROMISES, $promise);
 
         $loan->append(LOAN::PROMISES);
     }
@@ -285,7 +285,7 @@ class PromisesTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing fields for \''.LOAN::PROMISES.'\'');
         $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
-        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::PROMISES, $promise);
+        $loan = static::$sdk->CreateLoan("Test ID")->Set(LOAN::PROMISES, $promise);
 
         $loan->append(LOAN::PROMISES,LOAN::PROMISES,$promise);
     }
@@ -299,7 +299,7 @@ class PromisesTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing fields for \''.LOAN::PROMISES.'\'');
         $promise = static::$sdk->CreatePromise('Subject', 'promise note', '2117-05-30', 12.0, 0);
-        $loan = static::$sdk->CreateLoan("Test ID")->set(LOAN::PROMISES, $promise);
+        $loan = static::$sdk->CreateLoan("Test ID")->Set(LOAN::PROMISES, $promise);
 
         $loan->append(LOAN::PROMISES,$promise,LOAN::PROMISES,LOAN::PROMISES,$promise);
     }

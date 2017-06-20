@@ -41,7 +41,7 @@ class SearchParams
      * Gets JSON representation of search parameters
      * @return array
      */
-    public function get(){
+    public function Get(){
         return $this->json;
     }
 

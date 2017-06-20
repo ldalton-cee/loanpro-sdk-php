@@ -19,9 +19,16 @@ case "$response" in
         ;;
 esac
 
-echo "Running Composer..."
-{
-  php composer.phar install
-} &> /dev/null
-echo "Done with composer"
-echo "The SDK is setup!"
+read -r -p "Run Composer? [Y/n] " response
+case "$response" in
+    [nN])
+        ;;
+    *)
+        echo "Running Composer..."
+        {
+          php composer.phar install
+        } &> /dev/null
+        echo "Done with composer"
+        echo "The SDK is setup!"
+        ;;
+esac

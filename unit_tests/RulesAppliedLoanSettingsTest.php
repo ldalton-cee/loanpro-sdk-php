@@ -48,7 +48,7 @@ class RulesAppliedLoanSettingsTest extends TestCase
     public function testRulesAppliedLoanSettingsInstantiate(){
         $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true);
 
-        $this->assertEquals(5, $rulesApplied->get(BASE_ENTITY::ID));
+        $this->assertEquals(5, $rulesApplied->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -56,8 +56,8 @@ class RulesAppliedLoanSettingsTest extends TestCase
      * @group offline
      */
     public function testRulesAppliedLoanSettingsSet(){
-        $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true)->set(BASE_ENTITY::ID, 12)->set(LOAN_SETTINGS_RULES_APPLIED::ENABLED, false);
-        $this->assertEquals(12, $rulesApplied->get(BASE_ENTITY::ID));
+        $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true)->Set(BASE_ENTITY::ID, 12)->Set(LOAN_SETTINGS_RULES_APPLIED::ENABLED, false);
+        $this->assertEquals(12, $rulesApplied->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -66,10 +66,10 @@ class RulesAppliedLoanSettingsTest extends TestCase
      */
     public function testRulesAppliedLoanSettingsCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.BASE_ENTITY::ID.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'id' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\RulesAppliedLoanSettingsEntity");
 
         /* should throw exception when setting LOAN_AMT to null */
-        static::$sdk->CreateRulesAppliedLoanSettings(5, true)->set(BASE_ENTITY::ID, null);
+        static::$sdk->CreateRulesAppliedLoanSettings(5, true)->Set(BASE_ENTITY::ID, null);
     }
 
     /**
@@ -82,7 +82,7 @@ class RulesAppliedLoanSettingsTest extends TestCase
         $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true);
 
         // should throw exception
-        $rulesApplied->rem(BASE_ENTITY::ID);
+        $rulesApplied->Rem(BASE_ENTITY::ID);
     }
 
     /**
@@ -95,7 +95,7 @@ class RulesAppliedLoanSettingsTest extends TestCase
         $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true);
 
         // should throw exception
-        $rulesApplied->rem(LOAN_SETTINGS_RULES_APPLIED::ENABLED);
+        $rulesApplied->Rem(LOAN_SETTINGS_RULES_APPLIED::ENABLED);
     }
 
     /**
@@ -105,6 +105,6 @@ class RulesAppliedLoanSettingsTest extends TestCase
     public function testAddToLoan(){
         $loan = static::$sdk->CreateLoan("Test ID");
         $rulesApplied = static::$sdk->CreateRulesAppliedLoanSettings(5, true);
-        $this->assertEquals([$rulesApplied], $loan->set(LOAN::LOAN_SETTINGS_RULES_APPLIED, $rulesApplied)->get(LOAN::LOAN_SETTINGS_RULES_APPLIED));
+        $this->assertEquals([$rulesApplied], $loan->Set(LOAN::LOAN_SETTINGS_RULES_APPLIED, $rulesApplied)->Get(LOAN::LOAN_SETTINGS_RULES_APPLIED));
     }
 }

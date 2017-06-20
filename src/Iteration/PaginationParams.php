@@ -67,7 +67,7 @@ class PaginationParams
      * @param array      $orderBy - Name of field to order by
      * @param string     $order - order that things should be ordered by
      */
-    public function setOrdering($orderBy, $order){
+    public function SetOrdering($orderBy, $order){
         $this->orderBy = $orderBy;
         $this->order = $this->GetValidOrdering($order);
     }
@@ -77,7 +77,7 @@ class PaginationParams
      * @param bool $nopaging
      * @return PaginationParams
      */
-    public function setNoPaging($nopaging = false){
+    public function SetNoPaging($nopaging = false){
         $obj = clone $this;
         $obj->nopaging = $nopaging;
         return $obj;
@@ -88,7 +88,7 @@ class PaginationParams
      * @param int $start - Which element to start returning at (0-based indexing)
      * @return PaginationParams
      */
-    public function setStart($start = 0){
+    public function SetStart($start = 0){
         $obj = clone $this;
         $obj->nopaging = false;
         $obj->start = $start;
@@ -100,7 +100,7 @@ class PaginationParams
      * @param int $pgSize - New page size
      * @return PaginationParams
      */
-    public function setPageSize($pgSize){
+    public function SetPageSize($pgSize){
         $obj = clone $this;
         $obj->nopaging = false;
         $obj->pgSize = $pgSize;
@@ -115,7 +115,7 @@ class PaginationParams
      * @param int $pageSize - (optional) Size of page
      * @return PaginationParams
      */
-    public function setPage($pageNum = 0, $pageSize = 0){
+    public function SetPage($pageNum = 0, $pageSize = 0){
         $obj = clone $this;
         $obj->nopaging = false;
         if($pageSize <= 0)
@@ -130,7 +130,7 @@ class PaginationParams
      * Adds the current page size to the offset and returns the modified copy
      * @return PaginationParams
      */
-    public function nextPage(){
+    public function NextPage(){
         $obj = clone $this;
         $obj->start += $obj->pgSize;
         return $obj;
@@ -140,7 +140,7 @@ class PaginationParams
      * Returns whether or not the nopaging option is true (if true, then pagination is ignored)
      * @return bool
      */
-    public function isNoPagingEnabled(){
+    public function IsNoPagingEnabled(){
         return ($this->nopaging);
     }
 
@@ -148,11 +148,11 @@ class PaginationParams
      * Returns the current offset
      * @return int
      */
-    public function getOffset(){
+    public function GetOffset(){
         return $this->start;
     }
 
-    public function setUseSkip($use = true){
+    public function SetUseSkip($use = true){
         $obj = clone $this;
         $obj->useSkip = $use;
         return $obj;

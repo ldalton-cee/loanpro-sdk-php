@@ -22,23 +22,22 @@ namespace Simnang\LoanPro\Iteration;
 use Simnang\LoanPro\LoanProSDK;
 
 /**
- * Class LoanIterator
+ * Class CustomerIterator
  *
- * An iterator for loans stored on LoanPro which abstracts away pagination
+ * An iterator for customers stored on LoanPro which abstracts away pagination
  *
  * @package Simnang\LoanPro\Iteration
  */
-class LoanIterator extends BaseIterator
+class LoansForCustomerIterator extends BaseIterator
 {
     /**
-     * Creates a new loan iterator that will iterate over all the loans on the server
-     * @param array             $expand
-     * @param FilterParams|null $filterParams
-     * @param array             $orderBy
-     * @param string            $order
-     * @param int               $internalPageSize
+     * Iterates over all the loans for a customer
+     * @param int   $cid - ID of the customer
+     * @param array $expand
+     * @param int   $internalPageSize
      */
-    public function __construct($expand = [], FilterParams $filterParams = null, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
-        parent::__construct('GetLoans_RAW', 'normal', ['filterParams'=>$filterParams,'orderBy'=>$orderBy,'order'=>$order],$internalPageSize);
+    public function __construct($cid = 0, $expand = []){
+        parent::__construct('GetLoansForCustomer', 'idBased', ['id'=>$cid,'expand'=>$expand]);
     }
+
 }

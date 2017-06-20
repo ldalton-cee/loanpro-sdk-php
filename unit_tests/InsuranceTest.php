@@ -52,7 +52,7 @@ class InsuranceTest extends TestCase
 
         // make sure every other field is null
         foreach($consts as $key=>$field){
-            $this->assertNull(null,$insurance->get($field));
+            $this->assertNull(null,$insurance->Get($field));
         }
     }
 
@@ -74,7 +74,7 @@ class InsuranceTest extends TestCase
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
-                    $this->assertEquals($cval, $insurance->set($field, $cval)->get($field));
+                    $this->assertEquals($cval, $insurance->Set($field, $cval)->Get($field));
                 }
             }
         }
@@ -86,9 +86,9 @@ class InsuranceTest extends TestCase
      */
     public function testLoanCannotSetNull(){
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value for \''.INSURANCE::AGENT_NAME.'\' is null. The \'set\' function cannot unset items, please use \'rem\' instead.');
+        $this->expectExceptionMessage("Value for 'agentName' is null. The 'Set' function Cannot unset items, please use 'Rem' instead for class Simnang\\LoanPro\\Loans\\InsuranceEntity");
         static::$sdk->CreateInsurance()
-            /* should throw exception when setting LOAN_AMT to null */ ->set(INSURANCE::AGENT_NAME, null);
+            /* should throw exception when setting LOAN_AMT to null */ ->Set(INSURANCE::AGENT_NAME, null);
     }
 
     /**
@@ -99,10 +99,10 @@ class InsuranceTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property \''.\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN.'\'');
         $ls = static::$sdk->CreateInsurance();
-        $ls->set(BASE_ENTITY::ID, 120);
+        $ls->Set(BASE_ENTITY::ID, 120);
 
         /* should throw exception when setting AGENT to null */
-        $ls->set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
+        $ls->Set(\Simnang\LoanPro\Constants\LOAN_SETUP::AMT_DOWN, 1280.32);
     }
 
     /**
@@ -110,12 +110,12 @@ class InsuranceTest extends TestCase
      * @group offline
      */
     public function testInsuranceDel(){
-        $insurance = static::$sdk->CreateInsurance()->set([INSURANCE::DEDUCTIBLE=> 232.23]);
-        $this->assertEquals(232.23, $insurance->get(INSURANCE::DEDUCTIBLE));
+        $insurance = static::$sdk->CreateInsurance()->Set([INSURANCE::DEDUCTIBLE=> 232.23]);
+        $this->assertEquals(232.23, $insurance->Get(INSURANCE::DEDUCTIBLE));
         /* deletions should have 'get' return 'null' */
-        $this->assertNull($insurance->rem(INSURANCE::DEDUCTIBLE)->get(INSURANCE::DEDUCTIBLE));
+        $this->assertNull($insurance->Rem(INSURANCE::DEDUCTIBLE)->Get(INSURANCE::DEDUCTIBLE));
         /* deletions should also not affect the original object (just return a copy) */
-        $this->assertEquals(232.23, $insurance->get(INSURANCE::DEDUCTIBLE));
+        $this->assertEquals(232.23, $insurance->Get(INSURANCE::DEDUCTIBLE));
     }
 
 }
