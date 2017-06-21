@@ -406,7 +406,7 @@ class LoanProSDK
      * @param string $dispId - Display ID for the loan
      * @return Loans\LoanEntity
      */
-    public function CreateLoan(string $dispId){
+    public function CreateLoan($dispId){
         return new Loans\LoanEntity($dispId);
     }
 
@@ -416,7 +416,7 @@ class LoanProSDK
      * @param string $lastName - last name of customer
      * @return CustomerEntity
      */
-    public function CreateCustomer(string $firstName, string $lastName){
+    public function CreateCustomer($firstName, $lastName){
         return new CustomerEntity($firstName, $lastName);
     }
 
@@ -425,7 +425,7 @@ class LoanProSDK
      * @param string $coName - Name of employing company
      * @return EmployerEntity
      */
-    public function CreateEmployer(string $coName){
+    public function CreateEmployer($coName){
         return new EmployerEntity($coName);
     }
 
@@ -528,7 +528,7 @@ class LoanProSDK
      * @param string $type - Type of loan
      * @return LoanSetupEntity
      */
-    public function CreateLoanSetup(string $class, string $type){
+    public function CreateLoanSetup($class, $type){
         return new LoanSetupEntity($class, $type);
     }
 
@@ -956,7 +956,7 @@ class LoanProSDK
      * @param array $json - json array
      * @return array
      */
-    private function CreateObjectListFromJSONClass(string $class, array $json){
+    private function CreateObjectListFromJSONClass($class, array $json){
         if(isset($json['results']))
             $json = $json['results'];
         if(count($json) == 0)
@@ -986,7 +986,7 @@ class LoanProSDK
      * @param array $json - json array
      * @return mixed
      */
-    private function CreateGenericJSONClass(string $class, array $json){
+    private function CreateGenericJSONClass($class, array $json){
         if(!is_array($json))
             throw new \InvalidArgumentException("Expected a parsed JSON array for class '$class'");
 

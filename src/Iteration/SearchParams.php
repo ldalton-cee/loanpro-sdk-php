@@ -30,7 +30,7 @@ class SearchParams
      * Creates a new search parameter object based on a search DSL string
      * @param string $searchString
      */
-    public function __construct(string $searchString){
+    public function __construct($searchString){
         if(is_null(static::$searchGenerator))
             static::$searchGenerator = new SearchGenerator();
 
