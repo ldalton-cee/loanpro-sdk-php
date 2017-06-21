@@ -69,7 +69,9 @@ class CustomerEntity extends  BaseEntity
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
     public function AddToLoan(LoanEntity $loan, $customerRole){
-        return LoanProSDK::GetInstance()->GetApiComm()->LinkCustomerAndLoan($this, $loan, $customerRole);
+        $this->InsureHasID();
+        $loan->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->LinkCustomerAndLoan($this->Get(BASE_ENTITY::ID), $loan->Get(BASE_ENTITY::ID), $customerRole);
     }
 
     /**
@@ -91,7 +93,8 @@ class CustomerEntity extends  BaseEntity
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
     public function PullCreditScore($expansion = [], $exportAsPDF = false){
-        return LoanProSDK::GetInstance()->GetApiComm()->PullCreditScore($this, $expansion, $exportAsPDF);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->PullCreditScore($this->Get(BASE_ENTITY::ID), $expansion, $exportAsPDF);
     }
 
     /**
@@ -102,7 +105,8 @@ class CustomerEntity extends  BaseEntity
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
     public function RunOfacTest(){
-        return LoanProSDK::GetInstance()->GetApiComm()->RunOfacTest($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->RunOfacTest($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -114,7 +118,8 @@ class CustomerEntity extends  BaseEntity
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
     public function GetLoanAccess(){
-        return LoanProSDK::GetInstance()->GetApiComm()->GetCustomerLoanAccess($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetCustomerLoanAccess($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -129,7 +134,8 @@ class CustomerEntity extends  BaseEntity
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
     public function GetLoanAccessForLoan(LoanEntity $loan){
-        return LoanProSDK::GetInstance()->GetApiComm()->GetCustomerLoanAccess($this, $loan);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetCustomerLoanAccess($this->Get(BASE_ENTITY::ID), $loan->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -142,10 +148,13 @@ class CustomerEntity extends  BaseEntity
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
     public function SetLoanAccessForLoan(LoanEntity $loan, $access = []){
-        return LoanProSDK::GetInstance()->GetApiComm()->SetCustomerLoanAccess($this, $loan, $access);
+        $this->InsureHasID();
+        $loan->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->SetCustomerLoanAccess($this->Get(BASE_ENTITY::ID), $loan->Get(BASE_ENTITY::ID), $access);
     }
 
     public function GetLoans($expand = []){
+        $this->InsureHasID();
         return new LoansForCustomerIterator($this->Get(BASE_ENTITY::ID), $expand);
     }
 
@@ -211,6 +220,6 @@ class CustomerEntity extends  BaseEntity
      */
     public function InsureHasID(){
         if(is_null($this->Get(BASE_ENTITY::ID)))
-            throw new InvalidStateException("Cannot perform operation on a loan without an ID");
+            throw new InvalidStateException("Cannot perform operation on a customer without an ID");
     }
 }

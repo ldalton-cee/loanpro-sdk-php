@@ -55,7 +55,9 @@ class ApiClientTest extends TestCase
     protected static $loanJSON;
     private static $minSetup;
     private static $cid = 0;
+    private static $customer;
     private static $access;
+    private static $loan;
 
     private static function generateRandomString($length = 17) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -127,6 +129,8 @@ class ApiClientTest extends TestCase
         $customer = $customer->SetIgnoreWarnings(true)->save();
         static::$cid = $customer->Get(BASE_ENTITY::ID);
         $customer->AddToLoan($res, CONSTS\CUSTOMER_ROLE::PRIMARY);
+        static::$loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoan(static::$loanId, [LOAN::LOAN_SETUP]);
+        static::$customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(static::$cid);
     }
 
     /**
@@ -314,8 +318,7 @@ class ApiClientTest extends TestCase
      */
     public function testModification(){
         //echo "Test Modification\n";
-        $comm = \Simnang\LoanPro\Communicator\Communicator::GetCommunicator(\Simnang\LoanPro\Communicator\ApiClient::TYPE_ASYNC);
-        $loan = $comm->getLoan(static::$loanId, [LOAN::LOAN_SETUP]);
+        $loan = static::$loan;
         $loan->activate();
         $oldLoanSetup = $loan->Get(LOAN::LOAN_SETUP);
         $loanModified = $loan->createModification($loan->Get(LOAN::LOAN_SETUP)->Set(LOAN_SETUP::LOAN_AMT, 9000.50));
@@ -379,13 +382,14 @@ class ApiClientTest extends TestCase
     public function testUpdate(){
         //echo "Test Update\n";
         $newId = uniqid("LOAN");
-        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->getLoan(static::$loanId)->Set(LOAN::DISP_ID, $newId);
+        $loan = static::$loan->Set(LOAN::DISP_ID, $newId);
 
         // Should throw exception
         $this->assertEquals($newId, $loan->Get(LOAN::DISP_ID));
 
         $resLoan = $loan->save();
         $this->assertEquals($loan->Get(LOAN::DISP_ID), $resLoan->Get(LOAN::DISP_ID));
+        static::$loan = $loan;
     }
 
     /**
@@ -418,7 +422,7 @@ class ApiClientTest extends TestCase
      */
     public function testActivation(){
         //echo "Test Activation\n";
-        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->getLoan(static::$loanId, [LOAN::LOAN_SETUP]);
+        $loan = static::$loan;
 
         $this->assertEquals(true, $loan->inactivate() instanceof \Simnang\LoanPro\Loans\LoanEntity);
 
@@ -430,7 +434,7 @@ class ApiClientTest extends TestCase
      */
     public function testArchive(){
         //echo "Test Archive\n";
-        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->getLoan(static::$loanId);
+        $loan = static::$loan;
         $this->assertEquals(1, $loan->archive()->Get(LOAN::ARCHIVED));
         $this->assertEquals(0, $loan->unarchive()->Get(LOAN::ARCHIVED));
     }
@@ -440,7 +444,7 @@ class ApiClientTest extends TestCase
      */
     public function testMisc(){
         //echo "Test Misc\n";
-        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->getLoan(static::$loanId);
+        $loan = static::$loan;
         $this->assertEquals(true, $loan->isSetup());
         $this->assertEquals(0, $loan->getInterestBasedOnTier());
         $this->assertTrue(is_int($loan->getLastActivityDate()));
@@ -465,12 +469,28 @@ class ApiClientTest extends TestCase
      */
     public function testReports(){
         //echo "Test Reports\n";
-        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->getLoan(static::$loanId);
+        $loan = static::$loan;
         $this->assertTrue(is_array($loan->getAdminStats()));
         //$this->assertTrue(is_array($loan->paidBreakdown()));
         $this->assertTrue(is_array($loan->getInterestFeesHistory()));
         $this->assertTrue(is_array($loan->getBalanceHistory()));
         $this->assertTrue(is_array($loan->getFlagArchiveReport()));
+    }
+
+    /**
+     * @group online
+     */
+    public function testPayoff(){
+        $loan = static::$loan;
+        $payoff = $loan->GetPayoff();
+
+        foreach($payoff as $day){
+            $this->assertTrue(isset($day['date']));
+            $this->assertTrue(isset($day['payoff']));
+            $this->assertTrue(isset($day['change']));
+            $this->assertTrue(isset($day['dailyInterest']));
+            $this->assertTrue(isset($day['details']));
+        }
     }
 
     /**
@@ -522,11 +542,12 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
+     * @group new
      */
     public function testCustomerAddToLoan(){
         //echo "Test CustomerAddToLoan\n";
-        $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(static::$cid);
-        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoan(static::$loanId);
+        $customer = static::$customer;
+        $loan = static::$loan;
         $loan = $loan->addCustomer($customer, CONSTS\CUSTOMER_ROLE::PRIMARY);
 
         $this->assertEquals(1, count($loan->Get(LOAN::CUSTOMERS)));
@@ -538,7 +559,7 @@ class ApiClientTest extends TestCase
      */
     public function testOfacTest(){
         //echo "Test OfacTest\n";
-        $customer= \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(static::$cid);
+        $customer= static::$customer;
         $ofacRes = $customer->runOfacTest();
         $this->assertEquals([false,[]], $ofacRes);
     }
@@ -741,8 +762,8 @@ class ApiClientTest extends TestCase
      * @depends testIteratorsCustomerGet
      */
     public function testIteratorsLoansForCustomer(\Simnang\LoanPro\Customers\CustomerEntity $c){
-//echo "Test IteratorsLoansForCustomer\n";
-$it = $c->GetLoans();
+        //echo "Test IteratorsLoansForCustomer\n";
+        $it = $c->GetLoans();
         $foundLoan = false;
         foreach($it as $key => $i){
             $this->assertTrue(!is_null($i));

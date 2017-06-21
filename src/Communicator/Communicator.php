@@ -129,6 +129,14 @@ class Communicator
         throw new ApiException($response);
     }
 
+    /**
+     * Returns the loans for the customer
+     * @param       $customerId
+     * @param array $expandProps
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
     public function GetLoansForCustomer($customerId, $expandProps = []){
         $query = [];
         $exp = implode(',', $expandProps);
@@ -143,6 +151,35 @@ class Communicator
                 $ret = [];
                 foreach($body['d']['results'] as $val){
                     $ret[] = LoanProSDK::GetInstance()->CreateLoanFromJSON($val);
+                }
+                return $ret;
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Grabs the payoff for the specified loan
+     * @param $loanId - ID of loan to grab payoff for
+     * @param $datetime - timestamp for when to grab the payoff
+     * @return array - Array of payoff items (each is an array with keys 'date', 'payoff', etc.)
+     * @throws ApiException
+     */
+    public function GetPayoff($loanId, $datetime){
+        $datetime = FieldValidator::GetDate($datetime);
+        if(is_null($datetime)){
+            $datetime = (new \DateTime())->getTimestamp();
+        }
+        $dt = new \DateTime();
+        $dt->setTimestamp($datetime);
+        $date = $dt->format('Y-m-d');
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetLoanPayoff($date)");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                $ret = [];
+                foreach($body['d'] as $val){
+                    $ret[] = $val;
                 }
                 return $ret;
             }
@@ -198,8 +235,8 @@ class Communicator
     }
 
     /**
-     * Gets a loan from the LoanPro servers.
-     * @param int $loanId - ID of loan to pull
+     * Gets a customer from the LoanPro servers.
+     * @param int   $id - ID of customer to pull
      * @param array $expandProps - array of properties to expand
      * @param bool|true $nopageProps
      * @return CustomerEntity
@@ -236,9 +273,7 @@ class Communicator
      * @return bool
      * @throws ApiException
      */
-    public function ModifyLoan(LoanEntity $loan){
-        $loan->InsureHasID();
-        $loanId = $loan->Get(BASE_ENTITY::ID);
+    public function ModifyLoan($loanId){
         $client = $this->client;
         $res = $client->POST("$this->baseUrl/Loans($loanId)/Autopal.CreateModification()");
         if ($res->getStatusCode() == 200) {
@@ -256,9 +291,7 @@ class Communicator
      * @return bool
      * @throws ApiException
      */
-    public function CancelLatestModification(LoanEntity $loan){
-        $loan->InsureHasID();
-        $loanId = $loan->Get(BASE_ENTITY::ID);
+    public function CancelLatestModification($loanId){
         $client = $this->client;
         $response = $client->POST("$this->baseUrl/Loans($loanId)/Autopal.CancelModification()");
 
@@ -272,18 +305,14 @@ class Communicator
 
     /**
      * Links a customer to a loan
-     * @param CustomerEntity $customer
-     * @param LoanEntity     $loan
+     * @param int            $customerId
+     * @param int            $loanId
      * @param                $customerRole
      * @return bool
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function LinkCustomerAndLoan(CustomerEntity $customer, LoanEntity $loan, $customerRole){
-        $loan->InsureHasID();
-        $customer->InsureHasID();
-        $loanId = $loan->Get(BASE_ENTITY::ID);
-        $customerId = $customer->Get(BASE_ENTITY::ID);
+    public function LinkCustomerAndLoan($customerId, $loanId, $customerRole){
 
         $rclass = new \ReflectionClass(CUSTOMER_ROLE::class);
         $validFields = $rclass->getConstants();
@@ -317,15 +346,13 @@ class Communicator
 
     /**
      * Returns the LoanSetup from the previous modification for the loan
-     * @param LoanEntity $loan
+     * @param  int $loanId
      * @return LoanSetupEntity
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetPreModSetup(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $response = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetPreModSetup()");
+    public function GetPreModSetup($loanId){
+        $response = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetPreModSetup()");
 
 
         if($response->getStatusCode() == 200) {
@@ -339,12 +366,12 @@ class Communicator
     /**
      * Saves the loan to the server via a PUT request (or a POST request if there is no ID)
      * Either returns the resulting loan/response if there's an error (if synchronous), or a promise that returns the resulting loan/response
-     * @param            $loan
+     * @param  LoanEntity $loan - Loan to save
      * @return LoanEntity
      * @throws InvalidStateException
      * @throws ApiException
      */
-    public function SaveLoan($loan){
+    public function SaveLoan(LoanEntity $loan){
         $client = $this->client;
         $id = $loan->Get(BASE_ENTITY::ID);
         if(is_null($id)) {
@@ -368,12 +395,12 @@ class Communicator
     /**
      * Saves the customer to the server via a PUT request (or a POST request if there is no ID)
      * Returns the resulting customer
-     * @param            $cust
+     * @param  CustomerEntity $cust - Customer to save
      * @return CustomerEntity
      * @throws InvalidStateException
      * @throws ApiException
      */
-    public function SaveCustomer($cust){
+    public function SaveCustomer(CustomerEntity $cust){
         $client = $this->client;
         $id = $cust->Get(BASE_ENTITY::ID);
         if(is_null($id)) {
@@ -394,39 +421,35 @@ class Communicator
 
     /**
      * Deletes a loan and returns true if successul
-     * @param LoanEntity $loan - loan to delete
+     * @param int $loanId - loan to delete
      * @param bool|false $areYouSure - must be set to true to delete
      * @return bool
-     * @throws InvalidStateException
+     * @throws \Exception
      * @throws ApiException
      */
-    public function DeleteLoan(LoanEntity $loan, $areYouSure = false){
+    public function DeleteLoan($loanId, $areYouSure = false){
         if(!$areYouSure)
             throw new \Exception("Unsure deletion, either state that you are sure or don't delete the loan");
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
 
-        $response = $this->client->DELETE("$this->baseUrl/odata.svc/Loans($id)");
+        $response = $this->client->DELETE("$this->baseUrl/odata.svc/Loans($loanId)");
 
         if($response->getStatusCode() == 200) {
             return true;
         }
-        throw new ApiException($response);;
+        throw new ApiException($response);
     }
 
     /**
      * Activates the given loan
      *  Returns true if successful
-     * @param LoanEntity $loan - loan to activate
+     * @param  int  $loan - loan to activate
      * @return bool
      * @throws InvalidStateException
      * @throws ApiException
      */
-    public function ActivateLoan(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
+    public function ActivateLoan($loanId){
 
-        $response = $this->client->POST(("$this->baseUrl/Loans($id)/AutoPal.Activate()"));
+        $response = $this->client->POST(("$this->baseUrl/Loans($loanId)/AutoPal.Activate()"));
 
         if($response->getStatusCode() == 200)
             return true;
@@ -435,17 +458,15 @@ class Communicator
 
     /**
      * Returns the JSON array for the loan status on a date
-     * @param LoanEntity $loan - Loan to get status for
-     * @param            $date - date to get status on
+     * @param int $loanId - ID of loan to get status for
+     * @param     $date   - date to get status on
      * @return array
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetLoanStatusOnDate(LoanEntity $loan, $date){
+    public function GetLoanStatusOnDate($loanId, $date){
         $date = FieldValidator::GetDateString($date);
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetStatus($date)");
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetStatus($date)");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d'])) {
@@ -457,15 +478,13 @@ class Communicator
 
     /**
      * Gets the interest based on tenant tier settings
-     * @param LoanEntity $loan
+     * @param int $loanId - ID of loan id
      * @return number
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetLoanIntOnTier(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $res = $this->client->PUT("$this->baseUrl/Loans($id)/AutoPal.GetInterestBasedOnTier()");
+    public function GetLoanIntOnTier($loanId){
+        $res = $this->client->PUT("$this->baseUrl/Loans($loanId)/AutoPal.GetInterestBasedOnTier()");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['interest'])) {
@@ -477,15 +496,13 @@ class Communicator
 
     /**
      * Returns the last activity date for the loan
-     * @param LoanEntity $loan
+     * @param  int  $loanId = ID of loan to get activity date fore
      * @return int|null
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetLastActivityDate(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $res = $this->client->GET("$this->baseUrl/Loans($id)/AutoPal.GetLastActivityDate()");
+    public function GetLastActivityDate($loanId){
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/AutoPal.GetLastActivityDate()");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['lastActivityDate'])) {
@@ -497,15 +514,13 @@ class Communicator
 
     /**
      * Queries the server about whether or not the loan is setup and then returns the result
-     * @param LoanEntity $loan - loan to check for
+     * @param int $loanId - ID of loan to check for
      * @return bool
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function IsSetup(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.isSetup()");
+    public function IsSetup($loanId){
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.isSetup()");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['setup'])) {
@@ -517,15 +532,13 @@ class Communicator
 
     /**
      * Queries the server about whether or not the loan is a late fee candidate
-     * @param LoanEntity $loan - loan to check for
+     * @param int $loanId - ID of loan to check for
      * @return bool
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function IsLateFeeCandidate(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.isLateFeeCandidate()");
+    public function IsLateFeeCandidate($loanId){
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.isLateFeeCandidate()");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['isCandidate'])) {
@@ -537,15 +550,13 @@ class Communicator
 
     /**
      * Returns the JSON array for the payment summaries for a loan
-     * @param LoanEntity $loan - loan to check for
+     * @param int $loanId - ID of loan to check for
      * @return array
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetPaymentSummary(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetPaymentSummary()");
+    public function GetPaymentSummary($loanId){
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetPaymentSummary()");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['results'])) {
@@ -557,15 +568,13 @@ class Communicator
 
     /**
      * Returns the JSON array for the final payment difference
-     * @param LoanEntity $loan - loan to check for
+     * @param int $loanId - loan to check for
      * @return array
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetFinalPaymentDiff(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetFinalPaymentDiff()");
+    public function GetFinalPaymentDiff($loanId){
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetFinalPaymentDiff()");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d'])) {
@@ -577,15 +586,13 @@ class Communicator
 
     /**
      * Returns admin stats for the loan
-     * @param LoanEntity $loan
+     * @param int $loanId
      * @return array
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetLoanAdminStats(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetAdminStats()");
+    public function GetLoanAdminStats($loanId){
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetAdminStats()");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d'])) {
@@ -597,15 +604,13 @@ class Communicator
 
     /**
      * Returns interest fees history
-     * @param LoanEntity $loan
+     * @param int $loanId
      * @return array
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetLoanInterestFeesHistory(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetInterestFeesHistory()");
+    public function GetLoanInterestFeesHistory($loanId){
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetInterestFeesHistory()");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d'])) {
@@ -617,15 +622,13 @@ class Communicator
 
     /**
      * returns loan balance history
-     * @param LoanEntity $loan
+     * @param int $loanId
      * @return array
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetLoanBalanceHistory(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetBalanceHistory()");
+    public function GetLoanBalanceHistory($loanId){
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetBalanceHistory()");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d'])) {
@@ -637,15 +640,13 @@ class Communicator
 
     /**
      * returns loan flag archive report
-     * @param LoanEntity $loan
+     * @param  int $loanId
      * @return array
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetLoanFlagArchiveReport(LoanEntity $loan){
-        $loan->InsureHasID();
-        $id = $loan->Get(BASE_ENTITY::ID);
-        $res = $this->client->GET("$this->baseUrl/Loans($id)/Autopal.GetFlagArchiveReport");
+    public function GetLoanFlagArchiveReport($loanId){
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetFlagArchiveReport");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d'])) {
@@ -801,15 +802,14 @@ class Communicator
 
     /**
      * Pulls credit score for customer and saves to customer on server; returns CreditScoreEntity with result
-     * @param CustomerEntity $customer - customer to pull score for
+     * @param int            $custId - customer to pull score for
      * @param array          $expansion - array expansion for customer
      * @param bool|false     $exportAsPDF - whether or not to save results as a PDF
      * @return CreditScoreEntity
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function PullCreditScore(CustomerEntity $customer, $expansion = [], $exportAsPDF = false){
-        $customer->InsureHasID();
+    public function PullCreditScore($custId, $expansion = [], $exportAsPDF = false){
 
         $query = [];
         if($exportAsPDF)
@@ -827,9 +827,8 @@ class Communicator
             throw new \InvalidArgumentException("Need to provide an expansion property");
         $query = '?'.implode('&',array_filter($query));
 
-        $id = $customer->Get(BASE_ENTITY::ID);
 
-        $res = $this->client->POST("$this->baseUrl/odata.svc/Customers($id)/Autopal.GetCreditScore()$query");
+        $res = $this->client->POST("$this->baseUrl/odata.svc/Customers($custId)/Autopal.GetCreditScore()$query");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['success']) && isset($body['d']['result']) && isset($body['d']['result']['scores']) && $body['d']['success']) {
@@ -851,16 +850,14 @@ class Communicator
 
     /**
      * This runs an OFAC test for a customer. The return result is an array where the first element is wether or not there was a match and the second element is a list of matches
-     * @param CustomerEntity $customer - The customer to run an OFAC Test against
+     * @param  int $custId - The customer to run an OFAC Test against
      * @return array - First element is a boolean, second argument is a list of OFAC matches
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function RunOfacTest(CustomerEntity $customer){
-        $customer->InsureHasID();
-        $id = $customer->Get(BASE_ENTITY::ID);
+    public function RunOfacTest($custId){
 
-        $res = $this->client->POST("$this->baseUrl/odata.svc/Customers($id)/Autopal.OfacTest()");
+        $res = $this->client->POST("$this->baseUrl/odata.svc/Customers($custId)/Autopal.OfacTest()");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['matchesFound'])) {
@@ -873,26 +870,21 @@ class Communicator
     }
 
     /**
-     * @param CustomerEntity  $customer
-     * @param LoanEntity|null $loan
+     * @param int      $custId
+     * @param int|null $loanId
      * @return array|null
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetCustomerLoanAccess(CustomerEntity $customer, LoanEntity $loan = null){
-        $customer->InsureHasID();
-        $id = $customer->Get(BASE_ENTITY::ID);
-        if(!is_null($loan))
-            $loan->InsureHasID();
+    public function GetCustomerLoanAccess($custId, $loanId = null){
 
-
-        $res = $this->client->GET("$this->baseUrl/odata.svc/Customers($id)?\$expand=Loans,Loans/StatusArchive&nopaging=true");
+        $res = $this->client->GET("$this->baseUrl/odata.svc/Customers($custId)?\$expand=Loans,Loans/StatusArchive&nopaging=true");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['Loans'])) {
-                if($loan){
+                if($loanId){
                     foreach($body['d']['Loans'] as $l){
-                        if($l['id'] == $loan->Get(BASE_ENTITY::ID))
+                        if($l['id'] == $loanId)
                         {
                             return [
                                 'web'=>$l['_relatedMetadata']['customerWebAccess'],
@@ -919,19 +911,17 @@ class Communicator
 
     /**
      * Sets the customer access restrictions for a loan
-     * @param CustomerEntity $customer
-     * @param LoanEntity     $loan
+     * @param int            $custId
+     * @param int            $loanId
      * @param array          $access
      * @return array|null
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function SetCustomerLoanAccess(CustomerEntity $customer, LoanEntity $loan, $access = []){
-        $customer->insureHasID();
-        $loan->insureHasID();
+    public function SetCustomerLoanAccess($custId, $loanId, $access = []){
 
-        $cid = $customer->Get(BASE_ENTITY::ID);
-        $lid = $loan->Get(BASE_ENTITY::ID);
+        $cid = $custId;
+        $lid = $loanId;
 
         $raccess = [
             '__id'=>$cid,
@@ -970,7 +960,7 @@ class Communicator
         if($response->getStatusCode() == 200) {
             $body = json_decode($response->getBody(), true);
             if(isset($body['d']))
-                return $this->getCustomerLoanAccess($customer, $loan);
+                return $this->getCustomerLoanAccess($cid, $lid);
         }
         throw new ApiException($response);
     }
