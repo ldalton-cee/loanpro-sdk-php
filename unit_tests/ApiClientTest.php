@@ -55,6 +55,7 @@ class ApiClientTest extends TestCase
     protected static $loanJSON;
     private static $minSetup;
     private static $cid = 0;
+    private static $customer;
     private static $access;
     private static $loan;
 
@@ -129,6 +130,7 @@ class ApiClientTest extends TestCase
         static::$cid = $customer->Get(BASE_ENTITY::ID);
         $customer->AddToLoan($res, CONSTS\CUSTOMER_ROLE::PRIMARY);
         static::$loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoan(static::$loanId, [LOAN::LOAN_SETUP]);
+        static::$customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(static::$cid);
     }
 
     /**
@@ -477,7 +479,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testPayoff(){
         $loan = static::$loan;
@@ -541,11 +542,12 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
+     * @group new
      */
     public function testCustomerAddToLoan(){
         //echo "Test CustomerAddToLoan\n";
-        $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(static::$cid);
-        $loan =static::$loan;
+        $customer = static::$customer;
+        $loan = static::$loan;
         $loan = $loan->addCustomer($customer, CONSTS\CUSTOMER_ROLE::PRIMARY);
 
         $this->assertEquals(1, count($loan->Get(LOAN::CUSTOMERS)));
@@ -557,7 +559,7 @@ class ApiClientTest extends TestCase
      */
     public function testOfacTest(){
         //echo "Test OfacTest\n";
-        $customer= \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(static::$cid);
+        $customer= static::$customer;
         $ofacRes = $customer->runOfacTest();
         $this->assertEquals([false,[]], $ofacRes);
     }

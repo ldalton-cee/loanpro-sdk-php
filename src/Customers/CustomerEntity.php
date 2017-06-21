@@ -81,8 +81,7 @@ class CustomerEntity extends  BaseEntity
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
     public function Save(){
-        $this->InsureHasID();
-        return LoanProSDK::GetInstance()->GetApiComm()->SaveCustomer($this->Get(BASE_ENTITY::ID));
+        return LoanProSDK::GetInstance()->GetApiComm()->SaveCustomer($this);
     }
 
     /**
@@ -136,7 +135,7 @@ class CustomerEntity extends  BaseEntity
      */
     public function GetLoanAccessForLoan(LoanEntity $loan){
         $this->InsureHasID();
-        return LoanProSDK::GetInstance()->GetApiComm()->GetCustomerLoanAccess($this->Get(BASE_ENTITY::ID), $loan);
+        return LoanProSDK::GetInstance()->GetApiComm()->GetCustomerLoanAccess($this->Get(BASE_ENTITY::ID), $loan->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -221,6 +220,6 @@ class CustomerEntity extends  BaseEntity
      */
     public function InsureHasID(){
         if(is_null($this->Get(BASE_ENTITY::ID)))
-            throw new InvalidStateException("Cannot perform operation on a loan without an ID");
+            throw new InvalidStateException("Cannot perform operation on a customer without an ID");
     }
 }

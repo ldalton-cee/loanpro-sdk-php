@@ -235,8 +235,8 @@ class Communicator
     }
 
     /**
-     * Gets a loan from the LoanPro servers.
-     * @param int $loanId - ID of loan to pull
+     * Gets a customer from the LoanPro servers.
+     * @param int   $id - ID of customer to pull
      * @param array $expandProps - array of properties to expand
      * @param bool|true $nopageProps
      * @return CustomerEntity
