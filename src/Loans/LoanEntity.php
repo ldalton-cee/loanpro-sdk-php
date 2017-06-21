@@ -60,13 +60,11 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException - Thrown if the loan ID isn't set
      */
     public function CreateModification($newLoanSetup = null){
+        $this->InsureHasID();
         $sdk = (LoanProSDK::GetInstance());
         $comm = $sdk->GetApiComm();
-        if(is_null($this->Get(BASE_ENTITY::ID)))
-            throw new InvalidStateException("Loan ID is not set, cannot modify loan");
 
-
-        $res = $comm->ModifyLoan($this);
+        $res = $comm->ModifyLoan($this->Get(BASE_ENTITY::ID));
 
         if($res === true)
         {
@@ -97,9 +95,10 @@ class LoanEntity extends BaseEntity
      * @throws ApiException
      */
     public function CancelModification(){
+        $this->InsureHasID();
         if(is_null($this->Get(BASE_ENTITY::ID)))
             throw new InvalidStateException("Loan ID is not set, cannot modify loan");
-        return LoanProSDK::GetInstance()->GetApiComm()->CancelLatestModification($this);
+        return LoanProSDK::GetInstance()->GetApiComm()->CancelLatestModification($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -109,7 +108,8 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function GetPreModificationSetup(){
-        return LoanProSDK::GetInstance()->GetApiComm()->GetPreModSetup($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetPreModSetup($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -120,7 +120,7 @@ class LoanEntity extends BaseEntity
      */
     public function Activate(){
         $this->InsureHasID();
-        LoanProSDK::GetInstance()->GetApiComm()->ActivateLoan($this);
+        LoanProSDK::GetInstance()->GetApiComm()->ActivateLoan($this->Get(BASE_ENTITY::ID));
         if(!is_null($this->Get(LOAN::LOAN_SETUP)))
             return $this->Set(LOAN::LOAN_SETUP, $this->Get(LOAN::LOAN_SETUP)->Set(LOAN_SETUP::ACTIVE, 1));
         return $this;
@@ -191,9 +191,10 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function GetStatusOnDate($date){
+        $this->InsureHasID();
         if(!FieldValidator::IsValidDate($date))
             throw new \InvalidArgumentException("Invalid date '$date'.");
-        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanStatusOnDate($this, $date);
+        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanStatusOnDate($this->Get(BASE_ENTITY::ID), $date);
     }
 
     /**
@@ -203,7 +204,8 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function GetLastActivityDate(){
-        return LoanProSDK::GetInstance()->GetApiComm()->GetLastActivityDate($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetLastActivityDate($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -213,7 +215,8 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function GetInterestBasedOnTier(){
-        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanIntOnTier($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanIntOnTier($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -223,7 +226,8 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function IsSetup(){
-        return LoanProSDK::GetInstance()->GetApiComm()->IsSetup($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->IsSetup($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -233,7 +237,8 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function IsLateFeeCandidate(){
-        return LoanProSDK::GetInstance()->GetApiComm()->IsLateFeeCandidate($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->IsLateFeeCandidate($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -246,7 +251,8 @@ class LoanEntity extends BaseEntity
      * @throws ApiException
      */
     public function Delete($areYouSure = false){
-        return (LoanProSDK::GetInstance()->GetApiComm()->DeleteLoan($this, $areYouSure))? $this->Set(LOAN::DELETED, 1) : $this;
+        $this->InsureHasID();
+        return (LoanProSDK::GetInstance()->GetApiComm()->DeleteLoan($this->Get(BASE_ENTITY::ID), $areYouSure))? $this->Set(LOAN::DELETED, 1) : $this;
     }
 
     /**
@@ -256,7 +262,8 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function GetPaymentSummary(){
-        return LoanProSDK::GetInstance()->GetApiComm()->GetPaymentSummary($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetPaymentSummary($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -266,7 +273,8 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function GetFinalPaymentDiff(){
-        return LoanProSDK::GetInstance()->GetApiComm()->GetFinalPaymentDiff($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetFinalPaymentDiff($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -276,7 +284,8 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function GetAdminStats(){
-        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanAdminStats($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanAdminStats($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -286,7 +295,8 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
 //    public function PaidBreakdown(){
-//        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanPaidBreakdown($this);
+//        $this->InsureHasID();
+//        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanPaidBreakdown($this->Get(BASE_ENTITY::ID));
 //    }
 
     /**
@@ -296,7 +306,8 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function GetInterestFeesHistory(){
-        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanInterestFeesHistory($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanInterestFeesHistory($this->Get(BASE_ENTITY::ID));
     }
 
     /**
@@ -306,19 +317,22 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function GetBalanceHistory(){
-        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanBalanceHistory($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanBalanceHistory($this->Get(BASE_ENTITY::ID));
     }
 
     /**
      * Adds the provided customer to the loan with the provided role
-     * @param CustomerEntity $loan - Customer to add
+     * @param CustomerEntity $customer - Customer to add
      * @param                $customerRole - Customer role to use (see Constants/CUSTOMER_ROLE)
      * @return bool
      * @throws InvalidStateException
      * @throws \Simnang\LoanPro\Exceptions\ApiException
      */
     public function AddCustomer(CustomerEntity $customer, $customerRole){
-        return LoanProSDK::GetInstance()->GetApiComm()->LinkCustomerAndLoan($customer, $this, $customerRole);
+        $this->InsureHasID();
+        $customer->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->LinkCustomerAndLoan($customer->Get(BASE_ENTITY::ID), $this->Get(BASE_ENTITY::ID), $customerRole);
     }
 
     /**
@@ -328,7 +342,20 @@ class LoanEntity extends BaseEntity
      * @throws InvalidStateException
      */
     public function GetFlagArchiveReport(){
-        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanFlagArchiveReport($this);
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanFlagArchiveReport($this->Get(BASE_ENTITY::ID));
+    }
+
+    /**
+     * Grabs the payoff for the specified loan
+     * @param int|null $datetime - (optional) timestamp for when to grab the payoff
+     * @return array - Array of payoff items (each is an array with keys 'date', 'payoff', etc.)
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetPayoff($datetime = null){
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetPayoff($this->Get(BASE_ENTITY::ID), $datetime);
     }
 
     /**
