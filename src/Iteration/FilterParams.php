@@ -32,7 +32,7 @@ class FilterParams
         'BIN_OP'        => 'add|sub|mul|div|mod',
         'UNARY_OP'      => 'not',
         'FUNC_CALL'     => '(substringof|endswith|startswith|length|indexof|replace|substring|tolower|toupper|trim|concat|day|hour|minute|month|second|year|round|floor|ceiling|isOf|isof|cast)\( *([\w\.\/]+|"(\\\\.|[^\\\\"])*"|\'(\\\\.|[^\\\\\'])*\')( *\, *([\w\.\/]+|"(\\\\.|[^\\\\"])*"|\'(\\\\.|[^\\\\\'])*\'))* *\)',
-        'FIELD_CONST'   => '([\w\.\/]+|"(\\\\.|[^\\\\"])*"|\'(\\\\.|[^\\\\\'])*\')',
+        'FIELD_CONST'   => '(datetime\'(\\.|[^\\\'])*\'|[\w\.\/]+|"(\\\\.|[^\\\\"])*"|\'(\\\\.|[^\\\\\'])*\')',
         'R_PAREN'       => '\)',
         'L_PAREN'       => '\('
     ];
@@ -52,7 +52,7 @@ class FilterParams
         'COMP_OP'       => '==?|<=?|>=?|!=',
         'UNARY_OP'      => '!',
         'FUNC_CALL'     => '(substringof|endswith|startswith|length|indexof|replace|substring|tolower|toupper|trim|concat|day|hour|minute|month|second|year|round|floor|ceiling|isOf|isof|cast) *\( *([\w\.\/]+|"(\\\\.|[^\\\\"])*"|\'(\\\\.|[^\\\\\'])*\')( *\, *([\w\.\/]+|"(\\\\.|[^\\\\"])*"|\'(\\\\.|[^\\\\\'])*\'))* *\)',
-        'FIELD_CONST'   => '([a-zA-Z_\.]((\/[a-zA-Z_\.])|[\w\.])*|"(\\\\.|[^\\\\"])*"|\'(\\\\.|[^\\\\\'])*\'|[\d\.]+)',
+        'FIELD_CONST'   => '(datetime\'(\\.|[^\\\'])*\'|[a-zA-Z_\.]((\/[a-zA-Z_\.])|[\w\.])*|"(\\\\.|[^\\\\"])*"|\'(\\\\.|[^\\\\\'])*\'|[\d\.]+)',
         'BIN_OP'        => '\+|-|\*|\/|%',
         'R_PAREN'       => '\)',
         'L_PAREN'       => '\('

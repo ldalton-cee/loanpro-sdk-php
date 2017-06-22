@@ -1045,6 +1045,23 @@ class LoanProSDK
 
         return (new Loans\LoanSetupEntity($json[LOAN_SETUP::LCLASS__C],$json[LOAN_SETUP::LTYPE__C]))->Set($setVars);
     }
+    public function CreateLoanStatusArchiveFromJSON($json){
+        if(!is_string($json) && !is_array($json))
+            throw new \InvalidArgumentException("Expected a JSON string or array");
+        if(is_string($json))
+            $json = json_decode($json, true);
+        $json = static::CleanJSON($json);
+
+        $setVars = [];
+
+        foreach($json as $key => $val){
+            $val = LoanProSDK::GetObjectForm($key, $val);
+            if(!is_null($val))
+                $setVars[$key] = $val;
+        }
+
+        return (new Loans\LoanStatusArchiveEntity())->Set($setVars);
+    }
     /// @endcond
 
     protected static function TrimRecursive($arg){

@@ -268,6 +268,49 @@ class Communicator
     }
 
     /**
+     * Gets the next scheduled payment info for a loan
+     * @param $loanId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function NextScheduledPayment($loanId){
+        $res = $this->client->POST("$this->baseUrl/odata.svc/Loans($loanId)/Autopal.GetNextScheduledPayment()?count");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return $body['d'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    public function GetLoanStatusArchive($loanId, $datetimeStart = null, $datetimeEnd = null){
+        $pagParams = new PaginationParams(true);
+        $pagParams->SetOrdering(['date'], PaginationParams::DESCENDING_ORDER);
+
+        $datetimeStart = (!is_null($datetimeStart)) ? FieldValidator::GetDate($datetimeStart) : (new \DateTime())->setTime(23,55,55)->sub(new \DateInterval('P2D'))->getTimestamp();
+        $datetimeEnd = (!is_null($datetimeEnd)) ? FieldValidator::GetDate($datetimeEnd) : (new \DateTime())->setTime(23,55,55)->add(new \DateInterval('P1D'))->getTimestamp();
+
+        $datetimeStart = (new \DateTime())->setTimestamp($datetimeStart)->format('Y-m-d\Th:i:s');
+        $datetimeEnd = (new \DateTime())->setTimestamp($datetimeEnd)->format('Y-m-d\Th:i:s');
+
+        $filterParams = FilterParams::MakeFromODataString("loanId eq $loanId and date ge datetime'$datetimeStart' and date le datetime'$datetimeEnd'");
+        $query = "?".implode('&',array_map('urlencode',['all',(string)$pagParams, (string)$filterParams]));
+        $res = $this->client->GET("$this->baseUrl/odata.svc/LoanStatusArchive$query");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['results'])) {
+                $ret = [];
+                foreach($body['d']['results'] as $val){
+                    $ret[] = LoanProSDK::GetInstance()->CreateLoanStatusArchiveFromJSON($val);
+                }
+                return $ret;
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
      * Creates a modification for a loan
      * @param int        $loanId - ID of loan to make a modification for
      * @return bool

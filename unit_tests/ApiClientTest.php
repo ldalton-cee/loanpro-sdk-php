@@ -493,6 +493,56 @@ class ApiClientTest extends TestCase
         }
     }
 
+    private $keys;
+
+    /**
+     * @group online
+     */
+    public function testGetNextScheduledPayment(){
+        $loan = static::$loan;
+        $nxtPmt = $loan->GetNextScheduledPayment();
+
+        $this->keys = [
+            'id','txId','entityType','entityId','modId','date','period','periodStart','periodEnd','title','type','infoOnly','infoDetails','paymentId','paymentDisplayId','paymentAmount',
+            'paymentInterest','paymentPrincipal','paymentDiscount','paymentFees','feesPaidDetails','paymentEscrow','paymentEscrowBreakdown','chargeAmount','chargeInterest','chargePrincipal',
+            'chargeDiscount','chargeFees','chargeEscrow','chargeEscrowBreakdown','future','principalOnly','advancement','payoffFee','chargeOff','paymentType','adbDays','adb','principalBalance',
+            'displayOrder','__metadata'
+        ];
+
+        $validate = function($entry){
+            $this->assertTrue(in_array($entry, $this->keys));
+            unset($this->keys[array_search($entry, $this->keys)]);
+        };
+
+        array_map($validate, array_keys($nxtPmt['scheduledPayment']));
+
+        $this->assertTrue(isset($nxtPmt['__count']));
+        $this->assertTrue($nxtPmt['__hasCount']);
+
+        $this->assertEquals(0, count($this->keys));
+    }
+
+    /**
+     * @group online
+     */
+    public function testGetLoanStatusArchive(){
+        $loan = static::$loan;
+        $archive = $loan->GetStatusArchive();
+
+        $validate = function($entry){
+            $this->keys = array_keys(array ('id' => 3, 'loanId' => 3, 'date' => '/Date(1498089600)/', 'amountDue' => '30.00', 'dueInterest' => '31.35', 'duePrincipal' => '0.00', 'dueDiscount' => '0.00', 'dueEscrow' => '0.00', 'dueEscrowBreakdown' => '{"2":0,"3":0,"23":0}', 'dueFees' => '0.00', 'duePni' => '31.35', 'payoffFees' => '0.00', 'nextPaymentDate' => '/Date(1499212800)/', 'nextPaymentAmount' => '900.00', 'lastPaymentAmount' => '900.00', 'principalBalance' => '308691.44', 'amountPastDue30' => '0.00', 'daysPastDue' => 3, 'payoff' => '319811.93', 'perdiem' => '30.01', 'interestAccruedToday' => '30.01', 'availableCredit' => '0.00', 'creditLimit' => '0.00', 'periodStart' => '/Date(1496620800)/', 'periodEnd' => '/Date(1499126400)/', 'periodsRemaining' => 50, 'escrowBalance' => '100.00', 'escrowBalanceBreakdown' => '{"1":0,"2":100,"3":0,"23":0}', 'discountRemaining' => '0.00', 'loanStatusId' => 6, 'loanStatusText' => 'Open', 'loanSubStatusId' => 32, 'loanSubStatusText' => 'Auto-Deferred (AD1)', 'creditStatus' => 'loan.creditstatus.11', 'loanAge' => 433, 'loanRecency' => 0, 'lastHumanActivity' => '/Date(1498089600)/', 'finalPaymentDate' => '/Date(1628121600)/', 'finalPaymentAmount' => '10778.44', 'netChargeOff' => '0.00', 'firstDelinquencyDate' => NULL, 'uniqueDelinquencies' => 1, 'delinquencyPercent' => '83.18', 'delinquentDays' => 361, 'calcedECOA' => 'loan.ecoacodes.1', 'calcedECOACoBuyer' => 'loan.ecoacodes.0', 'portfolioBreakdown' => '["7","15"]', 'subPortfolioBreakdown' => '[]','__update'=>true, '__id'=>3,'dateLastCurrent'=>true));
+            $validateArchive = function($entry){
+                $this->assertTrue(in_array($entry, $this->keys));
+                unset($this->keys[array_search($entry, $this->keys)]);
+            };
+            array_map($validateArchive, array_keys(json_decode(json_encode($entry), true)));
+        };
+
+        array_map($validate, $archive);
+
+        $this->assertEquals(0, count($this->keys));
+    }
+
     /**
      * @group online
      */
