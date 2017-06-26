@@ -359,6 +359,30 @@ class LoanEntity extends BaseEntity
     }
 
     /**
+     * Gets the next scheduled payment info for a loan
+     * @return mixed
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetNextScheduledPayment(){
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->NextScheduledPayment($this->Get(BASE_ENTITY::ID));
+    }
+
+    /**
+     * Gets the loan status archive for a loan
+     * @param null $startdatetime
+     * @param null $enddatetime
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetStatusArchive($startdatetime = null, $enddatetime = null){
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanStatusArchive($this->Get(BASE_ENTITY::ID), $startdatetime, $enddatetime);
+    }
+
+    /**
      * List of required fields
      * @var array
      */

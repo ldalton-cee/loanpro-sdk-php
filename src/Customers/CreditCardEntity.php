@@ -20,6 +20,7 @@ namespace Simnang\LoanPro\Customers;
 
 
 use Simnang\LoanPro\BaseEntity;
+use Simnang\LoanPro\Constants\CREDIT_CARD;
 use Simnang\LoanPro\Constants\REFERENCES;
 use Simnang\LoanPro\Validator\FieldValidator;
 
@@ -38,7 +39,7 @@ class CreditCardEntity extends  BaseEntity
      * The name of the constant collection list
      * @var string
      */
-    protected static $constCollectionPrefix = "REFERENCES";
+    protected static $constCollectionPrefix = "CREDIT_CARD";
 
     /**
      * Required to keep type fields from colliding with other types
@@ -56,15 +57,16 @@ class CreditCardEntity extends  BaseEntity
      * @var array
      */
     protected static $fields = [
-        REFERENCES::ACTIVE  => FieldValidator::BOOL,
-
-        REFERENCES::RELATION    => FieldValidator::COLLECTION,
-
-        REFERENCES::CREATED => FieldValidator::DATE,
-
-        REFERENCES::ADDRESS => FieldValidator::STRING,
-        REFERENCES::NAME    => FieldValidator::STRING,
-        REFERENCES::PRIMARY_PHONE   => FieldValidator::STRING,
-        REFERENCES::SECONDARY_PHONE => FieldValidator::STRING,
+        CREDIT_CARD::TOKEN             => FieldValidator::STRING,
+        CREDIT_CARD::CREATED           => FieldValidator::DATE,
+        CREDIT_CARD::CARD_NUMBER       => FieldValidator::STRING,
+        CREDIT_CARD::CARD_TYPE__C      => FieldValidator::COLLECTION,
+        CREDIT_CARD::ADDRESS1          => FieldValidator::STRING,
+        CREDIT_CARD::CITY              => FieldValidator::STRING,
+        CREDIT_CARD::STATE             => FieldValidator::STRING,
+        CREDIT_CARD::ZIPCODE           => FieldValidator::STRING,
+        CREDIT_CARD::COUNTRY__C        => FieldValidator::COLLECTION,
+        CREDIT_CARD::CARD_EXPIRATION   => FieldValidator::STRING,
+        CREDIT_CARD::CARD_HOLDER_NAME  => FieldValidator::STRING,
     ];
 }

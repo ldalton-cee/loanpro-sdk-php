@@ -57,7 +57,7 @@ class CheckingAccountEntity extends  BaseEntity
      * @var array
      */
     protected static $fields = [
-        CHECKING_ACCOUNT::ACCOUNT_TYPE      => FieldValidator::COLLECTION,
+        CHECKING_ACCOUNT::ACCOUNT_TYPE__C   => FieldValidator::COLLECTION,
 
         CHECKING_ACCOUNT::CREATED           => FieldValidator::DATE,
 

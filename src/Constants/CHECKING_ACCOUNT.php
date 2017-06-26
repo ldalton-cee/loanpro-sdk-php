@@ -25,7 +25,7 @@ namespace Simnang\LoanPro\Constants;
 class CHECKING_ACCOUNT{
     const ADDRESS_ID        = 'addressId';
     const PROCESSOR         = 'processor';
-    const ACCOUNT_TYPE      = 'accountType';
+    const ACCOUNT_TYPE__C   = 'accountType';
     const TOKEN             = 'token';
     const CREATED           = 'created';
     const ACCOUNT_NUMBER    = 'accountNumber';

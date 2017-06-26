@@ -24,6 +24,8 @@ use Simnang\LoanPro\Communicator\Communicator;
 use Simnang\LoanPro\Constants\APD_ADJUSTMENTS;
 use Simnang\LoanPro\Constants\AUTOPAYS;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
+use Simnang\LoanPro\Constants\CHECKING_ACCOUNT;
+use Simnang\LoanPro\Constants\CREDIT_CARD;
 use Simnang\LoanPro\Constants\CUSTOM_FIELD_VALUES;
 use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Constants\DOCUMENTS;
@@ -32,10 +34,14 @@ use Simnang\LoanPro\Constants\LINKED_LOAN_VALUES;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LOAN_SETTINGS;
 use Simnang\LoanPro\Constants\LOAN_SETUP;
+use Simnang\LoanPro\Constants\PAYMENT_ACCOUNT;
+use Simnang\LoanPro\Constants\PAYMENT_ACCOUNT\PAYMENT_ACCOUNT_TYPE__C;
 use Simnang\LoanPro\Constants\STATUS_ARCHIVE;
 use Simnang\LoanPro\Constants\MC_PROCESSOR;
 use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Customers\AddressEntity;
+use Simnang\LoanPro\Customers\CheckingAccountEntity;
+use Simnang\LoanPro\Customers\CreditCardEntity;
 use Simnang\LoanPro\Customers\CreditScoreEntity;
 use Simnang\LoanPro\Customers\CustomerEntity;
 use Simnang\LoanPro\Customers\EmployerEntity;
@@ -462,8 +468,23 @@ class LoanProSDK
      * @param $type - type of payment account
      * @return PaymentAccountEntity
      */
-    public function CreateCustomerPaymentAccount($title, $type){
-        return new PaymentAccountEntity($title, $type);
+    public function CreateCustomerPaymentAccount($title, $type, $token = null, $isSavings = false){
+        $pmtAcct = new PaymentAccountEntity($title, $type);
+        if(!is_null($token)) {
+            $pmtAcct->Set(PAYMENT_ACCOUNT::ACTIVE, 1);
+            switch ($type) {
+                case PAYMENT_ACCOUNT_TYPE__C::CHECKING:
+                    $acctType = ($isSavings) ? \CHECKING_ACCOUNT_ACCOUNT_TYPE__C::SAVINGS : \CHECKING_ACCOUNT_ACCOUNT_TYPE__C::CHECKING;
+                    $acct = (new CheckingAccountEntity())->Set(CHECKING_ACCOUNT::ACCOUNT_TYPE__C, $acctType, CHECKING_ACCOUNT::TOKEN, $token);
+                    $pmtAcct->Set(PAYMENT_ACCOUNT::CHECKING_ACCOUNT, $acct);
+                    break;
+                case PAYMENT_ACCOUNT_TYPE__C::DEBIT:
+                default:
+                    $acct = (new CreditCardEntity())->Set(CREDIT_CARD::TOKEN, $token);
+                    $pmtAcct->Set(PAYMENT_ACCOUNT::CREDIT_CARD, $acct);
+            }
+        }
+        return $pmtAcct;
     }
 
     /**
@@ -1044,6 +1065,23 @@ class LoanProSDK
         }
 
         return (new Loans\LoanSetupEntity($json[LOAN_SETUP::LCLASS__C],$json[LOAN_SETUP::LTYPE__C]))->Set($setVars);
+    }
+    public function CreateLoanStatusArchiveFromJSON($json){
+        if(!is_string($json) && !is_array($json))
+            throw new \InvalidArgumentException("Expected a JSON string or array");
+        if(is_string($json))
+            $json = json_decode($json, true);
+        $json = static::CleanJSON($json);
+
+        $setVars = [];
+
+        foreach($json as $key => $val){
+            $val = LoanProSDK::GetObjectForm($key, $val);
+            if(!is_null($val))
+                $setVars[$key] = $val;
+        }
+
+        return (new Loans\LoanStatusArchiveEntity())->Set($setVars);
     }
     /// @endcond
 
