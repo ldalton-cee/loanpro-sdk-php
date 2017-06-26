@@ -471,17 +471,17 @@ class LoanProSDK
     public function CreateCustomerPaymentAccount($title, $type, $token = null, $isSavings = false){
         $pmtAcct = new PaymentAccountEntity($title, $type);
         if(!is_null($token)) {
-            $pmtAcct->Set(PAYMENT_ACCOUNT::ACTIVE, 1);
+            $pmtAcct = $pmtAcct->Set(PAYMENT_ACCOUNT::ACTIVE, 1);
             switch ($type) {
                 case PAYMENT_ACCOUNT_TYPE__C::CHECKING:
-                    $acctType = ($isSavings) ? \CHECKING_ACCOUNT_ACCOUNT_TYPE__C::SAVINGS : \CHECKING_ACCOUNT_ACCOUNT_TYPE__C::CHECKING;
+                    $acctType = ($isSavings) ? CHECKING_ACCOUNT\CHECKING_ACCOUNT_ACCOUNT_TYPE__C::SAVINGS : CHECKING_ACCOUNT\CHECKING_ACCOUNT_ACCOUNT_TYPE__C::CHECKING;
                     $acct = (new CheckingAccountEntity())->Set(CHECKING_ACCOUNT::ACCOUNT_TYPE__C, $acctType, CHECKING_ACCOUNT::TOKEN, $token);
-                    $pmtAcct->Set(PAYMENT_ACCOUNT::CHECKING_ACCOUNT, $acct);
+                    $pmtAcct = $pmtAcct->Set(PAYMENT_ACCOUNT::CHECKING_ACCOUNT, $acct);
                     break;
                 case PAYMENT_ACCOUNT_TYPE__C::DEBIT:
                 default:
                     $acct = (new CreditCardEntity())->Set(CREDIT_CARD::TOKEN, $token);
-                    $pmtAcct->Set(PAYMENT_ACCOUNT::CREDIT_CARD, $acct);
+                $pmtAcct = $pmtAcct->Set(PAYMENT_ACCOUNT::CREDIT_CARD, $acct);
             }
         }
         return $pmtAcct;
