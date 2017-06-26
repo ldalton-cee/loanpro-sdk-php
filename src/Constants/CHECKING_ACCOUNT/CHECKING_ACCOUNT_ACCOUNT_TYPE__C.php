@@ -16,6 +16,8 @@
  *
  */
 
+namespace Simnang\LoanPro\Constants\CHECKING_ACCOUNT;
+
 class CHECKING_ACCOUNT_ACCOUNT_TYPE__C{
     const CHECKING  = 'bankacct.type.checking';
     const SAVINGS   = 'bankacct.type.savings';
