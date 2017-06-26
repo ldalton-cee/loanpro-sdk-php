@@ -75,8 +75,7 @@ class PaymentAccountEntity extends  BaseEntity
         PAYMENT_ACCOUNT::VERIFY                 => FieldValidator::BOOL,
 
         PAYMENT_ACCOUNT::ADDRESS                => FieldValidator::OBJECT,
-
-        PAYMENT_ACCOUNT::CHECKING_ACCOUNT       => FieldValidator::READ_ONLY,
-        PAYMENT_ACCOUNT::CREDIT_CARD            => FieldValidator::READ_ONLY,
+        PAYMENT_ACCOUNT::CHECKING_ACCOUNT       => FieldValidator::OBJECT,
+        PAYMENT_ACCOUNT::CREDIT_CARD            => FieldValidator::OBJECT,
     ];
 }

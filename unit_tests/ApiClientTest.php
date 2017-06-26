@@ -597,7 +597,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testCustomerAddToLoan(){
         echo "Test CustomerAddToLoan\n";

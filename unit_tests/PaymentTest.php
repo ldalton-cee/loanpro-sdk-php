@@ -61,18 +61,22 @@ class PaymentTest extends TestCase
     /**
      * @group create_correctness
      * @group offline
+     * @group new
      */
     public function testPaymentAccountInstantiate(){
         $payment = LPSDK::GetInstance()->CreateCustomerPaymentAccount('test', \Simnang\LoanPro\Constants\PAYMENT_ACCOUNT\PAYMENT_ACCOUNT_TYPE__C::DEBIT, 'token12345', false);
 
         $this->assertEquals(['test',\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT\PAYMENT_ACCOUNT_TYPE__C::DEBIT], array_values($payment->Get(\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::TITLE,\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::TYPE__C)));
         $this->assertEquals('token12345', $payment->Get(\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::CREDIT_CARD)->Get(\Simnang\LoanPro\Constants\CREDIT_CARD::TOKEN));
-
+        $this->assertEquals(json_decode('{"title":"test","type":"paymentAccount.type.credit","active":1,"CreditCard":{"token":"token12345"}}', true),
+                            json_decode(json_encode($payment), true));
 
         $payment = LPSDK::GetInstance()->CreateCustomerPaymentAccount('test', \Simnang\LoanPro\Constants\PAYMENT_ACCOUNT\PAYMENT_ACCOUNT_TYPE__C::CHECKING, 'token12345', false);
 
         $this->assertEquals(['test',\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT\PAYMENT_ACCOUNT_TYPE__C::CHECKING], array_values($payment->Get(\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::TITLE,\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::TYPE__C)));
         $this->assertEquals('token12345', $payment->Get(\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::CHECKING_ACCOUNT)->Get(\Simnang\LoanPro\Constants\CREDIT_CARD::TOKEN));
+        $this->assertEquals(json_decode('{"title":"test","type":"paymentAccount.type.checking","active":1,"CheckingAccount":{"accountType":"bankacct.type.checking","token":"token12345"}}', true),
+                            json_decode(json_encode($payment), true));
     }
 
     /**
