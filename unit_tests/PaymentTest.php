@@ -58,6 +58,16 @@ class PaymentTest extends TestCase
             $this->assertNull(null,$payment->Get($field));
         }
     }
+    /**
+     * @group create_correctness
+     * @group offline
+     */
+    public function testPaymentAccountInstantiate(){
+        $payment = LPSDK::GetInstance()->CreateCustomerPaymentAccount('test', \Simnang\LoanPro\Constants\PAYMENT_ACCOUNT\PAYMENT_ACCOUNT_TYPE__C::DEBIT, 'token12345', false);
+
+        $this->assertEquals(['test',\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT\PAYMENT_ACCOUNT_TYPE__C::DEBIT], array_values($payment->Get(\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::TITLE,\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::TYPE__C)));
+        $this->assertEquals(['test',\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT\PAYMENT_ACCOUNT_TYPE__C::DEBIT], array_values($payment->Get(\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::TITLE,\Simnang\LoanPro\Constants\PAYMENT_ACCOUNT::TYPE__C)));
+    }
 
     /**
      * @group set_correctness

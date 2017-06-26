@@ -16,22 +16,11 @@
  *
  */
 
-namespace Simnang\LoanPro\Constants;
+namespace Simnang\LoanPro\Constants\CREDIT_CARD;
 
-/**
- * Class CREDIT_CARD
- * @package Simnang\LoanPro\Constants
- */
-class CREDIT_CARD{
-    const TOKEN             = 'token';
-    const CREATED           = 'created';
-    const CARD_NUMBER       = 'cardNumber';
-    const CARD_TYPE__C      = 'cardType';
-    const ADDRESS1          = 'address1';
-    const CITY              = 'city';
-    const STATE             = 'state';
-    const ZIPCODE           = 'zipcode';
-    const COUNTRY__C        = 'country';
-    const CARD_EXPIRATION   = 'cardExpiration';
-    const CARD_HOLDER_NAME  = 'cardHolderName';
+class CREDIT_CARD_CARD_TYPE__C{
+    const AMERICAN_EXPRESS = 'creditCard.type.amex';
+    const DISCOVER = 'creditCard.type.discover';
+    const MASTER_CARD = 'creditCard.type.masterCard';
+    const VISA = 'creditCard.type.visa';
 }
