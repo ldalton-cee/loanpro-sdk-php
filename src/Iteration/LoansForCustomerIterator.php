@@ -22,7 +22,7 @@ namespace Simnang\LoanPro\Iteration;
 use Simnang\LoanPro\LoanProSDK;
 
 /**
- * Class CustomerIterator
+ * Class LoansForCustomerIterator
  *
  * An iterator for customers stored on LoanPro which abstracts away pagination
  *
@@ -34,7 +34,6 @@ class LoansForCustomerIterator extends BaseIterator
      * Iterates over all the loans for a customer
      * @param int   $cid - ID of the customer
      * @param array $expand
-     * @param int   $internalPageSize
      */
     public function __construct($cid = 0, $expand = []){
         parent::__construct('GetLoansForCustomer', 'idBased', ['id'=>$cid,'expand'=>$expand]);
