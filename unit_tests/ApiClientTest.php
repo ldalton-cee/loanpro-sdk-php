@@ -794,6 +794,7 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
+     * @group new
      */
     public function testIteratorsCustomerGet(){
         echo "Test IteratorsCustomerGet\n";
@@ -813,6 +814,7 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
+     * @group new
      * @depends testIteratorsCustomerGet
      */
     public function testIteratorsLoansForCustomer(\Simnang\LoanPro\Customers\CustomerEntity $c){
@@ -826,6 +828,30 @@ class ApiClientTest extends TestCase
                 $foundLoan = true;
         }
         $this->assertTrue($foundLoan);
+        return $c;
+    }
+
+    /**
+     * @group online
+     * @group new
+     * @depends testIteratorsLoansForCustomer
+     */
+    public function testPaymentAccountsForCustomerIterator(\Simnang\LoanPro\Customers\CustomerEntity $c){
+        echo "Test PaymentAccountsForCustomerIterator\n";
+        $it = $c->GetPaymentAccounts();
+        foreach($it as $key => $i){
+            $this->assertTrue(!is_null($i));
+            $this->assertTrue(!is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::ACTIVE)));
+            $this->assertEquals(1, $i->Get(CONSTS\PAYMENT_ACCOUNT::ACTIVE));
+            $this->assertTrue(!is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CREDIT_CARD)) || !is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CHECKING_ACCOUNT)));
+        }
+
+        $it = $c->GetPaymentAccounts(true);
+        foreach($it as $key => $i){
+            $this->assertTrue(!is_null($i));
+            $this->assertTrue(!is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::ACTIVE)));
+            $this->assertTrue(!is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CREDIT_CARD)) || !is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CHECKING_ACCOUNT)));
+        }
     }
 
     /**

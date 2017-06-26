@@ -24,6 +24,7 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Iteration\LoansForCustomerIterator;
+use Simnang\LoanPro\Iteration\PaymentAccountsForCustomerIterator;
 use Simnang\LoanPro\LoanProSDK;
 use Simnang\LoanPro\Loans\LoanEntity;
 use Simnang\LoanPro\Validator\FieldValidator;
@@ -82,6 +83,16 @@ class CustomerEntity extends  BaseEntity
      */
     public function Save(){
         return LoanProSDK::GetInstance()->GetApiComm()->SaveCustomer($this);
+    }
+
+    /**
+     * Gets the payment accounts associated with a customer
+     * @param bool|false $includeInactive - whether or not to inlcude inactive payment accounts
+     * @return PaymentAccountsForCustomerIterator
+     * @throws InvalidStateException
+     */
+    public function GetPaymentAccounts($includeInactive = false){
+        return new PaymentAccountsForCustomerIterator($this->Get(BASE_ENTITY::ID), $includeInactive);
     }
 
     /**

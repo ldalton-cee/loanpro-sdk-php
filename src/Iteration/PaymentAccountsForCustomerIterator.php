@@ -18,28 +18,26 @@
 
 namespace Simnang\LoanPro\Iteration;
 
-
-use Simnang\LoanPro\LoanProSDK;
-
 /**
- * Class LoanSearchIterator
+ * Class PaymentAccountsForCustomerIterator
  *
- * An iterator for loans stored on LoanPro which abstracts away pagination
+ * An iterator for customers stored on LoanPro which abstracts away pagination
  *
  * @package Simnang\LoanPro\Iteration
  */
-class LoanSearchIterator extends BaseIterator
+class PaymentAccountsForCustomerIterator extends BaseIterator
 {
-
     /**
-     * Creates a new loan iterator that will iterate over all the loans on the server
-     * @param SearchParams|null     $searchParams
-     * @param AggregateParams|null  $aggParams
-     * @param array                 $orderBy
-     * @param string                $order
-     * @param int                   $internalPageSize
+     * Iterates over all the loans for a customer
+     * @param int   $cid - ID of the customer
+     * @param bool|false $includeInactive - whether or not to include inactive payment accounts
      */
-    public function __construct(SearchParams $searchParams = null, AggregateParams $aggParams = null, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
-        parent::__construct('SearchLoans_RAW', 'search', ['searchParams'=>$searchParams,'aggParams'=>$aggParams,'orderBy'=>$orderBy,'order'=>$order],$internalPageSize);
+    public function __construct($cid = 0, $includeInactive){
+        $expand = ['CheckingAccount','CreditCard'];
+        $filterParams = null;
+        if(!$includeInactive)
+            $filterParams = FilterParams::MakeFromODataString_UNSAFE('active eq 1');
+        parent::__construct('GetPaymentAccounts', 'idBased', ['id'=>$cid,'expand'=>$expand, 'filterParams'=>$filterParams]);
     }
+
 }

@@ -61,7 +61,6 @@ class PaymentTest extends TestCase
     /**
      * @group create_correctness
      * @group offline
-     * @group new
      */
     public function testPaymentAccountInstantiate(){
         $payment = LPSDK::GetInstance()->CreateCustomerPaymentAccount('test', \Simnang\LoanPro\Constants\PAYMENT_ACCOUNT\PAYMENT_ACCOUNT_TYPE__C::DEBIT, 'token12345', false);

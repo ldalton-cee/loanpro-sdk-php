@@ -27,6 +27,7 @@ use Simnang\LoanPro\Constants\ENTITY_TYPES;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Customers\CreditScoreEntity;
 use Simnang\LoanPro\Customers\CustomerEntity;
+use Simnang\LoanPro\Customers\PaymentAccountEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Iteration\AggregateParams;
@@ -38,6 +39,7 @@ use Simnang\LoanPro\Iteration\SearchParams;
 use Simnang\LoanPro\LoanProSDK;
 use Simnang\LoanPro\Loans\LoanEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
+use Simnang\LoanPro\Loans\LoanStatusArchiveEntity;
 use Simnang\LoanPro\Utils\Parser\SearchGenerator;
 use Simnang\LoanPro\Validator\FieldValidator;
 
@@ -133,16 +135,19 @@ class Communicator
      * Returns the loans for the customer
      * @param       $customerId
      * @param array $expandProps
+     * @param FilterParams $filterParams
      * @return array
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetLoansForCustomer($customerId, $expandProps = []){
+    public function GetLoansForCustomer($customerId, $expandProps = [], FilterParams $filterParams = null){
         $query = [];
         $exp = implode(',', $expandProps);
         if($exp)
             $query[] = "\$expand=$exp";
         $query[] = 'nopaging=true';
+        if(!is_null($filterParams))
+            $query[] = (string)$filterParams;
         $query = '?'.implode('&',array_filter($query));
         $res = $this->client->GET("$this->baseUrl/odata.svc/Customers($customerId)/Loans$query");
         if ($res->getStatusCode() == 200) {
@@ -151,6 +156,39 @@ class Communicator
                 $ret = [];
                 foreach($body['d']['results'] as $val){
                     $ret[] = LoanProSDK::GetInstance()->CreateLoanFromJSON($val);
+                }
+                return $ret;
+            }
+        }
+        throw new ApiException($res);
+    }
+
+
+    /**
+     * Gets the information for payment accounts associated to a customer
+     * @param int           $customerId - The id of the customer
+     * @param array         $expandProps - array of properties to expand
+     * @param FilterParams  $filterParams - FilterParams
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetPaymentAccounts($customerId, $expandProps = [], FilterParams $filterParams = null){
+        $query = [];
+        $exp = implode(',', $expandProps);
+        if($exp)
+            $query[] = "\$expand=$exp";
+        $query[] = 'nopaging=true';
+        if(!is_null($filterParams))
+            $query[] = (string)$filterParams;
+        $query = '?'.implode('&',array_filter($query));
+        $res = $this->client->GET("$this->baseUrl/odata.svc/Customers($customerId)/PaymentAccounts$query");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['results'])) {
+                $ret = [];
+                foreach($body['d']['results'] as $val){
+                    $ret[] = LoanProSDK::GetInstance()->CreateClassFromJSON_Public(PaymentAccountEntity::class, $val);
                 }
                 return $ret;
             }
@@ -284,32 +322,6 @@ class Communicator
         throw new ApiException($res);
     }
 
-    public function GetLoanStatusArchive($loanId, $datetimeStart = null, $datetimeEnd = null){
-        $pagParams = new PaginationParams(true);
-        $pagParams->SetOrdering(['date'], PaginationParams::DESCENDING_ORDER);
-
-        $datetimeStart = (!is_null($datetimeStart)) ? FieldValidator::GetDate($datetimeStart) : (new \DateTime())->setTime(23,55,55)->sub(new \DateInterval('P2D'))->getTimestamp();
-        $datetimeEnd = (!is_null($datetimeEnd)) ? FieldValidator::GetDate($datetimeEnd) : (new \DateTime())->setTime(23,55,55)->add(new \DateInterval('P1D'))->getTimestamp();
-
-        $datetimeStart = (new \DateTime())->setTimestamp($datetimeStart)->format('Y-m-d\Th:i:s');
-        $datetimeEnd = (new \DateTime())->setTimestamp($datetimeEnd)->format('Y-m-d\Th:i:s');
-
-        $filterParams = FilterParams::MakeFromODataString("loanId eq $loanId and date ge datetime'$datetimeStart' and date le datetime'$datetimeEnd'");
-        $query = "?".implode('&',array_map('urlencode',['all',(string)$pagParams, (string)$filterParams]));
-        $res = $this->client->GET("$this->baseUrl/odata.svc/LoanStatusArchive$query");
-        if ($res->getStatusCode() == 200) {
-            $body = json_decode($res->getBody(), true);
-            if (isset($body['d']) && isset($body['d']['results'])) {
-                $ret = [];
-                foreach($body['d']['results'] as $val){
-                    $ret[] = LoanProSDK::GetInstance()->CreateLoanStatusArchiveFromJSON($val);
-                }
-                return $ret;
-            }
-        }
-        throw new ApiException($res);
-    }
-
     /**
      * Creates a modification for a loan
      * @param int        $loanId - ID of loan to make a modification for
@@ -344,6 +356,41 @@ class Communicator
                 return $body['d']['success'];
         }
         throw new ApiException($response);
+    }
+
+    /**
+     * Returns the loan status archive for a loan
+     * @param      $loanId - ID of the loan to use
+     * @param null $datetimeStart - datetime period to start the range for pulling the archive
+     * @param null $datetimeEnd - datetime period to end the range for pulling the archive
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetLoanStatusArchive($loanId, $datetimeStart = null, $datetimeEnd = null){
+        $pagParams = new PaginationParams(true);
+        $pagParams->SetOrdering(['date'], PaginationParams::DESCENDING_ORDER);
+
+        $datetimeStart = (!is_null($datetimeStart)) ? FieldValidator::GetDate($datetimeStart) : (new \DateTime())->setTime(23,55,55)->sub(new \DateInterval('P2D'))->getTimestamp();
+        $datetimeEnd = (!is_null($datetimeEnd)) ? FieldValidator::GetDate($datetimeEnd) : (new \DateTime())->setTime(23,55,55)->add(new \DateInterval('P1D'))->getTimestamp();
+
+        $datetimeStart = (new \DateTime())->setTimestamp($datetimeStart)->format('Y-m-d\Th:i:s');
+        $datetimeEnd = (new \DateTime())->setTimestamp($datetimeEnd)->format('Y-m-d\Th:i:s');
+
+        $filterParams = FilterParams::MakeFromODataString("loanId eq $loanId and date ge datetime'$datetimeStart' and date le datetime'$datetimeEnd'");
+        $query = "?".implode('&',array_map('urlencode',['all',(string)$pagParams, (string)$filterParams]));
+        $res = $this->client->GET("$this->baseUrl/odata.svc/LoanStatusArchive$query");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['results'])) {
+                $ret = [];
+                foreach($body['d']['results'] as $val){
+                    $ret[] = LoanProSDK::GetInstance()->CreateClassFromJSON_Public(LoanStatusArchiveEntity::class, $val);
+                }
+                return $ret;
+            }
+        }
+        throw new ApiException($res);
     }
 
     /**

@@ -19,10 +19,8 @@
 namespace Simnang\LoanPro\Iteration;
 
 
-use Simnang\LoanPro\LoanProSDK;
-
 /**
- * Class LoanIterator
+ * Class CustomerSearchIterator
  *
  * An iterator for loans stored on LoanPro which abstracts away pagination
  *

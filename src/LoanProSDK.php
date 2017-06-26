@@ -288,6 +288,19 @@ class LoanProSDK
     }
 
     /**
+     * Gets the information for payment accounts associated to a customer
+     * @param int           $customerId - The id of the customer
+     * @param array         $expandProps - array of properties to expand
+     * @param FilterParams  $filterParams - FilterParams
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetPaymentAccounts($customerId, $expandProps = [], FilterParams $filterParams = null){
+        return $this->apiComm->GetPaymentAccounts($customerId, $expandProps, $filterParams);
+    }
+
+    /**
      * Sets the configuration for the loan pro instance (will re-set the instance if API credentials have been set)
      *  If non-null $tenant and $token is provided, will also set credentials
      * @param string      $commType - communicator type to use, accepts 'sync' or 'async', defaults to 'sync'
@@ -1069,22 +1082,23 @@ class LoanProSDK
 
         return (new Loans\LoanSetupEntity($json[LOAN_SETUP::LCLASS__C],$json[LOAN_SETUP::LTYPE__C]))->Set($setVars);
     }
-    public function CreateLoanStatusArchiveFromJSON($json){
+    public function CreateClassFromJSON_Public($class, $json){
         if(!is_string($json) && !is_array($json))
             throw new \InvalidArgumentException("Expected a JSON string or array");
         if(is_string($json))
             $json = json_decode($json, true);
-        $json = static::CleanJSON($json);
 
-        $setVars = [];
-
-        foreach($json as $key => $val){
-            $val = LoanProSDK::GetObjectForm($key, $val);
-            if(!is_null($val))
-                $setVars[$key] = $val;
+        $reqFields = $class::getReqFields();
+        $params = [];
+        foreach($reqFields as $r){
+            if(!isset($json[$r]))
+                throw new \InvalidArgumentException("Missing '$r' for class '$class'!");
+            $params[] = $json[$r];
         }
 
-        return (new Loans\LoanStatusArchiveEntity())->Set($setVars);
+        $json = LoanProSDK::PrepArray(LoanProSDK::CleanJSON($json));
+
+        return (new $class(...$params))->Set($json);
     }
     /// @endcond
 
