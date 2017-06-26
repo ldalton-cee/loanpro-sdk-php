@@ -938,6 +938,9 @@ class LoanProSDK
 
         MC_PROCESSOR::BANK_ACCOUNT      =>['class'=>PCIWalletTokenEntity::class],
         MC_PROCESSOR::CREDIT_CARD       =>['class'=>PCIWalletTokenEntity::class],
+
+        PAYMENT_ACCOUNT::CHECKING_ACCOUNT => ['class'=>CheckingAccountEntity::class],
+        PAYMENT_ACCOUNT::CREDIT_CARD      => ['class'=>CreditCardEntity::class],
     ];
 
     /**
