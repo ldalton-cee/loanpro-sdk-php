@@ -23,8 +23,18 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\REFERENCES;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class ReferencesEntity
+ *
+ * @package Simnang\LoanPro\Customers
+ */
 class ReferencesEntity extends  BaseEntity
 {
+    /**
+     * Creates a new references entity
+     * @param $name - name of reference
+     * @throws \ReflectionException
+     */
     public function __construct($name){
         parent::__construct($name);
     }

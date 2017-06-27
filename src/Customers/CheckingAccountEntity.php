@@ -24,10 +24,13 @@ use Simnang\LoanPro\Constants\CHECKING_ACCOUNT;
 use Simnang\LoanPro\Constants\CREDIT_CARD;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class CheckingAccountEntity
+ *
+ * @package Simnang\LoanPro\Customers
+ */
 class CheckingAccountEntity extends  BaseEntity
 {
-
-
     /**
      * List of required fields
      * @var array

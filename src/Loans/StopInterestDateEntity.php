@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\STOP_INTEREST_DATE;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class StopInterestDateEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class StopInterestDateEntity extends BaseEntity
 {
     /**

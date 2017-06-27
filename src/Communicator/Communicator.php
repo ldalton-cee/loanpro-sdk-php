@@ -1056,9 +1056,6 @@ class Communicator
     }
 
     /// @cond false
-    /**
-     *
-     */
     const BETA = "beta-";
 
     public function Secret($c){

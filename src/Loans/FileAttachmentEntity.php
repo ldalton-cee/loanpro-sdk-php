@@ -22,6 +22,11 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\FILE_ATTACHMENT;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class FileAttachmentEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class FileAttachmentEntity extends BaseEntity
 {
     /**

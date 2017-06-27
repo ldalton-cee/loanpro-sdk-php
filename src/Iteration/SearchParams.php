@@ -18,9 +18,13 @@
 
 namespace Simnang\LoanPro\Iteration;
 
-
 use Simnang\LoanPro\Utils\Parser\SearchGenerator;
 
+/**
+ * Class SearchParams
+ *
+ * @package Simnang\LoanPro\Iteration
+ */
 class SearchParams
 {
     private static $searchGenerator = null;

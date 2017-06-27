@@ -24,9 +24,9 @@ use PHPUnit\Framework\TestCase;
 /// Setup Aliasing
 ////////////////////
 
-use Simnang\LoanPro\LoanProSDK as LPSDK,
-    Simnang\LoanPro\Constants\INSURANCE as INSURANCE,
-    Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY
+use \Simnang\LoanPro\LoanProSDK as LPSDK,
+    \Simnang\LoanPro\Constants\INSURANCE as INSURANCE,
+    \Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY
     ;
 
 ////////////////////

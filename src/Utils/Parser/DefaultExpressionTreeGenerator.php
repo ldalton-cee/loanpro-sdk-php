@@ -18,9 +18,13 @@
 
 namespace Simnang\LoanPro\Utils\Parser;
 
-
 use Simnang\LoanPro\Utils\Stack;
 
+/**
+ * Class DefaultExpressionTreeGenerator
+ *
+ * @package Simnang\LoanPro\Utils\Parser
+ */
 class DefaultExpressionTreeGenerator extends ExpressionTreeGenerator
 {
     private $nodes;
@@ -28,6 +32,11 @@ class DefaultExpressionTreeGenerator extends ExpressionTreeGenerator
     private $curNode = null;
     private $exprTreeRules = null;
 
+    /**
+     * Creates default expression tree generator
+     * @param $tokenSymbols
+     * @param $expr
+     */
     public function __construct($tokenSymbols, $expr){
         parent::__construct($tokenSymbols);
 
@@ -44,6 +53,9 @@ class DefaultExpressionTreeGenerator extends ExpressionTreeGenerator
         $this->exprTreeRules = $expr;
     }
 
+    /**
+     * Resets the tree generator
+     */
     public function Reset(){
         $this->nodes = new Stack();
         $this->terminals = new Stack();
@@ -75,6 +87,10 @@ class DefaultExpressionTreeGenerator extends ExpressionTreeGenerator
         return false;
     }
 
+    /**
+     * Processes the next token
+     * @param Token $curToken
+     */
     public function ProcessToken(Token $curToken)
     {
         $svar = strtolower($curToken->token);
@@ -148,11 +164,19 @@ class DefaultExpressionTreeGenerator extends ExpressionTreeGenerator
         }
     }
 
+    /**
+     * Returns the accepted operations
+     * @return array
+     */
     public function GetAcceptedOps()
     {
         return ['terminal','binary_op', 'ignore'];
     }
 
+    /**
+     * Returns the expression tree
+     * @return null
+     */
     public function GetExpressionTree()
     {
         if(!is_null($this->curNode))

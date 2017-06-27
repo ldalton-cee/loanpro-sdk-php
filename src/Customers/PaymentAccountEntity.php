@@ -25,8 +25,19 @@ use Simnang\LoanPro\Constants\PAYMENT_ACCOUNT;
 use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class PaymentAccountEntity
+ *
+ * @package Simnang\LoanPro\Customers
+ */
 class PaymentAccountEntity extends  BaseEntity
 {
+    /**
+     * Creates a payment account entity
+     * @param $title - title of the payment account
+     * @param $type - creates a payment account type
+     * @throws \ReflectionException
+     */
     public function __construct($title, $type){
         parent::__construct($title, $type);
     }

@@ -18,7 +18,11 @@
 
 namespace Simnang\LoanPro\Utils\Parser;
 
-
+/**
+ * Class SearchGenerator
+ *
+ * @package Simnang\LoanPro\Utils\Parser
+ */
 class SearchGenerator
 {
     const TOKEN_SYMBOLS = ([

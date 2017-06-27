@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\RECURRENT_CHARGES;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class RecurrentChargesEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class RecurrentChargesEntity extends BaseEntity
 {
     /**

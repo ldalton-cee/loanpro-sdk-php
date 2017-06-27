@@ -24,6 +24,11 @@ use Simnang\LoanPro\Constants\CUSTOM_FIELD_VALUES;
 use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class CustomFieldValuesEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class CustomFieldValuesEntity extends BaseEntity
 {
     /**

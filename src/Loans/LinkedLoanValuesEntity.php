@@ -19,10 +19,14 @@
 namespace Simnang\LoanPro\Loans;
 
 use Simnang\LoanPro\BaseEntity;
-use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\LINKED_LOAN_VALUES;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class LinkedLoanValuesEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class LinkedLoanValuesEntity extends BaseEntity
 {
     /**

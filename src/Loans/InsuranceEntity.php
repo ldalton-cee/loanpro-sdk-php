@@ -13,6 +13,11 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\INSURANCE;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class InsuranceEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class InsuranceEntity extends BaseEntity
 {
     /**

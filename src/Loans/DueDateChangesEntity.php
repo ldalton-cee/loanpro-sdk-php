@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\DUE_DATE_CHANGES;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class DueDateChangesEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class DueDateChangesEntity extends BaseEntity
 {
     /**

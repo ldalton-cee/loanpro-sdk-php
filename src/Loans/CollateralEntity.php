@@ -13,6 +13,11 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\COLLATERAL;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class CollateralEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class CollateralEntity extends BaseEntity
 {
     /**

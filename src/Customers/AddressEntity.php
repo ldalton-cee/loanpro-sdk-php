@@ -23,8 +23,21 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\ADDRESS;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class AddressEntity
+ *
+ * Address entity to use
+ *
+ * @package Simnang\LoanPro\Customers
+ */
 class AddressEntity extends  BaseEntity
 {
+    /**
+     * Creates a new address entity
+     * @param $state - state code/province
+     * @param $zip - zip code
+     * @throws \ReflectionException
+     */
     public function __construct($state, $zip){
         parent::__construct($state, $zip);
     }
@@ -34,7 +47,7 @@ class AddressEntity extends  BaseEntity
      * @var array
      */
     protected static $required = [
-        ADDRESS::STATE__C,
+        ADDRESS::STATE,
         ADDRESS::ZIPCODE
     ];
 
@@ -63,7 +76,7 @@ class AddressEntity extends  BaseEntity
         ADDRESS::ADDRESS_1          => FieldValidator::STRING,
         ADDRESS::ADDRESS_2          => FieldValidator::STRING,
         ADDRESS::CITY               => FieldValidator::STRING,
-        ADDRESS::STATE__C           => FieldValidator::COLLECTION,
+        ADDRESS::STATE              => FieldValidator::STRING,
         ADDRESS::ZIPCODE            => FieldValidator::STRING,
         ADDRESS::COUNTRY__C         => FieldValidator::COLLECTION,
         ADDRESS::GEO_LAT            => FieldValidator::NUMBER,

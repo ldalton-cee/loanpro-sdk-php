@@ -18,16 +18,39 @@
 
 namespace Simnang\LoanPro\Utils\Parser;
 
-
+/**
+ * Class ExpressionTreeGenerator
+ *
+ * @package Simnang\LoanPro\Utils\Parser
+ */
 abstract class ExpressionTreeGenerator
 {
     protected $tokenSymbols;
 
+    /**
+     * Creates an expression tree generator
+     * @param $tokenSymbols - tokens to use with their symbols
+     */
     public function __construct($tokenSymbols){
         $this->tokenSymbols = $tokenSymbols;
     }
 
+    /**
+     * Process the next token
+     * @param Token $t
+     * @return mixed
+     */
     public abstract function ProcessToken(Token $t);
+
+    /**
+     * Returns the final expression tree
+     * @return mixed
+     */
     public abstract function GetExpressionTree();
+
+    /**
+     * Resets the expression tree generator
+     * @return mixed
+     */
     public abstract function Reset();
 }

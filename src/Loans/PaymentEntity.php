@@ -16,6 +16,11 @@ use Simnang\LoanPro\Constants\PAYMENTS;
 use Simnang\LoanPro\Iteration\FilterParams;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class PaymentEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class PaymentEntity extends BaseEntity
 {
     /**

@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\RULES_APPLIED_CHECKLIST;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class RulesAppliedChecklistsEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class RulesAppliedChecklistsEntity extends BaseEntity
 {
     /**

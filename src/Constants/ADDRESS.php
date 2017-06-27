@@ -26,7 +26,7 @@ class ADDRESS{
     const ADDRESS_1         = 'address1';
     const ADDRESS_2         = 'address2';
     const CITY              = 'city';
-    const STATE__C          = 'state';
+    const STATE             = 'state';
     const ZIPCODE           = 'zipcode';
     const COUNTRY__C        = 'country';
     const GEO_LAT           = 'geoLat';

@@ -1,6 +1,6 @@
 {
 	"communicator":{
-		"env":"beta",
+		"env":"staging",
 		"type":"async"
 	},
 	"config":{

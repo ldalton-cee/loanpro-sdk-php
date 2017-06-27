@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\CHECKING_ACCOUNT;
 use Simnang\LoanPro\Validator\FieldValidator;
 use Simnang\LoanPro\Constants\CHARGES;
 
+/**
+ * Class ChargeEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class ChargeEntity extends BaseEntity
 {
     /**

@@ -24,8 +24,18 @@ use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Constants\EMPLOYERS;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class EmployerEntity
+ *
+ * @package Simnang\LoanPro\Customers
+ */
 class EmployerEntity extends  BaseEntity
 {
+    /**
+     * Creates a new employer entity
+     * @param $coName - name of the company
+     * @throws \ReflectionException
+     */
     public function __construct($coName){
         parent::__construct($coName);
     }
