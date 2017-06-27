@@ -24,8 +24,18 @@ use Simnang\LoanPro\Constants\PHONES;
 use Simnang\LoanPro\Constants\REFERENCES;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class PhoneEntity
+ *
+ * @package Simnang\LoanPro\Customers
+ */
 class PhoneEntity extends  BaseEntity
 {
+    /**
+     * Creates a new phone entity
+     * @param $phoneNum - phone number
+     * @throws \ReflectionException
+     */
     public function __construct($phoneNum){
         parent::__construct($phoneNum);
     }

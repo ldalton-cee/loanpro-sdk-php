@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\STATUS_ARCHIVE;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class LoanStatusArchiveEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class LoanStatusArchiveEntity extends BaseEntity
 {
     /**

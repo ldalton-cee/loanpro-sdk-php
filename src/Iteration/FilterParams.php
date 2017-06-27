@@ -24,8 +24,16 @@ use Simnang\LoanPro\Utils\Parser\LL1_Parser;
 use Simnang\LoanPro\Utils\Parser\LogicalFilterExpressionTreeGenerator;
 use Simnang\LoanPro\Utils\Stack;
 
+/**
+ * Class FilterParams
+ *
+ * This holds filter information for OData filter statements
+ *
+ * @package Simnang\LoanPro\Iteration
+ */
 class FilterParams
 {
+    /// @cond false
     const ODATA_TOKENS = [
         'LOGICAL_OP'    => 'and|or',
         'COMP_OP'       => 'eq|ne|gt|ge|lt|le',
@@ -57,6 +65,7 @@ class FilterParams
         'R_PAREN'       => '\)',
         'L_PAREN'       => '\('
     ];
+    /// @endcond
 
     private $string;
     private static $funcNames = ['substringof','endswith','startswith','length','indexof','replace','substring','tolower','toupper','trim','concat','year','years','month','day',
@@ -66,6 +75,13 @@ class FilterParams
     private static $linterParser = null;
     private static $logicParser = null;
 
+    /**
+     * Creates a new FilterParams object from an OData Filter string
+     *
+     * Does perform lint checking
+     * @param $string
+     * @return FilterParams
+     */
     public static function MakeFromODataString($string){
         if(is_null(static::$linterParser)){
             static::$linterParser = new LL1_Parser(FilterParams::ODATA_TOKENS, FilterParams::GRAMMAR, 'EXPR');
@@ -77,10 +93,23 @@ class FilterParams
         throw new \InvalidArgumentException("Invalid filter statement");
     }
 
+    /**
+     * Creates a new FilterParams object from an OData Filter string
+     *
+     * Does NOT perform lint checking
+     * @param $string
+     * @return FilterParams
+     */
     public static function MakeFromODataString_UNSAFE($string){
         return new FilterParams($string);
     }
 
+    /**
+     * Creates a new FilterParams object from an Logic operator string
+     *
+     * @param $string
+     * @return FilterParams
+     */
     public static function MakeFromLogicString($string){
         if(is_null(static::$logicParser)){
             static::$logicParser = new LL1_Parser(FilterParams::LOGIC_TOKENS, FilterParams::GRAMMAR, 'EXPR');

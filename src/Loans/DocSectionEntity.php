@@ -22,6 +22,11 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\DOC_SECTION;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class DocSectionEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class DocSectionEntity extends BaseEntity
 {
     /**

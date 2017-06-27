@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\RULES_APPLIED_APD_RESET;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class RulesAppliedAPDResetEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class RulesAppliedAPDResetEntity extends BaseEntity
 {
     /**

@@ -23,6 +23,18 @@ use Simnang\LoanPro\Utils\Parser\AggregateExpressionTreeGenerator;
 use Simnang\LoanPro\Utils\Parser\ExpressionTreeNode;
 use Simnang\LoanPro\Utils\Parser\LL1_Parser;
 
+/**
+ * Class AggregateParams
+ *
+ * Creates aggregate params using a Domain Specific Language (DSL)
+ * The DSL has the following format:
+ *  field_to_aggregate:agg_method_1,agg_method_2;another_field:agg_method_3;
+ *
+ * Example, below aggregates the loan amount (gets the sum and max) and loan payoff (average)
+ * "loan_amount:sum,max;loan_payoff:avg"
+ *
+ * @package Simnang\LoanPro\Iteration
+ */
 class AggregateParams
 {
     private static $parser = null;
@@ -35,15 +47,27 @@ class AggregateParams
         }
     }
 
+    /**
+     * Creates new aggregate params object based on a DSL
+     * @param string $str
+     */
     public function __construct($str = ''){
         static::EnsureParserIsSetup();
         $this->tree = ['aggs'=>AggregateParams::ProcessTree(static::$parser->Parse($str))];
     }
 
+    /**
+     * Returns the internal tree representation
+     * @return array|null
+     */
     public function Get(){
         return $this->tree;
     }
 
+    /**
+     * Returns the stringified JSON (for searching)
+     * @return string
+     */
     public function __toString(){
         return json_encode($this->tree);
     }

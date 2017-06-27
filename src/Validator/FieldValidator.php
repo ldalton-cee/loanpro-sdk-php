@@ -328,7 +328,12 @@ class FieldValidator
         return null;
     }
 
-
+    /**
+     * Returns a date string
+     *
+     * @param $date
+     * @return string
+     */
     public static function GetDateString($date){
         $date = FieldValidator::GetDate($date);
         if ($date > -62169984000) {

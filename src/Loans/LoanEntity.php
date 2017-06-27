@@ -30,6 +30,11 @@ use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\LoanProSDK;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class LoanEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class LoanEntity extends BaseEntity
 {
     /**
@@ -39,6 +44,46 @@ class LoanEntity extends BaseEntity
      */
     public function __construct($dispId){
         parent::__construct($dispId);
+    }
+
+    /**
+     * This returns a copy of the object with the changes to the specified fields. Cannot be used to unset values or to set values to null (see rem)
+     *
+     * It accepts a list of alternating fields and values (eg. field1, val1, field2, val2, ...), or an array where the field is the key (eg. [field1=>val1, field2=>val2])
+     *
+     * @param $arg1
+     * @param ...$args
+     * @return LoanEntity
+     */
+    public function Set($arg1, ...$args){
+        return parent::Set($arg1, ...$args);
+    }
+
+    /**
+     * This returns a copy of the entity without the specified field(s). It can take a single field, a list of fields, or an array of fields. It effectively unloads a field from memory
+     *
+     * If trying to delete field marked as "required" (ie. it is required to be set in the constructor) then this function Will through an InvalidArgumentException.
+     * This is since fields marked as "required" are required for creation in LoanPro, and every local entity is considered a prototype of for creating an entity in LoanPro
+     *
+     * @param $arg1
+     * @param ...$args
+     * @return LoanEntity
+     */
+    public function Rem($arg1, ...$args){
+        return parent::Rem($arg1, ...$args);
+    }
+
+    /**
+     * This returns a copy of the object with the changes to the specified object lists. Cannot be used to unset values or to set values to null (see rem). Cannot be used to modify fields that aren't object lists.
+     *
+     * It accepts a list of alternating fields and values (eg. field1, val1, field2, val2, ...), an array where the field is the key (eg. [field1=>val1, field2=>val2]), a list of fields and followed by several values (eg. field1, val1_1, val1_2, ..., field2, val2_1, val2_2, ...), or an array where the field is the key and an array of values (eg. [field1=>[val1_1, val1_2], field2=>[val2_1, val2_1]]),
+     *
+     * @param $arg1
+     * @param ...$args
+     * @return LoanEntity
+     */
+    public function Append($arg1, ...$args){
+        return parent::Append($arg1, ...$args);
     }
 
     /**
@@ -58,6 +103,7 @@ class LoanEntity extends BaseEntity
      * @param $newLoanSetup - optional parameter, if set then this will Save the loan setup template as the new loan setup
      * @return LoanEntity - Returns a loan entity with the latest changes (just the loan and new loan setup)
      * @throws InvalidStateException - Thrown if the loan ID isn't set
+     * @throws ApiException
      */
     public function CreateModification($newLoanSetup = null){
         $this->InsureHasID();
@@ -287,17 +333,6 @@ class LoanEntity extends BaseEntity
         $this->InsureHasID();
         return LoanProSDK::GetInstance()->GetApiComm()->GetLoanAdminStats($this->Get(BASE_ENTITY::ID));
     }
-
-    /**
-     * Returns paid breakdown for the loan
-     * @return array
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-//    public function PaidBreakdown(){
-//        $this->InsureHasID();
-//        return LoanProSDK::GetInstance()->GetApiComm()->GetLoanPaidBreakdown($this->Get(BASE_ENTITY::ID));
-//    }
 
     /**
      * Returns interest fees history

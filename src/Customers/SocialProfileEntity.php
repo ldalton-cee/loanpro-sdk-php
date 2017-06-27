@@ -24,10 +24,13 @@ use Simnang\LoanPro\Constants\REFERENCES;
 use Simnang\LoanPro\Constants\SOCIAL_PROFILES;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class SocialProfileEntity
+ *
+ * @package Simnang\LoanPro\Customers
+ */
 class SocialProfileEntity extends  BaseEntity
 {
-
-
     /**
      * List of required fields
      * @var array

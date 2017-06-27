@@ -22,6 +22,11 @@ namespace Simnang\LoanPro\Utils\Parser;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Utils\Stack;
 
+/**
+ * Class LogicalFilterExpressionTreeGenerator
+ *
+ * @package Simnang\LoanPro\Utils\Parser
+ */
 class LogicalFilterExpressionTreeGenerator extends ExpressionTreeGenerator
 {
     private $treeStack;
@@ -30,6 +35,9 @@ class LogicalFilterExpressionTreeGenerator extends ExpressionTreeGenerator
     private $opToPushTo;
     private $usePExpr;
 
+    /**
+     * Resets the expression tree generator
+     */
     public function Reset(){
         $this->treeStack = new Stack();
         $this->pExrStack = new Stack();
@@ -38,6 +46,10 @@ class LogicalFilterExpressionTreeGenerator extends ExpressionTreeGenerator
         $this->opToPushTo = null;
     }
 
+    /**
+     * Processes the next token
+     * @param Token $t
+     */
     public function ProcessToken(Token $t)
     {
         $tname = $t->token;
@@ -141,6 +153,11 @@ class LogicalFilterExpressionTreeGenerator extends ExpressionTreeGenerator
         }
     }
 
+    /**
+     * Returns the final expression tree
+     * @return mixed
+     * @throws InvalidStateException
+     */
     public function GetExpressionTree()
     {
         if($this->treeStack->Size()> 1)

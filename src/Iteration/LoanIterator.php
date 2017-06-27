@@ -18,9 +18,6 @@
 
 namespace Simnang\LoanPro\Iteration;
 
-
-use Simnang\LoanPro\LoanProSDK;
-
 /**
  * Class LoanIterator
  *

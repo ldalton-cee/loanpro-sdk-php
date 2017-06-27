@@ -18,7 +18,6 @@
 
 namespace Simnang\LoanPro\Iteration;
 
-
 /**
  * Class CustomerSearchIterator
  *

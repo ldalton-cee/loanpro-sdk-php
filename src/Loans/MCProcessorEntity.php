@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\MC_PROCESSOR;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class MCProcessorEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class MCProcessorEntity extends BaseEntity
 {
     /**

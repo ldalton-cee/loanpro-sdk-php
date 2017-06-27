@@ -18,12 +18,21 @@
 
 namespace Simnang\LoanPro\Utils\Parser;
 
-
+/**
+ * Class TokenInfo
+ *
+ * @package Simnang\LoanPro\Utils\Parser
+ */
 class TokenInfo
 {
     public $value = 0;
     public $regex = '';
 
+    /**
+     * Creates token info
+     * @param $val - Value of token info
+     * @param $regex - Token regex
+     */
     public function __construct($val, $regex){
         $this->value = $val;
         $this->regex = $regex;

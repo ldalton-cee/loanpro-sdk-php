@@ -15,6 +15,11 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\ESCROW_CALCULATED_TX;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class EscrowCalculatedTxEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class EscrowCalculatedTxEntity extends BaseEntity
 {
     /**

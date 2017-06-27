@@ -15,6 +15,11 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\ESCROW_SUBSET;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class EscrowSubsetEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class EscrowSubsetEntity extends BaseEntity
 {
     /**

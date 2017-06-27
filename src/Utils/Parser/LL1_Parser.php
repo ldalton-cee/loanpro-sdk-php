@@ -21,6 +21,11 @@ namespace Simnang\LoanPro\Utils\Parser;
 
 use Simnang\LoanPro\Utils\Stack;
 
+/**
+ * Class LL1_Parser
+ *
+ * @package Simnang\LoanPro\Utils\Parser
+ */
 class LL1_Parser
 {
     private $tokenInfos = [];

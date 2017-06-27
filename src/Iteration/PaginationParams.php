@@ -55,13 +55,6 @@ class PaginationParams
         $this->order = $this->GetValidOrdering($order);
     }
 
-    private function GetValidOrdering($order){
-        $order = strtolower($order);
-        if($order != 'asc' && $order != 'desc')
-            $order = 'asc';
-        return $order;
-    }
-
     /**
      * Sets the ordering options
      * @param array      $orderBy - Name of field to order by
@@ -152,6 +145,11 @@ class PaginationParams
         return $this->start;
     }
 
+    /**
+     * Sets whether or not $skip should be used over $start
+     * @param bool|true $use
+     * @return PaginationParams
+     */
     public function SetUseSkip($use = true){
         $obj = clone $this;
         $obj->useSkip = $use;
@@ -181,5 +179,12 @@ class PaginationParams
             $options[] = implode(',',$this->orderBy).'%20'.$this->order;
         }
         return implode('&', $options);
+    }
+
+    private function GetValidOrdering($order){
+        $order = strtolower($order);
+        if($order != 'asc' && $order != 'desc')
+            $order = 'asc';
+        return $order;
     }
 }

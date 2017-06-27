@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\RULES_APPLIED_CHARGEOFF;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class RulesAppliedChargeoffEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class RulesAppliedChargeoffEntity extends BaseEntity
 {
     /**

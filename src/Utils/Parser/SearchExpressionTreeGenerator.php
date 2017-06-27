@@ -18,10 +18,14 @@
 
 namespace Simnang\LoanPro\Utils\Parser;
 
-
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Utils\Stack;
 
+/**
+ * Class SearchExpressionTreeGenerator
+ *
+ * @package Simnang\LoanPro\Utils\Parser
+ */
 class SearchExpressionTreeGenerator extends ExpressionTreeGenerator
 {
     private $treeStack;
@@ -31,6 +35,9 @@ class SearchExpressionTreeGenerator extends ExpressionTreeGenerator
     private $opToPushTo;
     private $usePExpr;
 
+    /**
+     * Resets the expression tree generator
+     */
     public function Reset(){
         $this->treeStack = new Stack();
         $this->pExrStack = new Stack();
@@ -40,6 +47,10 @@ class SearchExpressionTreeGenerator extends ExpressionTreeGenerator
         $this->opToPushTo = null;
     }
 
+    /**
+     * Processes the next token
+     * @param Token $t
+     */
     public function ProcessToken(Token $t)
     {
         $tname = $t->token;
@@ -181,6 +192,11 @@ class SearchExpressionTreeGenerator extends ExpressionTreeGenerator
         }
     }
 
+    /**
+     * Returns the final expression tree
+     * @return mixed
+     * @throws InvalidStateException
+     */
     public function GetExpressionTree()
     {
         //echo "\n".(json_encode($this->treeStack, JSON_PRETTY_PRINT))."\n\n";

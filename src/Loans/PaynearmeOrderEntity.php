@@ -15,6 +15,11 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\PAY_NEAR_ME_ORDERS;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class PaynearmeOrderEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class PaynearmeOrderEntity extends BaseEntity
 {
     /**

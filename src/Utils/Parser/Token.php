@@ -18,12 +18,21 @@
 
 namespace Simnang\LoanPro\Utils\Parser;
 
-
+/**
+ * Class Token
+ *
+ * @package Simnang\LoanPro\Utils\Parser
+ */
 class Token
 {
     public $token = 0;
     public $sequence = '';
 
+    /**
+     * Creates a new token
+     * @param string $token - Token name
+     * @param string $sequence - Sequence of code associated with the token
+     */
     public function __construct($token = '', $sequence = '') {
         $this->token = $token;
         $this->sequence = $sequence;

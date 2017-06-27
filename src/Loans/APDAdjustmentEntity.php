@@ -22,6 +22,11 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\APD_ADJUSTMENTS;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class APDAdjustmentEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class APDAdjustmentEntity extends BaseEntity
 {
     /**

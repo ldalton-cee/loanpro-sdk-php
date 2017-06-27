@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\SUB_PORTFOLIO;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class SubPortfolioEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class SubPortfolioEntity extends BaseEntity
 {
     /**

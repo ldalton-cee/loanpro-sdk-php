@@ -22,6 +22,11 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\AUTOPAYS;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class AutopayEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class AutopayEntity extends BaseEntity
 {
     /**

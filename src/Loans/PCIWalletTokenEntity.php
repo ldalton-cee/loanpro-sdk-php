@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\PCI_WALLET_TOKEN;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class PCIWalletTokenEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class PCIWalletTokenEntity extends BaseEntity
 {
     /**

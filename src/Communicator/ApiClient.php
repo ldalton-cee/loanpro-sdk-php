@@ -28,7 +28,6 @@ use Http\Client\HttpAsyncClient;
 use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\HttpAsyncClientDiscovery;
-use Http\Promise\FulfilledPromise;
 use Violet\StreamingJsonEncoder\JsonStream;
 
 /**
@@ -45,11 +44,21 @@ class ApiClient
     private static $tenant = null;
     private static $token = null;
 
+    /**
+     * Sets the authorization for future ApiClient
+     *  NOT Thread Safe!
+     * @param $tenant
+     * @param $token
+     */
     public static function SetAuthorization($tenant, $token){
         static::$tenant = $tenant;
         static::$token = $token;
     }
 
+    /**
+     * Whether or not the API token is set
+     * @return bool
+     */
     public static function AreTokensSet(){
         if(static::$tenant && static::$token)
             return true;
@@ -60,6 +69,10 @@ class ApiClient
         return ['Autopal-Instance-Id'=>static::$tenant, 'Authorization'=>'Bearer '.static::$token];
     }
 
+    /**
+     * Returns ID of the tenant that's been set
+     * @return null|int
+     */
     public static function GetTenantId(){
         return static::$tenant;
     }
@@ -106,7 +119,10 @@ class ApiClient
     }
 
     /**
-     * @param HttpAsyncClient|null $httpAsyncClient Client to do HTTP requests, if not set, auto discovery will be used to find an asynchronous client.
+     * Creates a new API Client
+     * @param bool|false $type
+     * @param            $client
+     * @param            ...$params
      */
     protected function __construct($type = false, $client, ...$params)
     {

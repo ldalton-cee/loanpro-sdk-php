@@ -128,6 +128,10 @@ class BaseIterator implements \Iterator
         $this->paginationVar = null;
     }
 
+    /**
+     * Gets the aggregate information (set with a search iterator)
+     * @return null|array
+     */
     public function GetAggregates(){
         $this->current();
         return $this->aggs;

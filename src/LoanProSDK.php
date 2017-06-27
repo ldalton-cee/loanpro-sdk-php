@@ -30,7 +30,6 @@ use Simnang\LoanPro\Constants\CUSTOM_FIELD_VALUES;
 use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Constants\DOCUMENTS;
 use Simnang\LoanPro\Constants\EMPLOYERS;
-use Simnang\LoanPro\Constants\LINKED_LOAN_VALUES;
 use Simnang\LoanPro\Constants\LOAN;
 use Simnang\LoanPro\Constants\LOAN_SETTINGS;
 use Simnang\LoanPro\Constants\LOAN_SETUP;
@@ -105,7 +104,6 @@ use Simnang\LoanPro\Loans\ScheduleRollEntity;
 use Simnang\LoanPro\Loans\SourceCompanyEntity;
 use Simnang\LoanPro\Loans\StopInterestDateEntity;
 use Simnang\LoanPro\Loans\SubPortfolioEntity;
-use Symfony\Component\Yaml\Tests\B;
 
 /**
  * Class LoanProSDK
@@ -147,7 +145,7 @@ class LoanProSDK
 
     /**
      * Returns a loan entity shell around an ID (good for performance)
-     * DO NOT USE 'save()' ON THIS ENTITY
+     * DO NOT USE 'Save()' ON THIS ENTITY
      * @param $loanId - ID of loan entity
      * @return LoanEntity
      */
@@ -155,13 +153,19 @@ class LoanProSDK
         return (new LoanEntity(''))->Set(BASE_ENTITY::ID, $loanId);
     }
 
+    /**
+     * Returns an array of LoanEntity for all loans associated with the specified customer
+     * @param $customerId - ID of customer entity
+     * @param $expandProps - ID of customer entity
+     * @return LoanEntity[]
+     */
     public function GetLoansForCustomer($customerId, $expandProps = []){
         return $this->apiComm->GetLoansForCustomer($customerId, $expandProps);
     }
 
     /**
      * Returns a customer entity shell around an ID (good for performance)
-     * DO NOT USE 'save()' ON THIS ENTITY
+     * DO NOT USE 'Save()' ON THIS ENTITY
      * @param $customerId - ID of customer entity
      * @return CustomerEntity
      */
@@ -199,7 +203,7 @@ class LoanProSDK
      * @param array                 $expandProps - expand properties to expand by
      * @param PaginationParams|null $paginationParams - Pagination options
      * @param FilterParams|null     $filter - filter object
-     * @return array
+     * @return LoanEntity[]
      * @throws ApiException
      * @throws InvalidStateException
      */
@@ -223,7 +227,7 @@ class LoanProSDK
     }
 
     /**
-     * Performs a loan search and returns the direct results
+     * Performs a loan search and returns the direct results (results are not Loan objects but raw JSON)
      * @param PaginationParams|null $paginationParams - pagination settings
      * @param SearchParams|null     $searchParams - parameters to search by
      * @return array
@@ -264,7 +268,7 @@ class LoanProSDK
      * @param array                 $expandProps - expand properties to expand by
      * @param PaginationParams|null $paginationParams - Pagination options
      * @param FilterParams|null     $filter - filter object
-     * @return array
+     * @return CustomerEntity[]
      * @throws ApiException
      * @throws InvalidStateException
      */
@@ -292,7 +296,7 @@ class LoanProSDK
      * @param int           $customerId - The id of the customer
      * @param array         $expandProps - array of properties to expand
      * @param FilterParams  $filterParams - FilterParams
-     * @return array
+     * @return PaymentAccountEntity[]
      * @throws ApiException
      * @throws InvalidStateException
      */
@@ -303,6 +307,7 @@ class LoanProSDK
     /**
      * Sets the configuration for the loan pro instance (will re-set the instance if API credentials have been set)
      *  If non-null $tenant and $token is provided, will also set credentials
+     *  This function is NOT thread safe!
      * @param string      $commType - communicator type to use, accepts 'sync' or 'async', defaults to 'sync'
      * @param string      $env - environment to use, accepts 'prod' or 'staging', defaults to 'prod'
      * @param string|null $tenant - Tenant ID
@@ -341,6 +346,7 @@ class LoanProSDK
 
     /**
      * Returns the singleton instance of the SDK
+     *  This function is NOT thread safe!
      * @return LoanProSDK
      * @throws InvalidStateException
      */
@@ -423,10 +429,10 @@ class LoanProSDK
     /**
      * Creates a new loan with the minimal amount of information required
      * @param string $dispId - Display ID for the loan
-     * @return Loans\LoanEntity
+     * @return LoanEntity
      */
     public function CreateLoan($dispId){
-        return new Loans\LoanEntity($dispId);
+        return new LoanEntity($dispId);
     }
 
     /**
@@ -476,12 +482,38 @@ class LoanProSDK
     }
 
     /**
+     * Creates a new phone number
+     * @param $phoneNum
+     * @return PhoneEntity
+     */
+    public function CreatePhoneNumber($phoneNum){
+        return new PhoneEntity($phoneNum);
+    }
+
+    /**
      * Creates a new payment account entity
-     * @param $title - title of payment account
-     * @param $type - type of payment account
+     *  If a token is specified, then it will create a savable payment account that will link to PCI Wallet
+     *   otherwise, you will need to get it into savable form yourself
+     * @param string        $title      - title of payment account
+     * @param string        $type       - type of payment account
+     * @param null|string   $token      - PCI-Wallet token of payment method
+     * @param bool          $isSavings  - Whether or not the checking account is a savings account (checking accounts only)
      * @return PaymentAccountEntity
      */
     public function CreateCustomerPaymentAccount($title, $type, $token = null, $isSavings = false){
+
+        switch ($type) {
+            case 'savings':
+                $isSavings = true;
+            case 'checking':
+                $type = PAYMENT_ACCOUNT_TYPE__C::CHECKING;
+                break;
+            case 'debit':
+            case 'credit':
+                $type = PAYMENT_ACCOUNT_TYPE__C::DEBIT;
+                break;
+        };
+
         $pmtAcct = new PaymentAccountEntity($title, $type);
         if(!is_null($token)) {
             $pmtAcct = $pmtAcct->Set(PAYMENT_ACCOUNT::ACTIVE, 1);
@@ -494,25 +526,16 @@ class LoanProSDK
                 case PAYMENT_ACCOUNT_TYPE__C::DEBIT:
                 default:
                     $acct = (new CreditCardEntity())->Set(CREDIT_CARD::TOKEN, $token);
-                $pmtAcct = $pmtAcct->Set(PAYMENT_ACCOUNT::CREDIT_CARD, $acct);
+                    $pmtAcct = $pmtAcct->Set(PAYMENT_ACCOUNT::CREDIT_CARD, $acct);
             }
         }
         return $pmtAcct;
     }
 
     /**
-     * Creates a new phone number
-     * @param $phoneNum
-     * @return PhoneEntity
-     */
-    public function CreatePhoneNumber($phoneNum){
-        return new PhoneEntity($phoneNum);
-    }
-
-    /**
      * Creates a new loan and nested entities from a JSON string
      * @param string $json
-     * @return BaseEntity
+     * @return LoanEntity
      */
     public function CreateLoanFromJSON($json){
         if(!is_string($json) && !is_array($json))
@@ -534,6 +557,12 @@ class LoanProSDK
         return (new Loans\LoanEntity($json[LOAN::DISP_ID]))->Set($setVars);
     }
 
+
+    /**
+     * Creates a new customer and nested entities from a JSON string
+     * @param string $json
+     * @return CustomerEntity
+     */
     public function CreateCustomerFromJSON($json){
         if(!is_string($json) && !is_array($json))
             throw new \InvalidArgumentException("Expected a JSON string or array");
@@ -571,7 +600,7 @@ class LoanProSDK
      * @param int $subset - ID of escrow subset to use
      * @return EscrowCalculatorEntity
      */
-    public function CreateEscrowCalculator(int $subset){
+    public function CreateEscrowCalculator($subset){
         return new EscrowCalculatorEntity($subset);
     }
 
@@ -585,7 +614,7 @@ class LoanProSDK
 
     /**
      * Creates a new, empty collateral entity
-     * @return LoanSettingsEntity
+     * @return CollateralEntity
      */
     public function CreateCollateral(){
         return new CollateralEntity();
@@ -593,7 +622,7 @@ class LoanProSDK
 
     /**
      * Creates a new, empty insurance entity
-     * @return LoanSettingsEntity
+     * @return InsuranceEntity
      */
     public function CreateInsurance(){
         return new InsuranceEntity();
@@ -683,8 +712,8 @@ class LoanProSDK
 
     /**
      * Create custom field value entity
-     * @param $id - The ID of the associated entity
-     * @param $entityType - The type of associated entity
+     * @param $customFieldId - The ID of the custom field id entity
+     * @param $customFieldValue - The value of the custom field entity
      * @return CustomFieldValuesEntity
      */
     public function CreateCustomField($customFieldId,$customFieldValue){
@@ -717,10 +746,12 @@ class LoanProSDK
 
     /**
      * Creates loan funding entity
-     * @param $categoryId - ID of note category
-     * @param $subject - subject line of note
-     * @param $body - body text of note
-     * @return NotesEntity
+     * @param $amount - amount funded
+     * @param $date - date funded
+     * @param $whoEntityType - entity type of who was funded
+     * @param $method - funding method
+     * @param $whoEntityId - id of who was funded
+     * @return LoanFundingEntity
      */
     public function CreateLoanFunding($amount, $date, $whoEntityType, $method, $whoEntityId){
         return new LoanFundingEntity($amount, $date, $whoEntityType, $method, $whoEntityId);
@@ -1055,6 +1086,10 @@ class LoanProSDK
         return $clean_json;
     }
 
+    /**
+     * Creates a LoanProSDK Object
+     * @throws InvalidStateException
+     */
     private function __construct(){
         $this->apiComm = Communicator::GetCommunicator(static::$clientType, static::$env);
     }
@@ -1102,6 +1137,11 @@ class LoanProSDK
     }
     /// @endcond
 
+    /**
+     * Recursively trims all strings in an array
+     * @param $arg
+     * @return array|string
+     */
     protected static function TrimRecursive($arg){
         if(is_array($arg)) {
             $ret = [];
@@ -1112,31 +1152,3 @@ class LoanProSDK
         return trim($arg);
     }
 }
-
-
-/*! \mainpage LoanPro PHP SDK
- *
- * \section intro_sec Introduction
- *
- * The goal of the LoanPro PHP SDK is to abstract the complexity of the LoanPro system and allow developers to create fast applications. This is accomplished by abstracting OData entities into PHP classes and providing a list of properties for each class. This list of constants allows integrating code to not have to change in the event of a property name change. This means that if all properties called "active" are renamed to "isActive", the constants list will be updated and integrating code will work once the new SDK is installed. Furthermore, the SDK does a lot of validation and input sanitization, as well as error parsing. Also, it provides several methods for credential management as well as integrating with both production and staging environments.
- *
- * To show how simple it is to use the SDK, below is a sample of creating a modification for a loan and doubling the lending amount:
- *
- * ```php
- * use Simnang\LoanPro\Constants\LOAN, Simnang\LoanPro\Constants\LOAN_SETUP, Simnang\LoanPro\Loans\LoanSetupEntity;
- * $loan = LoanProSDK::GetInstance()->GetLoan(55, [LOAN::LOAN_SETUP]);
- * $lsetup = $loan->Get(LOAN::LOAN_SETUP);
- * $loan->createModification($lsetup->Set(LOAN_SETUP::LOAN_AMT, $lsetup->Get(LOAN_SETUP::LOAN_AMT) / 2));
- * ```
- *
- * Below is an example of halving the loan amount, discount, and interest rate for another loan
- *
- * ```php
- * use Simnang\LoanPro\Constants\LOAN, Simnang\LoanPro\Constants\LOAN_SETUP, Simnang\LoanPro\Loans\LoanSetupEntity;
- * $halve = function($a){ return $a / 2; };
- * $loan = LoanProSDK::GetInstance()->GetLoan(55, [LOAN::LOAN_SETUP]);
- * $lsetup = $loan->Get(LOAN::LOAN_SETUP);
- * $loan->Set(LOAN::LOAN_SETUP, $lsetup->Set(array_map($halve,$lsetup->Get(LOAN_SETUP::LOAN_AMT, LOAN_SETUP::DISCOUNT, LOAN_SETUP::LOAN_RATE))))->save();
- * ```
- *
- */

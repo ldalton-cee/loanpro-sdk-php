@@ -24,10 +24,13 @@ use Simnang\LoanPro\Constants\CREDIT_CARD;
 use Simnang\LoanPro\Constants\REFERENCES;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class CreditCardEntity
+ *
+ * @package Simnang\LoanPro\Customers
+ */
 class CreditCardEntity extends  BaseEntity
 {
-
-
     /**
      * List of required fields
      * @var array

@@ -24,13 +24,12 @@ use Simnang\LoanPro\Communicator\ApiClient;
 /// Set Up Aliasing
 ////////////////////
 
-use Simnang\LoanPro\LoanProSDK as LPSDK,
-    \Simnang\LoanPro\Constants\LOAN as LOAN,
-    Simnang\LoanPro\Constants as CONSTS,
-    Simnang\LoanPro\Constants\LOAN_SETUP as LOAN_SETUP,
-    Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LCLASS__C as LOAN_SETUP_LCLASS,
-    Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LTYPE__C as LOAN_SETUP_LTYPE,
-    Simnang\LoanPro\Constants\LOAN_SETTINGS as LOAN_SETTINGS,
+use \Simnang\LoanPro\Constants\LOAN as LOAN,
+    \Simnang\LoanPro\Constants as CONSTS,
+    \Simnang\LoanPro\Constants\LOAN_SETUP as LOAN_SETUP,
+    \Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LCLASS__C as LOAN_SETUP_LCLASS,
+    \Simnang\LoanPro\Constants\LOAN_SETUP\LOAN_SETUP_LTYPE__C as LOAN_SETUP_LTYPE,
+    \Simnang\LoanPro\Constants\LOAN_SETTINGS as LOAN_SETTINGS,
     \Simnang\LoanPro\Constants\PAYMENTS as PAYMENTS,
     \Simnang\LoanPro\Constants\CHARGES as CHARGES,
     \Simnang\LoanPro\Constants\PAY_NEAR_ME_ORDERS as PAY_NEAR_ME_ORDERS,
@@ -105,10 +104,10 @@ class ApiClientTest extends TestCase
                 );
         $json = json_decode($json);
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoanFromJSON(json_encode($json[0]));
-        $res = $loan->save();
+        $res = $loan->Save();
         static::$loanId =$res->Get(BASE_ENTITY::ID);
         $loanUpdate = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoanFromJSON(json_encode($json[1]));
-        $loanUpdate->Set(BASE_ENTITY::ID, static::$loanId)->save();
+        $loanUpdate->Set(BASE_ENTITY::ID, static::$loanId)->Save();
         static::$minSetup = new \Simnang\LoanPro\Loans\LoanSetupEntity(LOAN_SETUP_LCLASS::CONSUMER, LOAN_SETUP_LTYPE::INSTALLMENT);
 
         $fname = static::generateRandomString(10);
@@ -126,7 +125,7 @@ class ApiClientTest extends TestCase
                     )
         );
         $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateCustomerFromJSON($json);
-        $customer = $customer->SetIgnoreWarnings(true)->save();
+        $customer = $customer->SetIgnoreWarnings(true)->Save();
         static::$cid = $customer->Get(BASE_ENTITY::ID);
         $customer->AddToLoan($res, CONSTS\CUSTOMER_ROLE::PRIMARY);
         static::$loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoan(static::$loanId, [LOAN::LOAN_SETUP]);
@@ -352,7 +351,7 @@ class ApiClientTest extends TestCase
         // Should throw exception
         $this->assertEquals($newId, $loan->Get(LOAN::DISP_ID));
 
-        $resLoan = $loan->save();
+        $resLoan = $loan->Save();
         $this->assertEquals($loan->Get(LOAN::DISP_ID), $resLoan->Get(LOAN::DISP_ID));
         $delRes = $resLoan->delete(true);
         $this->assertEquals($loan->Get(LOAN::DISP_ID), $delRes->Get(LOAN::DISP_ID));
@@ -373,7 +372,7 @@ class ApiClientTest extends TestCase
         $this->assertEquals("DISP ID", $loan->Get(LOAN::DISP_ID));
 
         // Will throw error before attempting a connection, so can be done offline or online
-        $loan->save();
+        $loan->Save();
     }
 
     /**
@@ -387,7 +386,7 @@ class ApiClientTest extends TestCase
         // Should throw exception
         $this->assertEquals($newId, $loan->Get(LOAN::DISP_ID));
 
-        $resLoan = $loan->save();
+        $resLoan = $loan->Save();
         $this->assertEquals($loan->Get(LOAN::DISP_ID), $resLoan->Get(LOAN::DISP_ID));
         static::$loan = $loan;
     }
@@ -412,7 +411,7 @@ class ApiClientTest extends TestCase
         $loan = $loan->inactivate();
         $this->assertEquals(0, $loan->Get(LOAN::LOAN_SETUP)->Get(LOAN_SETUP::ACTIVE));
 
-        $loan->save();
+        $loan->Save();
         $loan = $loan->activate();
         $this->assertEquals(1, $loan->Get(LOAN::LOAN_SETUP)->Get(LOAN_SETUP::ACTIVE));
     }
@@ -794,7 +793,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      */
     public function testIteratorsCustomerGet(){
         echo "Test IteratorsCustomerGet\n";
@@ -814,7 +812,6 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
      * @depends testIteratorsCustomerGet
      */
     public function testIteratorsLoansForCustomer(\Simnang\LoanPro\Customers\CustomerEntity $c){
@@ -833,10 +830,9 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
-     * @group new
-     * @depends testIteratorsLoansForCustomer
      */
-    public function testPaymentAccountsForCustomerIterator(\Simnang\LoanPro\Customers\CustomerEntity $c){
+    public function testPaymentAccountsForCustomerIterator(){
+        $c = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(2);
         echo "Test PaymentAccountsForCustomerIterator\n";
         $it = $c->GetPaymentAccounts();
         foreach($it as $key => $i){
@@ -850,7 +846,7 @@ class ApiClientTest extends TestCase
         foreach($it as $key => $i){
             $this->assertTrue(!is_null($i));
             $this->assertTrue(!is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::ACTIVE)));
-            $this->assertTrue(!is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CREDIT_CARD)) || !is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CHECKING_ACCOUNT)));
+            $this->assertTrue(!$i->Get(CONSTS\PAYMENT_ACCOUNT::ACTIVE) || !is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CREDIT_CARD)) || !is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CHECKING_ACCOUNT)));
         }
     }
 

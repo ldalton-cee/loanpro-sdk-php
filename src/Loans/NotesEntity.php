@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\NOTES;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class NotesEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class NotesEntity extends BaseEntity
 {
     /**

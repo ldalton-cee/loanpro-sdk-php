@@ -24,10 +24,13 @@ use Simnang\LoanPro\Constants\CREDIT_SCORE;
 use Simnang\LoanPro\Constants\REFERENCES;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class CreditScoreEntity
+ *
+ * @package Simnang\LoanPro\Customers
+ */
 class CreditScoreEntity extends  BaseEntity
 {
-
-
     /**
      * List of required fields
      * @var array

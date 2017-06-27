@@ -77,13 +77,13 @@ class CustomerTest extends TestCase
      */
     public function testAddressCreate(\Simnang\LoanPro\Customers\CustomerEntity $customer){
         $address = LPSDK::GetInstance()->CreateAddress(ADDRESS_STATE__C::ALABAMA,"12345");
-        $customer = $customer->Set(CUSTOMERS::PRIMARY_ADDRESS, $address, CUSTOMERS::MAIL_ADDRESS, $address->Set(ADDRESS::STATE__C, ADDRESS_STATE__C::ALASKA));
+        $customer = $customer->Set(CUSTOMERS::PRIMARY_ADDRESS, $address, CUSTOMERS::MAIL_ADDRESS, $address->Set(ADDRESS::STATE, ADDRESS_STATE__C::ALASKA));
 
         $this->assertEquals("12345", $customer->Get(CUSTOMERS::PRIMARY_ADDRESS)->Get(ADDRESS::ZIPCODE));
-        $this->assertEquals(ADDRESS_STATE__C::ALABAMA, $customer->Get(CUSTOMERS::PRIMARY_ADDRESS)->Get(ADDRESS::STATE__C));
+        $this->assertEquals(ADDRESS_STATE__C::ALABAMA, $customer->Get(CUSTOMERS::PRIMARY_ADDRESS)->Get(ADDRESS::STATE));
 
         $this->assertEquals("12345", $customer->Get(CUSTOMERS::MAIL_ADDRESS)->Get(ADDRESS::ZIPCODE));
-        $this->assertEquals(ADDRESS_STATE__C::ALASKA, $customer->Get(CUSTOMERS::MAIL_ADDRESS)->Get(ADDRESS::STATE__C));
+        $this->assertEquals(ADDRESS_STATE__C::ALASKA, $customer->Get(CUSTOMERS::MAIL_ADDRESS)->Get(ADDRESS::STATE));
         return $customer;
     }
 

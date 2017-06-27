@@ -23,6 +23,11 @@ use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\SCHEDULE_ROLLS;
 use Simnang\LoanPro\Validator\FieldValidator;
 
+/**
+ * Class ScheduleRollEntity
+ *
+ * @package Simnang\LoanPro\Loans
+ */
 class ScheduleRollEntity extends BaseEntity
 {
     /**
