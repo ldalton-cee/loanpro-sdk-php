@@ -16,14 +16,18 @@
  *
  */
 
-namespace Simnang\LoanPro\Utils\Parser;
+namespace Simnang\LoanPro\Utils\Parser\CodeGenerators;
+use Simnang\LoanPro\Utils\Parser\Token;
+use Simnang\LoanPro\Utils\Parser\TreeGenerators\SearchExpressionTreeGenerator;
+use Simnang\LoanPro\Utils\Parser\TreeGenerators\ExpressionTreeNode;
+use Simnang\LoanPro\Utils\Parser\LL1_Parser;
 
 /**
  * Class SearchGenerator
  *
- * @package Simnang\LoanPro\Utils\Parser
+ * @package Simnang\LoanPro\Utils\Parser\CodeGenerators
  */
-class SearchGenerator
+class SearchGenerator implements Generator
 {
     const TOKEN_SYMBOLS = ([
         'ARRAY'=>'\[ *(\w+)( *\, *\w+)* *\]',

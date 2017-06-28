@@ -112,10 +112,6 @@ use Simnang\LoanPro\Loans\SubPortfolioEntity;
  */
 class LoanProSDK
 {
-    private static $inst;
-    private static $clientType = ApiClient::TYPE_SYNC;
-    private static $env = Communicator::PRODUCTION;
-    private $apiComm;
 
     /**
      * Attempts to login to the customer facing website. Returns an array with the first item being whether or not login was successful and the second item is the response from the server.
@@ -303,121 +299,6 @@ class LoanProSDK
     public function GetPaymentAccounts($customerId, $expandProps = [], FilterParams $filterParams = null){
         return $this->apiComm->GetPaymentAccounts($customerId, $expandProps, $filterParams);
     }
-
-    /**
-     * Sets the configuration for the loan pro instance (will re-set the instance if API credentials have been set)
-     *  If non-null $tenant and $token is provided, will also set credentials
-     *  This function is NOT thread safe!
-     * @param string      $commType - communicator type to use, accepts 'sync' or 'async', defaults to 'sync'
-     * @param string      $env - environment to use, accepts 'prod' or 'staging', defaults to 'prod'
-     * @param string|null $tenant - Tenant ID
-     * @param string|null $token - API Token
-     */
-    public static function SetConfig($commType = 'sync', $env = 'prod', $tenant = null, $token = null){
-        if(!is_null($tenant) && !is_null($token)){
-            ApiClient::SetAuthorization($tenant, $token);
-        }
-
-        switch($commType){
-            case 'async':
-                static::$clientType = ApiClient::TYPE_ASYNC;
-                break;
-            case 'sync':
-            default:
-                static::$clientType = ApiClient::TYPE_SYNC;
-                break;
-        }
-        switch($env){
-            case 'beta':
-                $env = Communicator::BETA;
-                break;
-            case 'staging':
-                $env = Communicator::STAGING;
-                break;
-            case 'prod':
-            default:
-                $env = Communicator::PRODUCTION;
-        }
-        static::$env = $env;
-
-        if(ApiClient::AreTokensSet())
-            static::$inst = new LoanProSDK();
-    }
-
-    /**
-     * Returns the singleton instance of the SDK
-     *  This function is NOT thread safe!
-     * @return LoanProSDK
-     * @throws InvalidStateException
-     */
-    public static function GetInstance(){
-        if(static::$inst == null){
-            $loadedConfig = false;
-            if(!ApiClient::AreTokensSet()){
-                $loadedConfig = true;
-                $config = parse_ini_file(__DIR__."/config.ini", true);
-                $confFile = __DIR__."/config.ini";
-                // Load config from another source
-                $depthRemaining = 10;
-                while(isset($config['config']) && isset($config['config']['file']) && file_exists($config['config']['file']) && $depthRemaining >= 0){
-                    $depthRemaining--;
-                    $confFile = $config['config']['file'];
-                    $type = (isset($config['config']['type']))? $config['config']['type'] : substr(strrchr($config['config']['file'], '.'), 1);
-                    unset($config['config']);
-                    switch($type){
-                        case 'json':
-                            $config = array_replace_recursive($config, json_decode(file_get_contents($confFile),true));
-                            break;
-                        case 'ini':
-                            $config = array_replace_recursive($config, parse_ini_file($confFile, true));
-                            break;
-                        case 'xml':
-                            $xml = simplexml_load_string(file_get_contents($confFile));
-                            $config = array_replace_recursive($config,static::trimRecursive(json_decode(json_encode($xml), true)));
-                            break;
-                        default:
-                            throw new \InvalidArgumentException("Unknown config file type '$type', expected json, ini, or xml");
-                    }
-                }
-                if(isset($config['api']) && isset($config['api']['tenant']) && isset($config['api']['token'])){
-                    ApiClient::SetAuthorization($config['api']['tenant'], $config['api']['token']);
-                }
-                else{
-                    throw new InvalidStateException('Configuration does not have api credentials! Loading from '.$confFile);
-                }
-                $clientType = (isset($config['communicator']) && isset($config['communicator']['type'])) ? $config['communicator']['type'] : 'sync';
-
-                switch($clientType){
-                    case 'async':
-                        static::$clientType = ApiClient::TYPE_ASYNC;
-                        break;
-                    case 'sync':
-                    default:
-                        static::$clientType = ApiClient::TYPE_SYNC;
-                        break;
-                }
-
-                $env = (isset($config['communicator']) && isset($config['communicator']['env'])) ? $config['communicator']['env'] : 'prod';
-
-                switch($env){
-                    case 'beta':
-                        $env = Communicator::BETA;
-                        break;
-                    case 'staging':
-                        $env = Communicator::STAGING;
-                        break;
-                    case 'prod':
-                    default:
-                        $env = Communicator::PRODUCTION;
-                }
-                static::$env = $env;
-            }
-            static::$inst = new LoanProSDK();
-        }
-        assert(static::$inst instanceof LoanProSDK);
-        return static::$inst;
-    }
-
     /**
      * Returns the API communicator used
      * @return Communicator
@@ -1151,4 +1032,199 @@ class LoanProSDK
         }
         return trim($arg);
     }
+
+    /**
+     * Sets the configuration for the loan pro instance (will re-set the instance if API credentials have been set)
+     *  If non-null $tenant and $token is provided, will also set credentials
+     *  This function is NOT thread safe!
+     * @param string      $commType - communicator type to use, accepts 'sync' or 'async', defaults to 'sync'
+     * @param string      $env - environment to use, accepts 'prod' or 'staging', defaults to 'prod'
+     * @param string|null $tenant - Tenant ID
+     * @param string|null $token - API Token
+     * @param string|null $cacheFile - Location for settings from the LoanPro server
+     * @param string|null $cacheExpr - DateInterval string for length of cache expiration
+     */
+    public static function SetConfig($commType = 'sync', $env = 'prod', $tenant = null, $token = null, $cacheFile = null, $cacheExpr = null){
+        if(!is_null($tenant) && !is_null($token)){
+            ApiClient::SetAuthorization($tenant, $token);
+        }
+
+        switch($commType){
+            case 'async':
+                static::$clientType = ApiClient::TYPE_ASYNC;
+                break;
+            case 'sync':
+            default:
+                static::$clientType = ApiClient::TYPE_SYNC;
+                break;
+        }
+        switch($env){
+            case 'beta':
+                $env = Communicator::BETA;
+                break;
+            case 'staging':
+                $env = Communicator::STAGING;
+                break;
+            case 'prod':
+            default:
+                $env = Communicator::PRODUCTION;
+        }
+        static::$env = $env;
+
+        if(ApiClient::AreTokensSet())
+            static::$inst = new LoanProSDK();
+
+        if(!is_null($cacheFile))
+        {
+            if($cacheFile == 'false')
+                static::$cacheFile = false;
+            else
+                static::$cacheFile = $cacheFile;
+        }
+        if(!is_null($cacheExpr)){
+            try{
+                new \DateInterval($cacheExpr);
+                static::$cacheExpr = $cacheExpr;
+            }catch (\Exception $e){
+            }
+        }
+    }
+
+    /**
+     * Returns the singleton instance of the SDK
+     *  This function is NOT thread safe!
+     * @return LoanProSDK
+     * @throws InvalidStateException
+     */
+    public static function GetInstance(){
+        if(static::$inst == null){
+            $loadedConfig = false;
+            if(!ApiClient::AreTokensSet()){
+                $loadedConfig = true;
+                $config = parse_ini_file(__DIR__."/config.ini", true);
+                $confFile = __DIR__."/config.ini";
+                // Load config from another source
+                $depthRemaining = 10;
+                while(isset($config['config']) && isset($config['config']['file']) && file_exists($config['config']['file']) && $depthRemaining >= 0){
+                    $depthRemaining--;
+                    $confFile = $config['config']['file'];
+                    $type = (isset($config['config']['type']))? $config['config']['type'] : substr(strrchr($config['config']['file'], '.'), 1);
+                    unset($config['config']);
+                    switch($type){
+                        case 'json':
+                            $config = array_replace_recursive($config, json_decode(file_get_contents($confFile),true));
+                            break;
+                        case 'ini':
+                            $config = array_replace_recursive($config, parse_ini_file($confFile, true));
+                            break;
+                        case 'xml':
+                            $xml = simplexml_load_string(file_get_contents($confFile));
+                            $config = array_replace_recursive($config,static::trimRecursive(json_decode(json_encode($xml), true)));
+                            break;
+                        default:
+                            throw new \InvalidArgumentException("Unknown config file type '$type', expected json, ini, or xml");
+                    }
+                }
+                if(isset($config['api']) && isset($config['api']['tenant']) && isset($config['api']['token'])){
+                    ApiClient::SetAuthorization($config['api']['tenant'], $config['api']['token']);
+                }
+                else{
+                    throw new InvalidStateException('Configuration does not have api credentials! Loading from '.$confFile);
+                }
+                $clientType = (isset($config['communicator']) && isset($config['communicator']['type'])) ? $config['communicator']['type'] : 'sync';
+
+                switch($clientType){
+                    case 'async':
+                        static::$clientType = ApiClient::TYPE_ASYNC;
+                        break;
+                    case 'sync':
+                    default:
+                        static::$clientType = ApiClient::TYPE_SYNC;
+                        break;
+                }
+
+                $env = (isset($config['communicator']) && isset($config['communicator']['env'])) ? $config['communicator']['env'] : 'prod';
+
+                switch($env){
+                    case 'beta':
+                        $env = Communicator::BETA;
+                        break;
+                    case 'staging':
+                        $env = Communicator::STAGING;
+                        break;
+                    case 'prod':
+                    default:
+                        $env = Communicator::PRODUCTION;
+                }
+                static::$env = $env;
+
+                if(isset($config['cache'])){
+                    if(isset($config['cache']['file']))
+                    {
+                        if($config['cache']['file'] == 'false')
+                            static::$cacheFile = false;
+                        else
+                            static::$cacheFile = $config['cache']['file'];
+                    }
+                    if(isset($config['cache']['expr'])){
+                        try{
+                            new \DateInterval($config['cache']['expr']);
+                            static::$cacheExpr = $config['cache']['expr'];
+                        }catch (\Exception $e){
+                        }
+                    }
+                }
+            }
+            static::$inst = new LoanProSDK();
+        }
+        assert(static::$inst instanceof LoanProSDK);
+        return static::$inst;
+    }
+
+    /**
+     * Returns the cache settings
+     * @return array
+     */
+    public static function GetCacheSettings(){
+        return ['file'=>static::$cacheFile,'expr'=>static::$cacheExpr];
+    }
+
+    /**
+     * Returns the current cached objects (usually tenant-wide settings that shouldn't change often)
+     * @return array
+     */
+    public static function GetCache(){
+        $cache = [];
+        try{
+            if(static::$cacheFile && file_exists(static::$cacheFile)) {
+                $fileTime = (new \DateTime())->setTimestamp(filemtime(static::$cacheFile))->add(new \DateInterval(static::$cacheExpr))->getTimestamp();
+                $today = (new \DateTime())->getTimestamp();
+                if ($today - $fileTime < 0) {
+                    $cache = json_decode(file_get_contents(static::$cacheFile), true);
+                    if (is_null($cache))
+                        $cache = [];
+                    return $cache;
+                }
+            }
+            $cache = [
+                'contextVars' => static::GetInstance()->apiComm->GetContextVariables()
+            ];
+            if(static::$cacheFile)
+                file_put_contents(static::$cacheFile, json_encode($cache));
+        }
+        catch(ApiException $e){
+            throw $e;
+        }
+        catch(\Exception $e){
+            var_dump($e);
+        }
+        return $cache;
+    }
+
+    private static $inst;
+    private static $clientType = ApiClient::TYPE_SYNC;
+    private static $env = Communicator::PRODUCTION;
+    private $apiComm;
+    private static $cacheFile = "cache.json";
+    private static $cacheExpr = "P3D";
 }

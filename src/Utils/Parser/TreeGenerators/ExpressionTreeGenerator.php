@@ -16,16 +16,18 @@
  *
  */
 
-namespace Simnang\LoanPro\Utils\Parser;
+namespace Simnang\LoanPro\Utils\Parser\TreeGenerators;
+use Simnang\LoanPro\Utils\Parser\Token;
 
 /**
  * Class ExpressionTreeGenerator
  *
- * @package Simnang\LoanPro\Utils\Parser
+ * @package Simnang\LoanPro\Utils\Parser\TreeGenerators
  */
 abstract class ExpressionTreeGenerator
 {
     protected $tokenSymbols;
+    protected $curTree = null;
 
     /**
      * Creates an expression tree generator
@@ -33,6 +35,18 @@ abstract class ExpressionTreeGenerator
      */
     public function __construct($tokenSymbols){
         $this->tokenSymbols = $tokenSymbols;
+    }
+
+    public function __destruct(){
+        $this->Reset();
+    }
+
+    private function CleanTree(ExpressionTreeNode $tree){
+        if(!is_null($tree->leftNode))
+            $this->CleanTree($tree->leftNode);
+        if(!is_null($tree->rightNode))
+            $this->CleanTree($tree->rightNode);
+        $tree->parentNode = null;
     }
 
     /**
@@ -44,6 +58,7 @@ abstract class ExpressionTreeGenerator
 
     /**
      * Returns the final expression tree
+     *  State becomes invalid after call
      * @return mixed
      */
     public abstract function GetExpressionTree();
@@ -52,5 +67,9 @@ abstract class ExpressionTreeGenerator
      * Resets the expression tree generator
      * @return mixed
      */
-    public abstract function Reset();
+    public function Reset(){
+        if(!is_null($this->curTree))
+            $this->CleanTree($this->curTree);
+        $this->curTree = null;
+    }
 }

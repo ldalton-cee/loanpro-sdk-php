@@ -19,10 +19,9 @@
 namespace Simnang\LoanPro\Iteration;
 
 
-use Simnang\LoanPro\Utils\Parser\ExpressionTreeNode;
+use Simnang\LoanPro\Utils\Parser\TreeGenerators\ExpressionTreeNode;
 use Simnang\LoanPro\Utils\Parser\LL1_Parser;
-use Simnang\LoanPro\Utils\Parser\LogicalFilterExpressionTreeGenerator;
-use Simnang\LoanPro\Utils\Stack;
+use Simnang\LoanPro\Utils\Parser\TreeGenerators\LogicalFilterExpressionTreeGenerator;
 
 /**
  * Class FilterParams

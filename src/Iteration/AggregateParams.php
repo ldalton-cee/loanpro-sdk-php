@@ -19,8 +19,7 @@
 namespace Simnang\LoanPro\Iteration;
 
 
-use Simnang\LoanPro\Utils\Parser\AggregateExpressionTreeGenerator;
-use Simnang\LoanPro\Utils\Parser\ExpressionTreeNode;
+use Simnang\LoanPro\Utils\Parser\TreeGenerators\AggregateExpressionTreeGenerator;
 use Simnang\LoanPro\Utils\Parser\LL1_Parser;
 
 /**

@@ -16,44 +16,11 @@
  *
  */
 
-namespace Simnang\LoanPro\Iteration;
+namespace Simnang\LoanPro\Utils\Parser\CodeGenerators;
 
-use Simnang\LoanPro\Utils\Parser\CodeGenerators\SearchGenerator;
+use Simnang\LoanPro\Utils\Parser\Token;
 
-/**
- * Class SearchParams
- *
- * @package Simnang\LoanPro\Iteration
- */
-class SearchParams
+interface Generator
 {
-    private static $searchGenerator = null;
-    private $json;
-
-    /**
-     * Creates a new search parameter object based on a search DSL string
-     * @param string $searchString
-     */
-    public function __construct($searchString){
-        if(is_null(static::$searchGenerator))
-            static::$searchGenerator = new SearchGenerator();
-
-        $this->json = static::$searchGenerator->Generate($searchString);
-    }
-
-    /**
-     * Gets JSON representation of search parameters
-     * @return array
-     */
-    public function Get(){
-        return $this->json;
-    }
-
-    /**
-     * Converts pagination to a URL query string
-     * @return string
-     */
-    public function __toString(){
-        return json_encode($this->json);
-    }
+    public function Generate($str = '');
 }

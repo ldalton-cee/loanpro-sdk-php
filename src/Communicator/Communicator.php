@@ -693,6 +693,23 @@ class Communicator
     }
 
     /**
+     * Returns tenant context variables (useful for custom query)
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetContextVariables(){
+        $res = $this->client->GET("$this->baseUrl/odata.svc/ContextVariables?nopaging");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['results'])) {
+                return $body['d']['results'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
      * Returns interest fees history
      * @param int $loanId
      * @return array
