@@ -19,7 +19,7 @@
 require(__DIR__."/../vendor/autoload.php");
 
 use \PHPUnit\Framework\TestCase;
-use \Simnang\LoanPro\Iteration\PaginationParams;
+use \Simnang\LoanPro\Iteration\Params\PaginationParams;
 
 ////////////////////
 /// Done Setting Up Aliasing

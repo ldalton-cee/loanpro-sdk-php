@@ -219,7 +219,7 @@
  *
  * These different sections control API authorization, communication method to LoanPro, and configuration settings respectively.
  *
- * \subsction api_sec API Section
+ * \section api_sec API Section
  *
  * The API section of the config file holds the information about how to authenticate with the LoanPro API. It holds two key-value pairs: tenant (your tenant id) and token (your API token).
  *
@@ -231,7 +231,7 @@
  * token=abcdefg1234567
  * ```
  *
- * \subsction com_sec Communicator Section
+ * \section com_sec Communicator Section
  *
  * The communicator section of the config file holds information about how the SDK communicates with LoanPro. This includes target environment (eg. production or staging) as well as whether or not the PSR-7 compatible communicator is synchronous or asynchronous (this doesn't affect code execution, just how the SDK wraps the communication channel; by default the CURL PSR-7 communicator is used).
  *
@@ -253,7 +253,7 @@
  *
  * It is important to note that the SDK will only load up to 9 (nine) additional configuration files (not including the default configuration file). This is to prevent infinite-looping and to provide a termination point to limit time spent in initialization.
  *
- * \subsection file_form File Formats
+ * \section file_form File Formats
  *
  * The JSON and XML files follow an almost identical structure to the INI file.
  *

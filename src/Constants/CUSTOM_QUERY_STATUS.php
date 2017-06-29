@@ -16,27 +16,11 @@
  *
  */
 
-namespace Simnang\LoanPro\Iteration;
+namespace Simnang\LoanPro\Constants;
 
-/**
- * Class LoanSearchIterator
- *
- * An iterator for loans stored on LoanPro which abstracts away pagination
- *
- * @package Simnang\LoanPro\Iteration
- */
-class LoanSearchIterator extends BaseIterator
-{
-
-    /**
-     * Creates a new loan iterator that will iterate over all the loans on the server
-     * @param SearchParams|null     $searchParams
-     * @param AggregateParams|null  $aggParams
-     * @param array                 $orderBy
-     * @param string                $order
-     * @param int                   $internalPageSize
-     */
-    public function __construct(SearchParams $searchParams = null, AggregateParams $aggParams = null, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
-        parent::__construct('SearchLoans_RAW', 'search', ['searchParams'=>$searchParams,'aggParams'=>$aggParams,'orderBy'=>$orderBy,'order'=>$order],$internalPageSize);
-    }
+class CUSTOM_QUERY_STATUS{
+    const IN_PROGRESS = 'dataDumpProcess.status.inProgress';
+    const ERROR       = 'dataDumpProcess.status.error';
+    const COMPLETE    = 'dataDumpProcess.status.complete';
 }
+

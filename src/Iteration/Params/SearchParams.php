@@ -16,7 +16,7 @@
  *
  */
 
-namespace Simnang\LoanPro\Iteration;
+namespace Simnang\LoanPro\Iteration\Params;
 
 use Simnang\LoanPro\Utils\Parser\CodeGenerators\SearchGenerator;
 
@@ -25,7 +25,7 @@ use Simnang\LoanPro\Utils\Parser\CodeGenerators\SearchGenerator;
  *
  * @package Simnang\LoanPro\Iteration
  */
-class SearchParams
+class SearchParams implements Params
 {
     private static $searchGenerator = null;
     private $json;

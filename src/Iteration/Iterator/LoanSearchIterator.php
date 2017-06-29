@@ -16,27 +16,30 @@
  *
  */
 
-namespace Simnang\LoanPro\Iteration;
+namespace Simnang\LoanPro\Iteration\Iterator;
 
+use Simnang\LoanPro\Iteration\Params\SearchParams;
+use Simnang\LoanPro\Iteration\Params\AggregateParams;
+use Simnang\LoanPro\Iteration\Params\PaginationParams;
 /**
- * Class CustomerIterator
+ * Class LoanSearchIterator
  *
- * An iterator for customers stored on LoanPro which abstracts away pagination
+ * An iterator for loans stored on LoanPro which abstracts away pagination
  *
  * @package Simnang\LoanPro\Iteration
  */
-class CustomerIterator extends BaseIterator
+class LoanSearchIterator extends BaseIterator
 {
-    /**
-     * Creates a new customer iterator that will iterate over all the customers on the server
-     * @param array             $expand
-     * @param FilterParams|null $filterParams
-     * @param array             $orderBy
-     * @param string            $order
-     * @param int               $internalPageSize
-     */
-    public function __construct($expand = [], FilterParams $filterParams = null, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
-        parent::__construct('GetCustomers_RAW', 'normal', ['filterParams'=>$filterParams,'orderBy'=>$orderBy,'order'=>$order],$internalPageSize);
-    }
 
+    /**
+     * Creates a new loan iterator that will iterate over all the loans on the server
+     * @param SearchParams|null     $searchParams
+     * @param AggregateParams|null  $aggParams
+     * @param array                 $orderBy
+     * @param string                $order
+     * @param int                   $internalPageSize
+     */
+    public function __construct(SearchParams $searchParams = null, AggregateParams $aggParams = null, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
+        parent::__construct('SearchLoans_RAW', 'search', ['searchParams'=>$searchParams,'aggParams'=>$aggParams,'orderBy'=>$orderBy,'order'=>$order],$internalPageSize);
+    }
 }

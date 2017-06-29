@@ -81,11 +81,13 @@ class CustomQueryColumnGenerator
      * @param string $str
      * @return array
      */
-    public function Generate($str = ''){
+    public function Generate($str = '')
+    {
         $trees = $this->parser->Parse($str);
         $segments = [];
-        foreach($trees as $tree)
+        foreach ($trees as $tree) {
             $segments[] = $this->ProcessTree($tree);
+        }
         return $segments;
     }
 
@@ -94,6 +96,7 @@ class CustomQueryColumnGenerator
      * @param       $actionNode
      * @param array $compareObj
      * @return array
+     * @throws InvalidStateException
      */
     private function ProcessTree(Parser\TreeGenerators\ExpressionTreeNode $actionNode, $compareObj = []){
         $var = $actionNode->token->sequence;

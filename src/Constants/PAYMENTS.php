@@ -79,5 +79,9 @@ class PAYMENTS{
     const BEFORE_DAYS_PAST_DUE  = 'beforeDaysPastDue';
 
     const CHARGE_OFF_RECOVERY   = 'chargeOffRecovery';
+    const CHARGE_FEE_TYPE__C    = 'chargeFeeType';
+    const CHARGE_FEE_AMOUNT     = 'chargeFeeAmount';
+    const CHARGE_FEE_PERCENTAGE = 'chargeFeePercentage';
+
     const CREATED               = 'created';
 }

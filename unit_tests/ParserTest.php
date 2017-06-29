@@ -76,7 +76,7 @@ class ParserTest extends TestCase
      * @group offline
      */
     public function testAggregateTokenizer(){
-        $parser = new \Simnang\LoanPro\Iteration\AggregateParams("loan_amount: sum,avg;loanRecency:avg;loan_recency:avg,sum; payoff : sum");
+        $parser = new \Simnang\LoanPro\Iteration\Params\AggregateParams("loan_amount: sum,avg;loanRecency:avg;loan_recency:avg,sum; payoff : sum");
         $tree = $parser->Get();
         $this->assertEquals(json_decode('{"aggs":{"sum_loanamount":{"sum":{"field":"loanAmount"}},"avg_loanamount":{"avg":{"field":"loanAmount"}},"avg_loanrecency":{"avg":{"field":"loanRecency"}},"sum_loanrecency":{"sum":{"field":"loanRecency"}},"sum_payoff":{"sum":{"field":"payoff"}}}}', true),
                             json_decode(json_encode($tree), true));
