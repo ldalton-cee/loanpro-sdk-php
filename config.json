@@ -1,0 +1,9 @@
+{
+	"communicator":{
+		"env":"staging",
+		"type":"async"
+	},
+	"config":{
+		"file":"config.xml"
+	}
+}

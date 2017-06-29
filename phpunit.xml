@@ -1,0 +1,59 @@
+<phpunit
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.5/phpunit.xsd"
+         backupGlobals="true"
+         backupStaticAttributes="false"
+         cacheTokens="false"
+         colors="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         forceCoversAnnotation="false"
+         mapTestClassNameToCoveredClassName="false"
+         printerClass="PHPUnit_TextUI_ResultPrinter"
+	 processIsolatio="false"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnIncomplete="false"
+         stopOnSkipped="false"
+         stopOnRisky="false"
+         testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"
+         timeoutForSmallTests="1"
+         timeoutForMediumTests="10"
+         timeoutForLargeTests="60"
+         verbose="false">
+    <testsuites>
+        <testsuite name="all">
+            <directory>unit_tests</directory>
+        </testsuite>
+        <testsuite name="offline">
+            <directory>unit_tests</directory>
+            <group>offline</group>
+            <exclude>unit_tests/ApiClientTest.php</exclude>
+            <groups>
+                <include>
+                    <group>offline</group>
+                </include>
+                <exclude>
+                    <group>online</group>
+                </exclude>
+            </groups>
+        </testsuite>
+        <testsuite name="online">
+            <directory>unit_tests</directory>
+            <groups>
+                <include>
+                    <group>online</group>
+                </include>
+                <exclude>
+                    <group>offline</group>
+                </exclude>
+            </groups>
+        </testsuite>
+    </testsuites>
+    <filter>
+      <whitelist processUncoveredFilesFromWhitelist="true">
+        <directory>src</directory>
+      </whitelist>
+    </filter>
+</phpunit>

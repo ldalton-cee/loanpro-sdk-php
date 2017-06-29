@@ -1,0 +1,10 @@
+<config>
+	<api>
+		<token>abcdefg1234567</token>
+	</api>
+	<config>
+		<file>
+			config.ini
+		</file>
+	</config>
+</config>

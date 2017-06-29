@@ -1,0 +1,162 @@
+{
+  "status": "Active",
+  "customerType": "customer.type.individual",
+  "customerIdType": "customer.idType.ssn",
+  "gender": "customer.gender.male",
+  "generationCode": "customer.generationCode.sr",
+  "Phones": {
+    "results": [
+      {
+        "phone": "1234567890",
+        "isPrimary": "1",
+        "isSecondary": "0",
+        "delete": false,
+        "_index": 0,
+        "type": "customer.phoneType.cell",
+        "_$$currentPhoneValue": "",
+        "__isDirty": true,
+        "carrierVerified": 1,
+        "__lookupInProgress": false,
+        "carrierName": null,
+        "isLandLine": 0
+      }
+    ]
+  },
+  "PrimaryAddress": {
+    "country": "company.country.usa",
+    "zipcode": "12345",
+    "address1": "123 Oak Lane",
+    "city": "Schenectady",
+    "state": "geo.state.NY",
+    "verify": null
+  },
+  "MailAddress": {
+    "country": "company.country.usa",
+    "zipcode": "12345",
+    "city": "Schenectady",
+    "state": "geo.state.NY",
+    "address1": "123 Oak Lane"
+  },
+  "CustomFieldValues": {
+    "results": [
+      {
+        "name": "Customer Sample Field",
+        "description": null,
+        "type": "customfield.type.text",
+        "autoCalculate": "customfield.autoCalculate.discount",
+        "autoCalculateOperationType": null,
+        "creditReportEnabled": 0,
+        "required": 0,
+        "active": 1,
+        "searchable": 0,
+        "reportEnabled": 0,
+        "archiveEnable": 0,
+        "summaryEnabled": 0,
+        "maxLength": 50,
+        "defaultValue": "500.00",
+        "entityType": "Entity.Customer",
+        "sectionIdentifier": null,
+        "displayOrder": 1,
+        "selectOptions": null,
+        "customFieldId": 3,
+        "customFieldValue": "500.00",
+        "_$$definition": {
+          "name": "Customer Sample Field",
+          "description": null,
+          "type": "customfield.type.text",
+          "autoCalculate": "customfield.autoCalculate.discount",
+          "autoCalculateOperationType": null,
+          "creditReportEnabled": 0,
+          "required": 0,
+          "active": 1,
+          "searchable": 0,
+          "reportEnabled": 0,
+          "archiveEnable": 0,
+          "summaryEnabled": 0,
+          "maxLength": 50,
+          "defaultValue": "500.00",
+          "entityType": "Entity.Customer",
+          "sectionIdentifier": null,
+          "displayOrder": 1,
+          "selectOptions": null,
+          "customFieldId": 3,
+          "customFieldValue": "500.00"
+        }
+      },
+      {
+        "name": "Hair Color",
+        "description": null,
+        "type": "customfield.type.text",
+        "autoCalculate": "customfield.autoCalculate.discount",
+        "autoCalculateOperationType": null,
+        "creditReportEnabled": 0,
+        "required": 1,
+        "active": 1,
+        "searchable": 0,
+        "reportEnabled": 0,
+        "archiveEnable": 0,
+        "summaryEnabled": 0,
+        "maxLength": 50,
+        "defaultValue": "1",
+        "entityType": "Entity.Customer",
+        "sectionIdentifier": null,
+        "displayOrder": 2,
+        "selectOptions": null,
+        "customFieldId": 4,
+        "customFieldValue": "1",
+        "_$$definition": {
+          "name": "Hair Color",
+          "description": null,
+          "type": "customfield.type.text",
+          "autoCalculate": "customfield.autoCalculate.discount",
+          "autoCalculateOperationType": null,
+          "creditReportEnabled": 0,
+          "required": 1,
+          "active": 1,
+          "searchable": 0,
+          "reportEnabled": 0,
+          "archiveEnable": 0,
+          "summaryEnabled": 0,
+          "maxLength": 50,
+          "defaultValue": "1",
+          "entityType": "Entity.Customer",
+          "sectionIdentifier": null,
+          "displayOrder": 2,
+          "selectOptions": null,
+          "customFieldId": 4,
+          "customFieldValue": "1"
+        }
+      }
+    ]
+  },
+  "PaymentAccounts":{
+    "results": [
+      {
+        "active": 1,
+        "title": "Test Active",
+        "type": "paymentAccount.type.checking",
+        "CheckingAccount": {
+          "accountType": "bankacct.type.checking",
+          "token": "QVFFREFIaElMWTMxQjlPcHlNRHJ4NnZXZEtwV3d2ajI3ZUJ4MVdTSVlqcTdRbVFhR2dBQUFINHdmQVlKS29aSWh2Y05BUWNHb0c4d2JRSUJBREJvQmdrcWhraUc5dzBCQndFd0hnWUpZSVpJQVdVREJBRXVNQkVFRE11WC9TeXNVUmgva3lpK0hnSUJFSUE3bEJRWU1zSlNJdlgvcGdWSmpxcVlJRERaYnZhWnVIOTdZcm96dWFzd0puTjlmSVhFclV1TWY1SWVIUXpIUDlGaVB6T0lDSm9NWEtxVW1oRT0uZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmhaR1J5WlhOeklqb2lNVEl6SUU5aGF5Qk1ZVzVsSWl3aWRYQmtZWFJsWkNJNk1UUTVPRGMwT0RJMk5Td2lZMmwwZVNJNklsTkRTRVZPUlVOVVFVUlpJaXdpWW1GdWExOXVZVzFsSWpvaVZHVnpkQ0JDWVc1cklpd2lZM0psWVhSbFpDSTZNVFE1T0RjME9ESTJOU3dpYzNSaGRHVWlPaUpPV1NJc0lucHBjR052WkdVaU9pSXhNak0wTlNJc0ltRmpZMjkxYm5Sb2IyeGtaWEpmYm1GdFpTSTZJa3B2YUc0Z1JHOWxJaXdpYVdRaU9qRXpNamN3T0N3aVlXUmtjbVZ6YzE5cFpDSTZNalEzTWpjekxDSjFjMlZ5WDJsa0lqb3hOVGdzSW1OdmRXNTBjbmtpT2lKVlUwRWlMQ0pqZFhOMGIyMWxjbDlwWkNJNmJuVnNiSDAuUGRRazlKdkw4YVRiNENBNFd3dFRNVDM2dGhMOEVhOTVqQ1o5U3NmM0NwNA=="
+        }
+      },
+      {
+        "active": 0,
+        "title": "Test Inactive",
+        "type": "paymentAccount.type.checking",
+        "CheckingAccount": {
+          "accountType": "bankacct.type.checking",
+          "token": "QVFFREFIaElMWTMxQjlPcHlNRHJ4NnZXZEtwV3d2ajI3ZUJ4MVdTSVlqcTdRbVFhR2dBQUFINHdmQVlKS29aSWh2Y05BUWNHb0c4d2JRSUJBREJvQmdrcWhraUc5dzBCQndFd0hnWUpZSVpJQVdVREJBRXVNQkVFRE11WC9TeXNVUmgva3lpK0hnSUJFSUE3bEJRWU1zSlNJdlgvcGdWSmpxcVlJRERaYnZhWnVIOTdZcm96dWFzd0puTjlmSVhFclV1TWY1SWVIUXpIUDlGaVB6T0lDSm9NWEtxVW1oRT0uZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmhaR1J5WlhOeklqb2lNVEl6SUU5aGF5Qk1ZVzVsSWl3aWRYQmtZWFJsWkNJNk1UUTVPRGMwT0RJMk5Td2lZMmwwZVNJNklsTkRTRVZPUlVOVVFVUlpJaXdpWW1GdWExOXVZVzFsSWpvaVZHVnpkQ0JDWVc1cklpd2lZM0psWVhSbFpDSTZNVFE1T0RjME9ESTJOU3dpYzNSaGRHVWlPaUpPV1NJc0lucHBjR052WkdVaU9pSXhNak0wTlNJc0ltRmpZMjkxYm5Sb2IyeGtaWEpmYm1GdFpTSTZJa3B2YUc0Z1JHOWxJaXdpYVdRaU9qRXpNamN3T0N3aVlXUmtjbVZ6YzE5cFpDSTZNalEzTWpjekxDSjFjMlZ5WDJsa0lqb3hOVGdzSW1OdmRXNTBjbmtpT2lKVlUwRWlMQ0pqZFhOMGIyMWxjbDlwWkNJNmJuVnNiSDAuUGRRazlKdkw4YVRiNENBNFd3dFRNVDM2dGhMOEVhOTVqQ1o5U3NmM0NwNA=="
+        }
+      }
+    ]
+  },
+  "birthDate": "1993-01-02",
+  "firstName": "[[FNAME]]",
+  "lastName": "[[LNAME]]",
+  "ssn": "[[SSN]]",
+  "driverLicense": "1234567890",
+  "email": "[[ACCESS]]@none.com",
+  "accessUserName": "[[ACCESS]]",
+  "accessPassword": "Password1!"
+}

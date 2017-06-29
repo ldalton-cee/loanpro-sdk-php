@@ -1,0 +1,1389 @@
+{
+  "id": 20,
+  "displayId": "My Loan",
+  "title": null,
+  "modTotal": 0,
+  "modId": 0,
+  "active": 0,
+  "loanAlert": null,
+  "deleted": 0,
+  "LoanSetup":
+  {
+    "loanClass":"loan.class.carLoan",
+    "loanType":"loan.type.flooring"
+  },
+  "ChecklistItemValues": {
+    "results": [
+      {
+        "checklistId": 1,
+        "checklistItemId": "8",
+        "checklistItemValue": 1
+      }
+    ]
+  },
+  "Charges": {
+    "results": [
+      {
+        "expansion": {
+          "1": {
+            "create": [
+              {
+                "label": "Date/Time",
+                "value": "05/24/2017 10:28:13 am PDT",
+                "type": "date"
+              },
+              {
+                "label": "IP Address",
+                "value": "73.98.150.163",
+                "type": "number"
+              },
+              {
+                "label": "User",
+                "value": "Ronald",
+                "type": "string"
+              }
+            ],
+            "update": []
+          }
+        },
+        "displayId": 3651,
+        "info": "Late Fee 05/29/2017",
+        "date": "2017-05-29",
+        "priorcutoff": false,
+        "amount": "1250.00",
+        "chargeTypeId": 1,
+        "paidAmount": "60.00",
+        "paidPercent": "4.80",
+        "chargeApplicationType": "loan.latefeeapp.standard",
+        "interestBearing": 1,
+        "id": 1840,
+        "active": 1,
+        "_notEditable": false,
+        "ParentCharge": {},
+        "ChildCharge": {},
+        "order": 0,
+        "__update": true,
+        "__id": 1840,
+        "editComment": "Test"
+      }
+    ]
+  },
+  "PayNearMeOrders": {
+    "results": [
+      {
+        "customerId": 5,
+        "customerName": "Bob",
+        "email": "none@none.com",
+        "phone": "5551231234",
+        "sendSms": 0,
+        "address1": "123 Oak Lane",
+        "city": "Baltimore",
+        "state": "geo.state.CA",
+        "status": "open",
+        "zipCode": "12345",
+        "cardNumber": "1234567890"
+      }
+    ]
+  },
+  "EscrowCalculators": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/EscrowCalculators(id=12)",
+          "type": "Entity.EscrowCalculatorEntity"
+        },
+        "id": 12,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": 0,
+        "subset": 3,
+        "term": 360,
+        "total": "0.00",
+        "percent": "0.00",
+        "firstPeriod": "0.00",
+        "regularPeriod": "0.00",
+        "percentBase": "loan.escrowPercentBase.loanAmount",
+        "proRate1st": "loan.escrowProrateFirst.none",
+        "extendFinal": 0
+      }
+    ]
+  },
+  "Collateral":{
+    "__metadata": {
+      "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/Collateral(id=312)",
+      "type": "Entity.Collateral"
+    },
+    "Loan": {
+      "__deferred": {
+        "uri": "Collateral(id=312)/Loan"
+      }
+    },
+    "CustomFieldValues": {
+      "results": [
+        {
+          "id": 7357,
+          "customFieldId": 276,
+          "customFieldValue": "0"
+        }
+      ]
+    },
+    "id": 312,
+    "loanId": 69,
+    "a": "a",
+    "b": "b",
+    "c": "c",
+    "d": "d",
+    "additional": "additional",
+    "collateralType": "collateral.type.other",
+    "vin": "123456789123456",
+    "distance": 134.23,
+    "bookValue": 13000,
+    "color": "blue",
+    "gpsStatus": "collateral.gpsstatus.installed",
+    "gpsCode": "132s4f56",
+    "licensePlate": "111 222",
+    "gap": 554.32,
+    "warranty": 123.45
+  },
+  "Documents": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanDocuments(id=33)",
+          "type": "Entity.Document"
+        },
+        "Loan": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=33)/Loan"
+          }
+        },
+        "User": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=33)/User"
+          }
+        },
+        "DocSection": {
+          "__metadata": {
+            "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/DocSections(id=12)",
+            "type": "Entity.DocSection"
+          },
+          "id": 12,
+          "title": "Custom Forms",
+          "entityType": "Entity.Loan",
+          "created": "/Date(1442596555)/",
+          "active": 1
+        },
+        "FileAttachment": {
+          "__metadata": {
+            "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/FileAttachments(id=47)",
+            "type": "Entity.FileAttachment"
+          },
+          "id": 47,
+          "parentType": "Entity.LoanDocument",
+          "parentId": 33,
+          "fileName": "dummy_pdf_1493662865.pdf",
+          "fileOriginalName": "dummy_pdf.pdf",
+          "fileSize": 7363,
+          "fileMime": "application/pdf"
+        },
+        "id": 33,
+        "loanId": 69,
+        "userId": 7,
+        "sectionId": 12,
+        "fileAttachmentId": 47,
+        "userName": "Joey",
+        "remoteAddress": "387.301.330.352",
+        "fileName": "dummy_pdf.pdf",
+        "description": "asdfsadf",
+        "ip": 3150545560,
+        "size": 7363,
+        "active": 1,
+        "created": "/Date(1493662865)/",
+        "archived": 0,
+        "customerVisible": 1
+      },
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanDocuments(id=34)",
+          "type": "Entity.Document"
+        },
+        "Loan": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=34)/Loan"
+          }
+        },
+        "User": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=34)/User"
+          }
+        },
+        "DocSection": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=34)/DocSection"
+          }
+        },
+        "FileAttachment": {
+          "__deferred": {
+            "uri": "LoanDocuments(id=34)/FileAttachment"
+          }
+        },
+        "id": 34,
+        "loanId": 69,
+        "userId": 2,
+        "sectionId": 12,
+        "fileAttachmentId": 47,
+        "userName": "Jane",
+        "remoteAddress": "387.301.330.352",
+        "fileName": "dummy2_pdf.pdf",
+        "description": "asdfsadfasdf",
+        "ip": 3150545560,
+        "size": 7363,
+        "active": 1,
+        "created": "/Date(1523662865)/",
+        "archived": 0,
+        "customerVisible": 1
+      }
+    ]
+  },
+  "Notes":{
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/Notes(id=595)",
+          "type": "Entity.Note"
+        },
+        "Category": {
+          "__deferred": {
+            "uri": "Notes(id=595)/Category"
+          }
+        },
+        "Author": {
+          "__deferred": {
+            "uri": "Notes(id=595)/Author"
+          }
+        },
+        "Attachments": {
+          "__deferred": {
+            "uri": "Notes(id=595)/Attachments"
+          }
+        },
+        "id": 595,
+        "parentType": "Entity.Loan",
+        "parentId": 3,
+        "categoryId": 3,
+        "subject": "Test Queue 2",
+        "body": "<p>test note</p>",
+        "authorId": 10,
+        "authorName": "George",
+        "remoteAddress": "127.0.0.1",
+        "created": "/Date(1494525662)/"
+      }
+    ]
+  },
+  "Promises": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/Promises(id=217)",
+          "type": "Entity.Promise"
+        },
+        "Loan": {
+          "__deferred": {
+            "uri": "Promises(id=217)/Loan"
+          }
+        },
+        "id": 217,
+        "loanId": 69,
+        "subject": "Test Promise",
+        "note": "<p>Things</p>",
+        "amount": 100,
+        "fulfilled": 0,
+        "dueDate": "/Date(1494460800)/",
+        "fulfillmentDate": "2017-05-17",
+        "type": "loanpromise.type.payment",
+        "created": "/Date(1494259673)/",
+        "fulfilledDate": "2017-05-17",
+        "loggedBy": "David",
+        "fulfilledBy": "Test Item"
+      }
+    ]
+  },
+  "LoanFunding": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanFunding(id=1)",
+          "type": "Entity.LoanFunding"
+        },
+        "Loan": {
+          "__deferred": {
+            "uri": "LoanFunding(id=1)/Loan"
+          }
+        },
+        "CashDrawer": {
+          "__deferred": {
+            "uri": "LoanFunding(id=1)/CashDrawer"
+          }
+        },
+        "CashDrawerTransaction": {
+          "__deferred": {
+            "uri": "LoanFunding(id=1)/CashDrawerTransaction"
+          }
+        },
+        "PaymentAccount": {
+          "__deferred": {
+            "uri": "LoanFunding(id=1)/PaymentAccount"
+          }
+        },
+        "Payment": {
+          "__deferred": {
+            "uri": "LoanFunding(id=1)/Payment"
+          }
+        },
+        "id": 1,
+        "loanId": 109,
+        "whoEntityType": "Entity.Customer",
+        "whoEntityId": 36,
+        "cashDrawerId": 1,
+        "cashDrawerTxId": 109,
+        "paymentAccountId": null,
+        "paymentProcessor": "{\"id\":\"nacha\",\"name\":\"ACH\",\"default\":\"1\"}",
+        "merchantTxId": null,
+        "paymentId": null,
+        "agent": 44,
+        "authorizationType": "loan.funding.auth.web",
+        "method": "loan.funding.method.cashdrawer",
+        "amount": "1500.00",
+        "date": "/Date(1464048000)/",
+        "status": "loan.funding.status.success",
+        "created": "/Date(1464104008)/",
+        "active": 1
+      }
+    ]
+  },
+  "Advancements": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanAdvancements(id=36)",
+          "type": "Entity.Advancement"
+        },
+        "id": 36,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "title": "Test Advancement",
+        "date": "/Date(1494374400)/",
+        "amount": "120.00",
+        "category": 4
+      }
+    ]
+  },
+  "Credits": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanCredits(id=88)",
+          "type": "Entity.Credit"
+        },
+        "CustomPaymentType": {
+          "__metadata": {
+            "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/CustomPaymentTypes(id=1)",
+            "type": "Entity.CustomPaymentType"
+          },
+          "id": 1,
+          "static": 1,
+          "title": "Regular",
+          "application": "[\"payment.application.fees\",\"payment.application.escrow\",\"payment.application.interest\",\"payment.application.discount\",\"payment.application.principal\"]",
+          "escrowApplication": null,
+          "description": "A Regular payment will ALWAYS apply on the transaction date if the account has any balance due at the time of payment. If the loan is current it will apply on the next due date, or the date entered into the Payment Date field above, whichever is greater. A Regular payment applies a loan payment according to the waterfall application shown above. If a partial payment is applied it will still use the same waterfall application. If extra (more than the amount due on the loan) is paid, you can elect how it will apply with the payment setting selection of \"Extra Towards.\" If \"next\" is selected the extra amount will apply to future due dates using the above waterfall application, if another option is selected for the \"Extra Towards\" it will apply as specified by that option.",
+          "created": "/Date(1436902602)/",
+          "active": 1
+        },
+        "ChargeOff": {
+          "results": []
+        },
+        "APDAdjustment": {
+          "__deferred": {
+            "uri": "LoanCredits(id=88)/APDAdjustment"
+          }
+        },
+        "DPDAdjustment": {
+          "__deferred": {
+            "uri": "LoanCredits(id=88 )/DPDAdjustment"
+          }
+        },
+        "id": 88,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "importId": null,
+        "title": "Test credit",
+        "date": "/Date(1494374400)/",
+        "amount": "900.00",
+        "category": 1,
+        "paymentType": 1,
+        "customApplication": "[]",
+        "resetPastDue": 0,
+        "apdAdjustmentId": null,
+        "dpdAdjustmentId": null,
+        "chargeOffFlag": null
+      }
+    ]
+  },
+  "DueDateChanges": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanDueDateChanges(id=161)",
+          "type": "Entity.DueDateChange"
+        },
+        "id": 161,
+        "entityType": "Entity.Loan",
+        "entityId": 84,
+        "modId": null,
+        "originalDate": "/Date(1451088000)/",
+        "newDate": "/Date(1452038400)/",
+        "changedDate": "/Date(1453766400)/",
+        "dueDateOnLastDOM": 0
+      }
+    ]
+  },
+  "StatusArchive": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanStatusArchive(id=3)",
+          "type": "Entity.StatusArchive"
+        },
+        "id": 3,
+        "loanId": 3,
+        "date": "/Date(1496102400)/",
+        "amountDue": "9450.00",
+        "dueInterest": "30.91",
+        "duePrincipal": "0.00",
+        "dueDiscount": "0.00",
+        "dueEscrow": "0.00",
+        "dueEscrowBreakdown": "{\"2\":0,\"3\":0}",
+        "dueFees": "0.00",
+        "duePni": "30.91",
+        "payoffFees": "0.00",
+        "nextPaymentDate": "/Date(1496275200)/",
+        "nextPaymentAmount": "900.00",
+        "lastPaymentDate": "/Date(1494374400)/",
+        "lastPaymentAmount": "900.00",
+        "principalBalance": "308691.44",
+        "amountPastDue30": "0.00",
+        "daysPastDue": 19,
+        "dateLastCurrent": null,
+        "dateLastCurrent30": null,
+        "payoff": "320021.68",
+        "perdiem": "30.01",
+        "interestAccruedToday": "30.01",
+        "availableCredit": "0.00",
+        "creditLimit": "0.00",
+        "periodStart": "/Date(1493596800)/",
+        "periodEnd": "/Date(1496188800)/",
+        "periodsRemaining": 51,
+        "escrowBalance": "0.00",
+        "escrowBalanceBreakdown": "{\"1\":0,\"2\":0,\"3\":0}",
+        "discountRemaining": "0.00",
+        "loanStatusId": 6,
+        "loanStatusText": "Open",
+        "loanSubStatusId": 32,
+        "loanSubStatusText": "Auto-Deferred (AD1)",
+        "sourceCompanyId": 4,
+        "sourceCompanyText": "CTEST Source Company",
+        "creditStatus": "loan.creditstatus.11",
+        "loanAge": 410,
+        "loanRecency": 20,
+        "lastHumanActivity": "/Date(1495411200)/",
+        "stoplight": "stoplight.display.yellow",
+        "finalPaymentDate": "/Date(1627776000)/",
+        "finalPaymentAmount": "10627.96",
+        "netChargeOff": "0.00",
+        "firstDelinquencyDate": null,
+        "uniqueDelinquencies": 1,
+        "delinquencyPercent": "87.83",
+        "delinquentDays": 361,
+        "calcedECOA": "loan.ecoacodes.1",
+        "calcedECOACoBuyer": "loan.ecoacodes.0",
+        "customFieldsBreakdown": "{\"296\":\"2017-11-15 18:14:00\",\"297\":\"2017-11-15\"}",
+        "portfolioBreakdown": "[\"7\",\"15\"]",
+        "subPortfolioBreakdown": "[]"
+      }
+    ]
+  },
+  "Transactions": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanTransactions(id=855)",
+          "type": "Entity.LoanTransaction"
+        },
+        "id": 855,
+        "txId": "3-0-spm42",
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": 0,
+        "date": "/Date(1575158400)/",
+        "period": 42,
+        "periodStart": "/Date(1572566400)/",
+        "periodEnd": "/Date(1575072000)/",
+        "title": "Scheduled Payment: 43",
+        "type": "scheduledPayment",
+        "infoOnly": 0,
+        "infoDetails": null,
+        "paymentId": 0,
+        "paymentDisplayId": 0,
+        "paymentAmount": "0",
+        "paymentInterest": "0",
+        "paymentPrincipal": "0",
+        "paymentDiscount": "0",
+        "paymentFees": "0",
+        "feesPaidDetails": null,
+        "paymentEscrow": "0",
+        "paymentEscrowBreakdown": null,
+        "chargeAmount": "900",
+        "chargeInterest": "900.35",
+        "chargePrincipal": "0",
+        "chargeDiscount": "0",
+        "chargeFees": "0",
+        "chargeEscrow": "0",
+        "chargeEscrowBreakdown": "{\"subsets\":{\"2\":0,\"3\":0}}",
+        "future": 1,
+        "principalOnly": 0,
+        "advancement": 0,
+        "payoffFee": 0,
+        "chargeOff": 0,
+        "paymentType": 0,
+        "adbDays": 30,
+        "adb": "308691.44",
+        "principalBalance": "308691.44",
+        "displayOrder": "0"
+      }
+    ]
+  },
+  "ScheduleRolls": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/ScheduleRolls(id=4)",
+          "type": "Entity.ScheduleRoll"
+        },
+        "id": 4,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "term": 1,
+        "rate": "3.50",
+        "solveUsing": "loan.rollScheduleSolve.dollar",
+        "amount": "0.01",
+        "percent": "0.00",
+        "advancedTerms": "0",
+        "solveFor": "loan.rollScheduleSolveFor.balance",
+        "balance": "0.00",
+        "balanceSet": "0.00",
+        "difference": "0.00",
+        "forceBalloon": 0,
+        "basicRevert": 0,
+        "displayOrder": 4,
+        "isCurtailment": 0
+      }
+    ]
+  },
+  "EscrowCalculatedTx": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/EscrowCalculatedTx(id=208)",
+          "type": "Entity.EscrowCalculatedTx"
+        },
+        "id": 208,
+        "loanId": 69,
+        "subset": 2,
+        "category": null,
+        "txId": "l69s2pmt190",
+        "description": "Payment: Payoff - 05/24/2016 PTEST2",
+        "date": "/Date(1464048000)/",
+        "type": "transaction.type.deposit",
+        "fromPayment": 1,
+        "escrowTransactionId": null,
+        "depositAmount": "66.00",
+        "withdrawalAmount": "0.00",
+        "balance": "132.00",
+        "sortOrder": 2
+      }
+    ]
+  },
+  "StopInterestDates": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/StopInterestDates(id=34)",
+          "type": "Entity.StopInterestDate"
+        },
+        "id": 34,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "date": "/Date(1496275200)/",
+        "type": "loan.stopInterestType.resume"
+      },
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/StopInterestDates(id=33)",
+          "type": "Entity.StopInterestDate"
+        },
+        "id": 33,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "date": "/Date(1496188800)/",
+        "type": "loan.stopInterestType.suspend"
+      }
+    ]
+  },
+  "APDAdjustments": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/APDAdjustments(id=34)",
+          "type": "Entity.APDAdjustment"
+        },
+        "id": 34,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "date": "/Date(1494288000)/",
+        "type": "loan.apd.adjust.type.fixed",
+        "dollarAmount": "500.00"
+      }
+    ]
+  },
+  "DPDAdjustments": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/DPDAdjustments(id=40)",
+          "type": "Entity.DPDAdjustment"
+        },
+        "id": 40,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "modId": null,
+        "date": "/Date(1494460800)/"
+      }
+    ]
+  },
+  "LoanModifications": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LoanModifications(id=36)",
+          "type": "Entity.LoanModification"
+        },
+        "id": 36,
+        "entityType": "Entity.Loan",
+        "entityId": 3,
+        "date": "/Date(1496102400)/",
+        "created": "/Date(1496102400)/",
+        "parent": null
+      }
+    ]
+  },
+  "EscrowTransactions": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/EscrowTransactions(id=80)",
+          "type": "Entity.EscrowTransaction"
+        },
+        "Vendor": {
+          "__deferred": {
+            "uri": "EscrowTransactions(id=80)/Vendor"
+          }
+        },
+        "id": 80,
+        "loanId": 3,
+        "subset": 2,
+        "category": 1,
+        "vendorId": 1,
+        "description": "test2",
+        "date": "/Date(1496102400)/",
+        "type": "transaction.type.withdrawal",
+        "amount": "50.00"
+      }
+    ]
+  },
+  "EscrowSubsetOptions": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/EscrowSubsetOptions(id=19)",
+          "type": "Entity.EscrowSubsetOptions"
+        },
+        "EstimatedDisbursements": {
+          "__deferred": {
+            "uri": "EscrowSubsetOptions(id=19)/EstimatedDisbursements"
+          }
+        },
+        "id": 19,
+        "entityType": "Entity.Loan",
+        "entityId": 4,
+        "subset": "3",
+        "payoffOption": "loan.escrowpayoff.standard",
+        "paymentApplication": "loan.escrowpmtapp.standard",
+        "aprInclude": 0,
+        "scheduleInclude": 0,
+        "disclosureLnAmtAdd": 0,
+        "interestBearing": 1,
+        "escrowAnalysisEnabled": 1,
+        "cushion": 1,
+        "cushionFixedAmount": "0.00",
+        "cushionPercentage": "0.000",
+        "escrowComputationYearStartDate": "/Date(-62169984000)/",
+        "nextEscrowAnalysisDate": "/Date(-62169984000)/",
+        "deficiencyDelimitingDPD": 0,
+        "deficiencyDaysToPay": 0,
+        "deficiencyDelimitingAmount": 1,
+        "deficiencyDelimitingDollar": "0.00",
+        "deficiencyDelimitingPercentage": "0.000",
+        "deficiencyCatchupPaymentNumber": 2,
+        "deficiencyActionA": 1,
+        "deficiencyActionB": 1,
+        "deficiencyActionC": 1,
+        "shortageDaysToPay": 0,
+        "shortageCatchupPaymentNumber": 1,
+        "shortageDelimitingAmount": 1,
+        "shortageDelimitingDollar": "0.00",
+        "shortageDelimitingPercentage": "0.000",
+        "shortageActionA": 1,
+        "shortageActionB": 1,
+        "surplusAllowedSurplus": "0.00",
+        "surplusDaysToRefund": 0,
+        "surplusDelimitingDPD": 0,
+        "surplusActionA": 1,
+        "surplusActionB": 1
+      }
+    ]
+  },
+  "Loans": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/Loans(id=340)",
+          "type": "Entity.Loan"
+        },
+        "Insurance": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Insurance"
+          }
+        },
+        "CustomFieldValues": {
+          "__deferred": {
+            "uri": "Loans(id=340)/CustomFieldValues"
+          }
+        },
+        "ChecklistItemValues": {
+          "__deferred": {
+            "uri": "Loans(id=340)/ChecklistItemValues"
+          }
+        },
+        "Documents": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Documents"
+          }
+        },
+        "Collateral": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Collateral"
+          }
+        },
+        "LoanSettings": {
+          "__deferred": {
+            "uri": "Loans(id=340)/LoanSettings"
+          }
+        },
+        "LoanSetup": {
+          "__deferred": {
+            "uri": "Loans(id=340)/LoanSetup"
+          }
+        },
+        "Notes": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Notes"
+          }
+        },
+        "Promises": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Promises"
+          }
+        },
+        "Charges": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Charges"
+          }
+        },
+        "Payments": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Payments"
+          }
+        },
+        "LoanFunding": {
+          "__deferred": {
+            "uri": "Loans(id=340)/LoanFunding"
+          }
+        },
+        "Advancements": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Advancements"
+          }
+        },
+        "Credits": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Credits"
+          }
+        },
+        "DueDateChanges": {
+          "__deferred": {
+            "uri": "Loans(id=340)/DueDateChanges"
+          }
+        },
+        "CurtailmentDates": {
+          "__deferred": {
+            "uri": "Loans(id=340)/CurtailmentDates"
+          }
+        },
+        "StatusArchive": {
+          "__deferred": {
+            "uri": "Loans(id=340)/StatusArchive"
+          }
+        },
+        "Transactions": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Transactions"
+          }
+        },
+        "EscrowCalculatedTx": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowCalculatedTx"
+          }
+        },
+        "ScheduleRolls": {
+          "__deferred": {
+            "uri": "Loans(id=340)/ScheduleRolls"
+          }
+        },
+        "StopInterestDates": {
+          "__deferred": {
+            "uri": "Loans(id=340)/StopInterestDates"
+          }
+        },
+        "APDAdjustments": {
+          "__deferred": {
+            "uri": "Loans(id=340)/APDAdjustments"
+          }
+        },
+        "DPDAdjustments": {
+          "__deferred": {
+            "uri": "Loans(id=340)/DPDAdjustments"
+          }
+        },
+        "LoanModifications": {
+          "__deferred": {
+            "uri": "Loans(id=340)/LoanModifications"
+          }
+        },
+        "EscrowAdjustments": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowAdjustments"
+          }
+        },
+        "EscrowTransactions": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowTransactions"
+          }
+        },
+        "EscrowSubsetOptions": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowSubsetOptions"
+          }
+        },
+        "EscrowCalculators": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowCalculators"
+          }
+        },
+        "EstimatedDisbursements": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EstimatedDisbursements"
+          }
+        },
+        "Loans": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Loans"
+          }
+        },
+        "LinkedLoanValues": {
+          "__deferred": {
+            "uri": "Loans(id=340)/LinkedLoanValues"
+          }
+        },
+        "RecurrentCharges": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RecurrentCharges"
+          }
+        },
+        "PayNearMeOrders": {
+          "__deferred": {
+            "uri": "Loans(id=340)/PayNearMeOrders"
+          }
+        },
+        "Customers": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Customers"
+          }
+        },
+        "Portfolios": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Portfolios"
+          }
+        },
+        "SubPortfolios": {
+          "__deferred": {
+            "uri": "Loans(id=340)/SubPortfolios"
+          }
+        },
+        "EscrowSubsets": {
+          "__deferred": {
+            "uri": "Loans(id=340)/EscrowSubsets"
+          }
+        },
+        "RuleAppliedLoanSettings": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedLoanSettings"
+          }
+        },
+        "RuleAppliedChargeOff": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedChargeOff"
+          }
+        },
+        "RuleAppliedAPDReset": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedAPDReset"
+          }
+        },
+        "RuleAppliedChecklists": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedChecklists"
+          }
+        },
+        "RuleAppliedChangeDueDates": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedChangeDueDates"
+          }
+        },
+        "RuleAppliedStopInterest": {
+          "__deferred": {
+            "uri": "Loans(id=340)/RuleAppliedStopInterest"
+          }
+        },
+        "Autopays": {
+          "__deferred": {
+            "uri": "Loans(id=340)/Autopays"
+          }
+        },
+        "id": 340,
+        "displayId": "44450071",
+        "title": "44450071",
+        "settingsId": 326,
+        "setupId": 348,
+        "insurancePolicyId": "4",
+        "collateralId": 195,
+        "linkedLoan": 69,
+        "modId": null,
+        "modTotal": 0,
+        "humanActivityDate": "/Date(1466640000)/",
+        "created": "/Date(1466439551)/",
+        "lastMaintRun": "/Date(1496245685)/",
+        "createdBy": 44,
+        "active": 1,
+        "archived": 0,
+        "loanAlert": "asdfadfs",
+        "temporaryAccount": 0,
+        "deleted": 0,
+        "deletedAt": null,
+        "_relatedMetadata": null,
+        "_dynamicProperties": null
+      }
+    ]
+  },
+  "LinkedLoanValues": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LinkedLoanValues(id=1)",
+          "type": "Entity.LinkedLoan"
+        },
+        "LinkedLoanOption": {
+          "__deferred": {
+            "uri": "LinkedLoanValues(id=1)/LinkedLoanOption"
+          }
+        },
+        "id": 1,
+        "loanId": 86,
+        "linkedLoanId": 73,
+        "optionId": 9,
+        "value": 1,
+        "updated": "/Date(1462807872)/",
+        "linkedLoanDisplay": "73"
+      },
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/LinkedLoanValues(id=2)",
+          "type": "Entity.LinkedLoan"
+        },
+        "LinkedLoanOption": {
+          "__deferred": {
+            "uri": "LinkedLoanValues(id=2)/LinkedLoanOption"
+          }
+        },
+        "id": 2,
+        "loanId": 86,
+        "linkedLoanId": 73,
+        "optionId": 5,
+        "value": 1,
+        "updated": "/Date(1462807872)/",
+        "linkedLoanDisplay": "73"
+      }
+    ]
+  },
+  "RecurrentCharges": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/RecurrentCharges(id=16)",
+          "type": "Entity.RecurrentCharge"
+        },
+        "Bracket": {
+          "__deferred": {
+            "uri": "RecurrentCharges(id=16)/Bracket"
+          }
+        },
+        "id": 16,
+        "triggerEvent": "charge.recurring.event.paymentreversal",
+        "triggerSubEvent": "charge.recurring.event.paymentreversal.nfs",
+        "triggerEventValue": null,
+        "triggerRule": "sample",
+        "restrictionRule": null,
+        "restrictionUI": "{\"portfolios\":[{\"category\":\"\",\"portfolio\":\"\",\"subportfolio\":\"\"}],\"triggerRuleUI\":\"\"}",
+        "chargeApplicationType": "loan.latefeeapp.standard",
+        "isEnabled": 1,
+        "applyInNewLoan": 1,
+        "title": "NSF Charge RType",
+        "info": "NSF Charge aR",
+        "calculation": "charge.recurring.calculation.fixed",
+        "fixedAmount": "25.00",
+        "percentage": "0.00",
+        "percentageBase": null,
+        "contingencyBracketId": null,
+        "triggerType": "charge.recurring.triggertype.event",
+        "loanType": null,
+        "interestBearing": 0,
+        "status": 1,
+        "active": null,
+        "created": "/Date(1460567502)/",
+        "__modifyLoans": null
+      }
+    ]
+  },
+  "EscrowSubsets": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/EscrowSubsets(id=3)",
+          "type": "Entity.EscrowSubset"
+        },
+        "id": 3,
+        "leaseSalesTax": 0,
+        "entityType": "Entity.Loan",
+        "title": "CSO Sample",
+        "payoffOption": "loan.escrowpayoff.standard",
+        "paymentApplication": "loan.escrowpmtapp.standard",
+        "aprInclude": 0,
+        "scheduleInclude": 0,
+        "created": "/Date(1438098769)/",
+        "active": 1,
+        "disclosureLnAmtAdd": 0,
+        "availability": "loan.escrowAvailability.loan",
+        "interestBearing": 1,
+        "escrowAnalysisEnabled": 1,
+        "cushion": 1,
+        "cushionFixedAmount": "0.00",
+        "cushionPercentage": "0.000",
+        "escrowComputationYearStartDate": "/Date(-62169984000)/",
+        "nextEscrowAnalysisDate": "/Date(-62169984000)/",
+        "deficiencyDelimitingDPD": 0,
+        "deficiencyDaysToPay": 0,
+        "deficiencyDelimitingAmount": 1,
+        "deficiencyDelimitingDollar": "0.00",
+        "deficiencyDelimitingPercentage": "0.000",
+        "deficiencyCatchupPaymentNumber": 2,
+        "deficiencyActionA": 1,
+        "deficiencyActionB": 1,
+        "deficiencyActionC": 1,
+        "shortageDaysToPay": 0,
+        "shortageCatchupPaymentNumber": 1,
+        "shortageDelimitingAmount": 1,
+        "shortageDelimitingDollar": "0.00",
+        "shortageDelimitingPercentage": "0.000",
+        "shortageActionA": 1,
+        "shortageActionB": 1,
+        "surplusAllowedSurplus": "0.00",
+        "surplusDaysToRefund": 0,
+        "surplusDelimitingDPD": 0,
+        "surplusActionA": 1,
+        "surplusActionB": 1
+      }
+    ]
+  },
+  "RuleAppliedLoanSettings": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedLoanSettings(id=18)",
+          "type": "Entity.RuleAppliedLoanSettings"
+        },
+        "LoanStatus": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/LoanStatus"
+          }
+        },
+        "LoanSubStatus": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/LoanSubStatus"
+          }
+        },
+        "CustomFieldValues": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/CustomFieldValues"
+          }
+        },
+        "Portfolios": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/Portfolios"
+          }
+        },
+        "PortfoliosToDelete": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/PortfoliosToDelete"
+          }
+        },
+        "SubPortfolios": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/SubPortfolios"
+          }
+        },
+        "SubPortfoliosToDelete": {
+          "__deferred": {
+            "uri": "RuleAppliedLoanSettings(id=18)/SubPortfoliosToDelete"
+          }
+        },
+        "id": 18,
+        "name": "C2",
+        "rule": "(= status-days-past-due 2)",
+        "cardFeeAmount": null,
+        "cardFeeType": null,
+        "cardFeePercent": null,
+        "agent": null,
+        "loanStatusId": null,
+        "loanSubStatusId": null,
+        "sourceCompany": 4,
+        "eBilling": null,
+        "ECOACode": null,
+        "coBuyerECOACode": null,
+        "creditStatus": null,
+        "creditBureau": null,
+        "reportingType": null,
+        "secured": null,
+        "autopayEnabled": null,
+        "repoDate": null,
+        "closedDate": null,
+        "liquidationDate": null,
+        "isStoplightManuallySet": null,
+        "deletePortfolios": 0,
+        "enrollNewLoans": 1,
+        "enrollExistingLoans": 0,
+        "enabled": 1,
+        "evalInRealTime": 1,
+        "evalInDailyMaint": 0,
+        "forcing": 0,
+        "order": 29,
+        "loanEnabled": 1
+      }
+    ]
+  },
+  "RuleAppliedChargeOff": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedChargeOff(id=4)",
+          "type": "Entity.RuleAppliedChargeOff"
+        },
+        "id": 4,
+        "name": "DPD More Than 90 No GPS",
+        "rule": "90 status-days-past-due AND (-> collateral-gps-status (get :collateral.gpsstatus.notinstalled) :PROPERTY)",
+        "paymentTypeId": null,
+        "paymentMethodId": null,
+        "amountCalculation": "apd",
+        "amount": "0.00",
+        "extraTx": "payment.extra.tx.principal",
+        "extraPeriods": "payment.extra.periods.next",
+        "early": 1,
+        "info": "Information",
+        "enrollNewLoans": 1,
+        "enrollExistingLoans": 0,
+        "enabled": 1,
+        "evalInRealTime": 1,
+        "evalInDailyMaint": 0,
+        "forcing": 0,
+        "isPayment": 1,
+        "creditCategory": 1,
+        "resetPastDue": 0,
+        "order": 8,
+        "applyUnderPayDiffAs": null,
+        "applyOverPayDiffAs": null,
+        "advancementCategory": null,
+        "loanEnabled": 1
+      }
+    ]
+  },
+  "RuleAppliedAPDReset": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedAPDReset(id=2)",
+          "type": "Entity.RuleAppliedAPDReset"
+        },
+        "id": 2,
+        "name": "Days Old 25",
+        "rule": "(= (u/date-compare (u/today) setup-contract-date) 25)",
+        "amount": "0.00",
+        "dpdReset": "0",
+        "daysFromToday": "0",
+        "adjustmentType": "loan.apd.adjust.type.zero",
+        "enrollNewLoans": 1,
+        "enrollExistingLoans": 0,
+        "enabled": 0,
+        "evalInRealTime": 1,
+        "evalInDailyMaint": 0,
+        "forcing": 0,
+        "order": 15,
+        "loanEnabled": 1
+      }
+    ]
+  },
+  "RuleAppliedChecklists": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/RuleAppliedChecklists(id=2)",
+          "type": "Entity.RuleAppliedChecklist"
+        },
+        "ChecklistItemValues": {
+          "__deferred": {
+            "uri": "RuleAppliedChecklists(id=2)/ChecklistItemValues"
+          }
+        },
+        "id": 2,
+        "name": "Original Maturity Date Passed",
+        "rule": "(>= (u/date-compare (u/today :format :date) status-orig-maturity-date) 0)",
+        "enrollNewLoans": 1,
+        "enrollExistingLoans": 0,
+        "enabled": 1,
+        "evalInRealTime": 1,
+        "evalInDailyMaint": 0,
+        "forcing": 0,
+        "order": 3,
+        "loanEnabled": 1
+      }
+    ]
+  },
+  "Autopays": {
+    "results": [
+      {
+        "__metadata": {
+          "uri": "https://loanpro.simnang.com/api/public/api/1/odata.svc/Autopays(id=18)",
+          "type": "Entity.Autopay"
+        },
+        "PrimaryPaymentMethod": {
+          "__deferred": {
+            "uri": "Autopays(id=18)/PrimaryPaymentMethod"
+          }
+        },
+        "SecondaryPaymentMethod": {
+          "__deferred": {
+            "uri": "Autopays(id=18)/SecondaryPaymentMethod"
+          }
+        },
+        "AdditionalPaymentMethod": {
+          "__deferred": {
+            "uri": "Autopays(id=18)/AdditionalPaymentMethod"
+          }
+        },
+        "Loan": {
+          "__deferred": {
+            "uri": "Autopays(id=18)/Loan"
+          }
+        },
+        "PaymentType": {
+          "__deferred": {
+            "uri": "Autopays(id=18)/PaymentType"
+          }
+        },
+        "id": 18,
+        "loanId": 86,
+        "name": "Sample",
+        "type": "autopay.type.recurring",
+        "applyDate": "/Date(1466035200)/",
+        "processDateTime": "/Date(1466028000)/",
+        "originalProcessDateTime": "/Date(1463004000)/",
+        "amountType": "autopay.amountType.static",
+        "amount": 100,
+        "processCurrent": 1,
+        "chargeServiceFee": 0,
+        "retryDays": 2,
+        "retryCount": 2,
+        "postPaymentUpdate": 1,
+        "recurringFrequency": "autopay.recurringFrequency.monthly",
+        "recurringPeriods": 9,
+        "recurringDateOption": "autopay.recurringDate.applyDate",
+        "schedulingType": "autopay.schedulingType.calendarDay",
+        "paymentExtraTowards": "payment.extra.tx.principal",
+        "daysInPeriod": null,
+        "lastDayOfMonthEnabled": 0,
+        "paymentFee": 0,
+        "paymentMethodAuthType": "payment.echeckauth.PPD",
+        "payoffAdjustment": 0,
+        "chargeOffRecovery": 0,
+        "mcProcessor": {
+          "bankAccount": {
+            "id": "nacha",
+            "name": "NACHA Processor",
+            "default": "1"
+          }
+        },
+        "ccProcessor": 0,
+        "baProcessor": 0,
+        "processZeroOrNegativeBalance": 0,
+        "status": "autopay.status.failed",
+        "active": 1,
+        "created": "/Date(1462909491)/",
+        "lastPaymentExtraTowards": null
+      }
+    ]
+  }
+
+}
