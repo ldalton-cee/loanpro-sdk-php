@@ -50,14 +50,6 @@ use Simnang\LoanPro\Customers\ReferencesEntity;
 use Simnang\LoanPro\Customers\SocialProfileEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
-use Simnang\LoanPro\Iteration\AggregateParams;
-use Simnang\LoanPro\Iteration\CustomerIterator;
-use Simnang\LoanPro\Iteration\CustomerSearchIterator;
-use Simnang\LoanPro\Iteration\FilterParams;
-use Simnang\LoanPro\Iteration\LoanIterator;
-use Simnang\LoanPro\Iteration\LoanSearchIterator;
-use Simnang\LoanPro\Iteration\PaginationParams;
-use Simnang\LoanPro\Iteration\SearchParams;
 use Simnang\LoanPro\Loans\AdvancementsEntity;
 use Simnang\LoanPro\Loans\APDAdjustmentEntity;
 use Simnang\LoanPro\Loans\AutopayEntity;
@@ -104,245 +96,35 @@ use Simnang\LoanPro\Loans\ScheduleRollEntity;
 use Simnang\LoanPro\Loans\SourceCompanyEntity;
 use Simnang\LoanPro\Loans\StopInterestDateEntity;
 use Simnang\LoanPro\Loans\SubPortfolioEntity;
+use Simnang\LoanPro\Iteration\Iterator\CustomerIterator;
+use Simnang\LoanPro\Iteration\Iterator\CustomerSearchIterator;
+use Simnang\LoanPro\Iteration\Iterator\LoanIterator;
+use Simnang\LoanPro\Iteration\Iterator\LoanSearchIterator;
+use Simnang\LoanPro\Iteration\Params\AggregateParams;
+use Simnang\LoanPro\Iteration\Params\CustomQueryColumnParams;
+use Simnang\LoanPro\Iteration\Params\FilterParams;
+use Simnang\LoanPro\Iteration\Params\PaginationParams;
+use Simnang\LoanPro\Iteration\Params\SearchParams;
 
 /**
  * Class LoanProSDK
- * This is the interface for the LoanPro SDK. It provides wrappers for creating entities either in code or from JSON
- * @package Simnang\LoanPro
+ * This is the interface for the LoanPro SDK. It provides wrappers for:
+ *  * Creating entities either in code or from JSON
+ *  * Pulling entities from the server
+ *  * Performing common/complex processes with the server
+ *  * Pulling custom query information and downloading completed custom queries
+ *
+ * It is recommended to use this class for your integrations as it is the only class that is guaranteed to not have backwards-compatibility
+ *  breaking changes except between major versions (ie. backwards compatibility changes can only happen in the transition from 3.x to 4.x)
+ *
+*@package Simnang\LoanPro
  */
 class LoanProSDK
 {
-    private static $inst;
-    private static $clientType = ApiClient::TYPE_SYNC;
-    private static $env = Communicator::PRODUCTION;
-    private $apiComm;
 
-    /**
-     * Attempts to login to the customer facing website. Returns an array with the first item being whether or not login was successful and the second item is the response from the server.
-     *
-     * If login was successful, the login from the server will hold the customer id and name.
-     *
-     * @param string $username - Username of customer
-     * @param string $password - Password of user
-     * @return array
-     * @throws ApiException
-     */
-    public function LoginToCustomerSite($username = '', $password = ''){
-        return $this->apiComm->LoginToCustomerSite( $username, $password);
-    }
-
-    /**
-     * Gets a loan from the LoanPro servers.
-     * @param int $id - ID of loan to pull
-     * @param array $expandProps - array of properties to expand
-     * @param bool|true $nopageProps
-     * @return LoanEntity
-     * @throws ApiException
-     */
-    public function GetLoan($id, $expandProps = [], $nopageProps = true){
-        return $this->apiComm->GetLoan($id, $expandProps, $nopageProps);
-    }
-
-    /**
-     * Returns a loan entity shell around an ID (good for performance)
-     * DO NOT USE 'Save()' ON THIS ENTITY
-     * @param $loanId - ID of loan entity
-     * @return LoanEntity
-     */
-    public function MakeLoanShellFromID($loanId){
-        return (new LoanEntity(''))->Set(BASE_ENTITY::ID, $loanId);
-    }
-
-    /**
-     * Returns an array of LoanEntity for all loans associated with the specified customer
-     * @param $customerId - ID of customer entity
-     * @param $expandProps - ID of customer entity
-     * @return LoanEntity[]
-     */
-    public function GetLoansForCustomer($customerId, $expandProps = []){
-        return $this->apiComm->GetLoansForCustomer($customerId, $expandProps);
-    }
-
-    /**
-     * Returns a customer entity shell around an ID (good for performance)
-     * DO NOT USE 'Save()' ON THIS ENTITY
-     * @param $customerId - ID of customer entity
-     * @return CustomerEntity
-     */
-    public function MakeCustomerShellFromID($customerId){
-        return (new CustomerEntity('',''))->Set(BASE_ENTITY::ID, $customerId);
-    }
-
-    /**
-     * Gets a customer from the LoanPro servers.
-     * @param int $id - ID of customer to pull
-     * @param array $expandProps - array of properties to expand
-     * @param bool|true $nopageProps
-     * @return CustomerEntity
-     * @throws ApiException
-     */
-    public function GetCustomer($id, $expandProps = [], $nopageProps = true){
-        return $this->apiComm->GetCustomer($id, $expandProps, $nopageProps);
-    }
-
-    /**
-     * Returns an iterator that will iterate over all loans on the server
-     *  It caches only a small number of loans locally and will grab the rest as needed
-     * @param array                 $expandProps
-     * @param FilterParams|null     $filter
-     * @param array                 $orderBy
-     * @param string                $order
-     * @return LoanIterator
-     */
-    public function GetLoans($expandProps = [], FilterParams $filter = null, $orderBy = [], $order = PaginationParams::ASCENDING_ORDER){
-        return new LoanIterator($expandProps, $filter, $orderBy, $order);
-    }
-
-    /**
-     * Returns an array of loan entities
-     * @param array                 $expandProps - expand properties to expand by
-     * @param PaginationParams|null $paginationParams - Pagination options
-     * @param FilterParams|null     $filter - filter object
-     * @return LoanEntity[]
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    public function GetLoans_RAW($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
-        return $this->apiComm->GetLoans($expandProps, $paginationParams, $filter);
-    }
-
-    /**
-     * Performs a loan search and returns an iterator for the results
-     * @param SearchParams|null     $searchParams - search params
-     * @param AggregateParams|null  $aggParams - aggregate params
-     * @param array                 $orderBy
-     * @param string                $order
-     * @param int                   $internalPageSize
-     * @return LoanSearchIterator
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    public function SearchLoans(SearchParams $searchParams, AggregateParams $aggParams, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
-        return new LoanSearchIterator($searchParams, $aggParams, $orderBy, $order, $internalPageSize);
-    }
-
-    /**
-     * Performs a loan search and returns the direct results (results are not Loan objects but raw JSON)
-     * @param PaginationParams|null $paginationParams - pagination settings
-     * @param SearchParams|null     $searchParams - parameters to search by
-     * @return array
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    public function SearchLoans_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
-        return $this->apiComm->SearchLoans($searchParams, $aggParams, $paginationParams);
-    }
-
-    /**
-     * Returns an iterator that will iterate over all loans on the server
-     *  It caches only a small number of loans locally and will grab the rest as needed
-     * @param array                 $expandProps
-     * @param FilterParams|null     $filter
-     * @param array                 $orderBy
-     * @param string                $order
-     * @return LoanIterator
-     */
-    public function GetCustomers($expandProps = [], FilterParams $filter = null, $orderBy = [], $order = PaginationParams::ASCENDING_ORDER){
-        return new CustomerIterator($expandProps, $filter, $orderBy, $order);
-    }
-
-    /**
-     * Performs a customer search and returns the direct results
-     * @param PaginationParams|null $paginationParams - pagination settings
-     * @param SearchParams|null     $searchParams - parameters to search by
-     * @return CustomerSearchIterator
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    public function SearchCustomers_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
-        return $this->apiComm->SearchCustomers($searchParams, $aggParams, $paginationParams);
-    }
-
-    /**
-     * Returns an array of customer entities
-     * @param array                 $expandProps - expand properties to expand by
-     * @param PaginationParams|null $paginationParams - Pagination options
-     * @param FilterParams|null     $filter - filter object
-     * @return CustomerEntity[]
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    public function GetCustomers_RAW($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
-        return $this->apiComm->GetCustomers($expandProps, $paginationParams, $filter);
-    }
-
-    /**
-     * Performs a customer search and returns an iterator for the results
-     * @param SearchParams|null     $searchParams - search params
-     * @param AggregateParams|null  $aggParams - aggregate params
-     * @param array                 $orderBy
-     * @param string                $order
-     * @param int                   $internalPageSize
-     * @return CustomerSearchIterator
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    public function SearchCustomers(SearchParams $searchParams, AggregateParams $aggParams, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
-        return new CustomerSearchIterator($searchParams, $aggParams, $orderBy, $order, $internalPageSize);
-    }
-
-    /**
-     * Gets the information for payment accounts associated to a customer
-     * @param int           $customerId - The id of the customer
-     * @param array         $expandProps - array of properties to expand
-     * @param FilterParams  $filterParams - FilterParams
-     * @return PaymentAccountEntity[]
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    public function GetPaymentAccounts($customerId, $expandProps = [], FilterParams $filterParams = null){
-        return $this->apiComm->GetPaymentAccounts($customerId, $expandProps, $filterParams);
-    }
-
-    /**
-     * Sets the configuration for the loan pro instance (will re-set the instance if API credentials have been set)
-     *  If non-null $tenant and $token is provided, will also set credentials
-     *  This function is NOT thread safe!
-     * @param string      $commType - communicator type to use, accepts 'sync' or 'async', defaults to 'sync'
-     * @param string      $env - environment to use, accepts 'prod' or 'staging', defaults to 'prod'
-     * @param string|null $tenant - Tenant ID
-     * @param string|null $token - API Token
-     */
-    public static function SetConfig($commType = 'sync', $env = 'prod', $tenant = null, $token = null){
-        if(!is_null($tenant) && !is_null($token)){
-            ApiClient::SetAuthorization($tenant, $token);
-        }
-
-        switch($commType){
-            case 'async':
-                static::$clientType = ApiClient::TYPE_ASYNC;
-                break;
-            case 'sync':
-            default:
-                static::$clientType = ApiClient::TYPE_SYNC;
-                break;
-        }
-        switch($env){
-            case 'beta':
-                $env = Communicator::BETA;
-                break;
-            case 'staging':
-                $env = Communicator::STAGING;
-                break;
-            case 'prod':
-            default:
-                $env = Communicator::PRODUCTION;
-        }
-        static::$env = $env;
-
-        if(ApiClient::AreTokensSet())
-            static::$inst = new LoanProSDK();
-    }
+    ///////////////////////////////////////////////////////
+    ////        UTILS SECTION
+    ///////////////////////////////////////////////////////
 
     /**
      * Returns the singleton instance of the SDK
@@ -411,11 +193,147 @@ class LoanProSDK
                         $env = Communicator::PRODUCTION;
                 }
                 static::$env = $env;
+
+                if(isset($config['cache'])){
+                    if(isset($config['cache']['file']))
+                    {
+                        if($config['cache']['file'] == 'false')
+                            static::$cacheFile = false;
+                        else
+                            static::$cacheFile = $config['cache']['file'];
+                    }
+                    if(isset($config['cache']['expr'])){
+                        try{
+                            new \DateInterval($config['cache']['expr']);
+                            static::$cacheExpr = $config['cache']['expr'];
+                        }catch (\Exception $e){
+                        }
+                    }
+                }
             }
             static::$inst = new LoanProSDK();
         }
         assert(static::$inst instanceof LoanProSDK);
         return static::$inst;
+    }
+
+    /**
+     * Sets the configuration for the loan pro instance (will re-set the instance if API credentials have been set)
+     *  If non-null $tenant and $token is provided, will also set credentials
+     *  This function is NOT thread safe!
+     * @param string      $commType - communicator type to use, accepts 'sync' or 'async', defaults to 'sync'
+     * @param string      $env - environment to use, accepts 'prod' or 'staging', defaults to 'prod'
+     * @param string|null $tenant - Tenant ID
+     * @param string|null $token - API Token
+     * @param string|null $cacheFile - Location for settings from the LoanPro server
+     * @param string|null $cacheExpr - DateInterval string for length of cache expiration
+     */
+    public static function SetConfig($commType = 'sync', $env = 'prod', $tenant = null, $token = null, $cacheFile = null, $cacheExpr = null){
+        if(!is_null($tenant) && !is_null($token)){
+            ApiClient::SetAuthorization($tenant, $token);
+        }
+
+        switch($commType){
+            case 'async':
+                static::$clientType = ApiClient::TYPE_ASYNC;
+                break;
+            case 'sync':
+            default:
+                static::$clientType = ApiClient::TYPE_SYNC;
+                break;
+        }
+        switch($env){
+            case 'beta':
+                $env = Communicator::BETA;
+                break;
+            case 'staging':
+                $env = Communicator::STAGING;
+                break;
+            case 'prod':
+            default:
+                $env = Communicator::PRODUCTION;
+        }
+        static::$env = $env;
+
+        if(ApiClient::AreTokensSet())
+            static::$inst = new LoanProSDK();
+
+        if(!is_null($cacheFile))
+        {
+            if($cacheFile == 'false')
+                static::$cacheFile = false;
+            else
+                static::$cacheFile = $cacheFile;
+        }
+        if(!is_null($cacheExpr)){
+            try{
+                new \DateInterval($cacheExpr);
+                static::$cacheExpr = $cacheExpr;
+            }catch (\Exception $e){
+            }
+        }
+    }
+
+    /**
+     * Returns the cache settings
+     * @return array
+     */
+    public static function GetCacheSettings(){
+        return ['file'=>static::$cacheFile,'expr'=>static::$cacheExpr];
+    }
+
+    /**
+     * Returns the current cached objects (usually tenant-wide settings that shouldn't change often)
+     * @return array
+     * @throws ApiException
+     * @throws \Exception
+     */
+    public static function GetCache(){
+        $cache = [];
+        try{
+            if(static::$cacheFile && file_exists(static::$cacheFile)) {
+                $fileTime = (new \DateTime())->setTimestamp(filemtime(static::$cacheFile))->add(new \DateInterval(static::$cacheExpr))->getTimestamp();
+                $today = (new \DateTime())->getTimestamp();
+                if ($today - $fileTime < 0) {
+                    $cache = json_decode(file_get_contents(static::$cacheFile), true);
+                    if (is_null($cache))
+                        $cache = [];
+                    return $cache;
+                }
+            }
+            $cache = [
+                'contextVars' => static::GetInstance()->apiComm->GetContextVariables()
+            ];
+            if(static::$cacheFile)
+                file_put_contents(static::$cacheFile, json_encode($cache));
+        }
+        catch(ApiException $e){
+            throw $e;
+        }
+        catch(\Exception $e){
+            var_dump($e);
+        }
+        return $cache;
+    }
+
+    /**
+     * Returns a loan entity shell around an ID (good for performance)
+     * DO NOT USE 'Save()' ON THIS ENTITY
+     * @param $loanId - ID of loan entity
+     * @return LoanEntity
+     */
+    public function MakeLoanShellFromID($loanId){
+        return (new LoanEntity(''))->Set(BASE_ENTITY::ID, $loanId);
+    }
+
+    /**
+     * Returns a customer entity shell around an ID (good for performance)
+     * DO NOT USE 'Save()' ON THIS ENTITY
+     * @param $customerId - ID of customer entity
+     * @return CustomerEntity
+     */
+    public function MakeCustomerShellFromID($customerId){
+        return (new CustomerEntity('',''))->Set(BASE_ENTITY::ID, $customerId);
     }
 
     /**
@@ -425,6 +343,305 @@ class LoanProSDK
     public function GetApiComm(){
         return $this->apiComm;
     }
+
+    ///////////////////////////////////////////////////////
+    ////        SERVER COMM SECTION - LOANS
+    ///////////////////////////////////////////////////////
+
+    /**
+     * Gets a loan from the LoanPro servers.
+     * @param int $id - ID of loan to pull
+     * @param array $expandProps - array of properties to expand
+     * @param bool|true $nopageProps
+     * @return LoanEntity
+     * @throws ApiException
+     */
+    public function GetLoan($id, $expandProps = [], $nopageProps = true){
+        return $this->apiComm->GetLoan($id, $expandProps, $nopageProps);
+    }
+
+    /**
+     * Returns an iterator that will iterate over all loans on the server
+     *  It caches only a small number of loans locally and will grab the rest as needed
+     * @param array                 $expandProps
+     * @param FilterParams|null     $filter
+     * @param array                 $orderBy
+     * @param string                $order
+     * @return LoanIterator
+     */
+    public function GetLoans($expandProps = [], FilterParams $filter = null, $orderBy = [], $order = PaginationParams::ASCENDING_ORDER){
+        return new LoanIterator($expandProps, $filter, $orderBy, $order);
+    }
+
+    /**
+     * Returns an array of loan entities
+     * @param array                 $expandProps - expand properties to expand by
+     * @param PaginationParams|null $paginationParams - Pagination options
+     * @param FilterParams|null     $filter - filter object
+     * @return LoanEntity[]
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetLoans_RAW($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
+        return $this->apiComm->GetLoans($expandProps, $paginationParams, $filter);
+    }
+
+    /**
+     * Performs a loan search and returns an iterator for the results
+     * @param SearchParams|null     $searchParams - search params
+     * @param AggregateParams|null  $aggParams - aggregate params
+     * @param array                 $orderBy
+     * @param string                $order
+     * @param int                   $internalPageSize
+     * @return LoanSearchIterator
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function SearchLoans(SearchParams $searchParams, AggregateParams $aggParams, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
+        return new LoanSearchIterator($searchParams, $aggParams, $orderBy, $order, $internalPageSize);
+    }
+
+    /**
+     * Performs a loan search and returns the direct results (results are not Loan objects but raw JSON)
+     * @param PaginationParams|null $paginationParams - pagination settings
+     * @param SearchParams|null     $searchParams - parameters to search by
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function SearchLoans_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
+        return $this->apiComm->SearchLoans($searchParams, $aggParams, $paginationParams);
+    }
+
+    ///////////////////////////////////////////////////////
+    ////        SERVER COMM SECTION - CUSTOMER
+    ///////////////////////////////////////////////////////
+
+    /**
+     * Gets a customer from the LoanPro servers.
+     * @param int $id - ID of customer to pull
+     * @param array $expandProps - array of properties to expand
+     * @param bool|true $nopageProps
+     * @return CustomerEntity
+     * @throws ApiException
+     */
+    public function GetCustomer($id, $expandProps = [], $nopageProps = true){
+        return $this->apiComm->GetCustomer($id, $expandProps, $nopageProps);
+    }
+
+    /**
+     * Returns an iterator that will iterate over all loans on the server
+     *  It caches only a small number of loans locally and will grab the rest as needed
+     * @param array                 $expandProps
+     * @param FilterParams|null     $filter
+     * @param array                 $orderBy
+     * @param string                $order
+     * @return LoanIterator
+     */
+    public function GetCustomers($expandProps = [], FilterParams $filter = null, $orderBy = [], $order = PaginationParams::ASCENDING_ORDER){
+        return new CustomerIterator($expandProps, $filter, $orderBy, $order);
+    }
+
+    /**
+     * Returns an array of customer entities
+     * @param array                 $expandProps - expand properties to expand by
+     * @param PaginationParams|null $paginationParams - Pagination options
+     * @param FilterParams|null     $filter - filter object
+     * @return CustomerEntity[]
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetCustomers_RAW($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
+        return $this->apiComm->GetCustomers($expandProps, $paginationParams, $filter);
+    }
+
+    /**
+     * Performs a customer search and returns an iterator for the results
+     * @param SearchParams|null     $searchParams - search params
+     * @param AggregateParams|null  $aggParams - aggregate params
+     * @param array                 $orderBy
+     * @param string                $order
+     * @param int                   $internalPageSize
+     * @return CustomerSearchIterator
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function SearchCustomers(SearchParams $searchParams, AggregateParams $aggParams, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
+        return new CustomerSearchIterator($searchParams, $aggParams, $orderBy, $order, $internalPageSize);
+    }
+
+    /**
+     * Performs a customer search and returns the direct results
+     * @param PaginationParams|null $paginationParams - pagination settings
+     * @param SearchParams|null     $searchParams - parameters to search by
+     * @return CustomerSearchIterator
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function SearchCustomers_RAW(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
+        return $this->apiComm->SearchCustomers($searchParams, $aggParams, $paginationParams);
+    }
+
+    /**
+     * Attempts to login to the customer facing website. Returns an array with the first item being whether or not login was successful and the second item is the response from the server.
+     *
+     * If login was successful, the login from the server will hold the customer id and name.
+     *
+     * @param string $username - Username of customer
+     * @param string $password - Password of user
+     * @return array
+     * @throws ApiException
+     */
+    public function LoginToCustomerSite($username = '', $password = ''){
+        return $this->apiComm->LoginToCustomerSite( $username, $password);
+    }
+
+    /**
+     * Gets the information for payment accounts associated to a customer
+     * @param int           $customerId - The id of the customer
+     * @param array         $expandProps - array of properties to expand
+     * @param FilterParams  $filterParams - FilterParams
+     * @return PaymentAccountEntity[]
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetPaymentAccounts($customerId, $expandProps = [], FilterParams $filterParams = null){
+        return $this->apiComm->GetPaymentAccounts($customerId, $expandProps, $filterParams);
+    }
+
+    ///////////////////////////////////////////////////////
+    ////        SERVER COMM SECTION - CUSTOMER AND LOANS
+    ///////////////////////////////////////////////////////
+
+    /**
+     * Returns an array of LoanEntity for all loans associated with the specified customer
+     * @param $customerId - ID of customer entity
+     * @param $expandProps - ID of customer entity
+     * @return LoanEntity[]
+     */
+    public function GetLoansForCustomer($customerId, $expandProps = []){
+        return $this->apiComm->GetLoansForCustomer($customerId, $expandProps);
+    }
+
+    ///////////////////////////////////////////////////////
+    ////        SERVER COMM SECTION - MISC
+    ///////////////////////////////////////////////////////
+
+    /**
+     * Queues a custom query report for LoanPro
+     * @param SearchParams            $search - search parameters for determining loans to run
+     * @param CustomQueryColumnParams $columns - columns to pull for the custom query report
+     * @param string                  $name - name of the report
+     * @return array
+     * @throws ApiException
+     */
+    public function QueueCustomQuery(SearchParams $search, CustomQueryColumnParams $columns, $name = ''){
+        return $this->apiComm->QueueCustomQuery($search, $columns, $name);
+    }
+
+    /**
+     * Checks the status of a custom query and returns the resulting response from the server
+     * @param int   $queryId - The ID of a custom query
+     * @return array
+     * @throws ApiException
+     */
+    public function GetCustomQueryStatus($queryId){
+        return $this->apiComm->CheckCustomQueryStatus($queryId);
+    }
+
+    /**
+     * Checks the status of a custom query and returns the download url if the query is complete, null if it is in progress, and false if there was an error creating the report
+     * @param int   $queryId - The ID of a custom query
+     * @return null|false|string
+     * @throws ApiException
+     */
+    public function GetCustomQueryURL($queryId){
+        return $this->apiComm->GetCustomQueryURL($queryId);
+    }
+
+    /**
+     * Checks the status of a custom query and returns the CSV contents if the query is complete, null if it is in progress, and false if there was an error creating the report
+     * @param int   $queryId - The ID of a custom query
+     * @return null|false|string
+     * @throws ApiException
+     */
+    public function DownloadCustomQuery($queryId){
+        return $this->apiComm->DownloadCustomQuery($queryId);
+    }
+
+    ///////////////////////////////////////////////////////
+    ////        UTILITIES CREATE SECTION
+    ///////////////////////////////////////////////////////
+
+    /**
+     * Creates filter parameters based on an OData string
+     * @param $str
+     * @return FilterParams
+     */
+    public function CreateFilterParams_OData($str){
+        return FilterParams::MakeFromODataString($str);
+    }
+
+    /**
+     * Creates filter parameters based on a logic string
+     * @param $str
+     * @return FilterParams
+     */
+    public function CreateFilterParams_Logic($str){
+        return FilterParams::MakeFromLogicString($str);
+    }
+
+    /**
+     * Creates elastic search parameters on the SDK DSL
+     * @param $str
+     * @return SearchParams
+     */
+    public function CreateSearchParams($str){
+        return new SearchParams($str);
+    }
+
+    /**
+     * Creates pagination parameters
+     * @param int        $start - starting offset
+     * @param int        $pgSize - page size
+     * @param array      $orderBy - array of fields to order by
+     * @param string     $order - ordering (asc or desc)
+     * @param bool|false $nopaging  - whether or not to turn off pagination
+     * @return PaginationParams
+     */
+    public function CreatePaginationParams($start = 0, $pgSize = 0, $orderBy = [], $order = PaginationParams::ASCENDING_ORDER, $nopaging = false){
+        return new PaginationParams($nopaging, $start, $pgSize, $orderBy, $order);
+    }
+
+    /**
+     * Creates a no-pagination pagination parameter (use for turning off search pagination)
+     * @return PaginationParams
+     */
+    public function CreateNoPagingParam(){
+        return new PaginationParams(true);
+    }
+
+    /**
+     * Creates aggregate parameters for searches
+     * @param $str
+     * @return AggregateParams
+     */
+    public function CreateAggregateParams($str){
+        return new AggregateParams($str);
+    }
+
+    /**
+     * Creates custom query column parameters for a custom query
+     * @param $str
+     * @return CustomQueryColumnParams
+     */
+    public function CreateCustomQueryColumnParams($str){
+        return new CustomQueryColumnParams($str);
+    }
+
+    ///////////////////////////////////////////////////////
+    ////        ENTITY CREATE SECTION
+    ///////////////////////////////////////////////////////
 
     /**
      * Creates a new loan with the minimal amount of information required
@@ -556,7 +773,6 @@ class LoanProSDK
 
         return (new Loans\LoanEntity($json[LOAN::DISP_ID]))->Set($setVars);
     }
-
 
     /**
      * Creates a new customer and nested entities from a JSON string
@@ -883,15 +1099,19 @@ class LoanProSDK
      * @return EscrowSubsetOptionEntity
      */
     public function CreateEscrowSubsetOption($subset, $cushion, $cushionFixedAmt, $cushinPerc, $deficiencyDelimDPD, $deficiencyDaysToPay, $deficiencyDelemAmt,
-                                                    $deficiencyDelimDollar, $deficiencyDelimPerc, $deficiencyCatchupPayNum, $deficiencyActA, $deficiencyActB, $deficiencyActC, $escrowCompYrStrtDate, $nxtEscrowAnalysisDate,
-                                                    $shortDaysToPay, $shortCatchupPayNum, $shortDelimAmnt, $shortDelimDollar, $shortDelimPercent, $shortActionA, $shortActionB,
-                                                    $surplusDaysToRefund, $surplusActA, $surplusActB, $surplusAllowedSurplus, $surplusDelimDPD)
+                                             $deficiencyDelimDollar, $deficiencyDelimPerc, $deficiencyCatchupPayNum, $deficiencyActA, $deficiencyActB, $deficiencyActC, $escrowCompYrStrtDate, $nxtEscrowAnalysisDate,
+                                             $shortDaysToPay, $shortCatchupPayNum, $shortDelimAmnt, $shortDelimDollar, $shortDelimPercent, $shortActionA, $shortActionB,
+                                             $surplusDaysToRefund, $surplusActA, $surplusActB, $surplusAllowedSurplus, $surplusDelimDPD)
     {
         return new EscrowSubsetOptionEntity($subset, $cushion, $cushionFixedAmt, $cushinPerc, $deficiencyDelimDPD, $deficiencyDaysToPay, $deficiencyDelemAmt,
-            $deficiencyDelimDollar, $deficiencyDelimPerc, $deficiencyCatchupPayNum, $deficiencyActA, $deficiencyActB, $deficiencyActC, $escrowCompYrStrtDate, $nxtEscrowAnalysisDate,
-            $shortDaysToPay, $shortCatchupPayNum, $shortDelimAmnt, $shortDelimDollar, $shortDelimPercent, $shortActionA, $shortActionB,
-            $surplusDaysToRefund, $surplusActA, $surplusActB, $surplusAllowedSurplus, $surplusDelimDPD);
+                                            $deficiencyDelimDollar, $deficiencyDelimPerc, $deficiencyCatchupPayNum, $deficiencyActA, $deficiencyActB, $deficiencyActC, $escrowCompYrStrtDate, $nxtEscrowAnalysisDate,
+                                            $shortDaysToPay, $shortCatchupPayNum, $shortDelimAmnt, $shortDelimDollar, $shortDelimPercent, $shortActionA, $shortActionB,
+                                            $surplusDaysToRefund, $surplusActA, $surplusActB, $surplusAllowedSurplus, $surplusDelimDPD);
     }
+
+    ///////////////////////////////////////////////////////
+    ////        PRIVATE SECTION
+    ///////////////////////////////////////////////////////
 
     /**
      * Preps an array to be used to create an object by cleaning it and getting the object form (if applicable)
@@ -1094,6 +1314,20 @@ class LoanProSDK
         $this->apiComm = Communicator::GetCommunicator(static::$clientType, static::$env);
     }
 
+    /**
+     * Recursively trims all strings in an array
+     * @param $arg
+     * @return array|string
+     */
+    protected static function TrimRecursive($arg){
+        if(is_array($arg)) {
+            $ret = [];
+            foreach($arg as $k => $v)
+                $ret[$k] = static::trimRecursive($v);
+            return $ret;
+        }
+        return trim($arg);
+    }
 
     /// @cond false
     public function CreateLoanSetupFromJSON($json){
@@ -1136,19 +1370,10 @@ class LoanProSDK
         return (new $class(...$params))->Set($json);
     }
     /// @endcond
-
-    /**
-     * Recursively trims all strings in an array
-     * @param $arg
-     * @return array|string
-     */
-    protected static function TrimRecursive($arg){
-        if(is_array($arg)) {
-            $ret = [];
-            foreach($arg as $k => $v)
-                $ret[$k] = static::trimRecursive($v);
-            return $ret;
-        }
-        return trim($arg);
-    }
+    private static $inst;
+    private static $clientType = ApiClient::TYPE_SYNC;
+    private static $env = Communicator::PRODUCTION;
+    private $apiComm;
+    private static $cacheFile = "cache.json";
+    private static $cacheExpr = "P3D";
 }

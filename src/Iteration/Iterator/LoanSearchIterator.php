@@ -16,41 +16,30 @@
  *
  */
 
-namespace Simnang\LoanPro\Utils\Parser;
+namespace Simnang\LoanPro\Iteration\Iterator;
 
+use Simnang\LoanPro\Iteration\Params\SearchParams;
+use Simnang\LoanPro\Iteration\Params\AggregateParams;
+use Simnang\LoanPro\Iteration\Params\PaginationParams;
 /**
- * Class ExpressionTreeGenerator
+ * Class LoanSearchIterator
  *
- * @package Simnang\LoanPro\Utils\Parser
+ * An iterator for loans stored on LoanPro which abstracts away pagination
+ *
+ * @package Simnang\LoanPro\Iteration
  */
-abstract class ExpressionTreeGenerator
+class LoanSearchIterator extends BaseIterator
 {
-    protected $tokenSymbols;
 
     /**
-     * Creates an expression tree generator
-     * @param $tokenSymbols - tokens to use with their symbols
+     * Creates a new loan iterator that will iterate over all the loans on the server
+     * @param SearchParams|null     $searchParams
+     * @param AggregateParams|null  $aggParams
+     * @param array                 $orderBy
+     * @param string                $order
+     * @param int                   $internalPageSize
      */
-    public function __construct($tokenSymbols){
-        $this->tokenSymbols = $tokenSymbols;
+    public function __construct(SearchParams $searchParams = null, AggregateParams $aggParams = null, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
+        parent::__construct('SearchLoans_RAW', 'search', ['searchParams'=>$searchParams,'aggParams'=>$aggParams,'orderBy'=>$orderBy,'order'=>$order],$internalPageSize);
     }
-
-    /**
-     * Process the next token
-     * @param Token $t
-     * @return mixed
-     */
-    public abstract function ProcessToken(Token $t);
-
-    /**
-     * Returns the final expression tree
-     * @return mixed
-     */
-    public abstract function GetExpressionTree();
-
-    /**
-     * Resets the expression tree generator
-     * @return mixed
-     */
-    public abstract function Reset();
 }

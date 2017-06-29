@@ -16,13 +16,12 @@
  *
  */
 
-namespace Simnang\LoanPro\Iteration;
+namespace Simnang\LoanPro\Iteration\Params;
 
 
-use Simnang\LoanPro\Utils\Parser\ExpressionTreeNode;
+use Simnang\LoanPro\Utils\Parser\TreeGenerators\ExpressionTreeNode;
 use Simnang\LoanPro\Utils\Parser\LL1_Parser;
-use Simnang\LoanPro\Utils\Parser\LogicalFilterExpressionTreeGenerator;
-use Simnang\LoanPro\Utils\Stack;
+use Simnang\LoanPro\Utils\Parser\TreeGenerators\LogicalFilterExpressionTreeGenerator;
 
 /**
  * Class FilterParams
@@ -31,7 +30,7 @@ use Simnang\LoanPro\Utils\Stack;
  *
  * @package Simnang\LoanPro\Iteration
  */
-class FilterParams
+class FilterParams implements Params
 {
     /// @cond false
     const ODATA_TOKENS = [
@@ -185,5 +184,9 @@ class FilterParams
 
     public function __toString(){
         return '$filter='.$this->string;
+    }
+
+    public function Get(){
+        return $this->string;
     }
 }

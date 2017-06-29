@@ -16,16 +16,17 @@
  *
  */
 
-namespace Simnang\LoanPro\Utils\Parser;
+namespace Simnang\LoanPro\Utils\Parser\TreeGenerators;
 
 
 use Simnang\LoanPro\Exceptions\InvalidStateException;
 use Simnang\LoanPro\Utils\Stack;
+use Simnang\LoanPro\Utils\Parser\Token;
 
 /**
  * Class LogicalFilterExpressionTreeGenerator
  *
- * @package Simnang\LoanPro\Utils\Parser
+ * @package Simnang\LoanPro\Utils\Parser\TreeGenerators
  */
 class LogicalFilterExpressionTreeGenerator extends ExpressionTreeGenerator
 {

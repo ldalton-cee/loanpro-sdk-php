@@ -16,27 +16,44 @@
  *
  */
 
-namespace Simnang\LoanPro\Iteration;
+namespace Simnang\LoanPro\Iteration\Params;
+
+use Simnang\LoanPro\Utils\Parser\CodeGenerators\SearchGenerator;
 
 /**
- * Class LoanSearchIterator
- *
- * An iterator for loans stored on LoanPro which abstracts away pagination
+ * Class SearchParams
  *
  * @package Simnang\LoanPro\Iteration
  */
-class LoanSearchIterator extends BaseIterator
+class SearchParams implements Params
 {
+    private static $searchGenerator = null;
+    private $json;
 
     /**
-     * Creates a new loan iterator that will iterate over all the loans on the server
-     * @param SearchParams|null     $searchParams
-     * @param AggregateParams|null  $aggParams
-     * @param array                 $orderBy
-     * @param string                $order
-     * @param int                   $internalPageSize
+     * Creates a new search parameter object based on a search DSL string
+     * @param string $searchString
      */
-    public function __construct(SearchParams $searchParams = null, AggregateParams $aggParams = null, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
-        parent::__construct('SearchLoans_RAW', 'search', ['searchParams'=>$searchParams,'aggParams'=>$aggParams,'orderBy'=>$orderBy,'order'=>$order],$internalPageSize);
+    public function __construct($searchString){
+        if(is_null(static::$searchGenerator))
+            static::$searchGenerator = new SearchGenerator();
+
+        $this->json = static::$searchGenerator->Generate($searchString);
+    }
+
+    /**
+     * Gets JSON representation of search parameters
+     * @return array
+     */
+    public function Get(){
+        return $this->json;
+    }
+
+    /**
+     * Converts pagination to a URL query string
+     * @return string
+     */
+    public function __toString(){
+        return json_encode($this->json);
     }
 }

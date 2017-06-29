@@ -19,7 +19,7 @@
 require(__DIR__."/../vendor/autoload.php");
 
 use PHPUnit\Framework\TestCase;
-use \Simnang\LoanPro\Utils\Parser\SearchGenerator;
+use \Simnang\LoanPro\Utils\Parser\CodeGenerators\SearchGenerator;
 
 class ParserTest extends TestCase
 {
@@ -39,7 +39,7 @@ class ParserTest extends TestCase
      * @depends testTokenizer
      */
     public function testGrammarParser(\Simnang\LoanPro\Utils\Parser\LL1_Parser $parser){
-        $parser->SetExpressionTreeGenerator(new \Simnang\LoanPro\Utils\Parser\SearchExpressionTreeGenerator(SearchGenerator::TOKEN_SYMBOLS));
+        $parser->SetExpressionTreeGenerator(new \Simnang\LoanPro\Utils\Parser\TreeGenerators\SearchExpressionTreeGenerator(SearchGenerator::TOKEN_SYMBOLS));
         $etree = $parser->Parse(' [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] << CUSTOMERS->[lastName] ~& "*100*" && [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] ~ "*100*"');
 
         //$parser->Parse(' [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] ~& "*100*"');
@@ -76,7 +76,7 @@ class ParserTest extends TestCase
      * @group offline
      */
     public function testAggregateTokenizer(){
-        $parser = new \Simnang\LoanPro\Iteration\AggregateParams("loan_amount: sum,avg;loanRecency:avg;loan_recency:avg,sum; payoff : sum");
+        $parser = new \Simnang\LoanPro\Iteration\Params\AggregateParams("loan_amount: sum,avg;loanRecency:avg;loan_recency:avg,sum; payoff : sum");
         $tree = $parser->Get();
         $this->assertEquals(json_decode('{"aggs":{"sum_loanamount":{"sum":{"field":"loanAmount"}},"avg_loanamount":{"avg":{"field":"loanAmount"}},"avg_loanrecency":{"avg":{"field":"loanRecency"}},"sum_loanrecency":{"sum":{"field":"loanRecency"}},"sum_payoff":{"sum":{"field":"payoff"}}}}', true),
                             json_decode(json_encode($tree), true));

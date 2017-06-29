@@ -16,11 +16,10 @@
  *
  */
 
-namespace Simnang\LoanPro\Iteration;
+namespace Simnang\LoanPro\Iteration\Params;
 
 
-use Simnang\LoanPro\Utils\Parser\AggregateExpressionTreeGenerator;
-use Simnang\LoanPro\Utils\Parser\ExpressionTreeNode;
+use Simnang\LoanPro\Utils\Parser\TreeGenerators\AggregateExpressionTreeGenerator;
 use Simnang\LoanPro\Utils\Parser\LL1_Parser;
 
 /**
@@ -35,7 +34,7 @@ use Simnang\LoanPro\Utils\Parser\LL1_Parser;
  *
  * @package Simnang\LoanPro\Iteration
  */
-class AggregateParams
+class AggregateParams implements Params
 {
     private static $parser = null;
     private $tree = null;

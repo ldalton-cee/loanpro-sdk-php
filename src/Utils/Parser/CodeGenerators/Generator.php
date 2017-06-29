@@ -16,27 +16,11 @@
  *
  */
 
-namespace Simnang\LoanPro\Iteration;
+namespace Simnang\LoanPro\Utils\Parser\CodeGenerators;
 
-/**
- * Class CustomerSearchIterator
- *
- * An iterator for loans stored on LoanPro which abstracts away pagination
- *
- * @package Simnang\LoanPro\Iteration
- */
-class CustomerSearchIterator extends BaseIterator
+use Simnang\LoanPro\Utils\Parser\Token;
+
+interface Generator
 {
-
-    /**
-     * Creates a new loan iterator that will iterate over all the loans on the server
-     * @param SearchParams|null     $searchParams
-     * @param AggregateParams|null  $aggParams
-     * @param array                 $orderBy
-     * @param string                $order
-     * @param int                   $internalPageSize
-     */
-    public function __construct(SearchParams $searchParams = null, AggregateParams $aggParams = null, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
-        parent::__construct('SearchCustomers_RAW', 'search', ['searchParams'=>$searchParams,'aggParams'=>$aggParams,'orderBy'=>$orderBy,'order'=>$order],$internalPageSize);
-    }
+    public function Generate($str = '');
 }

@@ -16,7 +16,10 @@
  *
  */
 
-namespace Simnang\LoanPro\Iteration;
+namespace Simnang\LoanPro\Iteration\Iterator;
+
+use Simnang\LoanPro\Iteration\Params\FilterParams;
+use Simnang\LoanPro\Iteration\Params\PaginationParams;
 
 /**
  * Class CustomerIterator

@@ -16,12 +16,13 @@
  *
  */
 
-namespace Simnang\LoanPro\Utils\Parser;
+namespace Simnang\LoanPro\Utils\Parser\TreeGenerators;
+use Simnang\LoanPro\Utils\Parser\Token;
 
 /**
  * Class ExpressionTreeNode
  *
- * @package Simnang\LoanPro\Utils\Parser
+ * @package Simnang\LoanPro\Utils\Parser\TreeGenerators
  */
 class ExpressionTreeNode implements \JsonSerializable {
     public $token = null;

@@ -418,6 +418,29 @@ class LoanEntity extends BaseEntity
     }
 
     /**
+     * Processes a payment on a loan
+     *  Will process with PCI-Wallet if payment information is specified, otherwise will just log it on the loan
+     * @param PaymentEntity $pmt
+     * @return mixed
+     * @throws InvalidStateException
+     */
+    public function ProcessPayment(PaymentEntity $pmt){
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->SavePayment($this->Get(BASE_ENTITY::ID), $pmt);
+    }
+
+    /**
+     * Processes a payment on a loan (alias for ProcessPayment)
+     *  Will process with PCI-Wallet if payment information is specified, otherwise will just log it on the loan
+     * @param PaymentEntity $pmt
+     * @return mixed
+     * @throws InvalidStateException
+     */
+    public function LogPayment(PaymentEntity $pmt){
+        return $this->ProcessPayment($pmt);
+    }
+
+    /**
      * List of required fields
      * @var array
      */

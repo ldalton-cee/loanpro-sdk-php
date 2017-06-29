@@ -56,4 +56,37 @@ class ArrayUtils
         }
         return $arrFinal;
     }
+
+    /**
+     * Iterates over an array applying a function to each item; returns true if the function returns true at any point, false otherwise
+     * @param $item - Item to pass to the function
+     * @param $array - array to iterate over
+     * @param $func - a function to apply, the first element is $item, the second element is the array element
+     * @return bool
+     */
+    public static function InArrayFunc($item, $array, $func){
+        foreach($array as $i){
+            if($func($item, $i)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Iterates over an array applying a function to each item; returns the result of the function if it returns a truthy value, returns null otherwise
+     * @param $item - Item to pass to the function
+     * @param $array - array to iterate over
+     * @param $func - a function to apply, the first element is $item, the second element is the array element
+     * @return mixed
+     */
+    public static function GetResForItem($item, $array, $func){
+        foreach($array as $i){
+            $res = $func($item, $i);
+            if($res){
+                return $res;
+            }
+        }
+        return null;
+    }
 }

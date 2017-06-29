@@ -19,7 +19,7 @@
 require(__DIR__."/../vendor/autoload.php");
 
 use \PHPUnit\Framework\TestCase;
-use \Simnang\LoanPro\Iteration\FilterParams;
+use \Simnang\LoanPro\Iteration\Params\FilterParams;
 
 ////////////////////
 /// Done Setting Up Aliasing
@@ -149,7 +149,7 @@ class FilterTest extends TestCase
      */
     public function testODataInit_L(){
         $filterParams = FilterParams::MakeFromLogicString('! Address/City==\'Redmond\'||Address/City ==\' + Idaho\' && (Price - 5) >10 && concat ( Address/City     , Address/State) != isof(Address/Address)');
-        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromLogicString('! Address/City==\'Redmond\'||Address/City ==\' + Idaho\' && (Price - 5) * 2 >10 && concat ( Address/City     , Address/State) != isof(Address/Address)');
+        $filter = FilterParams::MakeFromLogicString('! Address/City==\'Redmond\'||Address/City ==\' + Idaho\' && (Price - 5) * 2 >10 && concat ( Address/City     , Address/State) != isof(Address/Address)');
 
         $this->assertTrue($filterParams instanceof FilterParams);
         $this->assertEquals(("\$filter=not Address/City eq 'Redmond' or Address/City eq ' + Idaho' and (Price sub 5) gt 10 and concat(Address/City , Address/State) ne isof(Address/Address)"), (string)$filterParams);

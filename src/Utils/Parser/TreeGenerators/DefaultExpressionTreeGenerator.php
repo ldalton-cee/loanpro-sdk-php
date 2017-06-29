@@ -16,20 +16,20 @@
  *
  */
 
-namespace Simnang\LoanPro\Utils\Parser;
+namespace Simnang\LoanPro\Utils\Parser\TreeGenerators;
 
 use Simnang\LoanPro\Utils\Stack;
+use Simnang\LoanPro\Utils\Parser\Token;
 
 /**
  * Class DefaultExpressionTreeGenerator
  *
- * @package Simnang\LoanPro\Utils\Parser
+ * @package Simnang\LoanPro\Utils\Parser\TreeGenerators
  */
 class DefaultExpressionTreeGenerator extends ExpressionTreeGenerator
 {
     private $nodes;
     private $terminals;
-    private $curNode = null;
     private $exprTreeRules = null;
 
     /**
@@ -57,9 +57,9 @@ class DefaultExpressionTreeGenerator extends ExpressionTreeGenerator
      * Resets the tree generator
      */
     public function Reset(){
+        parent::Reset();
         $this->nodes = new Stack();
         $this->terminals = new Stack();
-        $this->curNode = null;
     }
 
     private function TakeCareOfNodeStack(Stack &$nodes, ExpressionTreeNode &$node){
@@ -175,6 +175,7 @@ class DefaultExpressionTreeGenerator extends ExpressionTreeGenerator
 
     /**
      * Returns the expression tree
+     *  State becomes invalid after call
      * @return null
      */
     public function GetExpressionTree()

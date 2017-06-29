@@ -89,6 +89,15 @@ class ApiClientTest extends TestCase
      * @group online
      */
     public static function setUpBeforeClass(){
+        $datetime1 = new DateTime('2017-06-29');
+        $datetime2 = new DateTime();
+        $interval = $datetime1->diff($datetime2);
+        $diff = intval($interval->format('%y'));
+
+        if($diff >= 5){
+            throw new \Simnang\LoanPro\Exceptions\InvalidStateException("Error! Registered payment method in the customer online template has reached the 5 year limit and has expired in PCI Wallet! Please renew and change in the template! Please then change the date in line 92 of ".__FILE__."!");
+        }
+
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
         \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm();
         ApiClientTest::$comm = \Simnang\LoanPro\Communicator\Communicator::GetCommunicator(ApiClient::TYPE_ASYNC);
@@ -493,6 +502,19 @@ class ApiClientTest extends TestCase
         }
     }
 
+    /**
+     * @group online
+     */
+    public function testPayment(){
+        echo "Test Payment\n";
+        $loan = static::$loan;
+        $pmt = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreatePayment(50.00, (new DateTime())->getTimestamp(),'Test Payment', 1, 1)
+             ->Set(PAYMENTS::LOG_ONLY, true);
+        $ln = $loan->ProcessPayment($pmt);
+
+        $this->assertTrue(!is_null($ln->Get(BASE_ENTITY::ID)));
+    }
+
     private $keys;
 
     /**
@@ -558,7 +580,7 @@ class ApiClientTest extends TestCase
         foreach($loans as $loan){
             $this->assertTrue($loan instanceof \Simnang\LoanPro\Loans\LoanEntity);
         }
-        $paginator = new \Simnang\LoanPro\Iteration\PaginationParams(false, 0, 1);
+        $paginator = new \Simnang\LoanPro\Iteration\Params\PaginationParams(false, 0, 1);
         $loans = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoans_RAW([], $paginator);
         $this->assertTrue(is_array($loans));
         $this->assertEquals(1, count($loans));
@@ -566,7 +588,7 @@ class ApiClientTest extends TestCase
             $this->assertTrue($loan instanceof \Simnang\LoanPro\Loans\LoanEntity);
         }
 
-        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromODataString("4 lt 5");
+        $filter = \Simnang\LoanPro\Iteration\Params\FilterParams::MakeFromODataString("4 lt 5");
         $loans = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoans_RAW([], $paginator, $filter);
         $this->assertTrue(is_array($loans));
         $this->assertEquals(1, count($loans));
@@ -574,13 +596,13 @@ class ApiClientTest extends TestCase
             $this->assertTrue($loan instanceof \Simnang\LoanPro\Loans\LoanEntity);
         }
 
-        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromODataString("4 gt 5");
+        $filter = \Simnang\LoanPro\Iteration\Params\FilterParams::MakeFromODataString("4 gt 5");
         $loans = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoans_RAW([], $paginator, $filter);
         $this->assertTrue(is_array($loans));
         $this->assertEquals(0, count($loans));
 
 
-        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromLogicString("4 < 5");
+        $filter = \Simnang\LoanPro\Iteration\Params\FilterParams::MakeFromLogicString("4 < 5");
         $loans = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoans_RAW([], $paginator, $filter);
         $this->assertTrue(is_array($loans));
         $this->assertEquals(1, count($loans));
@@ -588,7 +610,7 @@ class ApiClientTest extends TestCase
             $this->assertTrue($loan instanceof \Simnang\LoanPro\Loans\LoanEntity);
         }
 
-        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromLogicString("4 > 5");
+        $filter = \Simnang\LoanPro\Iteration\Params\FilterParams::MakeFromLogicString("4 > 5");
         $loans = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoans_RAW([], $paginator, $filter);
         $this->assertTrue(is_array($loans));
         $this->assertEquals(0, count($loans));
@@ -650,7 +672,7 @@ class ApiClientTest extends TestCase
         foreach($customers as $c){
             $this->assertTrue($c instanceof \Simnang\LoanPro\Customers\CustomerEntity);
         }
-        $paginator = new \Simnang\LoanPro\Iteration\PaginationParams(false, 0, 1);
+        $paginator = new \Simnang\LoanPro\Iteration\Params\PaginationParams(false, 0, 1);
         $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW([], $paginator);
         $this->assertTrue(is_array($customers));
         $this->assertEquals(1, count($customers));
@@ -658,7 +680,7 @@ class ApiClientTest extends TestCase
             $this->assertTrue($c instanceof \Simnang\LoanPro\Customers\CustomerEntity);
         }
 
-        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromODataString("4 lt 5");
+        $filter = \Simnang\LoanPro\Iteration\Params\FilterParams::MakeFromODataString("4 lt 5");
         $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW([], $paginator, $filter);
         $this->assertTrue(is_array($customers));
         $this->assertEquals(1, count($customers));
@@ -666,13 +688,13 @@ class ApiClientTest extends TestCase
             $this->assertTrue($c instanceof \Simnang\LoanPro\Customers\CustomerEntity);
         }
 
-        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromODataString("4 gt 5");
+        $filter = \Simnang\LoanPro\Iteration\Params\FilterParams::MakeFromODataString("4 gt 5");
         $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW([], $paginator, $filter);
         $this->assertTrue(is_array($customers));
         $this->assertEquals(0, count($customers));
 
 
-        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromLogicString("4 < 5");
+        $filter = \Simnang\LoanPro\Iteration\Params\FilterParams::MakeFromLogicString("4 < 5");
         $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW([], $paginator, $filter);
         $this->assertTrue(is_array($customers));
         $this->assertEquals(1, count($customers));
@@ -680,7 +702,7 @@ class ApiClientTest extends TestCase
             $this->assertTrue($c instanceof \Simnang\LoanPro\Customers\CustomerEntity);
         }
 
-        $filter = \Simnang\LoanPro\Iteration\FilterParams::MakeFromLogicString("4 > 5");
+        $filter = \Simnang\LoanPro\Iteration\Params\FilterParams::MakeFromLogicString("4 > 5");
         $customers = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomers_RAW([], $paginator, $filter);
         $this->assertTrue(is_array($customers));
         $this->assertEquals(0, count($customers));
@@ -692,9 +714,9 @@ class ApiClientTest extends TestCase
      */
     public function testLoanSearch(){
         echo "Test LoanSearch\n";
-        $searchParams = new \Simnang\LoanPro\Iteration\SearchParams('[displayId] ~ "*LOAN*"');
-        $paginationParams = new \Simnang\LoanPro\Iteration\PaginationParams(true);
-        $aggregateParams = new \Simnang\LoanPro\Iteration\AggregateParams("loan_amount:sum,max;loan_payoff:avg");
+        $searchParams = new \Simnang\LoanPro\Iteration\Params\SearchParams('[displayId] ~ "*LOAN*"');
+        $paginationParams = new \Simnang\LoanPro\Iteration\Params\PaginationParams(true);
+        $aggregateParams = new \Simnang\LoanPro\Iteration\Params\AggregateParams("loan_amount:sum,max;loan_payoff:avg");
         $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->SearchLoans_RAW($searchParams, $aggregateParams, $paginationParams);
         $this->assertGreaterThan(0, count($res['results']));
 
@@ -721,9 +743,9 @@ class ApiClientTest extends TestCase
      */
     public function testCustomerSearch(){
         echo "Test CustomerSearch\n";
-        $searchParams = new \Simnang\LoanPro\Iteration\SearchParams('[email] ~ "*none.com"');
-        $paginationParams = new \Simnang\LoanPro\Iteration\PaginationParams(true);
-        $aggregateParams = new \Simnang\LoanPro\Iteration\AggregateParams("age:sum,max;loanCount:avg");
+        $searchParams = new \Simnang\LoanPro\Iteration\Params\SearchParams('[email] ~ "*none.com"');
+        $paginationParams = new \Simnang\LoanPro\Iteration\Params\PaginationParams(true);
+        $aggregateParams = new \Simnang\LoanPro\Iteration\Params\AggregateParams("age:sum,max;loanCount:avg");
         $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->SearchCustomers_RAW($searchParams, $aggregateParams, $paginationParams);
         $this->assertGreaterThan(0, count($res['results']));
 
@@ -749,7 +771,7 @@ class ApiClientTest extends TestCase
      */
     public function testIteratorsLoan(){
         echo "Test IteratorsLoan\n";
-        $it = new \Simnang\LoanPro\Iteration\LoanIterator([], null, [], \Simnang\LoanPro\Iteration\PaginationParams::ASCENDING_ORDER, 1);
+        $it = new \Simnang\LoanPro\Iteration\Iterator\LoanIterator([], null, [], \Simnang\LoanPro\Iteration\Params\PaginationParams::ASCENDING_ORDER, 1);
         $foundLoan = false;
         foreach ($it as $key => $i) {
             $this->assertTrue(!is_null($i->Get(LOAN::DISP_ID)));
@@ -781,7 +803,7 @@ class ApiClientTest extends TestCase
 
         echo "Test IteratorsCustomer\n";
 
-        $it = new \Simnang\LoanPro\Iteration\CustomerIterator([], null, [], \Simnang\LoanPro\Iteration\PaginationParams::ASCENDING_ORDER, 8);
+        $it = new \Simnang\LoanPro\Iteration\Iterator\CustomerIterator([], null, [], \Simnang\LoanPro\Iteration\Params\PaginationParams::ASCENDING_ORDER, 8);
         $foundLoan = false;
         foreach ($it as $key => $i) {
             $this->assertTrue(!is_null($i->Get(CONSTS\CUSTOMERS::FIRST_NAME)));
@@ -830,9 +852,9 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
+     * @depends testIteratorsLoansForCustomer
      */
-    public function testPaymentAccountsForCustomerIterator(){
-        $c = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomer(2);
+    public function testPaymentAccountsForCustomerIterator(\Simnang\LoanPro\Customers\CustomerEntity $c){
         echo "Test PaymentAccountsForCustomerIterator\n";
         $it = $c->GetPaymentAccounts();
         foreach($it as $key => $i){
@@ -846,7 +868,7 @@ class ApiClientTest extends TestCase
         foreach($it as $key => $i){
             $this->assertTrue(!is_null($i));
             $this->assertTrue(!is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::ACTIVE)));
-            $this->assertTrue(!$i->Get(CONSTS\PAYMENT_ACCOUNT::ACTIVE) || !is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CREDIT_CARD)) || !is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CHECKING_ACCOUNT)));
+            $this->assertTrue(!is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CREDIT_CARD)) || !is_null($i->Get(CONSTS\PAYMENT_ACCOUNT::CHECKING_ACCOUNT)));
         }
     }
 
@@ -864,5 +886,20 @@ class ApiClientTest extends TestCase
             ->where(function($cust){ return $cust->Get(BASE_ENTITY::ID) == static::$cid;})->count();
         $this->assertEquals(1, $res);
 
+    }
+
+    /**
+     * @group online
+     */
+    public function testCustomQuery(){
+        echo "Test CustomQuery\n";
+        $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->QueueCustomQuery(
+            new \Simnang\LoanPro\Iteration\Params\SearchParams("[displayId] ~ \"*\""),
+            new \Simnang\LoanPro\Iteration\Params\CustomQueryColumnParams("setup-loan-amount<Loan Amount>;setup-underwriting<Underwriting>"));
+        $this->assertTrue(isset($res['id']));
+        $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomQueryStatus($res['id']);
+        $this->assertTrue(isset($res['id']));
+        $this->assertTrue(isset($res['status']));
+        $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomQueryURL($res['id']);
     }
 }

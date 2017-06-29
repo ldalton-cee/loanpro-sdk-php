@@ -16,28 +16,28 @@
  *
  */
 
-namespace Simnang\LoanPro\Utils\Parser;
+namespace Simnang\LoanPro\Utils\Parser\TreeGenerators;
+use Simnang\LoanPro\Utils\Parser\Token;
 
 /**
  * Class AggregateExpressionTreeGenerator
  *
- * @package Simnang\LoanPro\Utils\Parser
+ * @package Simnang\LoanPro\Utils\Parser\TreeGenerators
  */
 class AggregateExpressionTreeGenerator extends ExpressionTreeGenerator
 {
     private $lastField = null;
     private $lastAggType = '';
     private $lastTypeSep = null;
-    private $curTree = null;
 
     /**
      * Resets expression tree generator
      */
     public function Reset(){
+        parent::Reset();
         $this->lastField = null;
         $this->lastAggType = '';
         $this->lastTypeSep = null;
-        $this->curTree = null;
     }
 
     /**
@@ -91,6 +91,7 @@ class AggregateExpressionTreeGenerator extends ExpressionTreeGenerator
 
     /**
      * Returns the final expression tree generator
+     *  State becomes invalid after call
      * @return ExpressionTreeNode
      */
     public function GetExpressionTree()

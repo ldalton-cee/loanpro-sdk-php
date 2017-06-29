@@ -70,6 +70,14 @@ class Stack implements \JsonSerializable
     }
 
     /**
+     * Converts the stack to an array with the top element at the end of the array
+     * @return array
+     */
+    public function ToArray(){
+        return $this->arr;
+    }
+
+    /**
      * Specify data which should be serialized to JSON
      *
      * @link  http://php.net/manual/en/jsonserializable.jsonserialize.php

@@ -19,9 +19,9 @@
 namespace Simnang\LoanPro\Communicator;
 
 
-use Psr\Http\Message\ResponseInterface;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\CREDIT_SCORE;
+use Simnang\LoanPro\Constants\CUSTOM_QUERY_STATUS;
 use Simnang\LoanPro\Constants\CUSTOMER_ROLE;
 use Simnang\LoanPro\Constants\ENTITY_TYPES;
 use Simnang\LoanPro\Constants\LOAN;
@@ -30,17 +30,18 @@ use Simnang\LoanPro\Customers\CustomerEntity;
 use Simnang\LoanPro\Customers\PaymentAccountEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
-use Simnang\LoanPro\Iteration\AggregateParams;
-use Simnang\LoanPro\Iteration\CustomerSearchIterator;
-use Simnang\LoanPro\Iteration\FilterParams;
-use Simnang\LoanPro\Iteration\LoanSearchIterator;
-use Simnang\LoanPro\Iteration\PaginationParams;
-use Simnang\LoanPro\Iteration\SearchParams;
+use Simnang\LoanPro\Iteration\Iterator\CustomerSearchIterator;
+use Simnang\LoanPro\Iteration\Iterator\LoanSearchIterator;
+use Simnang\LoanPro\Iteration\Params\AggregateParams;
+use Simnang\LoanPro\Iteration\Params\CustomQueryColumnParams;
+use Simnang\LoanPro\Iteration\Params\FilterParams;
+use Simnang\LoanPro\Iteration\Params\PaginationParams;
+use Simnang\LoanPro\Iteration\Params\SearchParams;
 use Simnang\LoanPro\LoanProSDK;
 use Simnang\LoanPro\Loans\LoanEntity;
 use Simnang\LoanPro\Loans\LoanSetupEntity;
 use Simnang\LoanPro\Loans\LoanStatusArchiveEntity;
-use Simnang\LoanPro\Utils\Parser\SearchGenerator;
+use Simnang\LoanPro\Loans\PaymentEntity;
 use Simnang\LoanPro\Validator\FieldValidator;
 
 /**
@@ -105,6 +106,11 @@ class Communicator
         }
     }
 
+
+    ///////////////////////////////////////////////////////
+    ////        UTILITIES SECTION
+    ///////////////////////////////////////////////////////
+
     /**
      * Attempts to login to the customer facing website. Returns an array with the first item being whether or not login was successful and the second item is the response from the server.
      *
@@ -132,24 +138,60 @@ class Communicator
     }
 
     /**
-     * Returns the loans for the customer
-     * @param       $customerId
-     * @param array $expandProps
-     * @param FilterParams $filterParams
+     * Generates and returns a new communicator object for the LoanPro API. Also ensures that credentials have bene properly set
+     * @param int $clientType
+     * @param string $environment
+     * @param int $apiVersion
+     * @return Communicator
+     * @throws InvalidStateException
+     */
+    public static function GetCommunicator($clientType = ApiClient::TYPE_SYNC, $environment = Communicator::PRODUCTION, $apiVersion = 1){
+        if(!ApiClient::AreTokensSet())
+            throw new InvalidStateException("API tokens are not setup!");
+        return new Communicator($clientType , $environment, $apiVersion);
+    }
+
+    /**
+     * Downloads a file at a url via a GET request
+     * @param string   $url - The url of the file to download
+     * @return null|false|string
+     * @throws ApiException
+     */
+    public function DownloadFile($url){
+        $response = $this->client->GET($url);
+        if($response->getStatusCode() == 200) {
+            return (string)$response->getBody();
+        }
+        throw new ApiException($response);
+    }
+
+    ///////////////////////////////////////////////////////
+    ////        LOAN SECTION
+    ///////////////////////////////////////////////////////
+
+
+    /**
+     * Returns an array of loan entities
+     * @param array                 $expandProps - expand properties to expand by
+     * @param PaginationParams|null $paginationParams - Pagination options
+     * @param FilterParams|null     $filter - filter object
      * @return array
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetLoansForCustomer($customerId, $expandProps = [], FilterParams $filterParams = null){
+    public function GetLoans($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
         $query = [];
+        if(!is_null($paginationParams))
+            $paginationParams = $paginationParams->setUseSkip(true);
+        $query[] = (string)$paginationParams;
+        $query[] = (string)$filter;
         $exp = implode(',', $expandProps);
         if($exp)
             $query[] = "\$expand=$exp";
-        $query[] = 'nopaging=true';
-        if(!is_null($filterParams))
-            $query[] = (string)$filterParams;
         $query = '?'.implode('&',array_filter($query));
-        $res = $this->client->GET("$this->baseUrl/odata.svc/Customers($customerId)/Loans$query");
+        if($query === '?')
+            $query = '';
+        $res = $this->client->GET("$this->baseUrl/odata.svc/Loans()$query");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['results'])) {
@@ -163,80 +205,41 @@ class Communicator
         throw new ApiException($res);
     }
 
-
     /**
-     * Gets the information for payment accounts associated to a customer
-     * @param int           $customerId - The id of the customer
-     * @param array         $expandProps - array of properties to expand
-     * @param FilterParams  $filterParams - FilterParams
-     * @return array
+     * Performs a loan search
+     * @param SearchParams|null     $searchParams - parameters to search by
+     * @param AggregateParams|null  $aggParams - aggregate data to pull
+     * @param PaginationParams|null $paginationParams - pagination settings
+     * @return LoanSearchIterator
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetPaymentAccounts($customerId, $expandProps = [], FilterParams $filterParams = null){
+    public function SearchLoans(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
         $query = [];
-        $exp = implode(',', $expandProps);
-        if($exp)
-            $query[] = "\$expand=$exp";
-        $query[] = 'nopaging=true';
-        if(!is_null($filterParams))
-            $query[] = (string)$filterParams;
+        $query[] = (string)$paginationParams;
         $query = '?'.implode('&',array_filter($query));
-        $res = $this->client->GET("$this->baseUrl/odata.svc/Customers($customerId)/PaymentAccounts$query");
+        if($query === '?')
+            $query = '';
+
+        $request = array_merge($searchParams->Get(), $aggParams->Get());
+
+        $res = $this->client->POST("$this->baseUrl/Loans/Autopal.Search()$query", $request);
+
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['results'])) {
                 $ret = [];
                 foreach($body['d']['results'] as $val){
-                    $ret[] = LoanProSDK::GetInstance()->CreateClassFromJSON_Public(PaymentAccountEntity::class, $val);
-                }
-                return $ret;
-            }
-        }
-        throw new ApiException($res);
-    }
-
-    /**
-     * Grabs the payoff for the specified loan
-     * @param $loanId - ID of loan to grab payoff for
-     * @param $datetime - timestamp for when to grab the payoff
-     * @return array - Array of payoff items (each is an array with keys 'date', 'payoff', etc.)
-     * @throws ApiException
-     */
-    public function GetPayoff($loanId, $datetime){
-        $datetime = FieldValidator::GetDate($datetime);
-        if(is_null($datetime)){
-            $datetime = (new \DateTime())->getTimestamp();
-        }
-        $dt = new \DateTime();
-        $dt->setTimestamp($datetime);
-        $date = $dt->format('Y-m-d');
-        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetLoanPayoff($date)");
-        if ($res->getStatusCode() == 200) {
-            $body = json_decode($res->getBody(), true);
-            if (isset($body['d'])) {
-                $ret = [];
-                foreach($body['d'] as $val){
                     $ret[] = $val;
                 }
+                $ret = ['results'=>$ret, 'aggregates'=>[]];
+                if(isset($body['d']['summary']) && isset($body['d']['summary']['aggregations'])){
+                    $ret['aggregates'] = $body['d']['summary']['aggregations'];
+                }
                 return $ret;
             }
         }
         throw new ApiException($res);
-    }
-
-    /**
-     * Generates and returns a new communicator object for the LoanPro API. Also ensures that credentials have bene properly set
-     * @param int $clientType
-     * @param string $environment
-     * @param int $apiVersion
-     * @return Communicator
-     * @throws InvalidStateException
-     */
-    public static function GetCommunicator($clientType = ApiClient::TYPE_SYNC, $environment = Communicator::PRODUCTION, $apiVersion = 1){
-        if(!ApiClient::AreTokensSet())
-            throw new InvalidStateException("API tokens are not setup!");
-        return new Communicator($clientType , $environment, $apiVersion);
     }
 
     /**
@@ -273,53 +276,69 @@ class Communicator
     }
 
     /**
-     * Gets a customer from the LoanPro servers.
-     * @param int   $id - ID of customer to pull
-     * @param array $expandProps - array of properties to expand
-     * @param bool|true $nopageProps
-     * @return CustomerEntity
+     * Saves the loan to the server via a PUT request (or a POST request if there is no ID)
+     * Either returns the resulting loan/response if there's an error (if synchronous), or a promise that returns the resulting loan/response
+     * @param  LoanEntity $loan - Loan to save
+     * @return LoanEntity
+     * @throws InvalidStateException
      * @throws ApiException
      */
-    public function GetCustomer($id, $expandProps = [], $nopageProps = true){
-        if(count($expandProps))
-            $expandProps = '?$expand='.implode(',',$expandProps);
-        else
-            $expandProps = "";
-
-        if($nopageProps){
-            if($expandProps == "") $expandProps = "?nopaging=true";
-            else $expandProps .= "&nopaging=true";
-        }
-
+    public function SaveLoan(LoanEntity $loan){
         $client = $this->client;
-
-        $url = "$this->baseUrl/odata.svc/Customers($id)$expandProps";
-        $response = $client->GET($url);
+        $id = $loan->Get(BASE_ENTITY::ID);
+        if(is_null($id)) {
+            if(is_null($loan->Get(LOAN::LOAN_SETUP)))
+                throw new InvalidStateException("Cannot create new loan on server without loan setup!");
+            $response = $client->POST("$this->baseUrl/odata.svc/Loans()", $loan);
+        }
+        else
+            $response = $client->PUT("$this->baseUrl/odata.svc/Loans($id)",$loan);
         if($response->getStatusCode() == 200) {
             $body = json_decode($response->getBody(), true);
-            if(isset($body['d']))
-                return LoanProSDK::GetInstance()->CreateCustomerFromJSON(json_decode($response->getBody(), true)['d']);
+            if(isset($body['d'])) {
+                return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($response->getBody(), true)['d']);
+            }
             else
-                throw new ApiException($response);
+                throw new ApiException($response);;
         }
         throw new ApiException($response);
     }
 
     /**
-     * Gets the next scheduled payment info for a loan
-     * @param $loanId
-     * @return mixed
+     * Activates the given loan
+     *  Returns true if successful
+     * @param  int  $loan - loan to activate
+     * @return bool
+     * @throws InvalidStateException
      * @throws ApiException
      */
-    public function NextScheduledPayment($loanId){
-        $res = $this->client->POST("$this->baseUrl/odata.svc/Loans($loanId)/Autopal.GetNextScheduledPayment()?count");
-        if ($res->getStatusCode() == 200) {
-            $body = json_decode($res->getBody(), true);
-            if (isset($body['d'])) {
-                return $body['d'];
-            }
+    public function ActivateLoan($loanId){
+
+        $response = $this->client->POST(("$this->baseUrl/Loans($loanId)/AutoPal.Activate()"));
+
+        if($response->getStatusCode() == 200)
+            return true;
+        throw new ApiException($response);
+    }
+
+    /**
+     * Deletes a loan and returns true if successul
+     * @param int $loanId - loan to delete
+     * @param bool|false $areYouSure - must be set to true to delete
+     * @return bool
+     * @throws \Exception
+     * @throws ApiException
+     */
+    public function DeleteLoan($loanId, $areYouSure = false){
+        if(!$areYouSure)
+            throw new \Exception("Unsure deletion, either state that you are sure or don't delete the loan");
+
+        $response = $this->client->DELETE("$this->baseUrl/odata.svc/Loans($loanId)");
+
+        if($response->getStatusCode() == 200) {
+            return true;
         }
-        throw new ApiException($res);
+        throw new ApiException($response);
     }
 
     /**
@@ -359,6 +378,42 @@ class Communicator
     }
 
     /**
+     * Returns the LoanSetup from the previous modification for the loan
+     * @param  int $loanId
+     * @return LoanSetupEntity
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetPreModSetup($loanId){
+        $response = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetPreModSetup()");
+
+
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d']))
+                return LoanProSDK::GetInstance()->CreateLoanSetupFromJSON($body['d']);
+        }
+        throw new ApiException($response);
+    }
+
+    /**
+     * Gets the next scheduled payment info for a loan
+     * @param $loanId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function NextScheduledPayment($loanId){
+        $res = $this->client->POST("$this->baseUrl/odata.svc/Loans($loanId)/Autopal.GetNextScheduledPayment()?count");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return $body['d'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
      * Returns the loan status archive for a loan
      * @param      $loanId - ID of the loan to use
      * @param null $datetimeStart - datetime period to start the range for pulling the archive
@@ -391,159 +446,6 @@ class Communicator
             }
         }
         throw new ApiException($res);
-    }
-
-    /**
-     * Links a customer to a loan
-     * @param int            $customerId
-     * @param int            $loanId
-     * @param                $customerRole
-     * @return bool
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    public function LinkCustomerAndLoan($customerId, $loanId, $customerRole){
-
-        $rclass = new \ReflectionClass(CUSTOMER_ROLE::class);
-        $validFields = $rclass->getConstants();
-        if(!in_array($customerRole, $validFields))
-            throw new \InvalidArgumentException("Invalid customer role option '$customerRole'");
-
-        $response = $this->client->PUT("$this->baseUrl/odata.svc/Loans($loanId)",[
-            'id'=>$loanId,
-            'Customers'=>[
-                'results'=>[
-                    [
-                        '__metadata'=>[
-                            'uri'=>"/api/1/odata.svc/Customers(id=$customerId)",
-                            'type'=>ENTITY_TYPES::CUSTOMER
-                        ],
-                        '__setLoanRole'=>$customerRole
-                    ]
-                ]
-            ],
-            '__update'=>true,
-            '__id'=>$loanId
-        ]);
-
-        if($response->getStatusCode() == 200) {
-            $body = json_decode($response->getBody(), true);
-            if(isset($body['d']))
-                return $this->getLoan($loanId, [LOAN::CUSTOMERS]);
-        }
-        throw new ApiException($response);
-    }
-
-    /**
-     * Returns the LoanSetup from the previous modification for the loan
-     * @param  int $loanId
-     * @return LoanSetupEntity
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    public function GetPreModSetup($loanId){
-        $response = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetPreModSetup()");
-
-
-        if($response->getStatusCode() == 200) {
-            $body = json_decode($response->getBody(), true);
-            if(isset($body['d']))
-                return LoanProSDK::GetInstance()->CreateLoanSetupFromJSON($body['d']);
-        }
-        throw new ApiException($response);
-    }
-
-    /**
-     * Saves the loan to the server via a PUT request (or a POST request if there is no ID)
-     * Either returns the resulting loan/response if there's an error (if synchronous), or a promise that returns the resulting loan/response
-     * @param  LoanEntity $loan - Loan to save
-     * @return LoanEntity
-     * @throws InvalidStateException
-     * @throws ApiException
-     */
-    public function SaveLoan(LoanEntity $loan){
-        $client = $this->client;
-        $id = $loan->Get(BASE_ENTITY::ID);
-        if(is_null($id)) {
-            if(is_null($loan->Get(LOAN::LOAN_SETUP)))
-                throw new InvalidStateException("Cannot create new loan on server without loan setup!");
-            $response = $client->POST("$this->baseUrl/odata.svc/Loans()", $loan);
-        }
-        else
-            $response = $client->PUT("$this->baseUrl/odata.svc/Loans($id)",$loan);
-        if($response->getStatusCode() == 200) {
-            $body = json_decode($response->getBody(), true);
-            if(isset($body['d'])) {
-                return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($response->getBody(), true)['d']);
-            }
-            else
-                throw new ApiException($response);;
-        }
-        throw new ApiException($response);
-    }
-
-    /**
-     * Saves the customer to the server via a PUT request (or a POST request if there is no ID)
-     * Returns the resulting customer
-     * @param  CustomerEntity $cust - Customer to save
-     * @return CustomerEntity
-     * @throws InvalidStateException
-     * @throws ApiException
-     */
-    public function SaveCustomer(CustomerEntity $cust){
-        $client = $this->client;
-        $id = $cust->Get(BASE_ENTITY::ID);
-        if(is_null($id)) {
-            $response = $client->POST("$this->baseUrl/odata.svc/Customers()", $cust);
-        }
-        else
-            $response = $client->PUT("$this->baseUrl/odata.svc/Customers($id)",$cust);
-        if($response->getStatusCode() == 200) {
-            $body = json_decode($response->getBody(), true);
-            if(isset($body['d'])) {
-                return LoanProSDK::GetInstance()->CreateCustomerFromJSON(json_decode($response->getBody(), true)['d']);
-            }
-            else
-                throw new ApiException($response);;
-        }
-        throw new ApiException($response);
-    }
-
-    /**
-     * Deletes a loan and returns true if successul
-     * @param int $loanId - loan to delete
-     * @param bool|false $areYouSure - must be set to true to delete
-     * @return bool
-     * @throws \Exception
-     * @throws ApiException
-     */
-    public function DeleteLoan($loanId, $areYouSure = false){
-        if(!$areYouSure)
-            throw new \Exception("Unsure deletion, either state that you are sure or don't delete the loan");
-
-        $response = $this->client->DELETE("$this->baseUrl/odata.svc/Loans($loanId)");
-
-        if($response->getStatusCode() == 200) {
-            return true;
-        }
-        throw new ApiException($response);
-    }
-
-    /**
-     * Activates the given loan
-     *  Returns true if successful
-     * @param  int  $loan - loan to activate
-     * @return bool
-     * @throws InvalidStateException
-     * @throws ApiException
-     */
-    public function ActivateLoan($loanId){
-
-        $response = $this->client->POST(("$this->baseUrl/Loans($loanId)/AutoPal.Activate()"));
-
-        if($response->getStatusCode() == 200)
-            return true;
-        throw new ApiException($response);
     }
 
     /**
@@ -693,6 +595,23 @@ class Communicator
     }
 
     /**
+     * Returns tenant context variables (useful for custom query)
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetContextVariables(){
+        $res = $this->client->GET("$this->baseUrl/odata.svc/ContextVariables?nopaging");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['results'])) {
+                return $body['d']['results'];
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
      * Returns interest fees history
      * @param int $loanId
      * @return array
@@ -747,7 +666,66 @@ class Communicator
     }
 
     /**
-     * Returns an array of loan entities
+     * Grabs the payoff for the specified loan
+     * @param $loanId - ID of loan to grab payoff for
+     * @param $datetime - timestamp for when to grab the payoff
+     * @return array - Array of payoff items (each is an array with keys 'date', 'payoff', etc.)
+     * @throws ApiException
+     */
+    public function GetPayoff($loanId, $datetime){
+        $datetime = FieldValidator::GetDate($datetime);
+        if(is_null($datetime)){
+            $datetime = (new \DateTime())->getTimestamp();
+        }
+        $dt = new \DateTime();
+        $dt->setTimestamp($datetime);
+        $date = $dt->format('Y-m-d');
+        $res = $this->client->GET("$this->baseUrl/Loans($loanId)/Autopal.GetLoanPayoff($date)");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                $ret = [];
+                foreach($body['d'] as $val){
+                    $ret[] = $val;
+                }
+                return $ret;
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Saves the payment to a specified loan
+     * @param int           $loanId
+     * @param PaymentEntity $pmt
+     * @return array
+     * @throws ApiException
+     */
+    public function SavePayment($loanId, PaymentEntity $pmt){
+        $pmt = $pmt->Rem(BASE_ENTITY::ID);
+        $res = $this->client->PUT("$this->baseUrl/odata.svc/Loans($loanId)",[
+            "Payments"=>[
+                "results"=>[
+                    $pmt
+                ]
+            ]
+        ]);
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($res->getBody(), true)['d']);
+            }
+        }
+        throw new ApiException($res);
+    }
+
+
+    ///////////////////////////////////////////////////////
+    ////        CUSTOMER SECTION
+    ///////////////////////////////////////////////////////
+
+    /**
+     * Returns an array of customer entities
      * @param array                 $expandProps - expand properties to expand by
      * @param PaginationParams|null $paginationParams - Pagination options
      * @param FilterParams|null     $filter - filter object
@@ -755,7 +733,7 @@ class Communicator
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetLoans($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
+    public function GetCustomers($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
         $query = [];
         if(!is_null($paginationParams))
             $paginationParams = $paginationParams->setUseSkip(true);
@@ -767,50 +745,13 @@ class Communicator
         $query = '?'.implode('&',array_filter($query));
         if($query === '?')
             $query = '';
-        $res = $this->client->GET("$this->baseUrl/odata.svc/Loans()$query");
+        $res = $this->client->GET("$this->baseUrl/odata.svc/Customers()$query");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['results'])) {
                 $ret = [];
                 foreach($body['d']['results'] as $val){
-                    $ret[] = LoanProSDK::GetInstance()->CreateLoanFromJSON($val);
-                }
-                return $ret;
-            }
-        }
-        throw new ApiException($res);
-    }
-
-    /**
-     * Performs a loan search
-     * @param SearchParams|null     $searchParams - parameters to search by
-     * @param AggregateParams|null  $aggParams - aggregate data to pull
-     * @param PaginationParams|null $paginationParams - pagination settings
-     * @return LoanSearchIterator
-     * @throws ApiException
-     * @throws InvalidStateException
-     */
-    public function SearchLoans(SearchParams $searchParams, AggregateParams $aggParams, PaginationParams $paginationParams = null){
-        $query = [];
-        $query[] = (string)$paginationParams;
-        $query = '?'.implode('&',array_filter($query));
-        if($query === '?')
-            $query = '';
-
-        $request = array_merge($searchParams->Get(), $aggParams->Get());
-
-        $res = $this->client->POST("$this->baseUrl/Loans/Autopal.Search()$query", $request);
-
-        if ($res->getStatusCode() == 200) {
-            $body = json_decode($res->getBody(), true);
-            if (isset($body['d']) && isset($body['d']['results'])) {
-                $ret = [];
-                foreach($body['d']['results'] as $val){
-                    $ret[] = $val;
-                }
-                $ret = ['results'=>$ret, 'aggregates'=>[]];
-                if(isset($body['d']['summary']) && isset($body['d']['summary']['aggregations'])){
-                    $ret['aggregates'] = $body['d']['summary']['aggregations'];
+                    $ret[] = LoanProSDK::GetInstance()->CreateCustomerFromJSON($val);
                 }
                 return $ret;
             }
@@ -856,33 +797,90 @@ class Communicator
     }
 
     /**
-     * Returns an array of customer entities
-     * @param array                 $expandProps - expand properties to expand by
-     * @param PaginationParams|null $paginationParams - Pagination options
-     * @param FilterParams|null     $filter - filter object
+     * Gets a customer from the LoanPro servers.
+     * @param int   $id - ID of customer to pull
+     * @param array $expandProps - array of properties to expand
+     * @param bool|true $nopageProps
+     * @return CustomerEntity
+     * @throws ApiException
+     */
+    public function GetCustomer($id, $expandProps = [], $nopageProps = true){
+        if(count($expandProps))
+            $expandProps = '?$expand='.implode(',',$expandProps);
+        else
+            $expandProps = "";
+
+        if($nopageProps){
+            if($expandProps == "") $expandProps = "?nopaging=true";
+            else $expandProps .= "&nopaging=true";
+        }
+
+        $client = $this->client;
+
+        $url = "$this->baseUrl/odata.svc/Customers($id)$expandProps";
+        $response = $client->GET($url);
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d']))
+                return LoanProSDK::GetInstance()->CreateCustomerFromJSON(json_decode($response->getBody(), true)['d']);
+            else
+                throw new ApiException($response);
+        }
+        throw new ApiException($response);
+    }
+
+    /**
+     * Saves the customer to the server via a PUT request (or a POST request if there is no ID)
+     * Returns the resulting customer
+     * @param  CustomerEntity $cust - Customer to save
+     * @return CustomerEntity
+     * @throws InvalidStateException
+     * @throws ApiException
+     */
+    public function SaveCustomer(CustomerEntity $cust){
+        $client = $this->client;
+        $id = $cust->Get(BASE_ENTITY::ID);
+        if(is_null($id)) {
+            $response = $client->POST("$this->baseUrl/odata.svc/Customers()", $cust);
+        }
+        else
+            $response = $client->PUT("$this->baseUrl/odata.svc/Customers($id)",$cust);
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d'])) {
+                return LoanProSDK::GetInstance()->CreateCustomerFromJSON(json_decode($response->getBody(), true)['d']);
+            }
+            else
+                throw new ApiException($response);;
+        }
+        throw new ApiException($response);
+    }
+
+    /**
+     * Gets the information for payment accounts associated to a customer
+     * @param int           $customerId - The id of the customer
+     * @param array         $expandProps - array of properties to expand
+     * @param FilterParams  $filterParams - FilterParams
      * @return array
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function GetCustomers($expandProps = [], PaginationParams $paginationParams = null, FilterParams $filter = null){
+    public function GetPaymentAccounts($customerId, $expandProps = [], FilterParams $filterParams = null){
         $query = [];
-        if(!is_null($paginationParams))
-            $paginationParams = $paginationParams->setUseSkip(true);
-        $query[] = (string)$paginationParams;
-        $query[] = (string)$filter;
         $exp = implode(',', $expandProps);
         if($exp)
             $query[] = "\$expand=$exp";
+        $query[] = 'nopaging=true';
+        if(!is_null($filterParams))
+            $query[] = (string)$filterParams;
         $query = '?'.implode('&',array_filter($query));
-        if($query === '?')
-            $query = '';
-        $res = $this->client->GET("$this->baseUrl/odata.svc/Customers()$query");
+        $res = $this->client->GET("$this->baseUrl/odata.svc/Customers($customerId)/PaymentAccounts$query");
         if ($res->getStatusCode() == 200) {
             $body = json_decode($res->getBody(), true);
             if (isset($body['d']) && isset($body['d']['results'])) {
                 $ret = [];
                 foreach($body['d']['results'] as $val){
-                    $ret[] = LoanProSDK::GetInstance()->CreateCustomerFromJSON($val);
+                    $ret[] = LoanProSDK::GetInstance()->CreateClassFromJSON_Public(PaymentAccountEntity::class, $val);
                 }
                 return $ret;
             }
@@ -957,6 +955,84 @@ class Communicator
             }
         }
         throw new ApiException($res);
+    }
+
+
+    ///////////////////////////////////////////////////////
+    ////        CUSTOMER AND LOAN SECTION
+    ///////////////////////////////////////////////////////
+
+    /**
+     * Returns the loans for the customer
+     * @param       $customerId
+     * @param array $expandProps
+     * @param FilterParams $filterParams
+     * @return array
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function GetLoansForCustomer($customerId, $expandProps = [], FilterParams $filterParams = null){
+        $query = [];
+        $exp = implode(',', $expandProps);
+        if($exp)
+            $query[] = "\$expand=$exp";
+        $query[] = 'nopaging=true';
+        if(!is_null($filterParams))
+            $query[] = (string)$filterParams;
+        $query = '?'.implode('&',array_filter($query));
+        $res = $this->client->GET("$this->baseUrl/odata.svc/Customers($customerId)/Loans$query");
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d']) && isset($body['d']['results'])) {
+                $ret = [];
+                foreach($body['d']['results'] as $val){
+                    $ret[] = LoanProSDK::GetInstance()->CreateLoanFromJSON($val);
+                }
+                return $ret;
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Links a customer to a loan
+     * @param int            $customerId
+     * @param int            $loanId
+     * @param                $customerRole
+     * @return bool
+     * @throws ApiException
+     * @throws InvalidStateException
+     */
+    public function LinkCustomerAndLoan($customerId, $loanId, $customerRole){
+
+        $rclass = new \ReflectionClass(CUSTOMER_ROLE::class);
+        $validFields = $rclass->getConstants();
+        if(!in_array($customerRole, $validFields))
+            throw new \InvalidArgumentException("Invalid customer role option '$customerRole'");
+
+        $response = $this->client->PUT("$this->baseUrl/odata.svc/Loans($loanId)",[
+            'id'=>$loanId,
+            'Customers'=>[
+                'results'=>[
+                    [
+                        '__metadata'=>[
+                            'uri'=>"/api/1/odata.svc/Customers(id=$customerId)",
+                            'type'=>ENTITY_TYPES::CUSTOMER
+                        ],
+                        '__setLoanRole'=>$customerRole
+                    ]
+                ]
+            ],
+            '__update'=>true,
+            '__id'=>$loanId
+        ]);
+
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d']))
+                return $this->getLoan($loanId, [LOAN::CUSTOMERS]);
+        }
+        throw new ApiException($response);
     }
 
     /**
@@ -1053,6 +1129,89 @@ class Communicator
                 return $this->getCustomerLoanAccess($cid, $lid);
         }
         throw new ApiException($response);
+    }
+
+    ///////////////////////////////////////////////////////
+    ////        MISC SECTION
+    ///////////////////////////////////////////////////////
+
+    /**
+     * Queues a custom query report for LoanPro
+     * @param SearchParams            $search - search parameters for determining loans to run
+     * @param CustomQueryColumnParams $columns - columns to pull for the custom query report
+     * @param string                  $name - name of the report
+     * @return array
+     * @throws ApiException
+     */
+    public function QueueCustomQuery(SearchParams $search, CustomQueryColumnParams $columns, $name = ''){
+        $json = [
+            "search"=>[
+                $search->Get(),
+                "reportColumns"=>$columns->Get(),
+            ]
+        ];
+        if($name)
+            $json['savedSearchTitle'] = $name;
+        $response = $this->client->POST("$this->baseUrl/CustomQueryReport/Autopal.SearchDataDump()/csv",$json);
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d']) && isset($body['d']['id']) && isset($body['d']['status']))
+                return $body['d'];
+        }
+        throw new ApiException($response);
+    }
+
+    /**
+     * Checks the status of a custom query and returns the resulting response from the server
+     * @param int   $queryId - The ID of a custom query
+     * @return array
+     * @throws ApiException
+     */
+    public function CheckCustomQueryStatus($queryId){
+        $response = $this->client->GET("$this->baseUrl/odata.svc/DataDumps($queryId)");
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d']) && isset($body['d']['id']) && isset($body['d']['status']))
+                return $body['d'];
+        }
+        throw new ApiException($response);
+    }
+
+    /**
+     * Checks the status of a custom query and returns the download url if the query is complete, null if it is in progress, and false if there was an error creating the report
+     * @param int   $queryId - The ID of a custom query
+     * @return null|false|string
+     * @throws ApiException
+     */
+    public function GetCustomQueryURL($queryId){
+        $response = $this->client->GET("$this->baseUrl/odata.svc/DataDumps($queryId)");
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d']) && isset($body['d']['id']) && isset($body['d']['status'])){
+                if($body['d']['status'] === CUSTOM_QUERY_STATUS::COMPLETE){
+                    return $body['d']['url'];
+                }
+                else if($body['d']['status'] === CUSTOM_QUERY_STATUS::ERROR){
+                    return false;
+                }
+                return null;
+            }
+        }
+        throw new ApiException($response);
+    }
+
+    /**
+     * Checks the status of a custom query and returns the CSV contents if the query is complete, null if it is in progress, and false if there was an error creating the report
+     * @param int   $queryId - The ID of a custom query
+     * @return null|false|string
+     * @throws ApiException
+     */
+    public function DownloadCustomQuery($queryId){
+        $res = $this->GetCustomQueryURL($queryId);
+        if($res){
+            return $this->DownloadFile($res);
+        }
+        return $res;
     }
 
     /// @cond false

@@ -6,3 +6,4 @@ cov_xml/*
 doxygen_out/*
 src/config.ini
 index.php
+cache.json

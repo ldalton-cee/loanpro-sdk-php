@@ -16,7 +16,7 @@
  *
  */
 
-namespace Simnang\LoanPro\Iteration;
+namespace Simnang\LoanPro\Iteration\Params;
 
 /**
  * Class PaginationParams
@@ -27,7 +27,7 @@ namespace Simnang\LoanPro\Iteration;
  *
  * @package Simnang\LoanPro\Iteration
  */
-class PaginationParams
+class PaginationParams implements Params
 {
     const ASCENDING_ORDER = 'asc';
     const DESCENDING_ORDER = 'desc';
@@ -179,6 +179,10 @@ class PaginationParams
             $options[] = implode(',',$this->orderBy).'%20'.$this->order;
         }
         return implode('&', $options);
+    }
+
+    public function Get(){
+        return (string)$this;
     }
 
     private function GetValidOrdering($order){
