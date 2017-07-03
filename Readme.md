@@ -47,14 +47,17 @@ To install the SDK, download it from the <a href="https://github.com/autopalsoft
 Alternatively, you can use Composer. Add the following to your composer file:
 
 ```json
-positories":[
-
-l":"https://github.com/autopalsoftware/loanpro-sdk-php.git",
-pe":"git"
-
-
-quire":{
-mnang/loanpro-sdk":"3.*"
+{
+	"repositories":[
+		{
+			"url":"https://github.com/autopalsoftware/loanpro-sdk-php.git",
+			"type":"git"
+		}
+	],
+	"require":{
+		"simnang/loanpro-sdk":"3.*"
+	}
+}
 
 ```
 
@@ -172,6 +175,14 @@ The cache section of the config file holds information about where to store a ca
  * file - the location to store the cache file
  * expr - a string defining the interval for a cache to be active (following the DateInterval format)
   * eg. to have an expiration of one week, it would be **P7D**
+  
+The cache only stores JSON files, so keep this in mind when determining where to store your cache. 
+  
+```ini
+[cache]
+file=/cache.json
+expr=P7D
+```
 
 ### More Configuration files
 
