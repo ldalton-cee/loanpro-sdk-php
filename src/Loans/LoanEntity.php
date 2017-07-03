@@ -441,6 +441,46 @@ class LoanEntity extends BaseEntity
     }
 
     /**
+     * Adds a portfolio to the loan
+     * @param $id - ID of the portfolio to add
+     * @return LoanEntity
+     */
+    public function AddPortfolio($id){
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->AddPortfolio($this->Get(BASE_ENTITY::ID), $id);
+    }
+
+    /**
+     * Adds a sub-portfolio to the loan
+     * @param $id - ID of the sub portfolio to add
+     * @return LoanEntity
+     */
+    public function AddSubPortfolio($id){
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->AddSubPortfolio($this->Get(BASE_ENTITY::ID), $id);
+    }
+
+    /**
+     * Removes a portfolio from the loan
+     * @param $id - ID of the portfolio to remove
+     * @return LoanEntity
+     */
+    public function RemPortfolio($id){
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->RemPortfolio($this->Get(BASE_ENTITY::ID), $id);
+    }
+
+    /**
+     * Removes a sub-portfolio from the loan
+     * @param $id - ID of the sub portfolio to remove
+     * @return LoanEntity
+     */
+    public function RemSubPortfolio($id){
+        $this->InsureHasID();
+        return LoanProSDK::GetInstance()->GetApiComm()->RemSubPortfolio($this->Get(BASE_ENTITY::ID), $id);
+    }
+
+    /**
      * List of required fields
      * @var array
      */

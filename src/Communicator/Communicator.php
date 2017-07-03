@@ -719,6 +719,126 @@ class Communicator
         throw new ApiException($res);
     }
 
+    /**
+     * Adds a portfolio to the specified loan
+     * @param int           $loanId
+     * @param int           $portfolioId
+     * @return LoanEntity
+     * @throws ApiException
+     */
+    public function AddPortfolio($loanId, $portfolioId){
+        $res = $this->client->PUT("$this->baseUrl/odata.svc/Loans($loanId)",[
+            LOAN::PORTFOLIOS=>[
+                "results"=>[
+                    [
+                        "__metadata"=>[
+                            "uri"=> "/api/1/odata.svc/Portfolios(id=$portfolioId)",
+                            "type"=> ENTITY_TYPES::PORTFOLIO
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($res->getBody(), true)['d']);
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Removes a portfolio from the specified loan
+     * @param int           $loanId
+     * @param int           $portfolioId
+     * @return LoanEntity
+     * @throws ApiException
+     */
+    public function RemPortfolio($loanId, $portfolioId){
+        $res = $this->client->PUT("$this->baseUrl/odata.svc/Loans($loanId)",[
+            LOAN::PORTFOLIOS=>[
+                "results"=>[
+                    [
+                        "__destroy"=>true,
+                        "__id"=>$portfolioId,
+                        "__metadata"=>[
+                            "uri"=> "/api/1/odata.svc/Portfolios(id=$portfolioId)",
+                            "type"=> ENTITY_TYPES::PORTFOLIO
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($res->getBody(), true)['d']);
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Adds a portfolio to the specified loan
+     * @param int           $loanId
+     * @param int           $portfolioId
+     * @return LoanEntity
+     * @throws ApiException
+     */
+    public function AddSubPortfolio($loanId, $portfolioId){
+        $res = $this->client->PUT("$this->baseUrl/odata.svc/Loans($loanId)",[
+            LOAN::SUB_PORTFOLIOS=>[
+                "results"=>[
+                    [
+                        "__metadata"=>[
+                            "uri"=> "/api/1/odata.svc/Portfolios(id=$portfolioId)",
+                            "type"=> ENTITY_TYPES::SUB_PORTFOLIO
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($res->getBody(), true)['d']);
+            }
+        }
+        throw new ApiException($res);
+    }
+
+    /**
+     * Removes a portfolio from the specified loan
+     * @param int           $loanId
+     * @param int           $portfolioId
+     * @return LoanEntity
+     * @throws ApiException
+     */
+    public function RemSubPortfolio($loanId, $portfolioId){
+        $res = $this->client->PUT("$this->baseUrl/odata.svc/Loans($loanId)",[
+            LOAN::SUB_PORTFOLIOS=>[
+                "results"=>[
+                    [
+                        "__destroy"=>true,
+                        "__id"=>$portfolioId,
+                        "__metadata"=>[
+                            "uri"=> "/api/1/odata.svc/Portfolios(id=$portfolioId)",
+                            "type"=> ENTITY_TYPES::SUB_PORTFOLIO
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        if ($res->getStatusCode() == 200) {
+            $body = json_decode($res->getBody(), true);
+            if (isset($body['d'])) {
+                return LoanProSDK::GetInstance()->CreateLoanFromJSON(json_decode($res->getBody(), true)['d']);
+            }
+        }
+        throw new ApiException($res);
+    }
+
 
     ///////////////////////////////////////////////////////
     ////        CUSTOMER SECTION
