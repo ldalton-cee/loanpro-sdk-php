@@ -131,14 +131,12 @@ class SearchGenerator implements Generator
             if(substr($token->sequence, 0,1) === '!')
                 $invert = true;
             $type = 'comp';
-            if(in_array(substr($token->sequence, 0, 1), ['<','>'])) {
+            if(in_array(substr($token->sequence, 0, 1), ['<','>']))
                 $type = 'range';
-                $op = $token->sequence;
-            }
             $phrase = $actionNode->rightNode->token->sequence;
             if(in_array(substr($phrase, 0, 1), ['"',"'"]))
                 $phrase = substr($phrase, 1, -1);
-            $json = $this->ProcessTree($actionNode->leftNode, ['type'=>$type,'phrase'=>$phrase,'operator'=>$op, 'invert' => $invert]);
+            $json = $this->ProcessTree($actionNode->leftNode, ['type'=>$type,'phrase'=>$phrase,'operator'=>$op, 'invert' => $invert, 'sequence'=>$token->sequence]);
         }
         else if($token->token === 'CONCAT'){
             $op = 'should';
@@ -168,24 +166,30 @@ class SearchGenerator implements Generator
             }
             else if($compareObj['type'] === 'range'){
                 $operators = ['<'=>'lt','<='=>'lte','>'=>'gt','>='=>'gte'];
+                $tmp = [];
                 foreach($fields as $field) {
-                    $json[ 'range' ] = [
+                    $tmp[ 'range' ] = [
                         $field => [
-                            $operators[$compareObj['operator']] => $compareObj['phrase']
+                            $operators[$compareObj['sequence']] => $compareObj['phrase']
                         ]
                     ];
                 }
+
+                $json ['bool'] = [
+                    $compareObj['operator'] => $tmp
+                ];
                 return $json;
             }
             else{
                 $invert = $compareObj['invert'];
                 $key = 'bool';
+                $tmp = [];
                 if($invert){
                     $key = 'mustNot';
                 }
                 foreach($fields as $field) {
                     if ($key === 'mustNot') {
-                        $json[ 'bool' ] = [
+                        $tmp[ 'bool' ] = [
                             'mustNot'=>[
                                 [
                                     'match' => [
@@ -196,10 +200,15 @@ class SearchGenerator implements Generator
                         ];
                     }
                     else
-                        $json[ 'match' ] = [
+                        $tmp[ 'match' ] = [
                             $field => $compareObj['phrase']
                         ];
                 }
+                $json = [
+                    'bool'=>[
+                        $compareObj['operator']=>$tmp
+                    ]
+                ];
                 return $json;
             }
         }

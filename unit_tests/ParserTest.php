@@ -56,20 +56,32 @@ class ParserTest extends TestCase
      */
     public function testGenerator($res = []){
         $generator = new SearchGenerator();
-        $this->assertEquals(json_decode('{"query":{"bool":{"should":[{"bool":{"must":[{"bool":{"must":[{"query_string":{"fields":["title","displayId","primaryPhone"],"query":"*100*","default_operator":"AND"}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["firstName","email"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["lastName"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"bool":{"must":[{"match":{"primaryPhone":"100"}},{"nested":{"path":"customers","query":{"bool":{"must":[{"match":{"email":"100"}}]}}}}]}}]}}}', true),
+        $this->assertEquals(json_decode('{"query":{"bool":{"should":[{"bool":{"must":[{"bool":{"must":[{"query_string":{"fields":["title","displayId","primaryPhone"],"query":"*100*","default_operator":"AND"}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["firstName","email"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["lastName"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"bool":{"must":[{"bool":{"must":{"match":{"primaryPhone":"100"}}}},{"nested":{"path":"customers","query":{"bool":{"must":[{"bool":{"must":{"match":{"email":"100"}}}}]}}}}]}}]}}}', true),
             $generator->Generate(' [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] << CUSTOMERS->[lastName] ~& "*100*" || [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] =& "100" '));
 
         $this->assertEquals(json_decode('{"query":{"bool":{"should":[{"query_string":{"fields":["displayId"],"query":"*LOAN*","default_operator":"OR"}}]}}}', true),
                             $generator->Generate('[displayId] ~ "*LOAN*"'));
 
-        $this->assertEquals(json_decode('{"query":{"bool":{"must":[{"bool":{"must":[{"bool":{"mustNot":[{"match":{"title":"*World"}}]}},{"bool":{"mustNot":[{"bool":{"should":[{"bool":{"should":[{"query_string":{"fields":["displayId"],"query":"*LOAN*","default_operator":"OR"}},{"bool":{"mustNot":[{"query_string":{"fields":["displayId"],"query":"*Loan*","default_operator":"OR"}}]}}]}},{"query_string":{"fields":["displayId"],"query":"*loan*","default_operator":"OR"}}]}}]}}]}},{"bool":{"mustNot":[{"match":{"title":"Hello*"}}]}}]}}}', true),
+        $this->assertEquals(json_decode('{"query":{"bool":{"must":[{"bool":{"must":[{"bool":{"should":{"bool":{"mustNot":[{"match":{"title":"*World"}}]}}}},{"bool":{"mustNot":[{"bool":{"should":[{"bool":{"should":[{"query_string":{"fields":["displayId"],"query":"*LOAN*","default_operator":"OR"}},{"bool":{"mustNot":[{"query_string":{"fields":["displayId"],"query":"*Loan*","default_operator":"OR"}}]}}]}},{"query_string":{"fields":["displayId"],"query":"*loan*","default_operator":"OR"}}]}}]}}]}},{"bool":{"should":{"bool":{"mustNot":[{"match":{"title":"Hello*"}}]}}}}]}}}', true),
                             $generator->Generate('[title]!="*World"&&!([displayId]~"*LOAN*"||!([displayId]~"*Loan*")||[displayId]~"*loan*")&&[title]!="Hello*"'));
 
-        $this->assertEquals(json_decode('{"query":{"bool":{"must":[{"bool":{"should":[{"bool":{"must":[{"bool":{"must":[{"query_string":{"fields":["title","displayId","primaryPhone"],"query":"*100*","default_operator":"AND"}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["firstName","email"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["lastName"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"bool":{"must":[{"match":{"primaryPhone":"100"}},{"nested":{"path":"customers","query":{"bool":{"must":[{"match":{"email":"100"}}]}}}}]}}]}},{"bool":{"mustNot":[{"match":{"title":"25"}}]}}]}}}', true),
+        $this->assertEquals(json_decode('{"query":{"bool":{"must":[{"bool":{"should":[{"bool":{"must":[{"bool":{"must":[{"query_string":{"fields":["title","displayId","primaryPhone"],"query":"*100*","default_operator":"AND"}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["firstName","email"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"nested":{"path":"customers","query":{"bool":{"must":[{"query_string":{"fields":["lastName"],"query":"*100*","default_operator":"AND"}}]}}}}]}},{"bool":{"must":[{"bool":{"must":{"match":{"primaryPhone":"100"}}}},{"nested":{"path":"customers","query":{"bool":{"must":[{"bool":{"must":{"match":{"email":"100"}}}}]}}}}]}}]}},{"bool":{"mustNot":[{"bool":{"should":{"match":{"title":"25"}}}}]}}]}}}', true),
                             $generator->Generate(' [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] << CUSTOMERS->[lastName] ~& "*100*" || ([title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] =& "100") && ! ( [title] == 25 ) '));
 
         $this->assertEquals(json_decode('{"query":{"bool":{"should":[{"query_string":{"fields":["displayId"],"query":"*LOAN*","default_operator":"OR"}}]}}}', true),
                             $generator->Generate('[displayId] ~ "*LOAN*"'));
+
+        $this->assertEquals(json_decode('{"query":{"bool":{"should":[{"bool":{"should":{"range":{"loanAmount":{"gt":"1200.00"}}}}}]}}}', true),
+                            $generator->Generate('[loanAmount] > 1200.00'));
+
+        $this->assertEquals(json_decode('{"query":{"bool":{"should":[{"bool":{"should":{"range":{"loanAmount":{"gte":"1200.00"}}}}}]}}}', true),
+                            $generator->Generate('[loanAmount] >= 1200.00'));
+
+        $this->assertEquals(json_decode('{"query":{"bool":{"should":[{"bool":{"should":{"range":{"loanAmount":{"lt":"1200.00"}}}}}]}}}', true),
+                            $generator->Generate('[loanAmount] < 1200.00'));
+
+        $this->assertEquals(json_decode('{"query":{"bool":{"should":[{"bool":{"should":{"range":{"loanAmount":{"lte":"1200.00"}}}}}]}}}', true),
+                            $generator->Generate('[loanAmount] <= 1200.00'));
     }
 
     /**
