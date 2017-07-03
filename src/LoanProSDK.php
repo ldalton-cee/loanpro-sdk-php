@@ -403,8 +403,9 @@ class LoanProSDK
 
     /**
      * Performs a loan search and returns the direct results (results are not Loan objects but raw JSON)
-     * @param PaginationParams|null $paginationParams - pagination settings
      * @param SearchParams|null     $searchParams - parameters to search by
+     * @param AggregateParams|null  $aggParams - aggregate params
+     * @param PaginationParams|null $paginationParams - pagination settings
      * @return array
      * @throws ApiException
      * @throws InvalidStateException

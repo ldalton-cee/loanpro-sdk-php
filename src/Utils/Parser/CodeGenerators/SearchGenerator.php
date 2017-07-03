@@ -33,14 +33,14 @@ class SearchGenerator implements Generator
         'ARRAY'=>'\[ *(\w+)( *\, *\w+)* *\]',
         'LIKE' => '~[\&\|]?',
         'CONCAT' => '<<[\&\|]?',
-        'COMPARE' => '(==|!=|=)[\&\|]?',
+        'COMPARE' => '(!=|>=?|<=?|==?)[\&\|]?',
         'NEST'=> '->',
         'NEST_NAME'=>'[A-Z]+',
         'LOGICAL_OP'=>'(\|\|?)|(\&\&?)',
         'REGEX' => '"(\\\\.|[^\\\\"])*"',
         'L_PAREN' => '\(',
         'R_PAREN' => '\)',
-        'CONST' => '([\w\d]+)',
+        'CONST' => '((\.\d+)|(\d+(\.\d*)?)|[\w\d]+)',
         'NOT' => '!',
     ]);
 
@@ -130,8 +130,15 @@ class SearchGenerator implements Generator
             $invert = false;
             if(substr($token->sequence, 0,1) === '!')
                 $invert = true;
+            $type = 'comp';
+            if(in_array(substr($token->sequence, 0, 1), ['<','>'])) {
+                $type = 'range';
+                $op = $token->sequence;
+            }
             $phrase = $actionNode->rightNode->token->sequence;
-            $json = $this->ProcessTree($actionNode->leftNode, ['type'=>'comp','phrase'=>$phrase,'operator'=>$op, 'invert' => $invert]);
+            if(in_array(substr($phrase, 0, 1), ['"',"'"]))
+                $phrase = substr($phrase, 1, -1);
+            $json = $this->ProcessTree($actionNode->leftNode, ['type'=>$type,'phrase'=>$phrase,'operator'=>$op, 'invert' => $invert]);
         }
         else if($token->token === 'CONCAT'){
             $op = 'should';
@@ -159,6 +166,17 @@ class SearchGenerator implements Generator
                 ];
                 return $json;
             }
+            else if($compareObj['type'] === 'range'){
+                $operators = ['<'=>'lt','<='=>'lte','>'=>'gt','>='=>'gte'];
+                foreach($fields as $field) {
+                    $json[ 'range' ] = [
+                        $field => [
+                            $operators[$compareObj['operator']] => $compareObj['phrase']
+                        ]
+                    ];
+                }
+                return $json;
+            }
             else{
                 $invert = $compareObj['invert'];
                 $key = 'bool';
@@ -171,7 +189,7 @@ class SearchGenerator implements Generator
                             'mustNot'=>[
                                 [
                                     'match' => [
-                                        $field => substr($compareObj['phrase'], 1, -1)
+                                        $field => $compareObj['phrase']
                                     ]
                                 ]
                             ]
@@ -179,7 +197,7 @@ class SearchGenerator implements Generator
                     }
                     else
                         $json[ 'match' ] = [
-                            $field => substr($compareObj['phrase'], 1, -1)
+                            $field => $compareObj['phrase']
                         ];
                 }
                 return $json;
