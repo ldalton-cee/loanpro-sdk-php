@@ -631,6 +631,17 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
+     * @group new
+     */
+    public function testPortfolioAdd(){
+        echo "Test PortfolioAdd\n";
+        $loan = static::$loan;
+        $loan = $loan->AddPortfolio(1)->AddSubPortfolio(1)->RemSubPortfolio(1)->RemPortfolio(1);
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @group online
      */
     public function testOfacTest(){
         echo "Test OfacTest\n";
