@@ -39,7 +39,7 @@ class CustomerIterator extends BaseIterator
      * @param int               $internalPageSize
      */
     public function __construct($expand = [], FilterParams $filterParams = null, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
-        parent::__construct('GetCustomers_RAW', 'normal', ['filterParams'=>$filterParams,'orderBy'=>$orderBy,'order'=>$order],$internalPageSize);
+        parent::__construct('GetCustomers_RAW', 'normal', ['expand'=>$expand,'filterParams'=>$filterParams,'orderBy'=>$orderBy,'order'=>$order],$internalPageSize);
     }
 
 }
