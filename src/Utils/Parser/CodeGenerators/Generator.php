@@ -22,5 +22,10 @@ use Simnang\LoanPro\Utils\Parser\Token;
 
 interface Generator
 {
+    /**
+     * Generates the an array representing the code base
+     * @param string $str
+     * @return array
+     */
     public function Generate($str = '');
 }

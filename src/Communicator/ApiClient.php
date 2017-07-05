@@ -46,7 +46,6 @@ class ApiClient
 
     /**
      * Sets the authorization for future ApiClient
-     *  NOT Thread Safe!
      * @param $tenant
      * @param $token
      */

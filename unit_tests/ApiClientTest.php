@@ -901,6 +901,7 @@ class ApiClientTest extends TestCase
 
     /**
      * @group online
+     * @group cache
      */
     public function testCustomQuery(){
         echo "Test CustomQuery\n";
