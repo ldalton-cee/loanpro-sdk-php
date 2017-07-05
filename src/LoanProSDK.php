@@ -128,17 +128,22 @@ class LoanProSDK
 
     /**
      * Returns the singleton instance of the SDK
-     *  This function is NOT thread safe!
+     * Throws InvalidStateException if it is unable to find a valid configuration state. This is when:
+     *  * It cannot find the tenant id
+     *  * It cannot find the API token
+     * 
+     * Note: if setting the tenant id and api token manually you must set them in the same function call or else they will be ignroed
+     *
      * @return LoanProSDK
      * @throws InvalidStateException
      */
     public static function GetInstance(){
         if(static::$inst == null){
-            $loadedConfig = false;
             if(!ApiClient::AreTokensSet()){
-                $loadedConfig = true;
-                $config = parse_ini_file(__DIR__."/config.ini", true);
                 $confFile = __DIR__."/config.ini";
+                if(!file_exists($confFile))
+                    throw new InvalidStateException("Missing configuration! Cannot find '$confFile' and api authorization not set manually!");
+                $config = parse_ini_file($confFile, true);
                 // Load config from another source
                 $depthRemaining = 10;
                 while(isset($config['config']) && isset($config['config']['file']) && file_exists($config['config']['file']) && $depthRemaining >= 0){
@@ -397,7 +402,7 @@ class LoanProSDK
      * @throws ApiException
      * @throws InvalidStateException
      */
-    public function SearchLoans(SearchParams $searchParams, AggregateParams $aggParams, $orderBy = [], $order =PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
+    public function SearchLoans(SearchParams $searchParams, AggregateParams $aggParams, $orderBy = [], $order = PaginationParams::ASCENDING_ORDER, $internalPageSize = 25){
         return new LoanSearchIterator($searchParams, $aggParams, $orderBy, $order, $internalPageSize);
     }
 
