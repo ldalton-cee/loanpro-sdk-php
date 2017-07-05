@@ -131,7 +131,7 @@ class LoanProSDK
      * Throws InvalidStateException if it is unable to find a valid configuration state. This is when:
      *  * It cannot find the tenant id
      *  * It cannot find the API token
-     * 
+     *
      * Note: if setting the tenant id and api token manually you must set them in the same function call or else they will be ignroed
      *
      * @return LoanProSDK
@@ -225,7 +225,6 @@ class LoanProSDK
     /**
      * Sets the configuration for the loan pro instance (will re-set the instance if API credentials have been set)
      *  If non-null $tenant and $token is provided, will also set credentials
-     *  This function is NOT thread safe!
      * @param string      $commType - communicator type to use, accepts 'sync' or 'async', defaults to 'sync'
      * @param string      $env - environment to use, accepts 'prod' or 'staging', defaults to 'prod'
      * @param string|null $tenant - Tenant ID
