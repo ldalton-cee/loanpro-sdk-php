@@ -30,25 +30,26 @@
             <directory>unit_tests</directory>
             <group>offline</group>
             <exclude>unit_tests/ApiClientTest.php</exclude>
+            <exclude>unit_tests/OnlineLoanTest.php</exclude>
+            <exclude>unit_tests/OnlineCustomerTest.php</exclude>
             <groups>
                 <include>
                     <group>offline</group>
                 </include>
                 <exclude>
-                    <group>online</group>
+                    <group>online1</group>
+                    <group>online2</group>
                 </exclude>
             </groups>
         </testsuite>
-        <testsuite name="online">
-            <directory>unit_tests</directory>
-            <groups>
-                <include>
-                    <group>online</group>
-                </include>
-                <exclude>
-                    <group>offline</group>
-                </exclude>
-            </groups>
+        <testsuite name="online1">
+            <file>unit_tests/ApiClientTest.php</file>
+        </testsuite>
+        <testsuite name="online2">
+            <file>unit_tests/OnlineLoanTest.php</file>
+        </testsuite>
+        <testsuite name="online3">
+            <file>unit_tests/OnlineCustomerTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

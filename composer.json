@@ -30,9 +30,10 @@
     },
     "files":["src/Constants/Constants.php"],
     "scripts": {
-        "test": "phpunit unit_tests/",
-	    "coverage": "phpunit --configuration phpunit.xml --coverage-html cov_html/ --coverage-clover cov_xml/clover.xml  --testsuite all",
-        "online": "phpunit --configuration phpunit.xml --testsuite online",
+        "coverage": "phpunit --configuration phpunit.xml --coverage-html cov_html/ --coverage-clover cov_xml/clover.xml  --testsuite all",
+        "online1": "phpunit --configuration phpunit.xml --testsuite online1",
+        "online2": "phpunit --configuration phpunit.xml --testsuite online2",
+        "online3": "phpunit --configuration phpunit.xml --testsuite online3",
         "offline": "phpunit --configuration phpunit.xml --testsuite offline",
         "new": "phpunit --group new unit_tests/"
     }

@@ -27,6 +27,7 @@ use Simnang\LoanPro\Constants\LOAN_SETUP;
 use Simnang\LoanPro\Customers\CustomerEntity;
 use Simnang\LoanPro\Exceptions\ApiException;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
+use Simnang\LoanPro\Iteration\Iterator\LoanNestedIterator;
 use Simnang\LoanPro\LoanProSDK;
 use Simnang\LoanPro\Validator\FieldValidator;
 
@@ -438,6 +439,11 @@ class LoanEntity extends BaseEntity
      */
     public function LogPayment(PaymentEntity $pmt){
         return $this->ProcessPayment($pmt);
+    }
+
+    public function GetNestedIterator($property){
+        $this->InsureHasID();
+        return new LoanNestedIterator($this->get(BASE_ENTITY::ID), $property);
     }
 
     /**

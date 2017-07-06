@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-php composer.phar test
-
+php vendor/bin/phpunit --configuration phpunit.xml --testsuite all
