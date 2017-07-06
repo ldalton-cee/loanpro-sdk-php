@@ -441,9 +441,15 @@ class LoanEntity extends BaseEntity
         return $this->ProcessPayment($pmt);
     }
 
-    public function GetNestedIterator($property){
+    /**
+     * Returns iterator for nested entities
+     * @param $nested
+     * @return LoanNestedIterator
+     * @throws InvalidStateException
+     */
+    public function GetNestedIterator($nested){
         $this->InsureHasID();
-        return new LoanNestedIterator($this->get(BASE_ENTITY::ID), $property);
+        return new LoanNestedIterator($this->get(BASE_ENTITY::ID), $nested);
     }
 
     /**
