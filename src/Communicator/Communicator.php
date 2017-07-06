@@ -776,6 +776,24 @@ class Communicator
         throw new ApiException($res);
     }
 
+    public function GetCustomerNested($custId, $nested, PaginationParams $pagination = null){
+        $client = $this->client;
+
+        $url = "$this->baseUrl/odata.svc/Customer($custId)/$nested";
+        $response = $client->GET($url);
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if (isset($body['d'])) {
+                $classType = LoanProSDK::GetInstance()->LookUpClassType($nested);
+                $res = [];
+                foreach($body['d']['results'] as $r)
+                    $res[] = LoanProSDK::GetInstance()->CreateClassFromJSON_Public($classType, $r);
+                return $res;
+            }
+        }
+        throw new ApiException($response);
+    }
+
     /**
      * Performs a customer search
      * @param SearchParams|null     $searchParams - parameters to search by

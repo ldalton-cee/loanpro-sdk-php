@@ -24,19 +24,19 @@ use Simnang\LoanPro\Iteration\Params\PaginationParams;
 /**
  * Class LoanNestedIterator
  *
- * An iterator for nested entities of a loan entity stored on LoanPro which abstracts away pagination
+ * An iterator for nested entities of a customer entity stored on LoanPro which abstracts away pagination
  *
  * @package Simnang\LoanPro\Iteration
  */
-class LoanNestedIterator extends BaseIterator
+class CustomerNestedIterator extends BaseIterator
 {
     /**
-     * Creates a new loan nested iterator that will iterate over all the specified nested entities of a given loan
-     * @param int       $loanId
+     * Creates a new customer nested iterator that will iterate over all the specified nested entities of a given customer
+     * @param int       $custId
      * @param string    $nested
      * @param int               $internalPageSize
      */
-    public function __construct($loanId, $nested, $internalPageSize = 25){
-        parent::__construct('GetLoanNested_RAW', 'args', ['args'=>[$loanId, $nested]],$internalPageSize);
+    public function __construct($custId, $nested, $internalPageSize = 25){
+        parent::__construct('GetCustomerNested_RAW', 'args', ['args'=>[$custId, $nested]],$internalPageSize);
     }
 }

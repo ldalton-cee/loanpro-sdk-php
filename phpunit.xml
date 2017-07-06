@@ -35,20 +35,19 @@
                     <group>offline</group>
                 </include>
                 <exclude>
-                    <group>online</group>
+                    <group>online1</group>
+                    <group>online2</group>
                 </exclude>
             </groups>
         </testsuite>
-        <testsuite name="online">
-            <directory>unit_tests</directory>
-            <groups>
-                <include>
-                    <group>online</group>
-                </include>
-                <exclude>
-                    <group>offline</group>
-                </exclude>
-            </groups>
+        <testsuite name="online1">
+            <file>unit_tests/ApiClientTest.php</file>
+        </testsuite>
+        <testsuite name="online2">
+            <file>unit_tests/OnlineLoanTests.php</file>
+        </testsuite>
+        <testsuite name="online3">
+            <file>unit_tests/OnlineCustomerTests.php</file>
         </testsuite>
     </testsuites>
     <filter>
