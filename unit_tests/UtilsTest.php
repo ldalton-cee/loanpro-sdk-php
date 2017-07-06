@@ -16,6 +16,19 @@
  *
  */
 
-class CleanUp{
+require(__DIR__."/../vendor/autoload.php");
 
+use PHPUnit\Framework\TestCase;
+use Simnang\LoanPro\LoanProSDK;
+
+class UtilsTest extends TestCase
+{
+    /**
+     * @group offline
+     */
+    public function testMakeFromNested(){
+        $nested = "Notes";
+        $classType = LoanProSDK::GetInstance()->LookUpClassType($nested);
+        $this->assertEquals(\Simnang\LoanPro\Loans\NotesEntity::class, $classType);
+    }
 }
