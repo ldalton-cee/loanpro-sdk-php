@@ -22,6 +22,7 @@ use Simnang\LoanPro\BaseEntity;
 use Simnang\LoanPro\Constants\BASE_ENTITY;
 use Simnang\LoanPro\Constants\CUSTOMERS;
 use Simnang\LoanPro\Exceptions\InvalidStateException;
+use Simnang\LoanPro\Iteration\Iterator\CustomerNestedIterator;
 use Simnang\LoanPro\Iteration\Iterator\LoansForCustomerIterator;
 use Simnang\LoanPro\Iteration\Iterator\PaymentAccountsForCustomerIterator;
 use Simnang\LoanPro\LoanProSDK;
@@ -208,9 +209,26 @@ class CustomerEntity extends  BaseEntity
         return LoanProSDK::GetInstance()->GetApiComm()->SetCustomerLoanAccess($this->Get(BASE_ENTITY::ID), $loan->Get(BASE_ENTITY::ID), $access);
     }
 
+    /**
+     * Returns iterator for loans for customer
+     * @param array $expand
+     * @return LoansForCustomerIterator
+     * @throws InvalidStateException
+     */
     public function GetLoans($expand = []){
         $this->InsureHasID();
         return new LoansForCustomerIterator($this->Get(BASE_ENTITY::ID), $expand);
+    }
+
+    /**
+     * Returns iterator for nested entities
+     * @param $nested
+     * @return CustomerNestedIterator
+     * @throws InvalidStateException
+     */
+    public function GetNestedEntityIterator($nested){
+        $this->InsureHasID();
+        return new CustomerNestedIterator($this->get(BASE_ENTITY::ID), $nested);
     }
 
     /**
