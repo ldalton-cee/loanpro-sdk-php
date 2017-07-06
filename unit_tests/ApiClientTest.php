@@ -59,6 +59,22 @@ class ApiClientTest extends TestCase
     }
 
     /**
+     * @before
+     */
+    public function SetStartTime(){
+        static::$startTime = microtime(true);
+    }
+
+    /**
+     * @after
+     */
+    public function GetEndTime(){
+        static::$endTime = microtime(true);
+        $diff = number_format(static::$endTime - static::$startTime,4);
+        echo "Took $diff seconds\n\n";
+    }
+
+    /**
      * Used with non-existant domain testing
      * @var string
      */

@@ -30,6 +30,8 @@
             <directory>unit_tests</directory>
             <group>offline</group>
             <exclude>unit_tests/ApiClientTest.php</exclude>
+            <exclude>unit_tests/OnlineLoanTest.php</exclude>
+            <exclude>unit_tests/OnlineCustomerTest.php</exclude>
             <groups>
                 <include>
                     <group>offline</group>
@@ -44,10 +46,10 @@
             <file>unit_tests/ApiClientTest.php</file>
         </testsuite>
         <testsuite name="online2">
-            <file>unit_tests/OnlineLoanTests.php</file>
+            <file>unit_tests/OnlineLoanTest.php</file>
         </testsuite>
         <testsuite name="online3">
-            <file>unit_tests/OnlineCustomerTests.php</file>
+            <file>unit_tests/OnlineCustomerTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

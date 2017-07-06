@@ -78,6 +78,22 @@ class OnlineCustomerTests extends TestCase
     }
 
     /**
+     * @before
+     */
+    public function SetStartTime(){
+        static::$startTime = microtime(true);
+    }
+
+    /**
+     * @after
+     */
+    public function GetEndTime(){
+        static::$endTime = microtime(true);
+        $diff = number_format(static::$endTime - static::$startTime,4);
+        echo "Took $diff seconds\n\n";
+    }
+
+    /**
      * This sets up the authorization for the API client and sets up an async communicator to use
      * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
      * @group online

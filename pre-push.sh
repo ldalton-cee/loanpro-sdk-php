@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-phpunit unit_tests/
+php vendor/bin/phpunit --configuration phpunit.xml --testsuite all

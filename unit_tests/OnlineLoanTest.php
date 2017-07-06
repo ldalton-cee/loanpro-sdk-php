@@ -69,8 +69,8 @@ class OnlineLoanTests extends TestCase
      */
     public function GetEndTime(){
         static::$endTime = microtime(true);
-        $diff = static::$endTime - static::$startTime;
-        echo "Took $diff seconds";
+        $diff = number_format(static::$endTime - static::$startTime,4);
+        echo "Took $diff seconds\n\n";
     }
 
     private static function generateRandomString($length = 17) {
