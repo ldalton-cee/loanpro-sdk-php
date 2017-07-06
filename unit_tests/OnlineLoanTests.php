@@ -54,6 +54,25 @@ class OnlineLoanTests extends TestCase
     private static $minSetup;
     private static $loan;
 
+    private static $startTime;
+    private static $endTime;
+
+    /**
+     * @before
+     */
+    public function SetStartTime(){
+        static::$startTime = microtime(true);
+    }
+
+    /**
+     * @after
+     */
+    public function GetEndTime(){
+        static::$endTime = microtime(true);
+        $diff = static::$endTime - static::$startTime;
+        echo "Took $diff seconds";
+    }
+
     private static function generateRandomString($length = 17) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
