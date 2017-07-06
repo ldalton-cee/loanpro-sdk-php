@@ -145,6 +145,7 @@ class BaseIterator implements \Iterator
         $searchParams = (isset($this->args['searchParams']))? $this->args['searchParams'] : null;
         $aggParams = (isset($this->args['aggParams']))? $this->args['aggParams'] : null;
         $id = (isset($this->args['id']))? $this->args['id'] : 0;
+        $args = (isset($this->args['args']))? $this->args['args'] : [];
 
         $isFirstTime = false;
         if(is_null($this->paginationVar)) {
@@ -172,6 +173,10 @@ class BaseIterator implements \Iterator
                 $this->res = $response['results'];
                 $this->aggs = $response['aggregates'];
                 $this->curIndex = 0;
+                break;
+            case 'args':
+                $args = array_merge($args, [$this->paginationVar]);
+                $this->res = LoanProSDK::GetInstance()->{$this->function}(...$args);
                 break;
             case 'normal':
             default:

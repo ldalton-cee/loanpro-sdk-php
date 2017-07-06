@@ -37,7 +37,6 @@ use \Simnang\LoanPro\Constants\LOAN as LOAN,
     \Simnang\LoanPro\Constants\BASE_ENTITY as BASE_ENTITY,
     \Simnang\LoanPro\Constants\COLLATERAL as COLLATERAL;
 
-require_once(__DIR__.'/CleanUp.php');
 
 ////////////////////
 /// Done Setting Up Aliasing
@@ -231,7 +230,7 @@ class ApiClientTest extends TestCase
             $this->assertFalse(true);
         }catch(\Simnang\LoanPro\Exceptions\ApiException $e){
             $this->assertEquals(200, $e->getCode());
-            $this->assertEquals("Simnang\LoanPro\Exceptions\ApiException: [200]: API EXCEPTION! An error occurred, please check your request.Resource not found for the segment 'Loans'\n", (string)$e);
+            $this->assertEquals("Simnang\\LoanPro\\Exceptions\\ApiException: [200]: API EXCEPTION! An error occurred, please check your request.Resource not found for the segment 'Loans'\n", (string)$e);
         }
 
         $expansion = [];
@@ -902,5 +901,23 @@ class ApiClientTest extends TestCase
         $this->assertTrue(isset($res['id']));
         $this->assertTrue(isset($res['status']));
         $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomQueryURL($res['id']);
+    }
+
+    /**
+     * @group online
+     */
+    public function testNoteIterator(){
+        echo "Test NoteIterator\n";
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->MakeLoanShellFromID(static::$loanId);
+        $c = 0;
+        $iterator = $loan->GetNestedIterator(LOAN::NOTES);
+        foreach($iterator as $i) {
+            $c++;
+            $this->assertTrue(!is_null($i->get(BASE_ENTITY::ID)));
+            $this->assertEquals('<p>test note</p>', $i->get(CONSTS\NOTES::BODY));
+            $this->assertEquals('Test Queue 2', $i->get(CONSTS\NOTES::SUBJECT));
+            $this->assertEquals(3, $i->get(CONSTS\NOTES::CATEGORY_ID));
+        }
+        $this->assertEquals(51, $c);
     }
 }

@@ -275,6 +275,24 @@ class Communicator
         throw new ApiException($response);
     }
 
+    public function GetLoanNested($loanId, $nested, PaginationParams $paginationParams = null){
+        $client = $this->client;
+
+        $url = "$this->baseUrl/odata.svc/Loans($loanId)/$nested";
+        $response = $client->GET($url);
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if (isset($body['d'])) {
+                $classType = LoanProSDK::GetInstance()->LookUpClassType($nested);
+                $res = [];
+                foreach($body['d']['results'] as $r)
+                    $res[] = LoanProSDK::GetInstance()->CreateClassFromJSON_Public($classType, $r);
+                return $res;
+            }
+        }
+        throw new ApiException($response);
+    }
+
     /**
      * Saves the loan to the server via a PUT request (or a POST request if there is no ID)
      * Either returns the resulting loan/response if there's an error (if synchronous), or a promise that returns the resulting loan/response
@@ -718,7 +736,6 @@ class Communicator
         }
         throw new ApiException($res);
     }
-
 
     ///////////////////////////////////////////////////////
     ////        CUSTOMER SECTION

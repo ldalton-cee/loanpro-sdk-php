@@ -377,6 +377,10 @@ class LoanProSDK
         return new LoanIterator($expandProps, $filter, $orderBy, $order);
     }
 
+    public function GetLoanNested_RAW($loanId, $nested, PaginationParams $pagination){
+        return $this->apiComm->GetLoanNested($loanId, $nested, $pagination);
+    }
+
     /**
      * Returns an array of loan entities
      * @param array                 $expandProps - expand properties to expand by
@@ -1335,6 +1339,11 @@ class LoanProSDK
     }
 
     /// @cond false
+    public function LookUpClassType($nested){
+        $classes = explode('/',$nested);
+        $class = end($classes);
+        return static::$entities[$class]['class'];
+    }
     public function CreateLoanSetupFromJSON($json){
         if(!is_string($json) && !is_array($json))
             throw new \InvalidArgumentException("Expected a JSON string or array");
