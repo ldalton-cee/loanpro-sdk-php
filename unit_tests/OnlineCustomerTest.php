@@ -57,6 +57,9 @@ class OnlineCustomerTests extends TestCase
     private static $access;
     private static $loan;
 
+    private static $startTime;
+    private static $endTime;
+
     private static function generateRandomString($length = 17) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);

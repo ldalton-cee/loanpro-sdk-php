@@ -52,6 +52,9 @@ class ApiClientTest extends TestCase
     protected static $loanId;
     protected static $loanJSON;
 
+    private static $startTime;
+    private static $endTime;
+
     public static function setUpBeforeClass(){
         \Simnang\LoanPro\BaseEntity::SetStrictMode(true);
         \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm();
