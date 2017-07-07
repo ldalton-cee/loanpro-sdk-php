@@ -264,9 +264,11 @@ class OnlineLoanTests extends TestCase
         echo "Test Activation\n";
         $loan = static::$loan;
 
-        $this->assertEquals(true, $loan->inactivate() instanceof \Simnang\LoanPro\Loans\LoanEntity);
+        $this->assertEquals(true, $loan->Inactivate() instanceof \Simnang\LoanPro\Loans\LoanEntity);
+        $this->assertFalse($loan->IsActive());
 
-        $this->assertEquals(true, $loan->activate() instanceof \Simnang\LoanPro\Loans\LoanEntity);
+        $this->assertEquals(true, $loan->Activate() instanceof \Simnang\LoanPro\Loans\LoanEntity);
+        $this->assertTrue($loan->IsActive());
     }
 
     /**
