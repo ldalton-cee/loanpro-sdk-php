@@ -187,7 +187,7 @@ class LoanEntity extends BaseEntity
         else
             $lsetup = $this->Get(LOAN::LOAN_SETUP);
         $lsetup = $lsetup->Set(LOAN_SETUP::ACTIVE, false);
-        $this->Set(LOAN::LOAN_SETUP, $lsetup)->Save();
+        (new LoanEntity($this->Get(LOAN::DISP_ID)))->Set(BASE_ENTITY::ID, $this->Get(BASE_ENTITY::ID), LOAN::LOAN_SETUP, $lsetup)->Save();
         if(!is_null($this->Get(LOAN::LOAN_SETUP)))
             return $this->Set(LOAN::LOAN_SETUP, $this->Get(LOAN::LOAN_SETUP)->Set(LOAN_SETUP::ACTIVE, 0));
         return $this;
