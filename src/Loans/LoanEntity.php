@@ -181,19 +181,16 @@ class LoanEntity extends BaseEntity
      */
     public function Inactivate(){
         $this->InsureHasID();
-        if(!is_null($this->Get(LOAN::LOAN_SETUP)))
-            $lsetup = (new LoanSetupEntity(LOAN_SETUP\LOAN_SETUP_LCLASS__C::OTHER,LOAN_SETUP\LOAN_SETUP_LTYPE__C::CRED_LIMIT,true))->Set(
-                BASE_ENTITY::ID, $this->Get(LOAN::LOAN_SETUP)->Get(BASE_ENTITY::ID),
-                LOAN_SETUP::ACTIVE, 0);
+
+        if(is_null($this->Get(LOAN::LOAN_SETUP)) || is_null($this->Get(LOAN::LOAN_SETUP)->Get(BASE_ENTITY::ID)))
+            $lsetup = LoanProSDK::GetInstance()->GetLoan($this->Get(BASE_ENTITY::ID))->Get(LOAN::LOAN_SETUP);
         else
-            $lsetup = (new LoanSetupEntity(LOAN_SETUP\LOAN_SETUP_LCLASS__C::OTHER,LOAN_SETUP\LOAN_SETUP_LTYPE__C::CRED_LIMIT,true))->Set(
-                BASE_ENTITY::ID, LoanProSDK::GetInstance()->GetApiComm()->GetLoan($this->Get(BASE_ENTITY::ID), [LOAN::LOAN_SETUP])->Get(LOAN::LOAN_SETUP)->Get(BASE_ENTITY::ID),
-                LOAN_SETUP::ACTIVE, 0);
-        (new LoanEntity($this->Get(LOAN::DISP_ID)))->Set(
-            BASE_ENTITY::ID, $this->Get(BASE_ENTITY::ID),
-            LOAN::LOAN_SETUP, $lsetup
-        )->Save();
-        return $this->Set(LOAN::LOAN_SETUP, $lsetup);
+            $lsetup = $this->Get(LOAN::LOAN_SETUP);
+        $lsetup = $lsetup->Set(LOAN_SETUP::ACTIVE, false);
+        $this->Set(LOAN::LOAN_SETUP, $lsetup)->Save();
+        if(!is_null($this->Get(LOAN::LOAN_SETUP)))
+            return $this->Set(LOAN::LOAN_SETUP, $this->Get(LOAN::LOAN_SETUP)->Set(LOAN_SETUP::ACTIVE, 0));
+        return $this;
     }
 
     /**

@@ -124,6 +124,15 @@ class OnlineLoanTests extends TestCase
     }
 
     /**
+     * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
+     * @group online
+     */
+    public static function tearDownAfterClass(){
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoan("")->Set(BASE_ENTITY::ID, static::$loanId);
+        $loan->delete(true);
+    }
+
+    /**
      * Tests our ability to load loans and loan info (does it asynchronously)
      * @group online
      */
