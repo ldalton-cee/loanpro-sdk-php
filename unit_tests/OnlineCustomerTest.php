@@ -153,6 +153,18 @@ class OnlineCustomerTests extends TestCase
     }
 
     /**
+     * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
+     * @group online
+     */
+    public static function tearDownAfterClass(){
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoan("")->Set(BASE_ENTITY::ID, static::$loanId);
+        $loan->delete(true);
+
+        if(static::$cid)
+            \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->secret(static::$cid);
+    }
+
+    /**
      * @group online
      */
     public function testCustomerLogin(){
