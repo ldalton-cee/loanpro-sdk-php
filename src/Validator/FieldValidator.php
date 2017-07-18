@@ -192,7 +192,7 @@ class FieldValidator
     {
         $d = \DateTime::createFromFormat('Y-m-d', $date);
 
-        return ($d && $d->format('Y-m-d') === $date) || preg_match(FieldValidator::$dateRegEx, $date) || is_int($date) || $date === '0000-00-00';
+        return ($d && $d->format('Y-m-d') === $date) || preg_match(FieldValidator::$dateRegEx, $date) || is_int($date) || $date === '0000-00-00' || $date === '';
     }
 
     /**
