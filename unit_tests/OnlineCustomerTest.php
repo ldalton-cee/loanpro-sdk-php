@@ -56,6 +56,7 @@ class OnlineCustomerTests extends TestCase
     private static $customer;
     private static $access;
     private static $loan;
+    private static $json;
 
     private static $startTime;
     private static $endTime;
@@ -135,15 +136,22 @@ class OnlineCustomerTests extends TestCase
         static::$access = $fname.$lname;
         $ssn = static::generateRandomNum();
 
+        $folderName = "online_templates";
+        if(\Simnang\LoanPro\LoanProSDK::GetInstance()->GetEnv() == 'beta')
+            $folderName = "online_templates_beta";
+        else if(\Simnang\LoanPro\LoanProSDK::GetInstance()->GetEnv() == 'staging')
+            $folderName = "online_templates_stag";
+
         $json = str_replace('[[ACCESS]]', static::$access,
                     str_replace('[[LNAME]]', $lname,
                         str_replace('[[FNAME]]', $fname,
                             str_replace('[[SSN]]',$ssn,
-                                file_get_contents(__DIR__.'/json_templates/online_templates/customerTemplate_create1.json')
+                                file_get_contents(__DIR__."/json_templates/$folderName/customerTemplate_create1.json")
                             )
                         )
                     )
         );
+        static::$json = $json;
         $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateCustomerFromJSON($json);
         $customer = $customer->SetIgnoreWarnings(true)->Save();
         static::$cid = $customer->Get(BASE_ENTITY::ID);
@@ -161,7 +169,56 @@ class OnlineCustomerTests extends TestCase
         $loan->delete(true);
 
         if(static::$cid)
-            \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm()->secret(static::$cid);
+            \Simnang\LoanPro\LoanProSDK::GetInstance()
+                ->GetApiComm()->secret(static::$cid);
+    }
+
+    private function removeDynFields($arr){
+        $fieldsToRemove = [
+            '__id',
+            '__update',
+            'id',
+            'entityId',
+            'accessPassword',
+            'created',
+            "mcId",
+            "lastUpdate",
+            "addressId",
+            "checkingAccountId",
+        ];
+        $copy = $arr;
+        foreach($copy as $key => $val){
+            if(is_array($val))
+                $arr[$key] = $this->removeDynFields($val);
+            else if(in_array($key, $fieldsToRemove))
+                unset($arr[$key]);
+        }
+        return $arr;
+    }
+
+    /**
+     * @group online
+     * @group new
+     */
+    public function testVerifyCustomer(){
+        $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()
+            ->GetCustomer(static::$cid, [
+            "Phones",
+            "PrimaryAddress",
+            "MailAddress",
+            "CustomFieldValues",
+            "PaymentAccounts",
+            "PaymentAccounts/CheckingAccount"
+        ]);
+
+        $customerJson = json_decode(json_encode($customer), true);
+
+        $customerJson = $this->removeDynFields($customerJson);
+        $verifyJson = $this->removeDynFields(
+            json_decode(static::$json, true)
+        );
+
+        $this->assertEquals($verifyJson, $customerJson);
     }
 
     /**

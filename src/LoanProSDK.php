@@ -1388,6 +1388,15 @@ class LoanProSDK
 
         return (new $class(...$params))->Set($json);
     }
+
+    public static function GetEnv(){
+        if(static::$env == Communicator::BETA)
+            return 'beta';
+        if(static::$env == Communicator::PRODUCTION)
+            return 'production';
+        if(static::$env == Communicator::STAGING)
+            return 'staging';
+    }
     /// @endcond
     private static $inst;
     private static $clientType = ApiClient::TYPE_SYNC;

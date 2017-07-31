@@ -53,6 +53,8 @@ class OnlineLoanTests extends TestCase
     protected static $loanJSON;
     private static $minSetup;
     private static $loan;
+    private static $guid;
+    private static $vin;
 
     private static $startTime;
     private static $endTime;
@@ -83,16 +85,6 @@ class OnlineLoanTests extends TestCase
         return $randomString;
     }
 
-    private static function generateRandomNum($length = 9) {
-        $characters = '0123456789';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
-
     /**
      * This sets up the authorization for the API client and sets up an async communicator to use
      * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
@@ -104,19 +96,28 @@ class OnlineLoanTests extends TestCase
         \Simnang\LoanPro\LoanProSDK::GetInstance()->GetApiComm();
         static::$comm = \Simnang\LoanPro\Communicator\Communicator::GetCommunicator(ApiClient::TYPE_ASYNC);
 
+
+        $folderName = "online_templates";
+        if(\Simnang\LoanPro\LoanProSDK::GetInstance()->GetEnv() == 'beta')
+            $folderName = "online_templates_beta";
+        else if(\Simnang\LoanPro\LoanProSDK::GetInstance()->GetEnv() == 'staging')
+            $folderName = "online_templates_stag";
+
         $guid = uniqid("PHP SDK");
         $randomVin = static::generateRandomString(17);
-        $json = str_replace('[[GUID_CUST]]', "CUSTOMER - $guid",
-                            str_replace('[[GUID_LOAN]]', "LOAN - $guid",
-                                        str_replace('[[VIN]]', $randomVin,
-                                                    file_get_contents(__DIR__ . '/json_templates/online_templates/loanTemplate_create_1.json')
-                                        )
-                            )
+        $json = str_replace('[[GUID_CUST]]', "C - $guid",
+                    str_replace('[[GUID_LOAN]]', "LN - $guid",
+                        str_replace('[[VIN]]', $randomVin,
+                            file_get_contents(__DIR__ . "/json_templates/$folderName/loanTemplate_create_1.json")
+                        )
+                    )
         );
         $json = json_decode($json);
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoanFromJSON(json_encode($json[0]));
         $res = $loan->Save();
         static::$loanId = $res->Get(BASE_ENTITY::ID);
+        static::$guid = $guid;
+        static::$vin = $randomVin;
         $loanUpdate = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoanFromJSON(json_encode($json[1]));
         $loanUpdate->Set(BASE_ENTITY::ID, static::$loanId)->Save();
         static::$minSetup = new \Simnang\LoanPro\Loans\LoanSetupEntity(LOAN_SETUP_LCLASS::CONSUMER, LOAN_SETUP_LTYPE::INSTALLMENT);
@@ -130,6 +131,241 @@ class OnlineLoanTests extends TestCase
     public static function tearDownAfterClass(){
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoan("")->Set(BASE_ENTITY::ID, static::$loanId);
         $loan->delete(true);
+    }
+
+    /**
+     * @group online
+     */
+    public function testVerifyLoanSetup(){
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoan(static::$loanId, [
+            LOAN::LOAN_SETUP,
+            LOAN::CHARGES,
+            LOAN::ESCROW_CALCULATORS,
+            LOAN::COLLATERAL,
+            LOAN::NOTES,
+            LOAN::PROMISES,
+            LOAN::COLLATERAL."/".COLLATERAL::CUSTOM_FIELD_VALUES
+        ]);
+
+        $loan_info = ["displayId" => "LN - ".static::$guid];
+        $this->assertEquals($loan_info, $loan->Get([LOAN::DISP_ID]));
+
+        $loan_setup = [
+            "loanClass" => "loan.class.carLoan",
+            "loanType" => "loan.type.installment",
+            "loanAmount"=> 12000.00,
+            "discount"=> 500.00,
+            "underwriting"=> 0.00,
+            "loanRate"=> 12.0212,
+            "loanRateType"=> "loan.rateType.annually",
+
+            "loanTerm"=> 36.0,
+            "contractDate"=> 1430956800,
+            "firstPaymentDate"=> 1431475200,
+            "amountDown"=> 0.00,
+            "reserve"=> 5.00,
+
+            "salesPrice"=> 12000.0,
+            "gap"=> 1120.0,
+            "warranty"=> 2500.0,
+            "dealerProfit"=> 1000.0,
+            "taxes"=> 125.25,
+
+            "creditLimit"=> 15500.0,
+            "discountSplit"=> 1,
+            "paymentFrequency"=> "loan.frequency.monthly",
+            "calcType"=> "loan.calcType.simpleInterest",
+
+            "daysInYear"=> "loan.daysInYear.frequency",
+            "interestApplication"=> "loan.interestApplication.betweenTransactions",
+            "begEnd"=> "loan.begend.end",
+            "firstPeriodDays"=> "loan.firstPeriodDays.frequency",
+            "firstDayInterest"=> 1,
+            "discountCalc"=> "loan.discountCalc.straightLine",
+            "diyAlt"=> "loan.diyAlt.no",
+            "daysInPeriod"=> "loan.daysinperiod.24",
+            "roundDecimals"=> 5,
+            "lastAsFinal"=> 1,
+            "curtailmentTemplate"=> 1,
+            "nddCalc"=> "loan.nddCalc.standard",
+            "endInterest"=> "loan.endInterest.no",
+            "feesPaidBy"=> "loan.feesPaidBy.date",
+            "graceDays"=> 5,
+            "lateFeeType"=> "loan.lateFee.3",
+            "lateFeeAmount"=> 30.00,
+            "lateFeePercent"=> 10.00,
+            "lateFeeCalc"=> "loan.lateFeeCalc.standard",
+            "lateFeePercentBase"=> "loan.latefeepercentbase.regular",
+            "paymentDateApp"=> "loan.pmtdateapp.actual"
+        ];
+
+        $this->assertEquals($loan_setup,
+                            $loan->Get(LOAN::LOAN_SETUP)
+                                 ->Get(array_keys($loan_setup))
+        );
+
+        $charges_info = [
+                "amount"=> 1250.0,
+                "date"=> 1496016000,
+                "info"=> "Late Fee 05/29/2017",
+                "chargeTypeId"=> 1,
+                "chargeApplicationType"=> "loan.latefeeapp.standard",
+                "interestBearing"=> 1,
+                "paidAmount"=> 60.0,
+                "paidPercent"=> 4.8,
+                "active"=> 1,
+                "editComment"=> "Test"
+        ];
+
+        $this->assertEquals($charges_info,
+                            $loan->Get(LOAN::CHARGES)[0]
+                                ->Get(array_keys($charges_info))
+        );
+
+        $escrow_calculators = [
+                "subset"=> 3,
+                "modId"=> 0,
+                "term"=> 360,
+                "total"=> 0,
+                "percent"=> 0,
+                "firstPeriod"=> 0,
+                "regularPeriod"=> 0,
+                "percentBase"=> "loan.escrowPercentBase.loanAmount",
+                "proRate1st"=> "loan.escrowProrateFirst.none",
+                "extendFinal"=> 0
+        ];
+
+        $this->assertEquals($escrow_calculators,
+                            $loan->Get(LOAN::ESCROW_CALCULATORS)[0]
+                                ->Get(array_keys($escrow_calculators))
+        );
+
+        $collateral = [
+            "a" => "2144",
+            "b" => "2134",
+            "c" => "1234",
+            "d" => "1234",
+            "additional" => "additional",
+            "collateralType" => "collateral.type.other",
+            "vin" => static::$vin,
+            "distance" => 134.0,
+            "bookValue" => 13000.0,
+            "color" => "blue",
+            "gpsStatus" => "collateral.gpsstatus.installed",
+            "gpsCode" => "132s4f56",
+            "licensePlate" => "111 222",
+            "gap" => 554.32,
+            "warranty" => 123.45
+        ];
+
+        $this->assertEquals($collateral,
+                            $loan->Get(LOAN::COLLATERAL)
+                                ->Get(array_keys($collateral))
+        );
+
+        $note_info_0 = [
+            "categoryId" => 3,
+            "subject" => "Test Queue 2",
+            "body" => "<p>test note</p>",
+            "parentType" => "Entity.Loan",
+            "authorId" => 806,
+            "authorName" => "Simnang Support",
+        ];
+
+        $this->assertEquals($note_info_0,
+                            $loan->Get(LOAN::NOTES)[0]
+                                ->Get(array_keys($note_info_0))
+        );
+        $this->assertEquals(51, count($loan->Get(LOAN::NOTES)));
+
+        $promise_info = [
+                "subject" => "Test Promise",
+                "note" => "<p>Things</p>",
+                "dueDate" => 1494460800,
+                "amount" => 100.0,
+                "fulfilled" => 0,
+                "fulfillmentDate" => 1494979200,
+                "type" => "loanpromise.type.payment",
+        ];
+
+        $this->assertEquals($promise_info,
+                            $loan->Get(LOAN::PROMISES)[0]
+                                ->Get(array_keys($promise_info))
+        );
+    }
+
+    /**
+     * @group online
+     */
+    public function testVerifyLoanSetup2(){
+
+        $guid = uniqid("PHP SDK");
+        $randomVin = static::generateRandomString(17);
+        $json = str_replace('[[GUID_CUST]]', "C - $guid",
+                    str_replace('[[GUID_LOAN]]', "LN - $guid",
+                        str_replace('[[VIN]]', $randomVin,
+                            file_get_contents(__DIR__ . '/json_templates/online_templates/loanTemplate_create_2.json')
+                        )
+                    )
+        );
+        $json = json_decode($json, true);
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoanFromJSON(json_encode($json[0]));
+        $res = $loan->Save();
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()
+            ->GetLoan(
+                $res->Get(BASE_ENTITY::ID),
+                [LOAN::LOAN_SETUP]
+        );
+
+        $loanJson = json_decode(json_encode($loan), true);
+
+        $calculatedValues = [
+            "apr" => 12.0212,
+            "aprForceSingle" => 0,
+            "payment" => 398.69,
+            "origFinalPaymentDate" => "2018-04-08",
+            "origFinalPaymentAmount" => 234.12,
+            "tilFinanceCharge" => 2188.27,
+            "tilTotalOfPayments" => 14188.27,
+            "tilLoanAmount" => 12000,
+            "tilSalesPrice" => 14188.27,
+            "regzCustomEnabled" => 0,
+            "regzApr" => 0,
+            "regzFinanceCharge" => 0,
+            "regzAmountFinanced" => 0,
+            "regzTotalOfPayments" => 0,
+            "moneyFactor" => 0,
+            "residual" => 0,
+            "scheduleRound" => 0,
+            "reportingCreditLimit" => 0,
+            "dueDateOnLastDOM" => 0,
+            "dueDatesOnBusinessDays" => "loan.businessduedates.disabled",
+            "scheduleTemplate" => 0,
+            "curtailmentTemplate" => 0,
+            "useInterestTiers" => 0,
+            "calcHistoryEnabled" => 0,
+            "calcDatesEnabled" => 0,
+            "rollLastPayment" => 0,
+            "isSetupValid" => 1
+        ];
+
+        $json[0]["LoanSetup"] = array_merge($json[0]["LoanSetup"], $calculatedValues);
+
+        unset($loanJson["settingsId"]);
+        unset($loanJson["setupId"]);
+        unset($loanJson["collateralId"]);
+        unset($loanJson["created"]);
+        unset($loanJson["lastMaintRun"]);
+        unset($loanJson["createdBy"]);
+        unset($loanJson["__update"]);
+        unset($loanJson["__id"]);
+        unset($loanJson["id"]);
+        unset($loanJson["LoanSetup"]["__update"]);
+        unset($loanJson["LoanSetup"]["__id"]);
+        unset($loanJson["LoanSetup"]["id"]);
+        unset($loanJson["LoanSetup"]["loanId"]);
+
+        $this->assertEquals($json[0], $loanJson);
     }
 
     /**
@@ -150,8 +386,10 @@ class OnlineLoanTests extends TestCase
         $funcs[] = function(\Simnang\LoanPro\Loans\LoanEntity $loan){
             $this->assertEquals(static::$loanId, $loan->Get(\Simnang\LoanPro\Constants\BASE_ENTITY::ID));
             $this->assertEquals(806, $loan->Get(LOAN::CREATED_BY));
-            //$this->assertEquals(static::$loanId, $loan->Get(LOAN::NOTES)[0]->Get(\Simnang\LoanPro\Constants\NOTES::PARENT_ID));
-            $this->assertEquals(static::$loanId, $loan->Get(LOAN::LOAN_SETUP)->Get(\Simnang\LoanPro\Constants\LOAN_SETUP::LOAN_ID));
+            $this->assertEquals(static::$loanId,
+                                $loan->Get(LOAN::LOAN_SETUP)
+                                    ->Get(\Simnang\LoanPro\Constants\LOAN_SETUP::LOAN_ID)
+            );
         };
 
         try {
@@ -169,7 +407,8 @@ class OnlineLoanTests extends TestCase
         $loanFields = $loanFieldsProp->getValue();
 
         foreach($loanFields as $fieldKey => $fieldType){
-            if($fieldType == \Simnang\LoanPro\Validator\FieldValidator::OBJECT || $fieldType == \Simnang\LoanPro\Validator\FieldValidator::OBJECT_LIST){
+            if($fieldType == \Simnang\LoanPro\Validator\FieldValidator::OBJECT
+                || $fieldType == \Simnang\LoanPro\Validator\FieldValidator::OBJECT_LIST){
                 $expansion[] = $fieldKey;
             }
         }
@@ -179,8 +418,10 @@ class OnlineLoanTests extends TestCase
             function(\Simnang\LoanPro\Loans\LoanEntity $loan){
                 $this->assertEquals(static::$loanId, $loan->Get(\Simnang\LoanPro\Constants\BASE_ENTITY::ID));
                 $this->assertEquals(806, $loan->Get(LOAN::CREATED_BY));
-                //$this->assertEquals(static::$loanId, $loan->Get(LOAN::NOTES)[0]->Get(\Simnang\LoanPro\Constants\NOTES::PARENT_ID));
-                $this->assertEquals(static::$loanId, $loan->Get(LOAN::LOAN_SETUP)->Get(\Simnang\LoanPro\Constants\LOAN_SETUP::LOAN_ID));
+                $this->assertEquals(static::$loanId,
+                                    $loan->Get(LOAN::LOAN_SETUP)
+                                        ->Get(\Simnang\LoanPro\Constants\LOAN_SETUP::LOAN_ID)
+                );
             };
 
         for($i = 0; $i < count($responses); ++$i){
@@ -196,20 +437,37 @@ class OnlineLoanTests extends TestCase
         $loan = static::$loan;
         $loan->activate();
         $oldLoanSetup = $loan->Get(LOAN::LOAN_SETUP);
-        $loanModified = $loan->createModification($loan->Get(LOAN::LOAN_SETUP)->Set(LOAN_SETUP::LOAN_AMT, 9000.50));
+        $loanModified = $loan->createModification(
+            $loan->Get(LOAN::LOAN_SETUP)
+                ->Set(LOAN_SETUP::LOAN_AMT, 9000.50)
+        );
         $this->assertEquals(true, $loanModified instanceof \Simnang\LoanPro\Loans\LoanEntity);
         $this->assertEquals($oldLoanSetup->Rem(
-            BASE_ENTITY::ID, LOAN_SETUP::MOD_ID,LOAN_SETUP::APR,
-            LOAN_SETUP::ORIG_FINAL_PAY_AMT,LOAN_SETUP::TIL_PAYMENT_SCHEDULE,
-            LOAN_SETUP::TIL_FINANCE_CHARGE, LOAN_SETUP::TIL_LOAN_AMOUNT,
-            LOAN_SETUP::TIL_PAYMENT_SCHEDULE, LOAN_SETUP::TIL_TOTAL_OF_PAYMENTS,
-            LOAN_SETUP::LOAN_AMT, LOAN_SETUP::IS_SETUP_VALID, LOAN_SETUP::ACTIVE
+            BASE_ENTITY::ID,
+            LOAN_SETUP::MOD_ID,
+            LOAN_SETUP::APR,
+            LOAN_SETUP::ORIG_FINAL_PAY_AMT,
+            LOAN_SETUP::TIL_PAYMENT_SCHEDULE,
+            LOAN_SETUP::TIL_FINANCE_CHARGE,
+            LOAN_SETUP::TIL_LOAN_AMOUNT,
+            LOAN_SETUP::TIL_PAYMENT_SCHEDULE,
+            LOAN_SETUP::TIL_TOTAL_OF_PAYMENTS,
+            LOAN_SETUP::LOAN_AMT,
+            LOAN_SETUP::IS_SETUP_VALID,
+            LOAN_SETUP::ACTIVE
         ), $loan->getPreModificationSetup()->Rem(
-            BASE_ENTITY::ID, LOAN_SETUP::MOD_ID,LOAN_SETUP::APR,
-            LOAN_SETUP::ORIG_FINAL_PAY_AMT,LOAN_SETUP::TIL_PAYMENT_SCHEDULE,
-            LOAN_SETUP::TIL_FINANCE_CHARGE, LOAN_SETUP::TIL_LOAN_AMOUNT,
-            LOAN_SETUP::TIL_PAYMENT_SCHEDULE, LOAN_SETUP::TIL_TOTAL_OF_PAYMENTS,
-            LOAN_SETUP::LOAN_AMT, LOAN_SETUP::IS_SETUP_VALID, LOAN_SETUP::ACTIVE
+            BASE_ENTITY::ID,
+            LOAN_SETUP::MOD_ID,
+            LOAN_SETUP::APR,
+            LOAN_SETUP::ORIG_FINAL_PAY_AMT,
+            LOAN_SETUP::TIL_PAYMENT_SCHEDULE,
+            LOAN_SETUP::TIL_FINANCE_CHARGE,
+            LOAN_SETUP::TIL_LOAN_AMOUNT,
+            LOAN_SETUP::TIL_PAYMENT_SCHEDULE,
+            LOAN_SETUP::TIL_TOTAL_OF_PAYMENTS,
+            LOAN_SETUP::LOAN_AMT,
+            LOAN_SETUP::IS_SETUP_VALID,
+            LOAN_SETUP::ACTIVE
         ));
 
         $loanModified = $loan->cancelModification();
@@ -228,7 +486,10 @@ class OnlineLoanTests extends TestCase
         $this->assertEquals($newId, $loan->Get(LOAN::DISP_ID));
 
         $resLoan = $loan->Save();
-        $this->assertEquals($loan->Get(LOAN::DISP_ID), $resLoan->Get(LOAN::DISP_ID));
+        $this->assertEquals(
+            $loan->Get(LOAN::DISP_ID),
+            $resLoan->Get(LOAN::DISP_ID)
+        );
         static::$loan = $loan;
     }
 
@@ -243,7 +504,8 @@ class OnlineLoanTests extends TestCase
         $loanFields = $loanFieldsProp->getValue();
 
         foreach($loanFields as $fieldKey => $fieldType){
-            if($fieldType == \Simnang\LoanPro\Validator\FieldValidator::OBJECT || $fieldType == \Simnang\LoanPro\Validator\FieldValidator::OBJECT_LIST){
+            if($fieldType == \Simnang\LoanPro\Validator\FieldValidator::OBJECT
+                || $fieldType == \Simnang\LoanPro\Validator\FieldValidator::OBJECT_LIST){
                 $expansion[] = $fieldKey;
             }
         }
