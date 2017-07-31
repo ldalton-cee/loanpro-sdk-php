@@ -1,5 +1,7 @@
 # LoanPro PHP SDK
 
+[![Build Status](https://travis-ci.org/simnangsupport/loanpro-sdk-php.svg?branch=master)](https://travis-ci.org/simnangsupport/loanpro-sdk-php)
+
 ## Introduction
 
 The goal of the LoanPro PHP SDK is to abstract the complexity of the LoanPro system and allow developers to create fast applications. This is accomplished by abstracting OData entities into PHP classes and providing a list of properties for each class. This list of constants allows integrating code to not have to change in the event of a property name change. This means that if all properties called "active" are renamed to "isActive", the constants list will be updated and integrating code will work once the new SDK is installed. Furthermore, the SDK does a lot of validation and input sanitization, as well as error parsing. Also, it provides several methods for credential management as well as integrating with both production and staging environments.
