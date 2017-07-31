@@ -82,6 +82,8 @@ class LoanSetupTest extends TestCase
                 $collClass = new \ReflectionClass($collName);
                 $collection = $collClass->getConstants();
                 foreach($collection as $ckey => $cval){
+                    if($ckey == 'REVISION_MAPPINGS')
+                        continue;
                     $this->assertEquals($cval, $loanSetup->Set($field, $cval)->Get($field));
                 }
             }

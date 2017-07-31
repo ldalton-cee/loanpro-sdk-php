@@ -194,6 +194,19 @@ class LoanEntity extends BaseEntity
     }
 
     /**
+     * Returns whether or not the loan has been activated inside of LoanPro
+     * @return bool
+     * @throws InvalidStateException
+     */
+    public function IsActive(){
+        $this->InsureHasID();
+        $loanSetup = LoanProSDK::GetInstance()->GetLoan($this->Get(BASE_ENTITY::ID), [LOAN::LOAN_SETUP])->Get(LOAN::LOAN_SETUP);
+        if(is_null($loanSetup))
+            throw new InvalidStateException("LoanSetup not available, cannot determine if the loan has been activated!");
+        return $loanSetup->Get(LOAN_SETUP::ACTIVE) == 1;
+    }
+
+    /**
      * Archives the loan and returns the result
      * @return LoanEntity
      * @throws InvalidStateException

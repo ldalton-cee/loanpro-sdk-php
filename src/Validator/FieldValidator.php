@@ -192,7 +192,7 @@ class FieldValidator
     {
         $d = \DateTime::createFromFormat('Y-m-d', $date);
 
-        return ($d && $d->format('Y-m-d') === $date) || preg_match(FieldValidator::$dateRegEx, $date) || is_int($date) || $date === '0000-00-00';
+        return ($d && $d->format('Y-m-d') === $date) || preg_match(FieldValidator::$dateRegEx, $date) || is_int($date) || $date === '0000-00-00' || $date === '';
     }
 
     /**
@@ -257,12 +257,24 @@ class FieldValidator
         $refClass = '\Simnang\LoanPro\Constants\\' . $collection;
         $rclass = new \ReflectionClass($refClass);
         $constNames = $rclass->getConstants();
-        $consts = array_flip($constNames);
+        $consts = [];
+        if(!isset($constNames['REVISION_MAPPINGS']))
+            $consts = array_flip($constNames);
+        else{
+            $constNames2 = $constNames;
+            unset($constNames2['REVISION_MAPPINGS']);
+            $consts = array_flip($constNames2);
+            if(isset($consts['TESTING'])){
+                echo "true\n\n";
+            }
+        }
         if (isset($consts[ $val ]))
             return true;
         if (static::IsValidBool(($val)) && isset($constNames['YES']) && isset($constNames['NO']))
             return true;
-
+        if (isset($constNames['REVISION_MAPPINGS']) && is_array($constNames['REVISION_MAPPINGS']) && isset($constNames['REVISION_MAPPINGS'][$val])){
+            return true;
+        }
         return false;;
     }
 
@@ -407,12 +419,21 @@ class FieldValidator
     public static function GetCollectionVal($val, $collection)
     {
         if (FieldValidator::IsValidCollectionVal($val, $collection)) {
-            if (!static::IsValidBool($val))
-                return $val;
 
             $refClass = '\Simnang\LoanPro\Constants\\' . $collection;
             $rclass = new \ReflectionClass($refClass);
             $constNames = $rclass->getConstants();
+
+            if (isset($constNames['REVISION_MAPPINGS'])
+                && is_array($constNames['REVISION_MAPPINGS'])
+                && isset($constNames['REVISION_MAPPINGS'][$val])
+            ){
+                return $constNames['REVISION_MAPPINGS'][$val];
+            }
+
+            if (!static::IsValidBool($val))
+                return $val;
+
             $b = static::GetBool($val);
             if ($b)
                 return $constNames['YES'];
