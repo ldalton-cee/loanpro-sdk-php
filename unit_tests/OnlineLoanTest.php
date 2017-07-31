@@ -130,7 +130,7 @@ class OnlineLoanTests extends TestCase
      */
     public static function tearDownAfterClass(){
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoan("")->Set(BASE_ENTITY::ID, static::$loanId);
-        $loan->delete(true);
+        //$loan->delete(true);
     }
 
     /**
@@ -268,9 +268,7 @@ class OnlineLoanTests extends TestCase
             "categoryId" => 3,
             "subject" => "Test Queue 2",
             "body" => "<p>test note</p>",
-            "parentType" => "Entity.Loan",
-            "authorId" => 806,
-            "authorName" => "Simnang Support",
+            "parentType" => "Entity.Loan"
         ];
 
         $this->assertEquals($note_info_0,
@@ -381,13 +379,11 @@ class OnlineLoanTests extends TestCase
         $responses[] = static::$comm->getLoan(static::$loanId);
         $funcs[] = function(\Simnang\LoanPro\Loans\LoanEntity $loan){
                 $this->assertEquals(static::$loanId, $loan->Get(\Simnang\LoanPro\Constants\BASE_ENTITY::ID));
-                $this->assertEquals(806, $loan->Get(LOAN::CREATED_BY));
             };
 
         $responses[] = static::$comm->getLoan(static::$loanId, [LOAN::LOAN_SETUP, LOAN::NOTES]);
         $funcs[] = function(\Simnang\LoanPro\Loans\LoanEntity $loan){
             $this->assertEquals(static::$loanId, $loan->Get(\Simnang\LoanPro\Constants\BASE_ENTITY::ID));
-            $this->assertEquals(806, $loan->Get(LOAN::CREATED_BY));
             $this->assertEquals(static::$loanId,
                                 $loan->Get(LOAN::LOAN_SETUP)
                                     ->Get(\Simnang\LoanPro\Constants\LOAN_SETUP::LOAN_ID)
@@ -419,7 +415,6 @@ class OnlineLoanTests extends TestCase
         $funcs[] =
             function(\Simnang\LoanPro\Loans\LoanEntity $loan){
                 $this->assertEquals(static::$loanId, $loan->Get(\Simnang\LoanPro\Constants\BASE_ENTITY::ID));
-                $this->assertEquals(806, $loan->Get(LOAN::CREATED_BY));
                 $this->assertEquals(static::$loanId,
                                     $loan->Get(LOAN::LOAN_SETUP)
                                         ->Get(\Simnang\LoanPro\Constants\LOAN_SETUP::LOAN_ID)
@@ -730,7 +725,7 @@ class OnlineLoanTests extends TestCase
      */
     public function testLoanSearch(){
         echo "Test LoanSearch\n";
-        $searchParams = new \Simnang\LoanPro\Iteration\Params\SearchParams('[displayId] ~ "*LOAN*"');
+        $searchParams = new \Simnang\LoanPro\Iteration\Params\SearchParams('[displayId] ~ "*loan*"');
         $paginationParams = new \Simnang\LoanPro\Iteration\Params\PaginationParams(true);
         $aggregateParams = new \Simnang\LoanPro\Iteration\Params\AggregateParams("loan_amount:sum,max;loan_payoff:avg");
         $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->SearchLoans_RAW($searchParams, $aggregateParams, $paginationParams);

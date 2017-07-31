@@ -168,10 +168,14 @@ class LoanProSDK
                 }
                 if(isset($config['api']) && isset($config['api']['tenant']) && isset($config['api']['token'])){
                     ApiClient::SetAuthorization($config['api']['tenant'], $config['api']['token']);
+                    if(isset($config['api']['version'])){
+                        static::$apiVersion = $config['api']['version'];
+                    }
                 }
                 else{
                     throw new InvalidStateException('Configuration does not have api credentials! Loading from '.$confFile);
                 }
+
                 $clientType = (isset($config['communicator']) && isset($config['communicator']['type'])) ? $config['communicator']['type'] : 'sync';
 
                 switch($clientType){
@@ -1397,10 +1401,17 @@ class LoanProSDK
         if(static::$env == Communicator::STAGING)
             return 'staging';
     }
+
+    public static function GetEnvUrl(){
+        $environment = static::$env;
+        $apiVersion = static::$apiVersion;
+        return "https://$environment"."loanpro.simnang.com/api/public/api/$apiVersion";
+    }
     /// @endcond
     private static $inst;
     private static $clientType = ApiClient::TYPE_SYNC;
     private static $env = Communicator::PRODUCTION;
+    private static $apiVersion = 1;
     private $apiComm;
     private static $cacheFile = "cache.json";
     private static $cacheExpr = "P3D";

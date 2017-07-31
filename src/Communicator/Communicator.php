@@ -95,7 +95,7 @@ class Communicator
     private function __construct($clientType = ApiClient::TYPE_SYNC, $environment = Communicator::PRODUCTION, $apiVersion = 1){
         $apiVersion = max(intval($apiVersion), 1);
         $environment = (in_array($environment, (new \ReflectionClass('Simnang\LoanPro\Communicator\Communicator'))->getConstants()) ? $environment : Communicator::PRODUCTION);
-        $this->baseUrl = "https://$environment"."loanpro.simnang.com/api/public/api/$apiVersion";
+        $this->baseUrl = LoanProSDK::GetEnvUrl();
         switch($clientType){
             case ApiClient::TYPE_ASYNC:
                 $this->client = ApiClient::GetAPIClientAsync();
