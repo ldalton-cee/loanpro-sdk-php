@@ -122,7 +122,7 @@ class DocumentTest extends TestCase
      * @group offline
      */
     public function testAddToLoan(){
-        $loan = LPSDK::CreateLoan("Test ID");
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoan("Test ID");
         $doc = new \Simnang\LoanPro\Loans\DocumentEntity();
         $this->assertEquals([$doc], $loan->Set(LOAN::DOCUMENTS, $doc)->Get(LOAN::DOCUMENTS));
     }
@@ -136,7 +136,7 @@ class DocumentTest extends TestCase
         $doc = new \Simnang\LoanPro\Loans\DocumentEntity();
         $doc2 = (new \Simnang\LoanPro\Loans\DocumentEntity())->Set(BASE_ENTITY::ID, 12);
         $doc3 = (new \Simnang\LoanPro\Loans\DocumentEntity())->Set(BASE_ENTITY::ID, 24);
-        $loan = LPSDK::CreateLoan("Test ID")->Set(LOAN::DOCUMENTS, $doc);
+        $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->CreateLoan("Test ID")->Set(LOAN::DOCUMENTS, $doc);
 
         // test append
         $this->assertEquals([$doc], $loan->Get(LOAN::DOCUMENTS));

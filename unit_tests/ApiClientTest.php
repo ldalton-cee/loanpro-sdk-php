@@ -87,18 +87,13 @@ class ApiClientTest extends TestCase
      * Tests our ability to make an asynchronous client and communicate with LoanPro
      * @group online
      */
-    public function testAsycMake(){
-        echo "Test AsycMake\n";
+    public function testAsyncMake(){
+        echo "Test AsyncMake\n";
         $asyncClient = ApiClient::GetAPIClientAsync();
         $this->assertEquals(ApiClient::TYPE_ASYNC, $asyncClient->ClientType());
-        try {
-            $response = $asyncClient->GET('https://loanpro.simnang.com/api/public/api/1/odata.svc/ContextVariables?$top=1');
-            $this->assertEquals(200, $response->getStatusCode());
-            $this->assertEquals('OK', $response->getReasonPhrase());
-        } catch (Exception $e) {
-            // ...or catch the thrown exception
-            $this->assertTrue(false);
-        }
+        $response = $asyncClient->GET(\Simnang\LoanPro\LoanProSDK::GetEnvUrl().'/odata.svc/ContextVariables?$top=1');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('OK', $response->getReasonPhrase());
     }
 
     /**
@@ -109,14 +104,10 @@ class ApiClientTest extends TestCase
         echo "Test SyncMake\n";
         $syncClient = \Simnang\LoanPro\Communicator\ApiClient::GetAPIClientSync();
         $this->assertEquals(ApiClient::TYPE_SYNC, $syncClient->ClientType());
-        $response = $syncClient->GET('https://loanpro.simnang.com/api/public/api/1/odata.svc/ContextVariables?$top=1');
-        try {
-            // We need now the response for our final treatment...
-            $this->assertEquals(200, $response->getStatusCode());
-            $this->assertEquals('OK', $response->getReasonPhrase());
-        } catch (Exception $e) {
-            // ...or catch the thrown exception
-        }
+        $response = $syncClient->GET(\Simnang\LoanPro\LoanProSDK::GetEnvUrl().'/odata.svc/ContextVariables?$top=1');
+        // We need now the response for our final treatment...
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('OK', $response->getReasonPhrase());
     }
 
     /**
@@ -196,6 +187,6 @@ class ApiClientTest extends TestCase
         $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomQueryStatus($res['id']);
         $this->assertTrue(isset($res['id']));
         $this->assertTrue(isset($res['status']));
-        $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomQueryURL($res['id']);
+        \Simnang\LoanPro\LoanProSDK::GetInstance()->GetCustomQueryURL($res['id']);
     }
 }

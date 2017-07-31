@@ -5,6 +5,7 @@ cov_html/*
 cov_xml/*
 doxygen_out/*
 src/config.ini
+src/config_copy.ini
 index.php
 cache.json
 DoxyfileOld

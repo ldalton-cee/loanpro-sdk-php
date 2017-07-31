@@ -25,7 +25,6 @@ class CustomQueryGeneratorTest extends TestCase
 {
     /**
      * @group offline
-     * @group new
      */
     public function testGenerator(){
         $generator = new CustomQueryColumnGenerator();
