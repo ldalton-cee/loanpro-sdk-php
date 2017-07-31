@@ -17,6 +17,11 @@ namespace Simnang\LoanPro\Constants\LOAN_SETUP;
  * @package Simnang\LoanPro\Constants\LOAN_SETUP
  */
 class LOAN_SETUP_LAST_AS_FINAL__C{
-    const YES = 'loan.lastasfinal.yes';
-    const NO  = 'loan.lastasfinal.no';
+    const YES = 1;
+    const NO  = 0;
+
+    const REVISION_MAPPINGS = [
+        "loan.lastasfinal.yes" => LOAN_SETUP_LAST_AS_FINAL__C::YES,
+        "loan.lastasfinal.no" => LOAN_SETUP_LAST_AS_FINAL__C::NO,
+    ];
 }

@@ -17,6 +17,11 @@ namespace Simnang\LoanPro\Constants\LOAN_SETUP;
  * @package Simnang\LoanPro\Constants\LOAN_SETUP
  */
 class LOAN_SETUP_FIRST_DAY_INT__C{
-    const YES = 'loan.firstdayinterest.yes';
-    const NO  = 'loan.firstdayinterest.no';
+    const YES = 1;
+    const NO  = 0;
+
+    const REVISION_MAPPINGS = [
+        "loan.firstdayinterest.yes" => LOAN_SETUP_FIRST_DAY_INT__C::YES,
+        "loan.firstdayinterest.no" => LOAN_SETUP_FIRST_DAY_INT__C::NO,
+    ];
 }
