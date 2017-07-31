@@ -39,7 +39,7 @@
       "daysInPeriod": "loan.daysinperiod.24",
       "roundDecimals": 5,
       "lastAsFinal": "loan.lastasfinal.yes",
-      "curtailmentTemplate": 1,
+      "curtailmentTemplate": 0,
       "nddCalc": "loan.nddCalc.standard",
       "endInterest": "loan.endInterest.no",
       "feesPaidBy": "loan.feesPaidBy.date",

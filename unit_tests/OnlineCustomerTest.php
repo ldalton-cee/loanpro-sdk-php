@@ -100,7 +100,6 @@ class OnlineCustomerTests extends TestCase
     /**
      * This sets up the authorization for the API client and sets up an async communicator to use
      * @throws \Simnang\LoanPro\Exceptions\InvalidStateException
-     * @group online
      */
     public static function setUpBeforeClass(){
         $datetime1 = new DateTime('2017-06-29');
@@ -201,6 +200,8 @@ class OnlineCustomerTests extends TestCase
      * @group new
      */
     public function testVerifyCustomer(){
+        echo "Test Verify Customer\n";
+
         $customer = \Simnang\LoanPro\LoanProSDK::GetInstance()
             ->GetCustomer(static::$cid, [
             "Phones",

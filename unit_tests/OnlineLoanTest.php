@@ -137,6 +137,7 @@ class OnlineLoanTests extends TestCase
      * @group online
      */
     public function testVerifyLoanSetup(){
+        echo "Test Verify Loan Creation\n";
         $loan = \Simnang\LoanPro\LoanProSDK::GetInstance()->GetLoan(static::$loanId, [
             LOAN::LOAN_SETUP,
             LOAN::CHARGES,
@@ -186,7 +187,7 @@ class OnlineLoanTests extends TestCase
             "daysInPeriod"=> "loan.daysinperiod.24",
             "roundDecimals"=> 5,
             "lastAsFinal"=> 1,
-            "curtailmentTemplate"=> 1,
+            "curtailmentTemplate"=> 0,
             "nddCalc"=> "loan.nddCalc.standard",
             "endInterest"=> "loan.endInterest.no",
             "feesPaidBy"=> "loan.feesPaidBy.date",
@@ -298,6 +299,7 @@ class OnlineLoanTests extends TestCase
      * @group online
      */
     public function testVerifyLoanSetup2(){
+        echo "Test Verify Loan Creation 2\n";
 
         $guid = uniqid("PHP SDK");
         $randomVin = static::generateRandomString(17);
