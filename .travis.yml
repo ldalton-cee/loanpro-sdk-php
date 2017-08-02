@@ -6,4 +6,7 @@ install: ./travis_setup.sh
 script: ./pre-push.sh
 notifications:
   email:
-    - support@simnang.com
+    recipients:
+      - support@simnang.com
+    on_success: always
+    on_failure: always
