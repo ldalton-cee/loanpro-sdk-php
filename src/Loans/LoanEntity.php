@@ -183,7 +183,7 @@ class LoanEntity extends BaseEntity
         $this->InsureHasID();
 
         if(is_null($this->Get(LOAN::LOAN_SETUP)) || is_null($this->Get(LOAN::LOAN_SETUP)->Get(BASE_ENTITY::ID)))
-            $lsetup = LoanProSDK::GetInstance()->GetLoan($this->Get(BASE_ENTITY::ID))->Get(LOAN::LOAN_SETUP);
+            $lsetup = LoanProSDK::GetInstance()->GetLoan($this->Get(BASE_ENTITY::ID), [LOAN::LOAN_SETUP])->Get(LOAN::LOAN_SETUP);
         else
             $lsetup = $this->Get(LOAN::LOAN_SETUP);
         $lsetup = $lsetup->Set(LOAN_SETUP::ACTIVE, false);
