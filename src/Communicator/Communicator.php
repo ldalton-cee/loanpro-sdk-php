@@ -152,8 +152,7 @@ class Communicator
      * If the connection to the server worked, then it will return true. Otherwise it wlil throw an ApiException.
      *
      * @param string $username - Username of customer
-     * @param string $password - Password of user
-     * @return array
+     * @return bool
      * @throws ApiException
      */
     public function ResetCustomerPassword($username =''){
