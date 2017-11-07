@@ -449,5 +449,14 @@ class OnlineCustomerTests extends TestCase
         $this->assertEquals(1, $res);
 
     }
+    
+    /**
+     * @group online
+     */
+    public function testCustomerPasswordReset(){
+        echo "Test ResetCustomerPassword\n";
+        $res = \Simnang\LoanPro\LoanProSDK::GetInstance()->ResetCustomerPassword(static::$access);
+        $this->assertTrue($res);
+    }
 
 }

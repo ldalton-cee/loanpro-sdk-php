@@ -113,6 +113,10 @@ class Communicator
 
     /**
      * Attempts to login to the customer facing website. Returns an array with the first item being whether or not login was successful and the second item is the response from the server.
+     * 
+     * If the server has created a session, then the session id will be returned in the session key-value-pair.
+     * 
+     * If the server supports redirect-logins, then the URL to redirect the user to to login to LoanPro's customer-facing site will be in the redirectTo key-value-pair.
      *
      * If login was successful, the login from the server will hold the customer id and name.
      *
@@ -138,6 +142,27 @@ class Communicator
         else if($response->getStatusCode() == 401) {
             $body = json_decode($response->getBody(), true);
             return [false, $body];
+        }
+        throw new ApiException($response);
+    }
+    
+    /**
+     * Will reset a customer's password by sending them a request-verification email. If the customer wants to continue the password reset, he/she will need the click the link in the email.
+     *
+     * If the connection to the server worked, then the function will return true. Otherwise the function will throw an ApiException.
+     *
+     * @param string $username - Username of customer
+     * @return bool
+     * @throws ApiException
+     */
+    public function ResetCustomerPassword($username =''){
+        $tenantId = ApiClient::GetTenantId();
+        $response = $this->client->POST("$this->baseUrl/tenants($tenantId)/customers/reset-password",['username'=>$username]);
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody(), true);
+            if(isset($body['d']) && isset($body['d']['success'])){
+                return true;
+            }
         }
         throw new ApiException($response);
     }
