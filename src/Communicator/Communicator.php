@@ -127,7 +127,12 @@ class Communicator
         if($response->getStatusCode() == 200) {
             $body = json_decode($response->getBody(), true);
             if(isset($body['d']) && isset($body['d']['id'])){
-                return [true, $body['d']];
+                $res = [true, $body['d']];
+                if(isset($body['d']['sessionId']))
+                    $res["session"] = $body['d']['sessionId'];
+                if(isset($body['d']['postLoginPage']))
+                    $res['redirectTo'] = $body['d']['postLoginPage'];
+                return $res;
             }
         }
         else if($response->getStatusCode() == 401) {
