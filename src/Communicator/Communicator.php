@@ -149,7 +149,7 @@ class Communicator
     /**
      * Will reset a customer's password by sending them a request-verification email. If the customer wants to continue the password reset, he/she will need the click the link in the email.
      *
-     * If the connection to the server worked, then it will return true. Otherwise it wlil throw an ApiException.
+     * If the connection to the server worked, then the function will return true. Otherwise the function will throw an ApiException.
      *
      * @param string $username - Username of customer
      * @return bool
