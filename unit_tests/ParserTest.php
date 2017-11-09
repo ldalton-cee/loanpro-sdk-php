@@ -34,6 +34,7 @@ class ParserTest extends TestCase
             $parser->TransformTokensToArr($parser->Tokenize(' [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] ~& "*100*" ')));
         return $parser;
     }
+
     /**
      * @group offline
      * @depends testTokenizer
@@ -48,6 +49,36 @@ class ParserTest extends TestCase
             json_decode(json_encode($etree), true)
         );
         return [$parser,$etree];
+    }
+    
+    /**
+     * @group offline
+     * @depends testTokenizer
+     */
+    public function testDatesInGrammar(\Simnang\LoanPro\Utils\Parser\LL1_Parser $parser){
+        $parser->SetExpressionTreeGenerator(new \Simnang\LoanPro\Utils\Parser\TreeGenerators\SearchExpressionTreeGenerator(SearchGenerator::TOKEN_SYMBOLS));
+        $etree = $parser->Parse('[created] >= 2017-05-01 00:00:00 && [created] <= 2017-05-05 23:59:59');
+
+        //$parser->Parse(' [title, displayId, primaryPhone] << CUSTOMERS->[firstName, email] ~& "*100*"');
+        $this->assertEquals(
+            json_decode('{"token":{"token":"LOGICAL_OP","sequence":"&&"},"left":{"token":{"token":"COMPARE","sequence":">="},"left":{"token":{"token":"ARRAY","sequence":"[created]"},"left":null,"right":null},"right":{"token":{"token":"CONST","sequence":"\\"2017-05-01 00:00:00\\""},"left":null,"right":null}},"right":{"token":{"token":"COMPARE","sequence":"<="},"left":{"token":{"token":"ARRAY","sequence":"[created]"},"left":null,"right":null},"right":{"token":{"token":"CONST","sequence":"\\"2017-05-05 23:59:59\\""},"left":null,"right":null}}}', true),
+            json_decode(json_encode($etree), true)
+        );
+        return [$parser,$etree];
+    }
+    
+    /**
+     * @group offline
+     * @depends testTokenizer
+     */
+    public function testDateGenerator($res = []){
+        $generator = new SearchGenerator();
+
+        $this->assertEquals(
+            json_decode('{"query":{"bool":{"must":[{"bool":{"should":{"range":{"created":{"gte":"2017-05-01 00:00:00"}}}}},{"bool":{"should":{"range":{"created":{"lte":"2017-05-05 23:59:59"}}}}}]}}}'),
+            json_decode(json_encode($generator->Generate('[created] >= 2017-05-01 00:00:00 && [created] <= 2017-05-05 23:59:59')))
+        );
+
     }
 
     /**

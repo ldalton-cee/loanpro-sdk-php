@@ -62,6 +62,10 @@ class SearchExpressionTreeGenerator extends ExpressionTreeGenerator
             $stack = $this->pExrStack;
 
         if($tname === 'CONST' || $tname === 'REGEX'){
+            // Wrap dates in quotation marks
+            if($tname === 'CONST' && preg_match("/\d{4}-\d{2}-\d{2}\ \d{2}:\d{2}:\d{2}/",$node->token->sequence)){
+                $node->token->sequence = '"'.$node->token->sequence.'"';
+            }
             if(!is_null($stack->Peek()) && ($stack->Peek()->token->token === 'COMPARE' || ($stack->Peek()->token->token === 'LIKE' && $tname === 'REGEX'))){
                 $tree = $stack->Pop();
                 $tree->AddNextChildNode($node);

@@ -40,7 +40,7 @@ class SearchGenerator implements Generator
         'REGEX' => '"(\\\\.|[^\\\\"])*"',
         'L_PAREN' => '\(',
         'R_PAREN' => '\)',
-        'CONST' => '((\.\d+)|(\d+(\.\d*)?)|[\w\d]+)',
+        'CONST' => '(\d{4}-\d{2}-\d{2}\ \d{2}:\d{2}:\d{2})|((\.\d+)|(\d+(\.\d*)?)|[\w\d]+)',
         'NOT' => '!',
     ]);
 
