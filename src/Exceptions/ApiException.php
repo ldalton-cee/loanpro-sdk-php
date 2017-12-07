@@ -26,6 +26,12 @@ namespace Simnang\LoanPro\Exceptions;
  */
 class ApiException extends \Exception{
 
+    private $type = 'ApiException';
+
+    public function getType(){
+        return $type;
+    }
+
     public function __construct(\Psr\Http\Message\ResponseInterface $response, $code = 0, \Exception $previous = null) {
         $json = json_decode($response->getBody(), true);
         $msg = "An error occurred, please check your request.";
@@ -33,8 +39,10 @@ class ApiException extends \Exception{
             $json = $json['d'];
         if(isset($json['error'])){
             $type = isset($json['error']['type'])? $json['error']['type'] : false;
-            if($type)
+            if($type){
                 $msg.= " $type: ";
+                $this->type = $type;
+            }
             if(isset($json['warnings']))
                 $msg .= implode("; ",$json['warnings']);
             if(isset($json['error']['message'])){
